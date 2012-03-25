@@ -1,0 +1,31 @@
+graph test {
+    // 3 nodes: a, b, and c
+    a [ 
+        autoack="False"
+        ipdests="10.1.0.0/16 10.10.0.0/16 10.128.0.0/9"
+        traffic="m1"
+
+        // basic harpoon setup 
+        // build up and withdrawal of harpoon sources; 10 sources for duration
+        // of 60 sec, followed by 20 sources for 60 sec, etc.
+        //  m1="modulator start=0.0 generator=s1 profile=((60,),(10,20,30,30,20,10))"
+
+        m1="modulator start=0.0 generator=s1 profile=((3600,),(1,))"
+        s1="harpoon ipsrc=10.1.0.0/16 ipdst=10.3.1.0/24 flowsize=pareto(10000,1.2) flowstart=exponential(100.0) ipproto=randomchoice(6) sport=randomchoice(22,80,443) dport=randomunifint(1025,65535) lossrate=randomchoice(0.001)"
+    ];
+
+    b [ 
+        autoack="False"
+        ipdests="10.2.0.0/16" 
+    ];
+
+    c [ 
+        autoack="False"
+        ipdests="10.3.0.0/16 10.4.0.0/16 10.0.0.0/8" 
+    ];
+
+    // links 
+    a -- b [weight=10, capacity=100000000, delay=0.043];
+    b -- c [weight=10, capacity=100000000, delay=0.031];
+    a -- c [weight=30, capacity=100000000, delay=0.123];
+}

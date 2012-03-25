@@ -1,0 +1,6 @@
+created-date [2012-02-14 10:00:01]
+inherit-from ../neat_code
+change  Detector
+comment calculate the derivative of entropy with different quantize state. the
+quantize state with largest derivative is the most sensitive one.
+

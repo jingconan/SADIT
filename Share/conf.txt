@@ -1,0 +1,10 @@
+HARPOON 400000.0 1 0.5
+GENERATOR HARPOON
+TYPE TRAN_PROB
+MARKOV_PARA normal(4e5,10) exponential(3) normal(4e5,10) exponential(0.3)
+DEFAULT_PROFILE 0 8000 1
+MARKOV_P 0 1 0 1
+MARKOV 0.1/Users/jingwang/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code/allinone.py
+OUTPUT_NAME conf.dot
+DETECTOR 500 markov 1 4 8
+TRAN_PROB 2000 3000 0.025 0.1

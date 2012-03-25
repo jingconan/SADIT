@@ -1,0 +1,25 @@
+graph test {
+    // 3 nodes: a, b, and c
+    a [ 
+        autoack="False"
+        ipdests="10.1.0.0/16"
+        traffic="m1"
+        m1="modulator start=0.0 generator=s1 profile=((600,),(1,))"
+        s1="harpoon ipsrc=10.1.0.0/16 ipdst=10.3.1.0/24 flowsize=randomchoice(10000) flowstart=randomchoice(10) ipproto=randomchoice(6) sport=randomchoice(22,80,443) dport=randomunifint(1025,65535) lossrate=randomchoice(0.001)"
+    ];
+
+    b [ 
+        autoack="False"
+        ipdests="10.2.0.0/16" 
+    ];
+
+    c [ 
+        autoack="False"
+        ipdests="10.3.0.0/16 10.4.0.0/16 10.0.0.0/8" 
+    ];
+
+    // links 
+    a -- b [weight=10, capacity=100000000, delay=0.043];
+    b -- c [weight=10, capacity=100000000, delay=0.031];
+    a -- c [weight=30, capacity=100000000, delay=0.123];
+}

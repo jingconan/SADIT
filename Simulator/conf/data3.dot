@@ -1,0 +1,169 @@
+                                                                     
+                                                                     
+                                                                     
+                                             
+graph data {
+	
+a [       
+autoack="False"
+ipdests="110.2.52.0/24"
+traffic="a2"
+a2="modulator start=randomunifint(0,1800)
+generator=s1 profile=((60000,),(1,))"
+s1="harpoon ipsrc=110.2.52.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(40000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+b [
+autoack="False"
+ipdests="120.65.74.0/24"
+traffic="b2 b3"
+b2="modulator start=randomunifint(0,1800)
+generator=s2 profile=((60000,),(1,))"
+s2="harpoon ipsrc=120.65.74.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(30000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+
+b3="modulator start=randomunifint(0,4000)
+generator=s11 profile=((60000,),(1,))"
+s11="harpoon ipsrc=120.65.74.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(3000000000,400000000)
+flowstart=normal(16000,1) 
+lossrate=randomchoice(0.001)"
+];
+
+c [         
+autoack="False"    
+ipdests="130.165.24.0/24"
+traffic="c2"
+c2="modulator start=randomunifint(0,1799)
+generator=s3 profile=((60000,),(1,))"
+s3="harpoon ipsrc=130.165.24.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(30000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+d [         
+autoack="False"    
+ipdests="140.9.84.0/24"
+traffic="d2"
+d2="modulator start=randomunifint(0,1799)
+generator=s4 profile=((60000,),(1,))"
+s4="harpoon ipsrc=140.9.84.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(25000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+e [         
+autoack="False"    
+ipdests="150.19.16.0/24 9.15.66.0/24"
+traffic="e2 e3"
+e2="modulator start=randomunifint(0,1799)
+generator=s5 profile=((60000,),(1,))"
+s5="harpoon ipsrc=150.19.16.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(35000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+
+e3="modulator start=randomunifint(0,4000)
+generator=s12 profile=((60000,),(1,))"
+s12="harpoon ipsrc=9.15.66.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(35000000,4000000)
+flowstart=normal(16000,1)
+lossrate=randomchoice(0.001)"
+];
+
+f [         
+autoack="False"    
+ipdests="160.99.114.0/24"
+traffic="f2"
+f2="modulator start=randomunifint(0,1799)
+generator=s6 profile=((60000,),(1,))"
+s6="harpoon ipsrc=160.99.114.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(35000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+g [         
+autoack="False"    
+ipdests="170.10.218.0/24"
+traffic="g2"
+g2="modulator start=randomunifint(0,1799)
+generator=s7 profile=((60000,),(1,))"
+s7="harpoon ipsrc=170.10.218.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(45000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+h [         
+autoack="False"    
+ipdests="180.52.36.0/24"
+traffic="h2"
+h2="modulator start=randomunifint(0,1799)
+generator=s8 profile=((60000,),(1,))"
+s8="harpoon ipsrc=180.52.36.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(30000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+i [         
+autoack="False"    
+ipdests="190.125.63.0/24"
+traffic="i2"
+i2="modulator start=randomunifint(0,1799)
+generator=s9 profile=((60000,),(1,))"
+s9="harpoon ipsrc=190.125.63.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(25000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+
+j [         
+autoack="False"    
+ipdests="200.78.116.0/24"
+traffic="j2"
+j2="modulator start=randomunifint(0,1799)
+generator=s10 profile=((60000,),(1,))"
+s10="harpoon ipsrc=200.78.116.0/24 ipdst=165.14.130.9
+sport=randomchoice(21) dport=randomunifint(1024,65535)
+flowsize=normal(30000000,4000000)
+flowstart=normal(240,60) 
+lossrate=randomchoice(0.001)"
+];
+	
+s [         
+autoack="False"    
+ipdests="165.14.130.9"
+];
+  
+a -- s [ weight=10, capacity=10000000, delay=0.10 ];
+b -- s [ weight=10, capacity=10000000, delay=0.10 ];
+c -- s [ weight=10, capacity=10000000, delay=0.10 ];
+d -- s [ weight=10, capacity=10000000, delay=0.10 ];
+e -- s [ weight=10, capacity=10000000, delay=0.10 ];
+f -- s [ weight=10, capacity=10000000, delay=0.10 ];
+g -- s [ weight=10, capacity=10000000, delay=0.10 ];
+h -- s [ weight=10, capacity=10000000, delay=0.10 ];
+i -- s [ weight=10, capacity=10000000, delay=0.10 ];
+j -- s [ weight=10, capacity=10000000, delay=0.10 ];
+
+}

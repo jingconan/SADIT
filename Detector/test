@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+from Detector import *
+import numpy as np
+
+class Tester:
+	def test(self):
+		self.testI1()
+		print 'pass test I1'
+	def testI1(self):
+		x = np.array([0.1, 0.2, 0.3, 0.4])
+		y = np.array([0.25, 0.25, 0.25, 0.25])
+		res = I1(x, y)
+		# assert(res == 0.1064)
+
+
+if __name__ == "__main__":
+	x = Tester()
+	x.test()
+		

@@ -1,0 +1,32 @@
+==========================================================================
+
+Copyright 2011  Joel Sommers.  All rights reserved.
+
+This file is part of fs, a network flow record generation tool.
+
+fs is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+fs is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Harpoon; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+==========================================================================
+
+Documentation placeholder :-)
+
+To use fs, you need the following Python packages:
+- ipaddr (2.1.1)
+- networkx (1.0)
+- pydot (1.0.2)
+- pyparsing (1.5.2)
+- py-radix (0.5)
+
+Versions indicate those that I've tested with.

@@ -1,0 +1,39 @@
+==========================================================================
+
+Copyright 2011  Joel Sommers.  All rights reserved.
+
+This file is part of fs, a network flow record generation tool.
+
+fs is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+fs is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Harpoon; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+==========================================================================
+
+This is code for dynamically and efficiently generating realistic IPv4
+addresses for simulation purposes.  See our SIMUtools 2011 paper for details
+on the method, available at: http://cs.colgate.edu/faculty/jsommers
+
+This code is _alpha_ quality.  There are many things that need to be
+improved about it, most notably the ability to avoid generating addresses
+from RFC1918 space (unless one is using a prefix from that space).  
+
+To build:
+python setup.py build
+
+To install:
+python setup.py install
+
+The file trietest.py gives a short example of how to use the code
+from Python.  The file testmain.c gives an example of how to use it
+from C.

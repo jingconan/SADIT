@@ -1,0 +1,74 @@
+graph test {
+
+    // nodes
+
+    a     [ 
+        autoack="True"
+        ipdests="10.1.0.0/16 10.10.0.0/16 10.128.0.0/9"
+        traffic="m1 m2 m3 m4 m5 m6 m7 m8"
+
+        // basic harpoon setup 
+        // build up and withdrawal of harpoon sources; 10 sources for duration
+        // of 60 sec, followed by 20 sources for 60 sec, etc.
+        m1="modulator start=0.0 generator=s1 profile=((60,),(10,20,30,30,20,10))"
+        s1="harpoon ipsrc=10.2.0.0/16 ipdst=10.3.1.0/24 flowsize=pareto(5000,1.2) flowstart=exponential(1/2.0) pktsize=normal(1000,200) ipproto=randomchoice(6) sport=randomchoice(22,80,443) dport=randomunifint(1025,65535) lossrate=randomuniffloat(0.005,0.01) mss=randomchoice(1500,576,1500) emitprocess=normal(x,x*0.1) iptos=randomchoice(0x0,0x10,0x08,0x04,0x02)"
+
+        // very short flows 
+        // immediate onset/withdrawal, one source started at exponential intervals (mean 1 sec) starting at 
+        // t=10 sec 
+        m2="modulator start=exponential(1/1.0) generator=s2 profile=((10,),(1,))"
+	s2="rawflow ipsrc=10.1.1.0/24 ipdst=10.3.2.0/24 sport=80 dport=randomunifint(1024,65535) ipproto=tcp bytes=normal(3000,500) iptos=randomchoice(0x0,0x02) pktsize=normal(1000,200) tcpflags=SYN|FIN|ACK continuous=False interval=exponential(1/1.0)"
+
+        // udp vbr flows 
+        m3="modulator start=exponential(1/1.0) generator=s3 profile=((10,),(1,))"
+	s3="rawflow ipsrc=10.1.1.5/32 ipdst=10.3.2.5/32 flowlets=100 dport=4444 sport=randomunifint(1024,65535) ipproto=udp pkts=normal(10,1) bytes=normal(1000,100) continuous=False interval=1.0"
+
+        // echo 
+        // icmp dport: high nybble=type, low nybble=code 
+        // every second, start up one source; immediate onset and departure 
+        m4="modulator start=exponential(1/1.0) generator=s4 profile=((10,),(1,))"
+	s4="rawflow ipsrc=10.1.1.5/32 ipdst=10.3.2.5/32 flowlets=1 ipproto=icmp pkts=1 bytes=64 icmptype=8 icmpcode=0 continuous=True interval=1"
+
+        // echo reply 
+        m5="modulator start=exponential(1/1.0) generator=s5 profile=((10,),(1,))"
+	s5="rawflow ipdst=10.1.1.5/32 ipsrc=10.3.2.5/32 flowlets=1 ipproto=icmp pkts=1 bytes=64 icmptype=0 icmpcode=0 continuous=True interval=1"
+
+        // various icmp 
+        m6="modulator start=0.0 generator=s6 profile=((10,),(1,))"
+	s6="rawflow ipdst=10.1.1.5/16 ipsrc=10.3.2.5/16 flowlets=1 ipproto=icmp pkts=1 bytes=64 icmptype=randomchoice(0,3,11,13,8,30) icmpcode=0 continuous=True interval=2"
+
+
+
+        // anomalies
+
+        // SYN flood that ramps up and winds down in a controlled fashion
+        // at t=10 sec, ramp up as a step function from 1 source up to 100;
+        // sustain for 30 sec at 100 sources, then withdraw down to 0, 
+        // reducing by 10 sources every second.
+        m7="modulator start=10 generator=syns emerge=((1,),frange(1,100,10)) sustain=((30,),(100,)) withdraw=((1,),frange(100,0,-10))"
+	syns="rawflow ipsrc=10.1.0.0/16 ipdst=10.3.5.0/26 dport=80 sport=randomunifint(1,65535) ipproto=tcp pkts=1 bytes=40 tcpflags=SYN flowlets=1 continuous=True interval=exponential(1/1.0) autoack=False"
+
+
+        // 'subtractive' anomaly 
+        m8="modulator start=30 generator=sub1 profile=((10,),(1,))"
+        // sub1="subtractive dstnode=a ipdstfilt=10.3.0.0/16 ipsrcfilt=10.2.0.0/16 ipprotofilt=6 action=removeuniform(0.9)"
+        sub1="subtractive dstnode=a action=removeuniform(0.001)"
+    ];
+
+    b  [ 
+        autoack="True"
+        ipdests="10.2.0.0/16" 
+    ];
+
+    c  [ 
+        autoack="True"
+        ipdests="10.3.0.0/16 10.4.0.0/16 10.0.0.0/8" 
+    ];
+
+
+    // links (bidirectional)
+
+    a -- b [weight=10, capacity=1000000, delay=0.043, reliability="failureafter=30 downfor=10"]; 
+    b -- c [weight=10, capacity=1000000, delay=0.031];
+    a -- c [weight=30, capacity=1000000, delay=0.123, reliability="failureafter=35 downfor=5"]; 
+}
