@@ -1,0 +1,54 @@
+                    Statitical Anomaly Detector of Internet Traffic (SADIT)
+What is it?
+-------------
+SADIT aims to provide research community an easy-to-use tool to validate and test
+statistical anomaly detecting method in both simulated and real environment.
+
+In the current developing stage, we focus on simulation. SADIT uses fs(flow-max)
+nework simulator, an efficient & light-weight network simulator developed by UW Madison, to simulate 
+the network flow traffic. 
+For more information about fs(flowmax) simulator, visit http://cs.colgate.edu/~jsommers/#code
+Also refer paper "Efficient Network-wide Flow Record Generation" Infocom 2011.
+
+SADIT now has the following three modules:
+** Configure **
+fs-simulator can only parse DOT file. this module will generate different types
+of DOTS file according the scenaios specfied in settings.py
+
+** Simulator **
+this is a revised fs simulator which supports:
+1. export abnormal flows record
+
+** Detector **
+Implements anomaly detection algorithm in paper
+"STATICAL APPROACHES TO DATA EXFILTRATION DETECTION" submitted to CDC2012.
+
+
+Start from allinone.py 
+run() will run the configurer, simulator and detector consectutively. 
+main() will do the sensitivity analysiss
+
+
+Documentation
+-------------
+
+
+Installation
+-------------
+
+Licensing
+-------------
+Please see the file called LICENSE.
+
+Authors
+-------------
+Jing Conan Wang
+EMAIL: wangjing AT bu.edu
+Personal Webpage: http://people.bu.edu/wangjing/
+Jing Wang is a Ph.D. Student in Division of Systems Engineering, Boston
+University advised by Professor Yannis Paschalidis.
+His main interests is Mathematica Modeling, i.e contruct mathematical 
+models for the real word and try to solve practical problems.
+
+
+
