@@ -2,6 +2,10 @@
 rm ./Share/conf.dot
 rm ./Simulator/*.txt
 rm *.pyc
+rm -r ./Share/sens_*
+rm ./Share/BlindTest/*
+rm ./Share/*.txt
+
 rm ./Simulator/*.pyc
 rm ./Configure/*.pyc
 rm ./Detector/*.pyc
