@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Detector.OldDetector &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for Detector.OldDetector</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># Copyright (C)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software; you can redistribute it and/or</span>
+<span class="c"># modify it under the terms of the GNU General Public License</span>
+<span class="c"># as published by the Free Software Foundation; either version 2</span>
+<span class="c"># of the License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU General Public License</span>
+<span class="c"># along with this program; if not, write to the Free Software</span>
+<span class="c"># Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.</span>
+<span class="c">#</span>
+<span class="c">##</span>
+<span class="c"># @file Detector.py</span>
+<span class="c"># @brief Anomaly Detector, Model Free and Model-based</span>
+<span class="c"># @author Jing Conan Wang, hbhzwj@gmail.com</span>
+<span class="c"># @version 1.0</span>
+<span class="c"># @date 2012-01-20</span>
+
+<span class="c">### --  Revision History --</span>
+<span class="c">### -- [2012-02-27 14:51:48] Extract Quantized State of Abnormal Flows --</span>
+<span class="c">### -- [2012-02-27 15:18:46] Merge the part of generating Nominal PDF to GenNominalPDF --</span>
+<span class="c">### --[2012-02-28 17:26:28] Revise TransData, make time start from 0</span>
+<span class="c">### -- [2012-02-28 19:07:40] add Mutliple Feature API ---</span>
+
+<span class="kn">from</span> <span class="nn">DataParser</span> <span class="kn">import</span> <span class="n">ParseData</span>
+<span class="kn">from</span> <span class="nn">ClusterAlg</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;..&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pickle</span> <span class="kn">import</span> <span class="n">dump</span><span class="p">,</span> <span class="n">load</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">Derivative</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">util</span>
+
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">profilehooks</span> <span class="kn">import</span> <span class="n">profile</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;[warning] profilehooks was not found ...&#39;</span>
+
+<div class="viewcode-block" id="TransData"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.TransData">[docs]</a><span class="k">def</span> <span class="nf">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">):</span>
+    <span class="n">uniqueIP</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">srcIP</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">srcIPVec</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">flowSize</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">endTime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># i = 0</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">flow</span><span class="p">:</span>
+        <span class="n">uniqueIP</span><span class="o">.</span><span class="n">add</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;srcIP&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">srcIP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;srcIP&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">srcIPVec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;srcIPVec&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">flowSize</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;flowSize&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">endTime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;endT&#39;</span><span class="p">]</span> <span class="p">)</span>
+
+    <span class="c"># return uniqueIP, srcIP, srcIPVec, flowSize</span>
+    <span class="n">sortIdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">sortedSrcIP</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sortedFlowSize</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sortedTime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sortedDur</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sortIdx</span><span class="p">:</span>
+        <span class="n">sortedSrcIP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="n">sortedFlowSize</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flowSize</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="n">sortedTime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="n">sortedDur</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">endTime</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">time</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="p">)</span>
+
+    <span class="c"># minT = min(sortedTime)</span>
+    <span class="c"># sortedTimeAligned = [t - minT for t in sortedTime]</span>
+    <span class="k">return</span> <span class="n">sortedSrcIP</span><span class="p">,</span> <span class="n">sortedFlowSize</span><span class="p">,</span> <span class="n">sortedTime</span><span class="p">,</span> <span class="n">sortedDur</span>
+    <span class="c"># return sortedSrcIP, sortedFlowSize, sortedTimeAligned, sortedDur</span>
+    <span class="c"># return srcIPVec, flowSize, time</span>
+</div>
+<div class="viewcode-block" id="GetDistToCenter"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.GetDistToCenter">[docs]</a><span class="k">def</span> <span class="nf">GetDistToCenter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">dis</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">cl</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">dis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">DF</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dis</span>
+</div>
+<div class="viewcode-block" id="QuantizeState"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.QuantizeState">[docs]</a><span class="k">def</span> <span class="nf">QuantizeState</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">rg</span><span class="p">):</span>
+    <span class="n">minVal</span><span class="p">,</span> <span class="n">maxVal</span> <span class="o">=</span> <span class="n">rg</span>
+    <span class="n">stepSize</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxVal</span> <span class="o">-</span> <span class="n">minVal</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># print &#39;stepSize: &#39; + str(stepSize)</span>
+    <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span> <span class="p">(</span><span class="n">ele</span> <span class="o">-</span> <span class="n">minVal</span> <span class="p">)</span> <span class="o">/</span> <span class="n">stepSize</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">seq</span> <span class="o">&gt;=</span> <span class="n">nx</span><span class="p">:</span>
+            <span class="c"># import pdb; pdb.set_trace()</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">nx</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">minVal</span> <span class="o">+</span>  <span class="n">seq</span> <span class="o">*</span> <span class="n">stepSize</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">g</span>
+
+<span class="c"># @profile</span></div>
+<div class="viewcode-block" id="ModelBased"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.ModelBased">[docs]</a><span class="k">def</span> <span class="nf">ModelBased</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">):</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span><span class="p">,</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">K</span><span class="o">*</span><span class="n">ND</span><span class="o">*</span><span class="n">NF</span><span class="p">,</span> <span class="p">))</span>
+
+    <span class="n">m_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">gc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">gd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">K</span> <span class="o">+</span> <span class="n">gf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">K</span><span class="o">*</span><span class="n">ND</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">fl</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">mp</span><span class="p">[</span><span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">mp</span><span class="p">[</span><span class="n">m_list</span><span class="p">[</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">mp</span> <span class="o">/</span> <span class="n">fl</span>
+    <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">mp</span>
+</div>
+<div class="viewcode-block" id="ModelFree"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.ModelFree">[docs]</a><span class="k">def</span> <span class="nf">ModelFree</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">):</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span><span class="p">,</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="c"># import pdb; pdb.set_trace()</span>
+    <span class="n">m_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">gc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">gd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">K</span> <span class="o">+</span> <span class="n">gf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">K</span><span class="o">*</span><span class="n">ND</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">fl</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fl</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">P</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fl</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">P</span>
+</div>
+<div class="viewcode-block" id="I1"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.I1">[docs]</a><span class="k">def</span> <span class="nf">I1</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span>
+    <span class="c"># for i in range(a):</span>
+        <span class="c"># if mu[i] == 0 or nu[i] == 0:</span>
+            <span class="c"># continue</span>
+        <span class="c"># e += nu[i] * np.log( nu[i] * 1.0 / mu[i] )</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">y</span> <span class="p">)</span>
+    <span class="n">nonZeroIdxSet</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">if</span> <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">nu</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c"># FIXME find better to make sure e is nonnegative</span>
+    <span class="c"># nu = nu / np.sum(nu[nonZeroIdxSet])</span>
+    <span class="c"># mu = mu / np.sum(mu[nonZeroIdxSet])</span>
+    <span class="n">e</span> <span class="o">=</span>  <span class="nb">sum</span><span class="p">(</span> <span class="n">F</span><span class="p">(</span><span class="n">nu</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nonZeroIdxSet</span> <span class="p">)</span> <span class="c">#  ele in nonZeroIdxSet for both nu and mu should sum to 1 to make e nonnegative.</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="c"># return e</span>
+</div>
+<div class="viewcode-block" id="I2"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.I2">[docs]</a><span class="k">def</span> <span class="nf">I2</span><span class="p">(</span><span class="n">P1</span><span class="p">,</span> <span class="n">mp1</span><span class="p">,</span> <span class="n">P2</span><span class="p">,</span> <span class="n">mp2</span><span class="p">):</span>
+    <span class="c"># mp1 = mp1 / np.sum(mp1)</span>
+    <span class="c"># mp2 = mp2 / np.sum(mp2)</span>
+    <span class="k">assert</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mp1</span><span class="p">)</span>  <span class="o">-</span> <span class="mf">1.0</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mp2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">)</span>
+    <span class="c"># if np.sum(mp1) == 0 or np.sum(mp2) == 0:</span>
+        <span class="c"># raise ValueError(&#39;sum zero&#39;)</span>
+
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">P1</span><span class="p">)</span>
+    <span class="n">P1Con</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">P1</span><span class="p">)</span>
+    <span class="n">P2Con</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">P2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">mp1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">P1Con</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">mp1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">mp2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">P2Con</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/=</span> <span class="n">mp2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="c"># Compute Expectation of Each Relative Entropy</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="n">mp1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">I1</span><span class="p">(</span><span class="n">P1Con</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">P2Con</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="k">return</span> <span class="n">y</span>
+</div>
+<div class="viewcode-block" id="FindCenter"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.FindCenter">[docs]</a><span class="k">def</span> <span class="nf">FindCenter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">):</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">dv</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">centerPt</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="n">dv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dv</span><span class="p">)</span>
+        <span class="n">cluster</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dv</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">md</span><span class="p">))</span>
+        <span class="n">distToCenter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">distToCenter</span>
+
+<span class="c"># def Find(L, th):</span>
+<span class="c">#     i = -1</span>
+<span class="c">#     for val in L:</span>
+<span class="c">#         i += 1</span>
+<span class="c">#         if val &gt; th:</span>
+<span class="c">#             return i-1</span>
+
+</div>
+<div class="viewcode-block" id="GetRange"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.GetRange">[docs]</a><span class="k">def</span> <span class="nf">GetRange</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">):</span>
+    <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">GetDistToCenter</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">distRange</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">distToCenter</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">distToCenter</span><span class="p">)]</span>
+    <span class="n">flowSizeRange</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">flowSize</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">flowSize</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span>
+</div>
+<div class="viewcode-block" id="GetFeature"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.GetFeature">[docs]</a><span class="k">def</span> <span class="nf">GetFeature</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Return Quantized distance and flowsize as feature&#39;&#39;&#39;</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">GetDistToCenter</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">posDist</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">distToCenter</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">distRange</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">posFlowSize</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">flowSize</span> <span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFlowSize</span>
+
+<span class="c"># The Distance Function</span></div>
+<span class="n">DF</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="c"># NominalPDFFile = &#39;../share/detect/nominal.p&#39;</span>
+<span class="n">NominalPDFFile</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">NominalPDFFile</span>
+
+
+<span class="c">##########################################################################################</span>
+<span class="c">#### API For Support Multiple Feature</span>
+<span class="c">##########################################################################################</span>
+
+<span class="c"># def GetAllPDF(srcIPVec, cluster, centerPt, flowSize, distRange, flowSizeRange, ND, NF):</span>
+<span class="c"># @profile</span>
+<div class="viewcode-block" id="GetAllPDF_MF"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.GetAllPDF_MF">[docs]</a><span class="k">def</span> <span class="nf">GetAllPDF_MF</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">featureRange</span><span class="p">,</span>  <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This Function Support Multiple Features, _MF means multiple feature</span>
+<span class="sd">    feature is a list contains all features</span>
+<span class="sd">    featureQ is a list of quantization set that specifies the quantization level of each feature</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">GetDistToCenter</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">posDist</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">distToCenter</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">distRange</span><span class="p">)</span>
+
+    <span class="n">posFeature</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature</span><span class="p">)):</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">qLevel</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">feature</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span> <span class="n">featureQ</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">featureRange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">posFeature</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qLevel</span><span class="p">)</span>
+
+    <span class="n">pmf</span> <span class="o">=</span> <span class="n">ModelFree_MF</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span>
+    <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span> <span class="o">=</span> <span class="n">ModelBased_MF</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pmf</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span>
+</div>
+<span class="kn">import</span> <span class="nn">operator</span>
+
+<span class="c"># @profile</span>
+<div class="viewcode-block" id="FeatureHash"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.FeatureHash">[docs]</a><span class="k">def</span> <span class="nf">FeatureHash</span><span class="p">(</span><span class="n">digit</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">digit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">digit</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">level</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">digit</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">level</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">level</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c"># return digit[2] + digit[1] * level[0] + digit[0] * level[1] * level[0]</span>
+    <span class="c"># value = digit[0]</span>
+    <span class="c"># for i in xrange(len(digit)-1):</span>
+        <span class="c"># value += digit[i+1] * reduce(operator.mul, level[0:i+1])</span>
+    <span class="c"># return value</span>
+</div>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+
+<div class="viewcode-block" id="UnifyF"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.UnifyF">[docs]</a><span class="k">def</span> <span class="nf">UnifyF</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Append c and d to feature&#39;&#39;&#39;</span>
+    <span class="n">plain</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+    <span class="n">plain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">plain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plain</span>
+</div>
+<div class="viewcode-block" id="GetFeatureHashList"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.GetFeatureHashList">[docs]</a><span class="k">def</span> <span class="nf">GetFeatureHashList</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Generate Has Value for all possible features&#39;&#39;&#39;</span>
+    <span class="n">unifyFeature</span> <span class="o">=</span> <span class="n">UnifyF</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">)</span>
+    <span class="n">unifyQ</span> <span class="o">=</span> <span class="n">UnifyF</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="c"># import pdb;pdb.set_trace()</span>
+    <span class="n">unifyAlignFeature</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">unifyFeature</span> <span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">fl</span><span class="p">)]</span>
+    <span class="n">m_list</span> <span class="o">=</span> <span class="p">[</span> <span class="n">FeatureHash</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">unifyQ</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">unifyAlignFeature</span> <span class="p">]</span>
+    <span class="k">return</span> <span class="n">m_list</span>
+</div>
+<div class="viewcode-block" id="ModelBased_MF"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.ModelBased_MF">[docs]</a><span class="k">def</span> <span class="nf">ModelBased_MF</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">):</span>
+    <span class="n">QLevelNum</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">QLevelNum</span><span class="p">,</span> <span class="n">QLevelNum</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">QLevelNum</span><span class="p">,</span> <span class="p">))</span>
+    <span class="n">m_list</span> <span class="o">=</span> <span class="n">GetFeatureHashList</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">mp</span><span class="p">[</span><span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">mp</span><span class="p">[</span><span class="n">m_list</span><span class="p">[</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">mp</span> <span class="o">/</span> <span class="n">fl</span>
+    <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">mp</span>
+</div>
+<div class="viewcode-block" id="ModelFree_MF"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.ModelFree_MF">[docs]</a><span class="k">def</span> <span class="nf">ModelFree_MF</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">):</span>
+    <span class="n">QLevelNum</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">QLevelNum</span><span class="p">,</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="n">m_list</span> <span class="o">=</span> <span class="n">GetFeatureHashList</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">posFeature</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">featureQ</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fl</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">m_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">P</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fl</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">P</span>
+
+<span class="c">##########################################################################################</span>
+<span class="c">####  END API For Support Multiple Feature</span>
+<span class="c">##########################################################################################</span>
+
+</div>
+<div class="viewcode-block" id="GenNominalPDF"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.GenNominalPDF">[docs]</a><span class="k">def</span> <span class="nf">GenNominalPDF</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">):</span>
+    <span class="c"># Generate Nominal PDF</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="n">ParseData</span><span class="p">(</span><span class="n">fName</span><span class="p">);</span>
+    <span class="n">srcIPVec</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+    <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span> <span class="o">=</span> <span class="n">GetRange</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">)</span>
+
+    <span class="n">normalStart</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">normalEnd</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">ANOMALY_TIME</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c">#FIXME Add feature like flow duration and estimation of flow arrival rate</span>
+    <span class="n">pmf</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span> <span class="o">=</span> <span class="n">GetAllPDF_MF</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">[</span><span class="n">normalStart</span><span class="p">:</span><span class="n">normalEnd</span><span class="p">],</span> <span class="n">cluster</span><span class="p">[</span><span class="n">normalStart</span><span class="p">:</span><span class="n">normalEnd</span><span class="p">],</span>
+            <span class="n">centerPt</span><span class="p">,</span> <span class="p">[</span><span class="n">flowSize</span><span class="p">[</span><span class="n">normalStart</span><span class="p">:</span><span class="n">normalEnd</span><span class="p">]],</span>
+            <span class="n">distRange</span><span class="p">,</span> <span class="p">[</span><span class="n">flowSizeRange</span><span class="p">],</span>
+            <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="p">[</span><span class="n">NF</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pmf</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">,</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="n">data</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">NominalPDFFile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pmf</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">,</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span>
+
+
+<span class="c"># from AnomalyAna import AddAnoFlag</span>
+</div>
+<div class="viewcode-block" id="Detect"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.Detect">[docs]</a><span class="k">def</span> <span class="nf">Detect</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">wSize</span><span class="p">):</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="n">ParseData</span><span class="p">(</span><span class="n">fName</span><span class="p">);</span>
+    <span class="n">srcIPVec</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+    <span class="c">### Generate Nominal PDF ###</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">UNIFIED_NOMINAL_PDF</span><span class="p">:</span>
+        <span class="n">pmf</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">,</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">NominalPDFFile</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pmf</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">,</span> <span class="n">distRange</span><span class="p">,</span> <span class="n">flowSizeRange</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span> <span class="o">=</span> <span class="n">GenNominalPDF</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">)</span>
+
+    <span class="n">IF</span><span class="p">,</span> <span class="n">IB</span><span class="p">,</span> <span class="n">winT</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">lp</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># last Position</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># current position</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ti</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DETECTOR_INTERVAL</span>
+    <span class="n">detectNum</span> <span class="o">=</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span> <span class="o">/</span> <span class="n">dInter</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">WINDOW_TYPE</span> <span class="o">==</span> <span class="s">&#39;FLOW&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">int</span><span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="n">wSize</span> <span class="p">)</span><span class="o">/</span><span class="n">ti</span><span class="p">)</span>
+    <span class="n">minT</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="n">CleanGlobalDeri</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">detectNum</span><span class="p">):</span>
+        <span class="c"># Find Data</span>
+        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">WINDOW_TYPE</span> <span class="o">==</span> <span class="s">&#39;FLOW&#39;</span><span class="p">:</span>
+            <span class="n">lp</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="n">wSize</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">lp</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">settings</span><span class="o">.</span><span class="n">WINDOW_TYPE</span> <span class="o">==</span> <span class="s">&#39;TIME&#39;</span><span class="p">:</span>
+            <span class="n">time</span> <span class="o">+=</span> <span class="n">ti</span>
+            <span class="n">lp</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">time</span><span class="o">+</span><span class="n">wSize</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknow window type&#39;</span><span class="p">)</span>
+
+        <span class="k">print</span> <span class="s">&#39;time: </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">time</span> <span class="o">-</span> <span class="n">minT</span><span class="p">)</span>
+
+        <span class="n">sIP</span> <span class="o">=</span> <span class="n">srcIPVec</span><span class="p">[</span><span class="n">lp</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">flowSize</span><span class="p">[</span><span class="n">lp</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">localCluster</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="n">lp</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c"># Update Hoeffding test threshold</span>
+        <span class="n">threshold</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">idx</span><span class="o">-</span><span class="n">lp</span><span class="o">+</span><span class="mi">1</span> <span class="p">)</span> <span class="c">#FIXME it is not real threshold</span>
+
+        <span class="n">d_pmf</span><span class="p">,</span> <span class="n">d_Pmb</span><span class="p">,</span> <span class="n">d_mpmb</span> <span class="o">=</span> <span class="n">GetAllPDF_MF</span><span class="p">(</span><span class="n">sIP</span><span class="p">,</span> <span class="n">localCluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="p">[</span><span class="n">fs</span><span class="p">],</span> <span class="n">distRange</span><span class="p">,</span> <span class="p">[</span><span class="n">flowSizeRange</span><span class="p">],</span>  <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="p">[</span><span class="n">NF</span><span class="p">])</span>
+
+        <span class="n">mfEntro</span> <span class="o">=</span> <span class="n">I1</span><span class="p">(</span><span class="n">d_pmf</span><span class="p">,</span> <span class="n">pmf</span><span class="p">)</span>
+        <span class="n">mbEntro</span> <span class="o">=</span> <span class="n">I2</span><span class="p">(</span><span class="n">d_Pmb</span><span class="p">,</span> <span class="n">d_mpmb</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">)</span>
+        <span class="n">IF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mfEntro</span><span class="p">)</span>
+        <span class="n">IB</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mbEntro</span><span class="p">)</span>
+        <span class="n">winT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+        <span class="c"># Identify the Most significant state transition for model-base case</span>
+        <span class="n">modelFreeDeri</span><span class="o">=</span> <span class="n">ModelFreeDerivative</span><span class="p">(</span><span class="n">d_pmf</span><span class="p">,</span> <span class="n">pmf</span><span class="p">)</span>
+        <span class="n">modelBaseDeri</span> <span class="o">=</span> <span class="n">ModelBaseDerivative</span><span class="p">(</span><span class="n">d_Pmb</span><span class="p">,</span> <span class="n">d_mpmb</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">)</span>
+        <span class="c"># util.Dump2Txt(deri, &#39;./deri.res&#39;, &#39;2dnp&#39;)</span>
+
+    <span class="n">DumpDerivative</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">PLOT_DERIVATIVE</span><span class="p">:</span>
+        <span class="n">PlotModelBase</span><span class="p">()</span>
+        <span class="n">PlotModelFree</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">IF</span><span class="p">,</span> <span class="n">IB</span><span class="p">,</span> <span class="n">winT</span><span class="p">,</span> <span class="n">threshold</span>
+</div>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="viewcode-block" id="Compare"><a class="viewcode-back" href="../../Detector.html#Detector.OldDetector.Compare">[docs]</a><span class="k">def</span> <span class="nf">Compare</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">dataName</span><span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DETECTOR_WINDOW_SIZE</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DETECTOR_PREFIX</span>
+    <span class="n">clusterNum</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">CLUSTER_NUMBER</span>
+    <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DISCRETE_LEVEL</span>
+
+    <span class="c"># print &#39;Window Size: &#39;, ws</span>
+    <span class="c"># print &#39;Prefix: &#39;, prefix</span>
+
+    <span class="n">IF2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">threshold</span> <span class="o">=</span> <span class="n">Detect</span><span class="p">(</span><span class="n">fName</span><span class="o">=</span><span class="n">fName</span><span class="p">,</span>
+            <span class="n">clusterNum</span><span class="o">=</span><span class="n">clusterNum</span><span class="p">,</span>
+            <span class="n">ND</span><span class="o">=</span><span class="n">ND</span><span class="p">,</span>
+            <span class="n">NF</span><span class="o">=</span><span class="n">NF</span><span class="p">,</span>
+            <span class="n">wSize</span> <span class="o">=</span> <span class="n">ws</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dataName</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+        <span class="c"># data = t2, IF2, IB2 #FIXME ATTENTION the order</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">t2</span><span class="p">,</span> <span class="n">IF2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">,</span> <span class="n">threshold</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="n">data</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">dataName</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">figure</span><span class="p">()</span>
+        <span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">IF2</span><span class="p">)</span>
+        <span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">)</span>
+        <span class="n">show</span><span class="p">()</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">os</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;cp ../settings_template.py ../settings.py&#39;</span><span class="p">)</span>
+    <span class="n">Compare</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

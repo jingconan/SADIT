@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>BlindTest &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for BlindTest</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">Detector.AnomalyAna</span> <span class="kn">import</span> <span class="n">ModelFreeDetectAnoType</span>
+<span class="kn">from</span> <span class="nn">Detector.AnomalyAna</span> <span class="kn">import</span> <span class="n">ModelBaseDetectAnoType</span>
+
+<div class="viewcode-block" id="TypeBlindTest"><a class="viewcode-back" href="../BlindTest.html#BlindTest.TypeBlindTest">[docs]</a><span class="k">def</span> <span class="nf">TypeBlindTest</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Blind Test of Anomaly Type, a anomaly will be randomly generate and we will use</span>
+<span class="sd">    derivative based method to detect the type of test, get the right ratio&#39;&#39;&#39;</span>
+    <span class="n">ANOMALY_TYPE_SELECTION_SET</span> <span class="o">=</span> <span class="n">settings_template</span><span class="o">.</span><span class="n">ANOMALY_TYPE_SELECTION_SET</span>
+    <span class="n">DEGREE_SELECTION_SET</span> <span class="o">=</span> <span class="n">settings_template</span><span class="o">.</span><span class="n">DEGREE_SELECTION_SET</span>
+    <span class="n">TEST_NUM</span> <span class="o">=</span> <span class="n">settings_template</span><span class="o">.</span><span class="n">TEST_NUM</span>
+
+    <span class="c"># TEST_NUM = 1</span>
+    <span class="n">mfIndiSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mbIndiSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labelSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">TEST_NUM</span><span class="p">):</span>
+        <span class="n">stTime</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
+        <span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ANOMALY_TYPE_SELECTION_SET</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ANOMALY_TYPE</span> <span class="o">==</span>  <span class="s">&#39;FLOW_SIZE&#39;</span><span class="p">:</span>
+            <span class="n">DEGREE_SELECTION</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">DEGREE_SELECTION_SET</span><span class="p">)</span>
+            <span class="n">FLOW_SIZE_MEAN</span><span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mf">1e6</span><span class="p">,</span> <span class="mf">2e6</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span> <span class="n">DEGREE_SELECTION</span> <span class="o">==</span> <span class="s">&#39;increase&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mf">4e4</span><span class="p">,</span> <span class="mf">5e4</span><span class="p">)</span>
+            <span class="n">CreateSettings</span><span class="p">(</span><span class="s">&#39;./settings_template.py&#39;</span><span class="p">,</span> <span class="s">&#39;./setting.py&#39;</span><span class="p">,</span>
+                        <span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="n">ANOMALY_TYPE</span><span class="p">,</span>
+                        <span class="n">FLOW_SIZE_MEAN</span> <span class="o">=</span> <span class="n">FLOW_SIZE_MEAN</span><span class="p">)</span>
+            <span class="n">ID_SUFFIX</span> <span class="o">=</span> <span class="n">FLOW_SIZE_MEAN</span>
+            <span class="n">CateLabel</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span> <span class="n">DEGREE_SELECTION</span> <span class="o">==</span> <span class="s">&#39;increase&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">2</span>
+
+        <span class="k">elif</span> <span class="n">ANOMALY_TYPE</span> <span class="o">==</span>  <span class="s">&#39;FLOW_RATE&#39;</span><span class="p">:</span>
+            <span class="n">DEGREE_SELECTION</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">DEGREE_SELECTION_SET</span><span class="p">)</span>
+            <span class="c"># FLOW_RATE = random.randrange(1.5, 3, 0.1) if ( DEGREE_SELECTION == &#39;increase&#39;) else random.randrange(0.2, 0.7, 0.1)</span>
+            <span class="n">FLOW_RATE</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span> <span class="k">if</span> <span class="p">(</span> <span class="n">DEGREE_SELECTION</span> <span class="o">==</span> <span class="s">&#39;increase&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">CreateSettings</span><span class="p">(</span><span class="s">&#39;./settings_template.py&#39;</span><span class="p">,</span> <span class="s">&#39;./setting.py&#39;</span><span class="p">,</span>
+                    <span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="n">ANOMALY_TYPE</span><span class="p">,</span>
+                    <span class="n">FLOW_RATE</span><span class="o">=</span><span class="n">FLOW_RATE</span><span class="p">)</span>
+            <span class="n">ID_SUFFIX</span> <span class="o">=</span> <span class="n">FLOW_RATE</span>
+            <span class="n">CateLabel</span> <span class="o">=</span> <span class="mi">3</span> <span class="k">if</span> <span class="p">(</span> <span class="n">DEGREE_SELECTION</span> <span class="o">==</span> <span class="s">&#39;increase&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">4</span>
+
+
+        <span class="k">elif</span> <span class="n">ANOMALY_TYPE</span> <span class="o">==</span> <span class="s">&#39;ATYPICAL_USER&#39;</span><span class="p">:</span>
+            <span class="n">CreateSettings</span><span class="p">(</span><span class="s">&#39;./settings_template.py&#39;</span><span class="p">,</span> <span class="s">&#39;./setting.py&#39;</span><span class="p">,</span>
+                    <span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="n">ANOMALY_TYPE</span><span class="p">)</span>
+            <span class="n">ID_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+            <span class="n">CateLabel</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown ANOMATYPE_TYPE&#39;</span><span class="p">)</span>
+
+        <span class="k">print</span> <span class="s">&#39;start to configure&#39;</span>
+        <span class="n">GlobalConfigure</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;start to simulate&#39;</span>
+        <span class="n">Simulate</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;start to detect&#39;</span>
+        <span class="n">GlobalDetect</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">OUTPUT_FLOW_FILE</span><span class="p">,</span> <span class="s">&#39;./Share/BlindTest/</span><span class="si">%d</span><span class="s">-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">.p&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ANOMALY_TYPE</span><span class="p">,</span> <span class="n">ID_SUFFIX</span><span class="p">))</span>
+        <span class="n">mfIndi</span> <span class="o">=</span> <span class="n">ModelFreeDetectAnoType</span><span class="p">()</span>
+        <span class="n">mfIndiSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mfIndi</span><span class="p">)</span>
+        <span class="n">mbIndi</span> <span class="o">=</span> <span class="n">ModelBaseDetectAnoType</span><span class="p">()</span>
+        <span class="n">mbIndiSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mbIndi</span><span class="p">)</span>
+        <span class="n">labelSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CateLabel</span><span class="p">)</span>
+        <span class="n">edTime</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&#39;test[</span><span class="si">%d</span><span class="s">]-&gt;total test num:[</span><span class="si">%d</span><span class="s">], time for one test:[</span><span class="si">%d</span><span class="s">], expected total time:[</span><span class="si">%d</span><span class="s">] &#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">TEST_NUM</span><span class="p">,</span> <span class="n">edTime</span><span class="o">-</span><span class="n">stTime</span><span class="p">,</span> <span class="p">(</span><span class="n">edTime</span><span class="o">-</span><span class="n">stTime</span><span class="p">)</span><span class="o">*</span><span class="n">TEST_NUM</span><span class="p">)</span>
+    <span class="c"># LibSVMWrapper(mfIndiSet, mbIndiSet, labelSet)</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -77,12 +77,12 @@ def MultiRun():
     # FlowSizeChange(rg, case)
 
 if __name__ == "__main__":
-    Test()
+    # Test()
     # mfIndi = ModelFreeDetectAnoType()
     # mbIndi = ModelBaseDetectAnoType()
     # Print(mfIndi, mbIndi)
     # GetAnomalyType()
-    # Run()
+    Run()
     # MultiRun()
 
 

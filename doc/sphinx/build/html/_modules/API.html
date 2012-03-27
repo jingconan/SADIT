@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for API</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;This file provides API for all three modules:</span>
+<span class="sd">    1 Configure module,</span>
+<span class="sd">    2 Simulator module,</span>
+<span class="sd">    3 Detector module</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="c">#########################################</span>
+<span class="c">####           Configure API          ###</span>
+<span class="c">#########################################</span>
+<span class="kn">from</span> <span class="nn">Configure.anomaly</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Configure.MarkovAnomaly</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Detector.AnomalyAna</span> <span class="kn">import</span> <span class="n">ModelFreeDetectAnoType</span><span class="p">,</span> <span class="n">ModelBaseDetectAnoType</span><span class="p">,</span><span class="n">GetAnomalyType</span><span class="p">,</span> <span class="n">ModelFreeHTest</span><span class="p">,</span> <span class="n">ModelBaseHTest</span>
+
+<div class="viewcode-block" id="GlobalConfigure"><a class="viewcode-back" href="../API.html#API.GlobalConfigure">[docs]</a><span class="k">def</span> <span class="nf">GlobalConfigure</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Generate configuration file accroding to settings.py&#39;&#39;&#39;</span>
+    <span class="nb">reload</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+    <span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ANOMALY_TIME</span>
+    <span class="n">outputFileName</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">OUTPUT_DOT_FILE</span>
+    <span class="n">anoType</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ANOMALY_TYPE</span>
+    <span class="k">if</span> <span class="n">anoType</span> <span class="o">==</span> <span class="s">&#39;ATYPICAL_USER&#39;</span><span class="p">:</span>
+        <span class="n">GenAtypicalUserAnomalyDot</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">,</span> <span class="n">outputFileName</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">anoType</span> <span class="o">==</span> <span class="s">&#39;FLOW_SIZE&#39;</span><span class="p">:</span>
+        <span class="n">GenFlowSizeAnomalyDot</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">FLOW_SIZE_MEAN</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">FLOW_SIZE_VAR</span><span class="p">,</span> <span class="n">outputFileName</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">anoType</span> <span class="o">==</span> <span class="s">&#39;FLOW_RATE&#39;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;FLOW_RATE, &#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">FLOW_RATE</span>
+        <span class="n">GenFlowRateAnomalyDot</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">FLOW_RATE</span><span class="p">,</span> <span class="n">outputFileName</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">anoType</span> <span class="o">==</span> <span class="s">&#39;MARKOV_TRAN_PROB&#39;</span><span class="p">:</span>
+        <span class="n">GenMarkovTranAnomalyDot</span><span class="p">(</span><span class="n">startTime</span> <span class="p">,</span><span class="n">endTime</span><span class="p">,</span>
+                <span class="n">settings</span><span class="o">.</span><span class="n">ABNORMAL_TRAN_PROB</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">settings</span><span class="o">.</span><span class="n">ABNORMAL_TRAN_PROB</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">outputFileName</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknow anomaly type&#39;</span><span class="p">)</span>
+
+
+<span class="c">#########################################</span>
+<span class="c">####          Simulator API          ###</span>
+<span class="c">#########################################</span></div>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">chdir</span> <span class="k">as</span> <span class="n">cd</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">system</span> <span class="k">as</span> <span class="n">sh</span>
+<div class="viewcode-block" id="Simulate"><a class="viewcode-back" href="../API.html#API.Simulate">[docs]</a><span class="k">def</span> <span class="nf">Simulate</span><span class="p">():</span>
+    <span class="n">simTime</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEFAULT_PROFILE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dotPath</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">OUTPUT_DOT_FILE</span>
+
+    <span class="n">cd</span><span class="p">(</span><span class="s">&#39;./Simulator&#39;</span><span class="p">)</span>
+    <span class="n">sh</span><span class="p">(</span> <span class="s">&#39;./fs.py </span><span class="si">%s</span><span class="s"> -t </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">dotPath</span><span class="p">,</span> <span class="n">simTime</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">cd</span><span class="p">(</span><span class="s">&#39;..&#39;</span><span class="p">)</span>
+
+
+
+
+<span class="c">#########################################</span>
+<span class="c">####          Simulator API          ###</span>
+<span class="c">#########################################</span></div>
+<span class="kn">from</span> <span class="nn">Detector.Detector</span> <span class="kn">import</span> <span class="n">Compare</span> <span class="k">as</span> <span class="n">GlobalDetect</span>
+<span class="kn">from</span> <span class="nn">Detector.Detector</span> <span class="kn">import</span> <span class="n">GenNominalPDF</span>
+
+<div class="viewcode-block" id="GlobalGenerateNominalPDF"><a class="viewcode-back" href="../API.html#API.GlobalGenerateNominalPDF">[docs]</a><span class="k">def</span> <span class="nf">GlobalGenerateNominalPDF</span><span class="p">():</span>
+    <span class="nb">reload</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+    <span class="n">GlobalConfigure</span><span class="p">()</span>
+    <span class="n">Simulate</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&#39;Simulate Done&#39;</span>
+    <span class="n">GenNominalPDF</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">OUTPUT_FLOW_FILE</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">DISCRETE_LEVEL</span> <span class="o">+</span> <span class="p">[</span><span class="n">settings</span><span class="o">.</span><span class="n">CLUSTER_NUMBER</span><span class="p">],</span>
+            <span class="bp">True</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configure.anomaly &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for Configure.anomaly</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># Copyright (C)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software; you can redistribute it and/or</span>
+<span class="c"># modify it under the terms of the GNU General Public License</span>
+<span class="c"># as published by the Free Software Foundation; either version 2</span>
+<span class="c"># of the License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU General Public License</span>
+<span class="c"># along with this program; if not, write to the Free Software</span>
+<span class="c"># Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.</span>
+<span class="c">#</span>
+
+<span class="c">##</span>
+<span class="c"># @file anomaly.py</span>
+<span class="c"># @brief Anomalies Related</span>
+<span class="c"># @author Jing Conan Wang, hbhzwj@gmail.com</span>
+<span class="c"># @version 0.1</span>
+<span class="c"># @date 2011-11-01</span>
+
+<span class="c">### -- [2012-03-04 14:56:03] FlowRate and FlowSize anomaly parameter has be changed as</span>
+<span class="c">### -- ratio instead of absolute value</span>
+
+
+<span class="kn">from</span> <span class="nn">GenDotConf</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">ListType</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;..&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="c"># Used global parameters,</span>
+<span class="c"># * link_attr</span>
+<span class="c"># * ATYPICAL_IP_FILE</span>
+<span class="c"># * IPS_FILE</span>
+
+<span class="c">##################################</span>
+<span class="c">####    Interface          #######</span>
+<span class="c">##################################</span>
+<div class="viewcode-block" id="GenAtypicalUserAnomalyDot"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.GenAtypicalUserAnomalyDot">[docs]</a><span class="k">def</span> <span class="nf">GenAtypicalUserAnomalyDot</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">,</span> <span class="n">outputFileName</span><span class="p">):</span>
+    <span class="n">IPSrcSet</span><span class="p">,</span> <span class="n">AnoSet</span><span class="p">,</span> <span class="n">graphSize</span> <span class="o">=</span> <span class="n">GetIPAdress</span><span class="p">()</span>
+    <span class="n">net</span><span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">StarTopo</span><span class="p">(</span><span class="n">graphSize</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">link_attr</span><span class="p">,</span> <span class="n">IPSrcSet</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">AtypicalUser</span><span class="p">(</span> <span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">),</span> <span class="n">AnoSet</span> <span class="p">)</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">InjectAnomaly</span><span class="p">(</span> <span class="n">A</span> <span class="p">)</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outputFileName</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GenFlowSizeAnomalyDot"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.GenFlowSizeAnomalyDot">[docs]</a><span class="k">def</span> <span class="nf">GenFlowSizeAnomalyDot</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">,</span> <span class="n">fSize_mean</span><span class="p">,</span> <span class="n">fSize_var</span><span class="p">,</span> <span class="n">outputFileName</span><span class="p">):</span>
+    <span class="n">IPSrcSet</span><span class="p">,</span> <span class="n">AnoSet</span><span class="p">,</span> <span class="n">graphSize</span> <span class="o">=</span> <span class="n">GetIPAdress</span><span class="p">()</span>
+    <span class="n">net</span><span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">StarTopo</span><span class="p">(</span><span class="n">graphSize</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">link_attr</span><span class="p">,</span> <span class="n">IPSrcSet</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">FlowSize</span><span class="p">((</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">),</span>
+            <span class="n">IPSrcSet</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fSize_mean</span><span class="p">,</span> <span class="n">fSize_var</span><span class="p">)</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">InjectAnomaly</span><span class="p">(</span> <span class="n">A</span> <span class="p">)</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outputFileName</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GenFlowRateAnomalyDot"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.GenFlowRateAnomalyDot">[docs]</a><span class="k">def</span> <span class="nf">GenFlowRateAnomalyDot</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">,</span> <span class="n">lamb</span><span class="p">,</span> <span class="n">outputFileName</span><span class="p">):</span>
+    <span class="n">IPSrcSet</span><span class="p">,</span> <span class="n">AnoSet</span><span class="p">,</span> <span class="n">graphSize</span> <span class="o">=</span> <span class="n">GetIPAdress</span><span class="p">()</span>
+    <span class="n">net</span><span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">StarTopo</span><span class="p">(</span><span class="n">graphSize</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">link_attr</span><span class="p">,</span> <span class="n">IPSrcSet</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">FlowRate</span><span class="p">((</span><span class="n">startTime</span><span class="p">,</span> <span class="n">endTime</span><span class="p">),</span>
+            <span class="n">IPSrcSet</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">lamb</span><span class="p">)</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">InjectAnomaly</span><span class="p">(</span> <span class="n">A</span> <span class="p">)</span>
+    <span class="n">net</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outputFileName</span><span class="p">)</span>
+
+
+<span class="c">##################################</span>
+<span class="c">####    Utility Function  #######</span>
+<span class="c">##################################</span></div>
+<div class="viewcode-block" id="GetIPAdress"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.GetIPAdress">[docs]</a><span class="k">def</span> <span class="nf">GetIPAdress</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Select normal IP address and abnormal IP address,</span>
+<span class="sd">    the distance  between normal IP address and abnormal IP</span>
+<span class="sd">    address is very large</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">IPMat</span> <span class="o">=</span> <span class="n">GetIPMat</span><span class="p">()</span> <span class="c">#  Get All IPs</span>
+    <span class="n">DF</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="c"># Calculate the center and distance to centers</span>
+    <span class="n">center</span><span class="p">,</span> <span class="n">dis</span> <span class="o">=</span> <span class="n">CalIPCenter</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">sortIdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">dis</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c"># Portion of selected points</span>
+    <span class="n">IPNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dis</span><span class="p">)</span>
+    <span class="n">corePts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">sortIdx</span><span class="p">[</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">IPNum</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">))</span> <span class="p">]</span> <span class="p">);</span>
+    <span class="n">anoPts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">sortIdx</span><span class="p">[</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">IPNum</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">ratio</span><span class="p">)),</span> <span class="n">IPNum</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span> <span class="p">)</span>
+
+    <span class="n">graphSize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">corePts</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">anoPts</span><span class="p">)</span> <span class="c"># Size of the Graph</span>
+
+    <span class="n">IPSrcSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">corePts</span><span class="p">:</span>
+        <span class="n">IPSrcSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+    <span class="n">AnoSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">anoPts</span><span class="p">:</span>
+        <span class="n">AnoSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">IPSrcSet</span><span class="p">,</span> <span class="n">AnoSet</span><span class="p">,</span> <span class="n">graphSize</span>
+</div>
+<div class="viewcode-block" id="CalIPCenter"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.CalIPCenter">[docs]</a><span class="k">def</span> <span class="nf">CalIPCenter</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">DF</span><span class="p">):</span>
+    <span class="n">IPNum</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">IPMat</span><span class="p">)</span>
+    <span class="n">IPCenter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">IPNum</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">IPNum</span><span class="p">):</span>
+        <span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">IPCenter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">IPCenter</span><span class="p">,</span> <span class="n">dis</span>
+
+</div>
+<div class="viewcode-block" id="PlotPts"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.PlotPts">[docs]</a><span class="k">def</span> <span class="nf">PlotPts</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">corePts</span><span class="p">,</span> <span class="n">anoPts</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">corePts</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;bo&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">anoPts</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;ro&#39;</span><span class="p">)</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;go&#39;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="GetIPMat"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.GetIPMat">[docs]</a><span class="k">def</span> <span class="nf">GetIPMat</span><span class="p">():</span>
+    <span class="c"># IP = LoadValidIP(&#39;./ips.txt&#39;)</span>
+    <span class="n">IP</span> <span class="o">=</span> <span class="n">LoadValidIP</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">IPS_FILE</span><span class="p">)</span>
+    <span class="n">IPNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">IP</span><span class="p">)</span>
+    <span class="n">IPMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">IPNum</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">IP</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">ipInt</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">]</span>
+        <span class="n">IPMat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ipInt</span>
+    <span class="k">return</span> <span class="n">IPMat</span>
+
+</div>
+<div class="viewcode-block" id="P2F_RAW"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.P2F_RAW">[docs]</a><span class="k">def</span> <span class="nf">P2F_RAW</span><span class="p">(</span><span class="n">flowRate</span><span class="p">,</span> <span class="n">flowDuration</span><span class="p">,</span> <span class="n">pktRate</span><span class="p">):</span> <span class="c"># Change Prameter to FS Format for rawflow</span>
+    <span class="k">pass</span>
+<span class="c"># interval =</span>
+    <span class="c"># flowlets # Number of Flowlets in Flow</span>
+    <span class="c"># bytes # Number of Flowlets in each flow</span>
+    <span class="c"># interval # Interval between flowlets.</span>
+    <span class="c"># pkts # Number of packets in each emitted flow</span>
+
+</div>
+<div class="viewcode-block" id="F2P_RAW"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.F2P_RAW">[docs]</a><span class="k">def</span> <span class="nf">F2P_RAW</span><span class="p">(</span><span class="n">flowlets</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">pkts</span> <span class="p">):</span>
+    <span class="n">pktRate</span> <span class="o">=</span> <span class="nb">bytes</span> <span class="o">*</span> <span class="n">pkts</span> <span class="o">/</span> <span class="n">interval</span>
+    <span class="n">flowDuration</span> <span class="o">=</span> <span class="n">flowlets</span> <span class="o">*</span> <span class="n">interval</span>
+    <span class="n">flowRate</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">flowDuration</span>
+
+
+
+
+<span class="c">################################</span>
+<span class="c">##    Class Definition  ###</span>
+<span class="c"># Anomaly Considered:</span>
+<span class="c">#     Atypical USer</span>
+<span class="c">#     Change of Flow Rate</span>
+<span class="c">#     Change of Flow Duration</span>
+<span class="c">#     Change of Data Rate</span>
+<span class="c">###############################</span>
+</div>
+<div class="viewcode-block" id="Anomaly"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.Anomaly">[docs]</a><span class="k">class</span> <span class="nc">Anomaly</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="c"># t is a tuple, the first element is start time, the second element is end time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipdst</span> <span class="o">=</span> <span class="s">&#39;165.14.130.9&#39;</span> <span class="c"># FIXME Should be a Parameter</span>
+</div>
+<div class="viewcode-block" id="AtypicalUser"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.AtypicalUser">[docs]</a><span class="k">class</span> <span class="nc">AtypicalUser</span><span class="p">(</span><span class="n">Anomaly</span><span class="p">):</span>
+    <span class="n">ATIP</span> <span class="o">=</span> <span class="bp">None</span> <span class="c"># Atypical IP Set. Will Select IP from this set and add a node with atypical ip</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># A indicator to seperate the IP that has been selected or not</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s">&#39;AtypicaUser&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">atip</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">Anomaly</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">AtypicalUser</span><span class="o">.</span><span class="n">ATIP</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">AtypicalUser</span><span class="o">.</span><span class="n">ATIP</span> <span class="o">=</span> <span class="n">atip</span>
+
+<div class="viewcode-block" id="AtypicalUser.Run"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.AtypicalUser.Run">[docs]</a>    <span class="k">def</span> <span class="nf">Run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net</span><span class="p">):</span>
+        <span class="n">ipdest</span> <span class="o">=</span> <span class="n">AtypicalUser</span><span class="o">.</span><span class="n">ATIP</span><span class="p">[</span><span class="n">AtypicalUser</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">NNode</span><span class="p">(</span><span class="n">ipdest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipdst</span><span class="p">)</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">))</span>
+        <span class="n">AtypicalUser</span><span class="o">.</span><span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">NEdge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">srvNode</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">link_attr</span><span class="p">)</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">node</span>
+
+        <span class="c"># Output the local IP address</span>
+        <span class="c"># fid = open(&#39;../atypical_IP.txt&#39;, &#39;w&#39;)</span>
+        <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">ATYPICAL_IP_FILE</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;ipdest: &#39;</span><span class="p">,</span> <span class="n">ipdest</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">ipdest</span><span class="p">)</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">close</span>
+
+</div></div>
+<div class="viewcode-block" id="FlowRate"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.FlowRate">[docs]</a><span class="k">class</span> <span class="nc">FlowRate</span><span class="p">(</span><span class="n">Anomaly</span><span class="p">):</span>
+    <span class="c"># def __init__(self, t, ip, il):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">ratio</span><span class="p">):</span>
+        <span class="c"># fr is flow rate</span>
+        <span class="n">Anomaly</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span>
+        <span class="c"># self.il = il #interval_lambda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span>
+
+<div class="viewcode-block" id="FlowRate.Run"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.FlowRate.Run">[docs]</a>    <span class="k">def</span> <span class="nf">Run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net</span><span class="p">):</span>
+        <span class="n">para</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEFAULT_PROFILE</span>
+        <span class="n">simT</span> <span class="o">=</span> <span class="n">para</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">NNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipdst</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span>
+                <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+
+        <span class="n">normalRate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span> <span class="n">node</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">][</span><span class="s">&#39;gen_para&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">normalRate</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">ANO_CONF_PARA_FILE</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span>
+
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">flowstart</span><span class="o">=</span><span class="s">&#39;exponential(</span><span class="si">%f</span><span class="s">)&#39;</span> <span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">normalRate</span><span class="p">))</span>
+                <span class="c"># flowstart=&#39;exponential(%f)&#39; %(self.il))</span>
+        <span class="c"># print &#39;self.il: &#39;, self.il, &#39;start: &#39;, start, &#39;end: &#39;, end</span>
+
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">),</span>
+                <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">simT</span> <span class="o">-</span> <span class="n">end</span><span class="p">))</span>
+
+        <span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">NEdge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">srvNode</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">link_attr</span><span class="p">)</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="FlowSize"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.FlowSize">[docs]</a><span class="k">class</span> <span class="nc">FlowSize</span><span class="p">(</span><span class="n">Anomaly</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">fSize_mean_ratio</span><span class="p">,</span> <span class="n">fSize_var</span><span class="p">):</span>
+    <span class="c"># def __init__(self, t, ip, fSize_mean, fSize_var):</span>
+        <span class="c"># fr is flow rate</span>
+        <span class="n">Anomaly</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span>
+        <span class="c"># self.fSize_mean = fSize_mean #interval_lambda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fSize_mean_ratio</span> <span class="o">=</span> <span class="n">fSize_mean_ratio</span> <span class="c">#interval_lambda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fSize_var</span> <span class="o">=</span> <span class="n">fSize_var</span>
+
+<div class="viewcode-block" id="FlowSize.Run"><a class="viewcode-back" href="../../Configure.html#Configure.anomaly.FlowSize.Run">[docs]</a>    <span class="k">def</span> <span class="nf">Run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net</span><span class="p">):</span>
+        <span class="n">para</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEFAULT_PROFILE</span>
+        <span class="n">simT</span> <span class="o">=</span> <span class="n">para</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">NNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipdst</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+
+        <span class="n">normalFSMean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span> <span class="n">node</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">][</span><span class="s">&#39;gen_para&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">normalFSMean</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fSize_mean_ratio</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">ANO_CONF_PARA_FILE</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span>
+
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span>
+                <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">flowsize</span><span class="o">=</span><span class="s">&#39;normal(</span><span class="si">%f</span><span class="s">,</span><span class="si">%f</span><span class="s">)&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">normalFSMean</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fSize_mean_ratio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fSize_var</span><span class="p">))</span>
+                <span class="c"># flowsize=&#39;normal(%f,%f)&#39; %(self.fSize_mean, self.fSize_var))</span>
+
+        <span class="n">node</span><span class="o">.</span><span class="n">ModifyAttr</span><span class="p">(</span><span class="n">seq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">),</span>
+                <span class="n">profile</span><span class="o">=</span><span class="s">&#39;((</span><span class="si">%d</span><span class="s">,),(1,))&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">simT</span> <span class="o">-</span> <span class="n">end</span><span class="p">))</span>
+
+        <span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">NEdge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">srvNode</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">link_attr</span><span class="p">)</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">GenAtypicalUserAnomalyDot</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="s">&#39;./out2.dot&#39;</span><span class="p">)</span>
+    <span class="c"># GenFlowSizeAnomalyDot(2000, 3000, 40000, 400, &#39;./out3.dot&#39;)</span>
+    <span class="c"># GenFlowRateAnomalyDot(2000, 3000, 1, &#39;./out4.dot&#39;)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

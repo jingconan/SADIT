@@ -68,8 +68,10 @@ FLOW_RATE_RANGE = [4, 6, 8]
 
 ### ROOT is the root directory for you directory, be aware to change this before you try to run the code
 # ROOT = '/Users/jingwang/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code'
-ROOT = '/Users/jingwang/Dropbox/Research/Cybersecurity/code/newanomalydetector/neat_code_sens'
+#ROOT = '/Users/jingwang/Dropbox/Research/Cybersecurity/code/newanomalydetector/neat_code_sens'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code_sens'
+
+ROOT = '/home/wangjing/Documents/OpenSource/sadit-sphinx'
 
 # The path for output of configure
 OUTPUT_DOT_FILE = ROOT + '/Share/conf.dot'

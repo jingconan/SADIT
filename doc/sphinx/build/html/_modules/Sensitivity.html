@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sensitivity &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for Sensitivity</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">### -- [2012-03-01 14:45:51] Add FlowRateChange</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">API</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="viewcode-block" id="FlowRateChange"><a class="viewcode-back" href="../Sensitivity.html#Sensitivity.FlowRateChange">[docs]</a><span class="k">def</span> <span class="nf">FlowRateChange</span><span class="p">(</span><span class="n">rg</span><span class="p">,</span> <span class="n">case</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Simulate under different flow rate and store the simulation result&#39;&#39;&#39;</span>
+    <span class="n">templateFilePath</span> <span class="o">=</span> <span class="s">&#39;./settings_template.py&#39;</span>
+    <span class="n">settingsFilePath</span> <span class="o">=</span> <span class="s">&#39;./settings.py&#39;</span>
+    <span class="n">dataDir</span> <span class="o">=</span> <span class="s">&#39;./Share/sens/</span><span class="si">%s</span><span class="s">/&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+
+    <span class="n">CreateSettings</span><span class="p">(</span><span class="n">templateFilePath</span><span class="p">,</span> <span class="n">settingsFilePath</span><span class="p">,</span>
+            <span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="s">&#39;FLOW_RATE&#39;</span><span class="p">)</span>
+    <span class="n">GlobalGenerateNominalPDF</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dataDir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dataDir</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">FLOW_RATE</span> <span class="ow">in</span> <span class="n">rg</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c"># Write New Setting File</span>
+        <span class="n">CreateSettings</span><span class="p">(</span><span class="n">templateFilePath</span><span class="p">,</span> <span class="n">settingsFilePath</span><span class="p">,</span>
+            <span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="s">&#39;FLOW_RATE&#39;</span><span class="p">,</span>
+            <span class="n">FLOW_RATE</span> <span class="o">=</span> <span class="n">FLOW_RATE</span><span class="p">)</span>
+        <span class="n">GlobalConfigure</span><span class="p">()</span>
+        <span class="n">Simulate</span><span class="p">()</span>
+        <span class="n">GlobalDetect</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">OUTPUT_FLOW_FILE</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%f</span><span class="s">.p&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">dataDir</span><span class="p">,</span> <span class="n">FLOW_RATE</span><span class="p">))</span>
+
+    <span class="n">Sensitivity</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="Sensitivity"><a class="viewcode-back" href="../Sensitivity.html#Sensitivity.Sensitivity">[docs]</a><span class="k">def</span> <span class="nf">Sensitivity</span><span class="p">(</span><span class="n">case</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Load the simulation results and show them in the same figure&#39;&#39;&#39;</span>
+    <span class="n">PREFIX</span> <span class="o">=</span> <span class="s">&#39;./Share/sens/</span><span class="si">%s</span><span class="s">/&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+    <span class="n">fNameList</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">PREFIX</span><span class="p">)</span>
+    <span class="n">fNameList</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fNameList</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;p&#39;</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;fNameList&#39;</span><span class="p">,</span> <span class="n">fNameList</span>
+
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+    <span class="n">h2</span> <span class="o">=</span> <span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="n">IF</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">fv</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.p&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">fNameList</span><span class="p">)</span>
+    <span class="n">idxSet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;fv: &#39;</span><span class="p">,</span> <span class="n">fv</span>
+    <span class="k">print</span> <span class="s">&#39;idxSet: &#39;</span><span class="p">,</span> <span class="n">idxSet</span>
+
+    <span class="c"># for f in fNameList:</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxSet</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">fNameList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">print</span> <span class="s">&#39;f, &#39;</span><span class="p">,</span> <span class="n">f</span>
+        <span class="k">if</span> <span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;markov&#39;</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;pi: </span><span class="si">%f</span><span class="s">, </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">fv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="o">-</span><span class="n">fv</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;flow&#39;</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span> <span class="o">+</span> <span class="s">&#39; x&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown case&#39;</span><span class="p">)</span>
+
+        <span class="n">t2</span><span class="p">,</span> <span class="n">IF2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">,</span> <span class="n">sampleSize</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">PREFIX</span> <span class="o">+</span> <span class="n">f</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+        <span class="n">h1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">IF2</span><span class="p">)</span>
+        <span class="n">h2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">)</span> <span class="c"># v.reverse()</span>
+
+    <span class="n">h1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">h2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="c"># epsilon = 1e-100</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">FALSE_ALARM_RATE</span>
+    <span class="c"># import pdb; pdb.set_trace()</span>
+    <span class="c"># trueThreshold = np.array(1.0 / np.array(sampleSize)) * (-1.0) * np.log(epsilon + np.log(sampleSize) / np.array(sampleSize) )</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span>
+    <span class="n">h1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="s">&#39;g.-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="n">h2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="s">&#39;g.-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+    <span class="n">trueThreshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">)</span>
+    <span class="n">h1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">trueThreshold</span><span class="p">,</span> <span class="s">&#39;r--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="n">h2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">trueThreshold</span><span class="p">,</span> <span class="s">&#39;r--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="c"># h2.plot(t2, trueThreshold * 1.5, &#39;--&#39;, linewidth=3.0)</span>
+    <span class="n">savefig</span><span class="p">(</span><span class="s">&#39;./res/sen_</span><span class="si">%s</span><span class="s">.eps&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">case</span><span class="p">))</span>
+    <span class="c"># show()</span>
+
+</div>
+<div class="viewcode-block" id="SensitivityCompareThreshold"><a class="viewcode-back" href="../Sensitivity.html#Sensitivity.SensitivityCompareThreshold">[docs]</a><span class="k">def</span> <span class="nf">SensitivityCompareThreshold</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">ratio</span><span class="p">):</span>
+    <span class="n">PREFIX</span> <span class="o">=</span> <span class="s">&#39;./Share/sens/</span><span class="si">%s</span><span class="s">/&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
+    <span class="n">fNameList</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">PREFIX</span><span class="p">)</span>
+    <span class="n">fNameList</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fNameList</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;p&#39;</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;fNameList&#39;</span><span class="p">,</span> <span class="n">fNameList</span>
+
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+    <span class="n">h2</span> <span class="o">=</span> <span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="n">IF</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">fv</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.p&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">fNameList</span><span class="p">)</span>
+    <span class="n">idxSet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;fv: &#39;</span><span class="p">,</span> <span class="n">fv</span>
+    <span class="k">print</span> <span class="s">&#39;idxSet: &#39;</span><span class="p">,</span> <span class="n">idxSet</span>
+
+    <span class="c"># for f in fNameList:</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxSet</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">fNameList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">print</span> <span class="s">&#39;f, &#39;</span><span class="p">,</span> <span class="n">f</span>
+        <span class="k">if</span> <span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;markov&#39;</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;pi: </span><span class="si">%f</span><span class="s">, </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">fv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="o">-</span><span class="n">fv</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;flow&#39;</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span> <span class="o">+</span> <span class="s">&#39; x&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unknown case&#39;</span><span class="p">)</span>
+
+        <span class="n">t2</span><span class="p">,</span> <span class="n">IF2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">,</span> <span class="n">sampleSize</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">PREFIX</span> <span class="o">+</span> <span class="n">f</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+        <span class="n">h1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">IF2</span><span class="p">)</span>
+        <span class="n">h2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">IB2</span><span class="p">)</span> <span class="c"># v.reverse()</span>
+
+    <span class="n">h1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">h2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="c"># epsilon = 1e-100</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">FALSE_ALARM_RATE</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ratio</span><span class="p">:</span>
+        <span class="n">trueThreshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampleSize</span><span class="p">)</span>
+        <span class="n">h1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">trueThreshold</span><span class="p">,</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">h2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">trueThreshold</span><span class="p">,</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="n">savefig</span><span class="p">(</span><span class="s">&#39;./res/sen_</span><span class="si">%s</span><span class="s">_compare_theshold.eps&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">case</span><span class="p">))</span>
+    <span class="n">show</span><span class="p">()</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c"># Sensitivity(&#39;flow_size_decr&#39;)</span>
+    <span class="c"># Sensitivity(&#39;flow_size_incr&#39;)</span>
+    <span class="c"># Sensitivity(&#39;flow_rate_incr&#39;)</span>
+    <span class="c"># Sensitivity(&#39;window_size&#39;)</span>
+    <span class="c"># Sensitivity(&#39;flow_rate_decr&#39;)</span>
+    <span class="n">Sensitivity</span><span class="p">(</span><span class="s">&#39;FlowRateIncr&#39;</span><span class="p">)</span>
+    <span class="n">SensitivityCompareThreshold</span><span class="p">(</span><span class="s">&#39;FlowRateIncr&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
+    <span class="c"># Sensitivity(&#39;window_size_FLOW_RATE&#39;)</span>
+    <span class="c"># import sys</span>
+    <span class="c"># Sensitivity(sys.argv[1])</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

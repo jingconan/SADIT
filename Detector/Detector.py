@@ -7,6 +7,8 @@ from OldDetector import *
 
 from matplotlib.pyplot import *
 def Compare(fName, dataName= ''):
+    '''Load some parameters and detect.
+    - fName is the '''
     IF2, IB2, t2, threshold = Detect(fName,
             settings.DISCRETE_LEVEL + [settings.CLUSTER_NUMBER],
             settings.DETECTOR_WINDOW_SIZE)

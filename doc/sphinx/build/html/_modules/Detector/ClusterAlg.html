@@ -1,0 +1,169 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Detector.ClusterAlg &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for Detector.ClusterAlg</h1><div class="highlight"><pre>
+<span class="c"># from types import TupleType</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span>
+
+
+<div class="viewcode-block" id="ReClustering"><a class="viewcode-back" href="../../Detector.html#Detector.ClusterAlg.ReClustering">[docs]</a><span class="k">def</span> <span class="nf">ReClustering</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">):</span>
+	<span class="n">cluster</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+		<span class="n">dv</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">centerPt</span><span class="p">:</span>
+			<span class="n">d</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+			<span class="n">dv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+		<span class="n">md</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dv</span><span class="p">)</span>
+		<span class="n">cluster</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dv</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">md</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">cluster</span>
+</div>
+<div class="viewcode-block" id="Add"><a class="viewcode-back" href="../../Detector.html#Detector.ClusterAlg.Add">[docs]</a><span class="k">def</span> <span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+		<span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+	<span class="k">return</span> <span class="n">res</span>
+</div>
+<div class="viewcode-block" id="NDivide"><a class="viewcode-back" href="../../Detector.html#Detector.ClusterAlg.NDivide">[docs]</a><span class="k">def</span> <span class="nf">NDivide</span><span class="p">(</span><span class="n">cSum</span><span class="p">,</span> <span class="n">cLen</span><span class="p">):</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cSum</span><span class="p">)):</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cSum</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+			<span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">cSum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">cLen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
+
+		<span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">res</span>
+</div>
+<div class="viewcode-block" id="CalClusteringCenter"><a class="viewcode-back" href="../../Detector.html#Detector.ClusterAlg.CalClusteringCenter">[docs]</a><span class="k">def</span> <span class="nf">CalClusteringCenter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cluster</span><span class="p">):</span>
+	<span class="c"># print &#39;cluster: &#39; + str(cluster)</span>
+	<span class="n">ucLen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+	<span class="n">cSum</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ucLen</span><span class="p">):</span>
+		<span class="n">cSum</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+	<span class="n">cLen</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ucLen</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+	<span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+		<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="n">cl</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="c"># print &#39;cl: &#39; + str(cl)</span>
+		<span class="c"># print cSum</span>
+		<span class="n">cSum</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="n">Add</span><span class="p">(</span><span class="n">cSum</span><span class="p">[</span><span class="n">cl</span><span class="p">],</span> <span class="n">ele</span><span class="p">)</span>
+		<span class="n">cLen</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+	<span class="c"># print &#39;cSum: &#39; + str(cSum)</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">cAve</span> <span class="o">=</span> <span class="n">NDivide</span><span class="p">(</span><span class="n">cSum</span><span class="p">,</span> <span class="n">cLen</span><span class="p">)</span>
+	<span class="k">except</span><span class="p">:</span>
+		<span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">cAve</span>
+
+</div>
+<div class="viewcode-block" id="Equal"><a class="viewcode-back" href="../../Detector.html#Detector.ClusterAlg.Equal">[docs]</a><span class="k">def</span> <span class="nf">Equal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">False</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+		<span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+			<span class="k">return</span> <span class="bp">False</span>
+	<span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="KMeans"><a class="viewcode-back" href="../../Detector.html#Detector.ClusterAlg.KMeans">[docs]</a><span class="k">def</span> <span class="nf">KMeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">distFunc</span><span class="p">):</span>
+	<span class="c"># Initialize</span>
+	<span class="n">centerPt</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+	<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+		<span class="n">cluster</span> <span class="o">=</span> <span class="n">ReClustering</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">distFunc</span><span class="p">)</span>
+		<span class="n">NewCenterPt</span> <span class="o">=</span> <span class="n">CalClusteringCenter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cluster</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">Equal</span><span class="p">(</span><span class="n">NewCenterPt</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">):</span>
+			<span class="k">break</span>
+		<span class="n">centerPt</span> <span class="o">=</span> <span class="n">NewCenterPt</span>
+
+	<span class="k">return</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span> </div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Detector.AnomalyAna &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for Detector.AnomalyAna</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="c"># -- Created at [2012-02-27 14:53:50] --</span>
+<span class="c"># -- [2012-02-27 15:54:26] Add GetAbnormalFlowQType() --</span>
+<span class="c"># -- [2012-02-27 21:27:18] Add ModelFreeDetectAnoType() --</span>
+<span class="c"># -- [2012-02-28 12:15:20] Add ModelBseDetectAnoType --</span>
+<span class="c"># -- [2012-03-03 00:02:09] Revise FeaRange --</span>
+<span class="c"># -- [2012-03-21 23:43:11] add savefig and add &quot;component&quot; to replace derivative</span>
+
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;..&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="kn">from</span> <span class="nn">DataParser</span> <span class="kn">import</span> <span class="n">ParseData</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="kn">import</span> <span class="nn">operator</span>
+<div class="viewcode-block" id="RFHash"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.RFHash">[docs]</a><span class="k">def</span> <span class="nf">RFHash</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    RFHash(v, q)</span>
+<span class="sd">    Reverse Hash Function, v is is a integer,</span>
+<span class="sd">    q is corresponding quantize level</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span><span class="p">(</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+    <span class="n">digit</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)):</span>
+        <span class="n">digit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">v</span> <span class="o">%</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">/</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">digit</span>
+</div>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="viewcode-block" id="GetStateTable"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.GetStateTable">[docs]</a><span class="k">def</span> <span class="nf">GetStateTable</span><span class="p">():</span>
+    <span class="n">QV</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DISCRETE_LEVEL</span> <span class="o">+</span> <span class="p">[</span><span class="n">settings</span><span class="o">.</span><span class="n">CLUSTER_NUMBER</span><span class="p">]</span>
+    <span class="n">QN</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">QV</span><span class="p">)</span>
+    <span class="n">sTable</span> <span class="o">=</span> <span class="p">[</span><span class="n">RFHash</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">QV</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">QN</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sTable</span><span class="p">)</span>
+</div>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="n">Index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">mylist</span><span class="p">,</span> <span class="n">ti</span><span class="p">:[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mylist</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">ti</span><span class="p">]</span>
+<span class="n">FV</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;flowSize&#39;</span><span class="p">,</span> <span class="s">&#39;flowRate&#39;</span><span class="p">,</span> <span class="s">&#39;distToCenter&#39;</span><span class="p">,</span> <span class="s">&#39;cluster&#39;</span><span class="p">]</span>
+<span class="n">TV</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;low&#39;</span><span class="p">,</span> <span class="s">&#39;high&#39;</span><span class="p">]</span>
+<span class="n">sTable</span> <span class="o">=</span> <span class="n">GetStateTable</span><span class="p">()</span>
+<div class="viewcode-block" id="sFilter"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.sFilter">[docs]</a><span class="k">def</span> <span class="nf">sFilter</span><span class="p">(</span><span class="n">cond</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter the state table by condition.</span>
+<span class="sd">    cond is a dict in which each key value pair specify a condition</span>
+<span class="sd">    for example if the cond = {&#39;flowsize&#39;:&#39;high&#39;, &#39;flowRate&#39;:&#39;high&#39;}</span>
+<span class="sd">    means we want to find out the indices for states with high flow size</span>
+<span class="sd">    and high flow arrival rate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">iSet</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">sTable</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">cond</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">ai</span> <span class="o">=</span> <span class="n">FV</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">TV</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
+        <span class="n">okIdx</span> <span class="o">=</span> <span class="n">Index</span><span class="p">(</span> <span class="n">sTable</span><span class="p">[:,</span> <span class="n">ai</span><span class="p">],</span> <span class="n">ti</span><span class="p">)</span>
+        <span class="n">iSet</span> <span class="o">=</span> <span class="n">iSet</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">okIdx</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">iSet</span><span class="p">)</span>
+
+
+
+<span class="c"># def AddAnoFlag(flows):</span>
+<span class="c">#     abnormal_flows = ParseData(&#39;../Simulator/abnormal_flow.txt&#39;)</span>
+<span class="c">#     abIdxSet = []</span>
+<span class="c">#     for f in abnormal_flows:</span>
+<span class="c">#         idx = flows.index(f)</span>
+<span class="c">#         abIdxSet.append(idx)</span>
+<span class="c">#         flows[idx][&#39;anoFlag&#39;]= True</span>
+
+<span class="c">#     normalIdxSet = [i for i in xrange(len(flows)) if i not in abIdxSet]</span>
+<span class="c">#     for i in normalIdxSet:</span>
+<span class="c">#         flows[i][&#39;anoFlag&#39;] = False</span>
+
+<span class="c">#     return flows</span>
+</div>
+<span class="kn">from</span> <span class="nn">ClusterAlg</span> <span class="kn">import</span> <span class="n">ReClustering</span>
+<span class="kn">from</span> <span class="nn">Detector</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+
+<div class="viewcode-block" id="AnoGetFeature"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.AnoGetFeature">[docs]</a><span class="k">def</span> <span class="nf">AnoGetFeature</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">):</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="n">ParseData</span><span class="p">(</span><span class="n">fName</span><span class="p">);</span>
+    <span class="n">srcIPVec</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">ReClustering</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">GetDistToCenter</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+
+    <span class="n">nominalFlow</span> <span class="o">=</span> <span class="n">ParseData</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">OUTPUT_FLOW_FILE</span><span class="p">)</span>
+    <span class="n">srcIPVec0</span><span class="p">,</span> <span class="n">flowSize0</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">dur0</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">nominalFlow</span><span class="p">)</span>
+    <span class="n">cluster0</span> <span class="o">=</span> <span class="n">ReClustering</span><span class="p">(</span><span class="n">srcIPVec0</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+
+    <span class="n">flowRate0</span> <span class="o">=</span> <span class="n">GetFlowRate</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">cluster0</span><span class="p">)</span>
+    <span class="n">flowRate</span> <span class="o">=</span> <span class="p">[</span> <span class="n">flowRate0</span><span class="p">[</span><span class="n">Find</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">tv</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="p">]</span> <span class="k">for</span> <span class="n">tv</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+
+    <span class="k">exec</span> <span class="n">settings</span><span class="o">.</span><span class="n">LOAD_FEATURE</span>
+    <span class="c"># print &#39;flowRate, &#39;, flowRate</span>
+    <span class="n">quanFlag</span> <span class="o">=</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">feaVec</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">feaRange</span> <span class="o">=</span> <span class="n">GetRange</span><span class="p">(</span><span class="n">feaVec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">feaVec</span><span class="p">,</span> <span class="n">feaRange</span><span class="p">,</span> <span class="n">quanFlag</span><span class="p">,</span> <span class="n">t</span>
+</div>
+<span class="kn">from</span> <span class="nn">Detector</span> <span class="kn">import</span> <span class="n">VectorQuantizeState</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="c"># @profile</span>
+<div class="viewcode-block" id="GetAbnormalFlowQType"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.GetAbnormalFlowQType">[docs]</a><span class="k">def</span> <span class="nf">GetAbnormalFlowQType</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Get Quantized State for Abnormal Flows. &#39;&#39;&#39;</span>
+    <span class="n">fName</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Simulator/abnormal_flow.txt&#39;</span>
+    <span class="n">clusterNum</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">CLUSTER_NUMBER</span>
+    <span class="n">feaQN</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DISCRETE_LEVEL</span> <span class="o">+</span> <span class="p">[</span><span class="n">clusterNum</span><span class="p">]</span>
+    <span class="n">feaRange</span><span class="p">,</span> <span class="n">centerPt</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">ANO_ANA_DATA_FILE</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="c"># print &#39;feaRange, &#39;, feaRange</span>
+    <span class="n">feaVec</span><span class="p">,</span> <span class="n">feaRange0</span><span class="p">,</span> <span class="n">quanFlag</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">AnoGetFeature</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">)</span>
+    <span class="c"># print &#39;feaVec, &#39;, feaVec</span>
+    <span class="c"># import pdb;pdb.set_trace()</span>
+    <span class="c"># print &#39;feaVec, &#39;, feaVec</span>
+    <span class="n">qFeaVec</span> <span class="o">=</span> <span class="n">VectorQuantizeState</span><span class="p">(</span><span class="n">feaVec</span> <span class="p">,</span> <span class="n">feaQN</span><span class="p">,</span> <span class="n">feaRange</span><span class="p">,</span> <span class="n">quanFlag</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qFeaVec</span>
+</div>
+<span class="kn">from</span> <span class="nn">Detector</span> <span class="kn">import</span> <span class="n">FHash</span><span class="p">,</span> <span class="n">GetFeatureHashList</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<div class="viewcode-block" id="GetAnomalyType"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.GetAnomalyType">[docs]</a><span class="k">def</span> <span class="nf">GetAnomalyType</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Get the Type for each abnormal flows, print them out&#39;&#39;&#39;</span>
+    <span class="n">qFeaVec</span> <span class="o">=</span> <span class="n">GetAbnormalFlowQType</span><span class="p">()</span>
+    <span class="c"># print &#39;qFeaVec, &#39;, qFeaVec</span>
+    <span class="n">feaQN</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DISCRETE_LEVEL</span> <span class="o">+</span> <span class="p">[</span><span class="n">settings</span><span class="o">.</span><span class="n">CLUSTER_NUMBER</span><span class="p">]</span>
+    <span class="n">feaHash</span> <span class="o">=</span> <span class="n">GetFeatureHashList</span><span class="p">(</span><span class="n">qFeaVec</span><span class="p">,</span> <span class="n">feaQN</span><span class="p">)</span>
+    <span class="n">counter</span><span class="o">=</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">feaHash</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;the anomaly flows are type, &#39;</span><span class="p">,</span> <span class="n">counter</span>
+
+</div>
+<div class="viewcode-block" id="LoadDeriData"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.LoadDeriData">[docs]</a><span class="k">def</span> <span class="nf">LoadDeriData</span><span class="p">():</span>
+    <span class="n">modelFreeDeri</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_FREE_DERI_DUMP_FILE</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="n">modelBaseDeri</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_BASE_DERI_DUMP_FILE</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">modelFreeDeri</span><span class="p">,</span> <span class="n">modelBaseDeri</span>
+</div>
+<span class="n">StateMap</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;low flow size&#39;</span><span class="p">,</span> <span class="s">&#39;small distance&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;low flow size&#39;</span><span class="p">,</span> <span class="s">&#39;large distance&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;large flow size&#39;</span><span class="p">,</span> <span class="s">&#39;small distance&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;large flow size&#39;</span><span class="p">,</span> <span class="s">&#39;large distance&#39;</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="CalIndicator"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.CalIndicator">[docs]</a><span class="k">def</span> <span class="nf">CalIndicator</span><span class="p">(</span><span class="n">deri</span><span class="p">,</span> <span class="n">intervalRatio</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Calculate the difference of derivative on anomaly time w.r.t normal &#39;&#39;&#39;</span>
+    <span class="n">tn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">deri</span><span class="p">)</span>
+    <span class="n">anoStart</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">tn</span> <span class="o">*</span> <span class="n">intervalRatio</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">anoStop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">tn</span> <span class="o">*</span> <span class="n">intervalRatio</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">anoDeri</span> <span class="o">=</span> <span class="n">deri</span><span class="p">[</span><span class="n">anoStart</span><span class="p">:</span><span class="n">anoStop</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">anoAveDeri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">anoDeri</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">anoDeri</span><span class="p">)</span>
+    <span class="n">normalAnoValue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">deri</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">tn</span>
+    <span class="c"># print &#39;normalAnoValue, &#39;, normalAnoValue</span>
+    <span class="c"># GetChangePercent = lambda a, b:np.abs(np.array(a)-np.array(b)) / np.abs(np.array(b))</span>
+    <span class="c"># GetChangePercent = lambda a, b:np.abs(np.array(a)-np.array(b))</span>
+    <span class="n">GetChangePercent</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">changePer</span> <span class="o">=</span> <span class="n">GetChangePercent</span><span class="p">(</span><span class="n">anoAveDeri</span><span class="p">,</span> <span class="n">normalAnoValue</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">changePer</span>
+
+</div>
+<div class="viewcode-block" id="ModelFreeDetectAnoType"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.ModelFreeDetectAnoType">[docs]</a><span class="k">def</span> <span class="nf">ModelFreeDetectAnoType</span><span class="p">():</span>
+    <span class="n">modelFreeDeri</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_FREE_DERI_DUMP_FILE</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="n">totalT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEFAULT_PROFILE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">WINDOW_TYPE</span> <span class="o">==</span> <span class="s">&#39;TIME&#39;</span><span class="p">)</span>
+    <span class="n">anoT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ANOMALY_TIME</span>
+    <span class="n">intervalRatio</span> <span class="o">=</span> <span class="p">[</span><span class="n">anoT</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">totalT</span><span class="p">,</span> <span class="n">anoT</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">totalT</span> <span class="p">]</span>
+    <span class="n">anoIndi</span> <span class="o">=</span> <span class="n">CalIndicator</span><span class="p">(</span><span class="n">modelFreeDeri</span><span class="p">,</span> <span class="n">intervalRatio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">anoIndi</span>
+</div>
+<div class="viewcode-block" id="ModelBaseDetectAnoType"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.ModelBaseDetectAnoType">[docs]</a><span class="k">def</span> <span class="nf">ModelBaseDetectAnoType</span><span class="p">():</span>
+    <span class="n">modelBaseDeri</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_BASE_DERI_DUMP_FILE</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+    <span class="n">totalT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEFAULT_PROFILE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">WINDOW_TYPE</span> <span class="o">==</span> <span class="s">&#39;TIME&#39;</span><span class="p">)</span>
+    <span class="n">anoT</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ANOMALY_TIME</span>
+    <span class="n">anoIndi</span> <span class="o">=</span> <span class="n">CalIndicator</span><span class="p">(</span><span class="n">modelBaseDeri</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">anoT</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">totalT</span><span class="p">,</span> <span class="p">(</span> <span class="n">anoT</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">anoT</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="o">/</span> <span class="p">(</span> <span class="mf">2.0</span><span class="o">*</span> <span class="n">totalT</span><span class="p">)</span> <span class="p">])</span>
+    <span class="k">return</span> <span class="n">anoIndi</span>
+
+
+</div>
+<div class="viewcode-block" id="PrintFriendly"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.PrintFriendly">[docs]</a><span class="k">def</span> <span class="nf">PrintFriendly</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flag</span><span class="p">)):</span>
+        <span class="k">print</span> <span class="n">FV</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">TV</span><span class="p">[</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+</div>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="viewcode-block" id="ModelFreeHTest"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.ModelFreeHTest">[docs]</a><span class="k">def</span> <span class="nf">ModelFreeHTest</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the type of the anomaly with ModelFree Indicator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">th</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DERI_TEST_THRESHOLD</span>
+    <span class="n">sortDesIdx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">v</span><span class="p">)</span> <span class="p">)</span>
+    <span class="c"># print &#39;sortIdx: &#39;, sortDesIdx</span>
+    <span class="k">print</span> <span class="s">&#39;descending derivative: &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">]</span>
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">],</span> <span class="s">&#39;*-&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="s">&#39;descending derivative&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;derivative&#39;</span><span class="p">)</span>
+    <span class="n">savefig</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_FREE_DERI_DESCENDING_FIG</span><span class="p">)</span>
+    <span class="n">close</span><span class="p">()</span>
+    <span class="c"># show()</span>
+    <span class="c"># import pdb;pdb.set_trace()</span>
+    <span class="n">lastSigIdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span> <span class="n">v</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span> <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c">#FIXME give hint when threshold is improper</span>
+    <span class="k">print</span> <span class="s">&#39;the suspicious states are: &#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">lastSigIdx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;State [</span><span class="si">%d</span><span class="s">]: &#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sortDesIdx</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+        <span class="n">PrintFriendly</span><span class="p">(</span> <span class="n">sTable</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span> <span class="p">)</span>
+
+</div>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="viewcode-block" id="ModelBaseHTest"><a class="viewcode-back" href="../../Detector.html#Detector.AnomalyAna.ModelBaseHTest">[docs]</a><span class="k">def</span> <span class="nf">ModelBaseHTest</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the type of the anomaly with Model Base Indicator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">fv</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="c"># row major</span>
+    <span class="n">th</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DERI_TEST_THRESHOLD</span>
+    <span class="n">sortDesIdx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">fv</span><span class="p">)</span> <span class="p">)</span>
+    <span class="c"># print &#39;sortIdx: &#39;, sortDesIdx</span>
+    <span class="k">print</span> <span class="s">&#39;descending derivative: &#39;</span><span class="p">,</span> <span class="n">fv</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">]</span>
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">fv</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">],</span> <span class="s">&#39;*-&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="s">&#39;descending derivative&#39;</span><span class="p">)</span>
+    <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;derivative&#39;</span><span class="p">)</span>
+    <span class="n">savefig</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_BASE_DERI_DESCENDING_FIG</span><span class="p">)</span>
+    <span class="n">close</span><span class="p">()</span>
+    <span class="c"># show()</span>
+    <span class="n">lastSigIdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span> <span class="n">fv</span><span class="p">[</span><span class="n">sortDesIdx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span> <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Idx2Sub</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span> <span class="o">%</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">sortDesIdx</span><span class="p">[:</span><span class="n">lastSigIdx</span><span class="p">]</span>
+    <span class="n">subVec</span> <span class="o">=</span> <span class="p">[</span><span class="n">Idx2Sub</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sortDesIdx</span><span class="p">[:</span><span class="n">lastSigIdx</span><span class="p">]]</span>
+    <span class="c"># print &#39;sort sub:&#39;, subVec</span>
+    <span class="n">desVec</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">subVec</span><span class="p">]</span>
+    <span class="c"># print &#39;desVec: &#39;, desVec</span>
+    <span class="k">print</span> <span class="s">&#39;the suspicious states are: &#39;</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">desVec</span><span class="p">:</span>
+        <span class="c"># print 100 * &#39;-&#39;</span>
+        <span class="k">print</span> <span class="s">&#39;state [</span><span class="si">%d</span><span class="s">]: &#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">d</span><span class="p">),</span>
+        <span class="n">PrintFriendly</span><span class="p">(</span> <span class="n">sTable</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:])</span>
+
+
+
+    <span class="k">pass</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c"># posDist, posFlowSize = GetAbnormalFlowQType()</span>
+    <span class="c"># value = [x + 2*y for x, y in zip(posDist, posFlowSize)]</span>
+    <span class="c"># print value</span>
+    <span class="c"># LoadDeriData()</span>
+    <span class="c"># anoTypeIdx = ModelFreeDetectAnoType()</span>
+    <span class="n">ModelFreeDetectAnoType</span><span class="p">()</span>
+    <span class="n">ModelBaseDetectAnoType</span><span class="p">()</span>
+    <span class="c"># anoType = GetAnomalyType()</span>
+    <span class="c"># if anoTypeIdx == anoType:</span>
+    <span class="c">#     print &#39;match&#39;</span>
+    <span class="c"># else:</span>
+    <span class="c">#     print &#39;unmatch&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

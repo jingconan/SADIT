@@ -37,6 +37,29 @@ Documentation
 
 Installation
 -------------
+this software depends on all softwares that fs-simulate depends on:
+- ipaddr (2.1.1) 
+  `Get_<http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz>`
+- networkx (1.0)
+  `Get_<http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz>`
+- pydot (1.0.2) `Get_<http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz>`
+- pyparsing (1.5.2)
+  `Get_<http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyparsing%2Ffiles%2Fpyparsing%2Fpyparsing-1.5.2%2F&ts=1332828745&use_mirror=softlayer>`
+- py-radix (0.5)
+  `Get_<http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz>`
+
+besides: it requires
+python-dev
+numpy
+matplotlib
+
+if you are in debain base system. you can simple use
+sudo apt-get install python-dev
+sudo apt-get install python-numpy
+sudo apt-get install python-matplotlib
+
+
+
 
 Licensing
 -------------

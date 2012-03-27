@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configure Package &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SADIT 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configure-package">
+<h1>Configure Package<a class="headerlink" href="#configure-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-Configure.FuncLib">
+<span id="funclib-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">FuncLib</span></tt> Module<a class="headerlink" href="#module-Configure.FuncLib" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Configure.FuncLib.FilterPt1stDigit">
+<tt class="descclassname">Configure.FuncLib.</tt><tt class="descname">FilterPt1stDigit</tt><big>(</big><em>IPMat</em>, <em>val</em><big>)</big><a class="reference internal" href="_modules/Configure/FuncLib.html#FilterPt1stDigit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.FuncLib.FilterPt1stDigit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter IP Address whose 1st Digits belongs to val</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.FuncLib.FindFarPoint">
+<tt class="descclassname">Configure.FuncLib.</tt><tt class="descname">FindFarPoint</tt><big>(</big><em>IPMat</em>, <em>distance</em>, <em>DF</em><big>)</big><a class="reference internal" href="_modules/Configure/FuncLib.html#FindFarPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.FuncLib.FindFarPoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-Configure.GenDotConf">
+<span id="gendotconf-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">GenDotConf</span></tt> Module<a class="headerlink" href="#module-Configure.GenDotConf" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Configure.GenDotConf.Attr">
+<em class="property">class </em><tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">Attr</tt><big>(</big><em>string=None</em>, <em>**args</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#Attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.Attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sub Class of String. __str__ method was overloaded, providing an easy way to
+get DOT format attribute string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.GenDotConf.FixQuoteBug">
+<tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">FixQuoteBug</tt><big>(</big><em>fileName</em>, <em>delay=0.001</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#FixQuoteBug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.FixQuoteBug" title="Permalink to this definition">¶</a></dt>
+<dd><p>There is a bug in pydot. when link attribute is &lt; 1, pydot will automatically add quote to value
+which is not desirable. This function try to fix that problem</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.GenDotConf.GenAttr">
+<tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">GenAttr</tt><big>(</big><em>k</em>, <em>ipdests</em>, <em>ipdst</em>, <em>N</em>, <em>stype</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#GenAttr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.GenAttr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the default Attribute.</p>
+<ul>
+<li><p class="first">k is NodeSeq,</p>
+</li>
+<li><p class="first">ipdests is the local ip address.</p>
+</li>
+<li><p class="first">ipdst is the destination</p>
+</li>
+<li><p class="first">N is the num of modulator and source. We assume for each modulator, there is one associated source</p>
+</li>
+<li><dl class="first docutils">
+<dt>stype can be:</dt>
+<dd><ul class="first last simple">
+<li>&#8216;HARPOON&#8217; harpoon generator. Click <a class="reference external" href="http://cs.colgate.edu/~jsommers/harpoon/">here</a> for more information of harpoon.</li>
+<li>&#8216;rawflow&#8217; rawflow generator.</li>
+<li>&#8216;JING&#8217;</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.GenDotConf.LoadValidIP">
+<tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">LoadValidIP</tt><big>(</big><em>fileName</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#LoadValidIP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.LoadValidIP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Configure.GenDotConf.NEdge">
+<em class="property">class </em><tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">NEdge</tt><big>(</big><em>src</em>, <em>dst</em>, <em>attr</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NEdge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Edge</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Configure.GenDotConf.NNode">
+<em class="property">class </em><tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">NNode</tt><big>(</big><em>ipdest</em>, <em>ipdst</em>, <em>N=1</em>, <em>stype='JING'</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Node</span></tt></p>
+<p>NNode is a representation of dot node. It provides several functions
+to modify the attribute of node. The original fs-simulator supports two
+types of generator. 1. <strong>Harpoon</strong>. 2. <strong>rawflow</strong>. In revised version of
+fs simulator, we add support of <strong>JING</strong> generator Just Incomplete and Not Good Generator.</p>
+<dl class="method">
+<dt id="Configure.GenDotConf.NNode.AddHarpoon">
+<tt class="descname">AddHarpoon</tt><big>(</big><em>start</em>, <em>end</em>, <em>para</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode.AddHarpoon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode.AddHarpoon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.NNode.AddModulator">
+<tt class="descname">AddModulator</tt><big>(</big><em>start</em>, <em>profile</em>, <em>generator</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode.AddModulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode.AddModulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>It will try to add modulator to the node.</p>
+<ul class="simple">
+<li><em>start</em> :start time of the modulator</li>
+<li><em>profile</em> :the profile of the modulator The syntax for specifying a traffic profile consists of two ordered lists of numbers, enclosed in parentheses. The first list
+indicates a series of 1 or more time durations (in seconds), and the second list indicates the number of instances of a particular traffic source that should be active.
+The time durations and number of sources are matched in a circular fashion; in the example, the time duration 60 is repeated for each of the five values for number of
+sources. An example is profile=((60,),(10,20,30,20,10)). the time duration 60 is repeated for each of the five values for number of sources</li>
+<li><em>generator</em> :the name for generator</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.NNode.GetHarpoon">
+<tt class="descname">GetHarpoon</tt><big>(</big><em>ipsrc</em>, <em>ipdst</em>, <em>flowsize</em>, <em>flowstart</em>, <em>sport</em>, <em>dport</em>, <em>lossrate</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode.GetHarpoon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode.GetHarpoon" title="Permalink to this definition">¶</a></dt>
+<dd><p>While a Harpoon generator is active, a new flow is started after a time duration chosen from the flowstart distribution; that flow will have random IP source and
+destination addresses chosen from the source and destination prefixes, and a random flow size chosen from the flowsize distribution. The next flow will start after another
+random value chosen from the flowstart distribution, and so forth. The source and destina- tion prefixes can be constructed in such a way as to recreate a particular
+distribution, similar to the way that Harpoon can be configured. For one instance of a Harpoon flow, source and destination ports are also chosen from the configured
+settings, or each flow, a random loss rate is chosen from the configured parameter (as with other settings, this could just be a single value, if desired; there are no restrictions placed on how this is configured). This value, along with a computed round-trip time based on the link configurations are used as input to a TCP throughput model to estimate the average rate of the flow. The RTT computed for input to the model only considers propagation delay; transmission and queuing delays are ignored. For the TCP throughput model, fs incorporates the simple Mathis et al. model from [23] and the more complex Cardwell et al. model from [8]. We used these two models in order to investigate the sensitivity of fs to the TCP model used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.NNode.GetJING">
+<tt class="descname">GetJING</tt><big>(</big><em>**para</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode.GetJING"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode.GetJING" title="Permalink to this definition">¶</a></dt>
+<dd><p>In JING Generator,  you need specifiy download rate, interval between two consequent flows
+and duration of the flows.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.NNode.GetRawFlow">
+<tt class="descname">GetRawFlow</tt><big>(</big><em>ipsrc</em>, <em>ipdst</em>, <em>flowlets</em>, <em>ipproto</em>, <em>dport</em>, <em>sport</em>, <em>pkts</em>, <em>bytes</em>, <em>interval</em>, <em>continuous</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode.GetRawFlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode.GetRawFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>raw flow generator can work as a one-flowlet generator (the entire flow is represented as one flowlet) or as a simple constant or variable bit-rate flow (e.g., to mimic a UDP-based media stream).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.NNode.ModifyAttr">
+<tt class="descname">ModifyAttr</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#NNode.ModifyAttr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.NNode.ModifyAttr" title="Permalink to this definition">¶</a></dt>
+<dd><p>ModifyAttr will try to match the input argument with the attribute
+of the node and revise the attribute accordingly. It will search layer
+by layer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Configure.GenDotConf.Network">
+<em class="property">class </em><tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">Network</tt><a class="reference internal" href="_modules/Configure/GenDotConf.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Dot</span></tt></p>
+<p>Network Class specifiy the topology of the network.</p>
+<dl class="method">
+<dt id="Configure.GenDotConf.Network.InjectAnomaly">
+<tt class="descname">InjectAnomaly</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#Network.InjectAnomaly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.Network.InjectAnomaly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inject Anomaly into the network. A is the one type Anomaly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.Network.StarTopo">
+<tt class="descname">StarTopo</tt><big>(</big><em>graphSize</em>, <em>link_attr</em>, <em>IPSrcSet</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#Network.StarTopo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.Network.StarTopo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a star topology network.</p>
+<ul class="simple">
+<li><em>graphSize</em> :is the number of nodes</li>
+<li><em>link_attr</em> :specify the attribute of link. All links are assumed to have the same attr</li>
+<li><em>IPSrcSet</em> :a set of IP address.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.Network.StarTopoMarkov">
+<tt class="descname">StarTopoMarkov</tt><big>(</big><em>graphSize</em>, <em>link_attr</em>, <em>IPSrcSet</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#Network.StarTopoMarkov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.Network.StarTopoMarkov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Star Topology Network with anomaly type of markov stationary probaility.</p>
+<ul>
+<li><p class="first"><em>graphSize</em> :is the number of nodes</p>
+</li>
+<li><dl class="first docutils">
+<dt><em>link_attr</em> :specify the attribute of link. All links are assumed to have the same attr. A link in fs can be considered either a</dt>
+<dd><p class="first last">logical or physical link between two routers. Notice in Listing 1 that for each link,
+<em>weight</em>, <em>capacity</em>, and <em>delay</em> attributes are configured. <em>Capacity</em> is specified
+in bits per second, and <em>delay</em> is specified in seconds. Presently in fs, the configured
+weights are fed into Dijkstra&#8217;s algorithm for computing shortest-path routes across the
+network (if there is more than one egress node for a given destination address the closest
+node is used, mimicking hot potato routing).</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><em>IPSrcSet</em> :a set of IP address.</p>
+</li>
+</ul>
+<p>The settings.py parameter it uses <strong>MARKOV_PARA</strong>, <strong>MARKOV_INTERVAL</strong>, <strong>MARKOV_P</strong>,
+<strong>DEFAULT_PROFILE[1]</strong></p>
+<p>This function will be merged into StarTopo in the future.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Configure.GenDotConf.Network.write">
+<tt class="descname">write</tt><big>(</big><em>fName</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#Network.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.Network.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>write the DOT file to <em>fName</em></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.GenDotConf.ParseArg">
+<tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">ParseArg</tt><big>(</big><em>string</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#ParseArg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.ParseArg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Configure.GenDotConf.ServerNNode">
+<em class="property">class </em><tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">ServerNNode</tt><big>(</big><em>addr</em><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#ServerNNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.ServerNNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Node</span></tt></p>
+<p>One type of node that used as server</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.GenDotConf.main">
+<tt class="descclassname">Configure.GenDotConf.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/Configure/GenDotConf.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.GenDotConf.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-Configure.Markov">
+<span id="markov-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">Markov</span></tt> Module<a class="headerlink" href="#module-Configure.Markov" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Configure.Markov.Markov">
+<em class="property">class </em><tt class="descclassname">Configure.Markov.</tt><tt class="descname">Markov</tt><big>(</big><em>para</em>, <em>P</em>, <em>interval</em>, <em>tRange</em>, <em>X=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/Configure/Markov.html#Markov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.Markov.Markov" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="Configure.Markov.Markov.MHarpoon">
+<tt class="descname">MHarpoon</tt><big>(</big><em>node</em><big>)</big><a class="reference internal" href="_modules/Configure/Markov.html#Markov.MHarpoon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.Markov.Markov.MHarpoon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input of Run is an empty node, node will be moduled in markovian way</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.Markov.RandDist">
+<tt class="descclassname">Configure.Markov.</tt><tt class="descname">RandDist</tt><big>(</big><em>dist</em><big>)</big><a class="reference internal" href="_modules/Configure/Markov.html#RandDist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.Markov.RandDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate Random Variable According to Certain Kind of
+Distribution</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-Configure.MarkovAnomaly">
+<span id="markovanomaly-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">MarkovAnomaly</span></tt> Module<a class="headerlink" href="#module-Configure.MarkovAnomaly" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Configure.MarkovAnomaly.GenMarkovTranAnomalyDot">
+<tt class="descclassname">Configure.MarkovAnomaly.</tt><tt class="descname">GenMarkovTranAnomalyDot</tt><big>(</big><em>startTime</em>, <em>endTime</em>, <em>p12</em>, <em>p21</em>, <em>outputFileName</em><big>)</big><a class="reference internal" href="_modules/Configure/MarkovAnomaly.html#GenMarkovTranAnomalyDot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.MarkovAnomaly.GenMarkovTranAnomalyDot" title="Permalink to this definition">¶</a></dt>
+<dd><p>startTime:
+endTime: end time for anomaly
+ip: the ip address for abnormal node
+p12: is the transition probabitliy from state 1 to state 2
+p21: is the transition probability froms state 2 to state 1
+outputFileName: will write down the dot file to outputFileName</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Configure.MarkovAnomaly.MarkovAnoP">
+<em class="property">class </em><tt class="descclassname">Configure.MarkovAnomaly.</tt><tt class="descname">MarkovAnoP</tt><big>(</big><em>t</em>, <em>ip</em>, <em>P2</em><big>)</big><a class="reference internal" href="_modules/Configure/MarkovAnomaly.html#MarkovAnoP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.MarkovAnomaly.MarkovAnoP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Configure.anomaly.Anomaly" title="Configure.anomaly.Anomaly"><tt class="xref py py-class docutils literal"><span class="pre">Configure.anomaly.Anomaly</span></tt></a></p>
+<p>Users has Markov Behavior, Abnomal User has different stationary probability</p>
+<dl class="method">
+<dt id="Configure.MarkovAnomaly.MarkovAnoP.Run">
+<tt class="descname">Run</tt><big>(</big><em>net</em><big>)</big><a class="reference internal" href="_modules/Configure/MarkovAnomaly.html#MarkovAnoP.Run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.MarkovAnomaly.MarkovAnoP.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Configure.anomaly">
+<span id="anomaly-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">anomaly</span></tt> Module<a class="headerlink" href="#module-Configure.anomaly" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Configure.anomaly.Anomaly">
+<em class="property">class </em><tt class="descclassname">Configure.anomaly.</tt><tt class="descname">Anomaly</tt><big>(</big><em>t</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#Anomaly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.Anomaly" title="Permalink to this definition">¶</a></dt>
+<dd><p>basis class for anomaly. Its subclass will provide Run() method</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Configure.anomaly.AtypicalUser">
+<em class="property">class </em><tt class="descclassname">Configure.anomaly.</tt><tt class="descname">AtypicalUser</tt><big>(</big><em>t</em>, <em>atip=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#AtypicalUser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.AtypicalUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Configure.anomaly.Anomaly" title="Configure.anomaly.Anomaly"><tt class="xref py py-class docutils literal"><span class="pre">Configure.anomaly.Anomaly</span></tt></a></p>
+<p>anomaly of atypical user. an atypical user joins to the network during some time.
+Atypical user refer those user has large IP distance with users in the network.</p>
+<dl class="attribute">
+<dt id="Configure.anomaly.AtypicalUser.ATIP">
+<tt class="descname">ATIP</tt><em class="property"> = None</em><a class="headerlink" href="#Configure.anomaly.AtypicalUser.ATIP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Configure.anomaly.AtypicalUser.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'AtypicaUser'</em><a class="headerlink" href="#Configure.anomaly.AtypicalUser.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Configure.anomaly.AtypicalUser.Run">
+<tt class="descname">Run</tt><big>(</big><em>net</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#AtypicalUser.Run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.AtypicalUser.Run" title="Permalink to this definition">¶</a></dt>
+<dd><p>will add a node for atypical user to the network.
+The IP address for atypical user is selected from. settings.ATYPICAL_IP_FILE</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Configure.anomaly.AtypicalUser.idx">
+<tt class="descname">idx</tt><em class="property"> = 0</em><a class="headerlink" href="#Configure.anomaly.AtypicalUser.idx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.CalIPCenter">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">CalIPCenter</tt><big>(</big><em>IPMat</em>, <em>DF</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#CalIPCenter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.CalIPCenter" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>IPMat</em> is a Mx4 numpy matrix contains M ip addresses.
+<em>DF</em> is a user defined distance function</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.F2P_RAW">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">F2P_RAW</tt><big>(</big><em>flowlets</em>, <em>bytes</em>, <em>interval</em>, <em>pkts</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#F2P_RAW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.F2P_RAW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Configure.anomaly.FlowRate">
+<em class="property">class </em><tt class="descclassname">Configure.anomaly.</tt><tt class="descname">FlowRate</tt><big>(</big><em>t</em>, <em>ip</em>, <em>ratio</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#FlowRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.FlowRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Configure.anomaly.Anomaly" title="Configure.anomaly.Anomaly"><tt class="xref py py-class docutils literal"><span class="pre">Configure.anomaly.Anomaly</span></tt></a></p>
+<p>anomaly of flow arrival rate, during the time of anomaly, the flow arrival rate of a user will change, you need specifiy <em>t</em>, which is tuple containing the starting time
+and end time of the anomaly. <em>ip</em> is the ip adress of the user that cause the anomaly.
+<em>ratio</em> is the ratio between abnormal and normal flow arrival rate.</p>
+<dl class="method">
+<dt id="Configure.anomaly.FlowRate.Run">
+<tt class="descname">Run</tt><big>(</big><em>net</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#FlowRate.Run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.FlowRate.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Configure.anomaly.FlowSize">
+<em class="property">class </em><tt class="descclassname">Configure.anomaly.</tt><tt class="descname">FlowSize</tt><big>(</big><em>t</em>, <em>ip</em>, <em>fSize_mean_ratio</em>, <em>fSize_var</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#FlowSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.FlowSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Configure.anomaly.Anomaly" title="Configure.anomaly.Anomaly"><tt class="xref py py-class docutils literal"><span class="pre">Configure.anomaly.Anomaly</span></tt></a></p>
+<p>anomaly of flow size. during the time of anomaly, the flow size of a user will change.</p>
+<dl class="method">
+<dt id="Configure.anomaly.FlowSize.Run">
+<tt class="descname">Run</tt><big>(</big><em>net</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#FlowSize.Run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.FlowSize.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.GenAtypicalUserAnomalyDot">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">GenAtypicalUserAnomalyDot</tt><big>(</big><em>startTime</em>, <em>endTime</em>, <em>outputFileName</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#GenAtypicalUserAnomalyDot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.GenAtypicalUserAnomalyDot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate DOT file with anomaly of atypical user.
+the topology is assumed to be start topology. You can change to other
+topology by change the net.StarTopo() function.</p>
+<ul class="simple">
+<li>startTime: start time of the anomaly</li>
+<li>endTime: endTime of the anomaly</li>
+<li>outputFileName: name for the output DOT file.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.GenFlowRateAnomalyDot">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">GenFlowRateAnomalyDot</tt><big>(</big><em>startTime</em>, <em>endTime</em>, <em>lamb</em>, <em>outputFileName</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#GenFlowRateAnomalyDot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.GenFlowRateAnomalyDot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate DOT file with anomaly of  flow arrival rate. the topology is assume to be
+start topology</p>
+<ul class="simple">
+<li><em>startTime</em> :start time of anomaly</li>
+<li><em>endTime</em> :endTime of anomaly,</li>
+<li><em>lamb</em> :flow arrvial rate during anomaly.</li>
+<li><em>outputFileName</em> :name for output DOT file</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.GenFlowSizeAnomalyDot">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">GenFlowSizeAnomalyDot</tt><big>(</big><em>startTime</em>, <em>endTime</em>, <em>fSize_mean</em>, <em>fSize_var</em>, <em>outputFileName</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#GenFlowSizeAnomalyDot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.GenFlowSizeAnomalyDot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate DOT file with anomaly of flow size. The topology is assumed to be star topology.</p>
+<ul class="simple">
+<li><em>fSize_mean</em> :the mean of flow size for anomaly</li>
+<li><em>fSize_var</em> :the variance of flow size for anomaly,</li>
+<li><em>outputFileName</em> : the name for output DOT File</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.GetIPAdress">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">GetIPAdress</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#GetIPAdress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.GetIPAdress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select normal IP address and abnormal IP address,
+the distance  between normal IP address and abnormal IP
+address is very large</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.GetIPMat">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">GetIPMat</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#GetIPMat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.GetIPMat" title="Permalink to this definition">¶</a></dt>
+<dd><p>load valid ip adrees from setting.IPS_FILE</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.P2F_RAW">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">P2F_RAW</tt><big>(</big><em>flowRate</em>, <em>flowDuration</em>, <em>pktRate</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#P2F_RAW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.P2F_RAW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Configure.anomaly.PlotPts">
+<tt class="descclassname">Configure.anomaly.</tt><tt class="descname">PlotPts</tt><big>(</big><em>IPMat</em>, <em>corePts</em>, <em>anoPts</em>, <em>c</em><big>)</big><a class="reference internal" href="_modules/Configure/anomaly.html#PlotPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Configure.anomaly.PlotPts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configure Package</a><ul>
+<li><a class="reference internal" href="#module-Configure.FuncLib"><tt class="docutils literal"><span class="pre">FuncLib</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-Configure.GenDotConf"><tt class="docutils literal"><span class="pre">GenDotConf</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-Configure.Markov"><tt class="docutils literal"><span class="pre">Markov</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-Configure.MarkovAnomaly"><tt class="docutils literal"><span class="pre">MarkovAnomaly</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-Configure.anomaly"><tt class="docutils literal"><span class="pre">anomaly</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Configure.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SADIT 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

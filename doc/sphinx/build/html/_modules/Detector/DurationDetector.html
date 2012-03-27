@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Detector.DurationDetector &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for Detector.DurationDetector</h1><div class="highlight"><pre>
+<span class="c"># --------- Revised For Considering Flow Duration Seperately --------</span>
+<div class="viewcode-block" id="ModelBased_Dur"><a class="viewcode-back" href="../../Detector.html#Detector.DurationDetector.ModelBased_Dur">[docs]</a><span class="k">def</span> <span class="nf">ModelBased_Dur</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">gr</span><span class="p">,</span> <span class="n">NR</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span> <span class="o">*</span> <span class="n">NR</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">gc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">gd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">+</span> <span class="n">gf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">+</span> <span class="n">gr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span>
+        <span class="n">mp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">gc</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">gd</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">+</span> <span class="n">gf</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">+</span> <span class="n">gr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">fl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">mp</span>
+</div>
+<div class="viewcode-block" id="ModelFree_Dur"><a class="viewcode-back" href="../../Detector.html#Detector.DurationDetector.ModelFree_Dur">[docs]</a><span class="k">def</span> <span class="nf">ModelFree_Dur</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">gd</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">gr</span><span class="p">,</span> <span class="n">NR</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span> <span class="o">*</span> <span class="n">NR</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gc</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fl</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">gc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">gd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">+</span> <span class="n">gf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">+</span> <span class="n">gr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">ND</span> <span class="o">*</span> <span class="n">NF</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fl</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">P</span>
+
+<span class="c"># ---------Start Detection Based On Duration ----</span></div>
+<div class="viewcode-block" id="Detect3"><a class="viewcode-back" href="../../Detector.html#Detector.DurationDetector.Detect3">[docs]</a><span class="k">def</span> <span class="nf">Detect3</span><span class="p">(</span><span class="n">fName</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">wSize</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Detect Using Flow Duration, not flow size and downloading rate&#39;&#39;&#39;</span>
+    <span class="c"># The Distance Function</span>
+    <span class="n">DF</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="mi">256</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="c"># Generate Nominal PDF</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="n">ParseData</span><span class="p">(</span><span class="n">fName</span><span class="p">);</span>
+    <span class="n">srcIPVec</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+    <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">GetDistToCenter</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">distRange</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">distToCenter</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">distToCenter</span><span class="p">)]</span>
+    <span class="n">flowSizeRange</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">flowSize</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">flowSize</span><span class="p">)]</span>
+    <span class="n">durRange</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">dur</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">dur</span><span class="p">)]</span>
+
+
+    <span class="n">normalStart</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">4000</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">srcIPVec</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">[</span><span class="n">normalStart</span><span class="p">:])</span>
+    <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">GetDistToCenter</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">posDist</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">distToCenter</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">distRange</span><span class="p">)</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">posFlowSize</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">dur</span> <span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">durRange</span><span class="p">)</span>
+    <span class="n">pmf</span> <span class="o">=</span> <span class="n">ModelFree</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFlowSize</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">)</span>
+    <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span> <span class="o">=</span> <span class="n">ModelBased</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFlowSize</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">)</span>
+
+
+    <span class="n">srcIPVec</span><span class="p">,</span> <span class="n">flowSize</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dur</span> <span class="o">=</span> <span class="n">TransData</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">srcIPVec</span><span class="p">)</span>
+
+    <span class="n">minT</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">tRange</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">minT</span>
+    <span class="k">print</span> <span class="n">tRange</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">-</span><span class="n">minT</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+
+    <span class="n">IF</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">IB</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">winT</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># for i in range(0, N-wSize):</span>
+        <span class="c"># print &#39;time: &#39; + str(i)</span>
+
+    <span class="n">lp</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># last Position</span>
+    <span class="n">ti</span> <span class="o">=</span> <span class="mi">10</span> <span class="c"># Time Interval</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">detectNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="n">wSize</span> <span class="p">)</span><span class="o">/</span><span class="n">ti</span><span class="p">)</span>
+    <span class="c"># print &#39;t: &#39;, t</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">detectNum</span><span class="p">):</span>
+        <span class="n">time</span> <span class="o">+=</span> <span class="n">ti</span>
+        <span class="k">print</span> <span class="s">&#39;time: </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+        <span class="n">lp</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">time</span><span class="o">+</span><span class="n">wSize</span><span class="p">)</span>
+
+        <span class="n">sIP</span> <span class="o">=</span> <span class="n">srcIPVec</span><span class="p">[</span><span class="n">lp</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">flowSize</span><span class="p">[</span><span class="n">lp</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">dur</span><span class="p">[</span><span class="n">lp</span><span class="p">:(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c"># lp = idx+1</span>
+        <span class="c"># sIP = srcIPVec[i:(i+wSize)]</span>
+        <span class="c"># fs = flowSize[i:(i+wSize)]</span>
+
+        <span class="n">cluster</span><span class="p">,</span> <span class="n">distToCenter</span> <span class="o">=</span> <span class="n">FindCenter</span><span class="p">(</span><span class="n">sIP</span><span class="p">,</span> <span class="n">centerPt</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span> <span class="c">#FIXME</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">posDist</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">distToCenter</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">distRange</span><span class="p">)</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">posFlowSize</span> <span class="o">=</span> <span class="n">QuantizeState</span><span class="p">(</span> <span class="n">duration</span><span class="p">,</span> <span class="n">NF</span><span class="p">,</span> <span class="n">durRange</span><span class="p">)</span>
+        <span class="n">d_pmf</span> <span class="o">=</span> <span class="n">ModelFree</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFlowSize</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">)</span>
+        <span class="n">d_Pmb</span><span class="p">,</span> <span class="n">d_mpmb</span> <span class="o">=</span> <span class="n">ModelBased</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">posDist</span><span class="p">,</span> <span class="n">posFlowSize</span><span class="p">,</span> <span class="n">clusterNum</span><span class="p">,</span> <span class="n">ND</span><span class="p">,</span> <span class="n">NF</span><span class="p">)</span>
+        <span class="n">mfEntro</span> <span class="o">=</span> <span class="n">I1</span><span class="p">(</span><span class="n">d_pmf</span><span class="p">,</span> <span class="n">pmf</span><span class="p">)</span>
+        <span class="n">mbEntro</span> <span class="o">=</span> <span class="n">I2</span><span class="p">(</span><span class="n">d_Pmb</span><span class="p">,</span> <span class="n">d_mpmb</span><span class="p">,</span> <span class="n">Pmb</span><span class="p">,</span> <span class="n">mpmb</span><span class="p">)</span>
+        <span class="n">IF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mfEntro</span><span class="p">)</span>
+        <span class="n">IB</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mbEntro</span><span class="p">)</span>
+        <span class="n">winT</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">IF</span><span class="p">,</span> <span class="n">IB</span><span class="p">,</span> <span class="n">winT</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

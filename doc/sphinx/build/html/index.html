@@ -1,0 +1,153 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to SADIT’s documentation! SADIT is acronym for Statiscal Anomaly Detector of Internet Traffic &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="#" />
+    <link rel="next" title="1. Customization" href="customize.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="customize.html" title="1. Customization"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">SADIT 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-sadit-s-documentation-sadit-is-acronym-for-statiscal-anomaly-detector-of-internet-traffic">
+<h1>Welcome to SADIT&#8217;s documentation! SADIT is  acronym for <strong>S</strong>tatiscal <strong>A</strong>nomaly <strong>D</strong>etector of <strong>I</strong>nternet <strong>T</strong>raffic<a class="headerlink" href="#welcome-to-sadit-s-documentation-sadit-is-acronym-for-statiscal-anomaly-detector-of-internet-traffic" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>SADIT is a byproduct of research project <strong>A Coordinated Approach to Cyber-Situation Awarness Based on Traffic Anomaly
+Detection</strong>.</p>
+<p>Cyber espionage poses a substantial threat to both corporate and government entities. Attacks can be precise and targeted efforts, such as extracting credit card transaction records from a central data server. Attacks can also be seemingly benign, such as randomly crawling through a server’s contents. It is thought that these attacks are trials to see if access to critical information can be gained. Data exfiltration varies over a broad spectrum. On one end is the case of a user, granted server access through legitimate means, exporting sensitive information to an external entity. On the other end is the case of an external user, through access inadvertently granted by a typical user, downloading random pieces of information.</p>
+<p>Some techniques to detect attacks are based on analyzing the information has been accessed. However, it is not effective in many cases. One case is that the attackers are authenticated users themselves or authoenticated users controlled by attackers. Another case is that, the web server owner resort third party software to detect anomaly and don&#8217;t want to disclose the information to third-party software.</p>
+<p>For some cases, a better approach would be to use statistical models to analyze the patterns of traffic to the webserver. The advatage is that this method is more general and have the ability to detect unknown anomalies.</p>
+</div>
+<div class="section" id="goal">
+<h2>Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h2>
+<p>A challenging problem in the research of anomaly detection is that there is no much traffic data avaiable.
+SADIT aims to provide research community an easy-to-use tool to validate and test
+statistical anomaly detecting method in both simulated and real environment.</p>
+<p>In the current developing stage, we focus on simulation. SADIT uses fs(flow-max)
+nework simulator, an efficient &amp; light-weight network simulator developed by UW Madison, to simulate
+the network flow traffic.</p>
+<p>Look at our <a class="reference external" href="http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf">poster</a> for more information of our work</p>
+</div>
+<div class="section" id="table-of-content">
+<h2>Table of Content<a class="headerlink" href="#table-of-content" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">1. Customization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#network-condition">1.1. network condition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#parameter-for-anomaly">1.2. parameter for anomaly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#parameter-for-detector-module">1.3. parameter for detector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#sensitivity-analysis">1.4. sensitivity analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#miscellaneous">1.5. miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to SADIT&#8217;s documentation! SADIT is  acronym for <strong>S</strong>tatiscal <strong>A</strong>nomaly <strong>D</strong>etector of <strong>I</strong>nternet <strong>T</strong>raffic</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#table-of-content">Table of Content</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="customize.html"
+                        title="next chapter">1. Customization</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="customize.html" title="1. Customization"
+             >next</a> |</li>
+        <li><a href="#">SADIT 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

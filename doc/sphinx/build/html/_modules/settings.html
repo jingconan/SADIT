@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>settings &mdash; SADIT 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 0.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for settings</h1><div class="highlight"><pre>
+<span class="c"># DEFAULT_PROFILE = (0, 8000, 1)</span>
+<span class="n">DEFAULT_PROFILE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c"># Specify the link property</span>
+<span class="n">link_attr</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;weight&#39;</span><span class="p">:</span><span class="s">&#39;10&#39;</span><span class="p">,</span> <span class="s">&#39;capacity&#39;</span><span class="p">:</span><span class="s">&#39;10000000&#39;</span><span class="p">,</span> <span class="s">&#39;delay&#39;</span><span class="p">:</span><span class="s">&#39;0.01&#39;</span><span class="p">}</span> <span class="c"># link Attribute</span>
+
+
+<span class="c">#################################</span>
+<span class="c">##   Parameter For Normal Case ##</span>
+<span class="c">#################################</span>
+
+<span class="n">GENERATOR</span> <span class="o">=</span> <span class="s">&#39;HARPOON&#39;</span>
+<span class="c"># HARPOON = (4e5, 100, 0.5) # (fSize_mean, fSize_var, lambda)</span>
+<span class="n">HARPOON</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;4e5&#39;</span><span class="p">,</span> <span class="s">&#39;100&#39;</span><span class="p">,</span> <span class="s">&#39;0.5&#39;</span><span class="p">)</span>
+<span class="c"># HARPOON = (&#39;randint(4e3, 4e5)&#39;, &#39;1000&#39;, &#39;0.5&#39;)</span>
+<span class="c"># JING = &#39;&#39;</span>
+
+<span class="c">#############################</span>
+<span class="c">##   Parameter For Markov  ##</span>
+<span class="c">#############################</span>
+<span class="n">MARKOV_PARA</span> <span class="o">=</span> <span class="p">[(</span> <span class="s">&#39;normal(4e5,10)&#39;</span><span class="p">,</span> <span class="s">&#39;exponential(3)&#39;</span><span class="p">),</span> <span class="c"># flow size for high state , interarrival time for high state</span>
+        <span class="p">(</span><span class="s">&#39;normal(4e5,10)&#39;</span><span class="p">,</span> <span class="s">&#39;exponential(0.3)&#39;</span><span class="p">)]</span> <span class="c"># low state</span>
+<span class="n">MARKOV_P</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span> <span class="c"># NORMAL</span>
+<span class="n">MARKOV_INTERVAL</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+
+
+<span class="c">#############################</span>
+<span class="c">##   Parameter For Anomaly ##</span>
+<span class="c">#############################</span>
+<span class="c"># ANOMALY_TIME = (3000, 3500) # (startTime, endTime)</span>
+<span class="c"># ANOMALY_TIME = (2000, 3000) # (startTime, endTime)</span>
+<span class="c"># ANOMALY_TIME = (600, 800) # (startTime, endTime)</span>
+<span class="n">ANOMALY_TIME</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1400</span><span class="p">)</span> <span class="c"># (startTime, endTime)</span>
+<span class="c"># ANOMALY_TIME = (200, 300) # (startTime, endTime)</span>
+<span class="c"># ANOMALY_TIME = (1000, 1300) # (startTime, endTime)</span>
+<span class="c"># ANOMALY_TIME = (6000, 7000) # (startTime, endTime)</span>
+
+<span class="c">##### Atypical User Anomaly #####</span>
+<span class="c"># ANOMALY_TYPE = &#39;ATYPICAL_USER&#39;</span>
+
+<span class="c">### FLOW_RATE Anomaly ####</span>
+<span class="n">ANOMALY_TYPE</span> <span class="o">=</span> <span class="s">&#39;FLOW_RATE&#39;</span>
+<span class="n">FLOW_RATE</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="c"># FLOW_RATE = 0.1</span>
+
+<span class="c">### FLOW_SIZE Anomaly ####</span>
+<span class="c"># ANOMALY_TYPE = &#39;FLOW_SIZE&#39;</span>
+<span class="c"># FLOW_SIZE_MEAN = 3 # The ratio between abnormal and normal flow size mean</span>
+<span class="c"># FLOW_SIZE_MEAN = 0.1 # The ratio between abnormal and normal flow size mean</span>
+<span class="c"># FLOW_SIZE_MEAN = 1e6</span>
+<span class="c"># FLOW_SIZE_MEAN = 1e3</span>
+<span class="n">FLOW_SIZE_VAR</span> <span class="o">=</span> <span class="mi">100</span> <span class="c"># Absolute FLOW_SIZE_VARIANCE</span>
+<span class="c"># FLOW_SIZE_VAR = 400</span>
+
+<span class="c">### FLOW_DURATION Anomaly ####</span>
+<span class="c"># FLOW_DURATION = 0.1</span>
+
+<span class="c">### Markovian Anomaly  #####</span>
+<span class="c"># ANOMALY_TYPE = &#39;MARKOV_TRAN_PROB&#39;</span>
+<span class="c"># ABNORMAL_TRAN_PROB= [0.5, 0.5] # [p12, p21]</span>
+
+
+<span class="c">#############################</span>
+<span class="c">## Sensitivity Analysis    ##</span>
+<span class="c">#############################</span>
+<span class="n">FLOW_RATE_RANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+
+
+<span class="c">### ROOT is the root directory for you directory, be aware to change this before you try to run the code</span>
+<span class="c"># ROOT = &#39;/Users/jingwang/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code&#39;</span>
+<span class="n">ROOT</span> <span class="o">=</span> <span class="s">&#39;/Users/jingwang/Dropbox/Research/Cybersecurity/code/newanomalydetector/neat_code_sens&#39;</span>
+<span class="c"># ROOT = &#39;/home/wangjing/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code_sens&#39;</span>
+
+<span class="c"># The path for output of configure</span>
+<span class="n">OUTPUT_DOT_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/conf.dot&#39;</span>
+
+<span class="c"># THe path for flow data</span>
+<span class="n">OUTPUT_FLOW_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Simulator/n0_flow.txt&#39;</span>
+
+<span class="c">#</span>
+<span class="n">ABNORMAL_USER_IP_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/abnormal_user_IP.txt&#39;</span>
+<span class="n">ATYPICAL_IP_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/atypical_IP.txt&#39;</span>
+
+<span class="n">IPS_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Configure/ips.txt&#39;</span>
+
+<span class="c">#############################</span>
+<span class="c">##   Parameters For Detector ##</span>
+<span class="c">#############################</span>
+<span class="c"># DETECTOR_WINDOW_SIZE = 200</span>
+<span class="n">DETECTOR_INTERVAL</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">DETECTOR_WINDOW_SIZE</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="c"># WINDOW_TYPE = &#39;FLOW&#39;</span>
+<span class="n">WINDOW_TYPE</span> <span class="o">=</span> <span class="s">&#39;TIME&#39;</span>
+<span class="n">DETECTOR_PREFIX</span> <span class="o">=</span> <span class="s">&#39;markov&#39;</span>
+<span class="n">FLOW_RATE_ESTIMATE_WINDOW</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c"># the state sequence</span>
+<span class="c">#    m_list = [gc[i] + gd[i]*K + gf[i]*K*ND for i in xrange(fl)]</span>
+<span class="c">#    CLUSTER_NUMBER determine the last dimension, distance to center determines</span>
+<span class="c">#    the second, flow size determine the first dimensition</span>
+<span class="c">#    index = [gc[i] + gd[i]*K + gf[i]*K*ND for i in xrange(fl)</span>
+<span class="c"># DISCRETE_LEVEL = (4, 4)</span>
+<span class="c"># DISCRETE_LEVEL = [2, 2]</span>
+<span class="n">DISCRETE_LEVEL</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="c"># DISCRETE_LEVEL = [2, 2, 2, 2]</span>
+<span class="n">CLUSTER_NUMBER</span> <span class="o">=</span> <span class="mi">2</span>
+
+
+<span class="n">LOAD_FEATURE</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">feaVec = [</span>
+<span class="s">         flowSize,</span>
+<span class="s">         # dur,</span>
+<span class="s">         flowRate,</span>
+<span class="s">         distToCenter,</span>
+<span class="s">         cluster]&quot;&quot;&quot;</span>
+
+<span class="c"># LOAD_FEATURE = &quot;&quot;&quot;feaVec = [flowSize, distToCenter, cluster]&quot;&quot;&quot;</span>
+
+
+<span class="n">FALSE_ALARM_RATE</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c"># false alarm rate</span>
+
+<span class="n">NominalPDFFile</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/nominal.p&#39;</span>
+<span class="n">UNIFIED_NOMINAL_PDF</span> <span class="o">=</span> <span class="bp">False</span>
+
+
+<span class="c">#####################################</span>
+<span class="c">###    Parameters for Analyzing Derivative  ###</span>
+<span class="c">#####################################</span>
+<span class="n">DERIVATIVE_FIGURE_DIR</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/res/Derivative/&#39;</span>
+<span class="n">PLOT_DERIVATIVE</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="c"># PLOT_DERIVATIVE = True</span>
+<span class="n">MODEL_BASE_DERI_DUMP_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Detector/model-base-deri.p&#39;</span>
+<span class="n">MODEL_FREE_DERI_DUMP_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Detector/model-free-deri.p&#39;</span>
+
+<span class="c">#############################################</span>
+<span class="c">###    Parameters for SVM Type Detection  ###</span>
+<span class="c">#############################################</span>
+<span class="n">ANOMALY_TYPE_SELECTION_SET</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;FLOW_SIZE&#39;</span><span class="p">,</span> <span class="s">&#39;FLOW_RATE&#39;</span><span class="p">,</span> <span class="s">&#39;ATYPICAL_USER&#39;</span><span class="p">]</span>
+<span class="c"># ANOMALY_TYPE_SELECTION_SET = [&#39;FLOW_SIZE&#39;]</span>
+<span class="n">DEGREE_SELECTION_SET</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;increase&#39;</span><span class="p">,</span> <span class="s">&#39;decrease&#39;</span><span class="p">]</span>
+<span class="n">TEST_NUM</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">SVM_MODEL_FREE_DATA_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/SVM/modelfree&#39;</span>
+<span class="n">SVM_MODEL_BASE_DATA_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/SVM/modelbase&#39;</span>
+<span class="n">SVM_OUTPUT_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/SVM/a.out&#39;</span>
+<span class="n">LIB_SVM_ROOT</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/libsvm-3.11&#39;</span>
+<span class="n">SVM_TRAIN_EXE</span> <span class="o">=</span> <span class="n">LIB_SVM_ROOT</span> <span class="o">+</span> <span class="s">&#39;/svm-train&#39;</span>
+<span class="n">SVM_PREDICT_EXE</span> <span class="o">=</span> <span class="n">LIB_SVM_ROOT</span> <span class="o">+</span> <span class="s">&#39;/svm-predict&#39;</span>
+<span class="c"># SVM_EASY_EXE = &#39;python &#39; + ROOT + &#39;/tools/easy.py&#39;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<div class="viewcode-block" id="SVM_EASY_EXE"><a class="viewcode-back" href="../settings.html#settings.SVM_EASY_EXE">[docs]</a><span class="k">def</span> <span class="nf">SVM_EASY_EXE</span><span class="p">(</span><span class="n">trainFile</span><span class="p">,</span> <span class="n">testFile</span><span class="p">,</span> <span class="n">outFile</span> <span class="o">=</span> <span class="s">&#39;a.out&#39;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">LIB_SVM_ROOT</span> <span class="o">+</span> <span class="s">&#39;/tools&#39;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&#39;python easy.py &#39;</span> <span class="o">+</span> <span class="n">trainFile</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">testFile</span> <span class="o">+</span> <span class="s">&#39; &gt;&#39;</span> <span class="o">+</span> <span class="n">outFile</span><span class="p">)</span>
+</div>
+<span class="n">CROSS_VALIDATION_RATIO</span> <span class="o">=</span> <span class="mf">0.8</span>
+
+
+<span class="n">FLOW_SIZE_TEST_RANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]</span>
+<span class="c"># FLOW_SIZE_TEST_RANGE = [2]</span>
+<span class="c"># FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]</span>
+
+
+<span class="n">ANO_ANA_DATA_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/AnoAna.txt&#39;</span>
+<span class="n">ANO_CONF_PARA_FILE</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/AnoPara.txt&#39;</span>
+
+
+<span class="n">DERI_TEST_THRESHOLD</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="c"># DERI_TEST_THRESHOLD = 1</span>
+
+
+<span class="c"># ANOMALY_TYPE_DETECT_INDI = &#39;derivative&#39;</span>
+<span class="c"># MODEL_FREE_DERI_DESCENDING_FIG = ROOT + &#39;/res/mf-descending-deri.eps&#39;</span>
+<span class="c"># MODEL_BASE_DERI_DESCENDING_FIG = ROOT + &#39;/res/mb-descending-deri.eps&#39;</span>
+
+<span class="n">ANOMALY_TYPE_DETECT_INDI</span> <span class="o">=</span> <span class="s">&#39;component&#39;</span>
+<span class="n">MODEL_FREE_DERI_DESCENDING_FIG</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/res/mf-descending-comp.eps&#39;</span>
+<span class="n">MODEL_BASE_DERI_DESCENDING_FIG</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/res/mb-descending-comp.eps&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 0.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+.. SADIT documentation master file, created by
+   sphinx-quickstart on Sun Mar 25 18:07:56 2012.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to SADIT's documentation! SADIT is  acronym for **S**\ tatiscal **A**\ nomaly **D**\ etector of **I**\ nternet **T**\ raffic
+=================================
+Introduction
+---------------------------------
+SADIT is a byproduct of research project **A Coordinated Approach to Cyber-Situation Awarness Based on Traffic Anomaly
+Detection**.
+
+Cyber espionage poses a substantial threat to both corporate and government entities. Attacks can be precise and targeted efforts, such as extracting credit card transaction records from a central data server. Attacks can also be seemingly benign, such as randomly crawling through a server’s contents. It is thought that these attacks are trials to see if access to critical information can be gained. Data exfiltration varies over a broad spectrum. On one end is the case of a user, granted server access through legitimate means, exporting sensitive information to an external entity. On the other end is the case of an external user, through access inadvertently granted by a typical user, downloading random pieces of information.
+
+Some techniques to detect attacks are based on analyzing the information has been accessed. However, it is not effective in many cases. One case is that the attackers are authenticated users themselves or authoenticated users controlled by attackers. Another case is that, the web server owner resort third party software to detect anomaly and don't want to disclose the information to third-party software.
+
+For some cases, a better approach would be to use statistical models to analyze the patterns of traffic to the webserver. The advatage is that this method is more general and have the ability to detect unknown anomalies.
+
+
+Goal
+----------------------------------
+A challenging problem in the research of anomaly detection is that there is no much traffic data avaiable.
+SADIT aims to provide research community an easy-to-use tool to validate and test
+statistical anomaly detecting method in both simulated and real environment.
+
+In the current developing stage, we focus on simulation. SADIT uses fs(flow-max)
+nework simulator, an efficient & light-weight network simulator developed by UW Madison, to simulate 
+the network flow traffic.
+
+Look at our `poster <http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf>`_ for more information of our work
+
+Table of Content
+-----------------------------------
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+
+   customize
+
+
+
+
+
+
+
+
