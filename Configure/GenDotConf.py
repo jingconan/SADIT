@@ -46,8 +46,8 @@ def LoadValidIP(fileName):
 
 
 def FixQuoteBug(fileName, delay=0.001):
-    # There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote to value
-    # which is not desirable. This function try to fix that problem
+    """ There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote to value
+    which is not desirable. This function try to fix that problem """
     fid = open(fileName, 'r')
     content = fid.read()
     content = re.sub('delay="[\d.]*"', 'delay='+str(delay), content)
@@ -76,7 +76,8 @@ def ParseArg(string):
 
 # Both Modulator and Source are described by Attr
 class Attr():
-    '''Sub Class of String'''
+    '''Sub Class of String. __str__ method was overloaded, providing an easy way to
+    get DOT format attribute string.'''
     def __init__(self, string=None, **args):
         if not string:
             self.attr = args
@@ -93,9 +94,18 @@ class Attr():
         return string
 
 def GenAttr(k, ipdests, ipdst, N, stype):
-    '''Generate the default Attribute.
-    k is NodeSeq, ipdests is the local ip addr. ipdst is the destination, N is
-    the num of modulator and source. We assume for each modulator, there is one associated source'''
+    """Generate the default Attribute.
+
+    - k is NodeSeq,
+    - ipdests is the local ip address.
+    - ipdst is the destination
+    - N is the num of modulator and source. We assume for each modulator, there is one associated source
+    - stype can be:
+        - 'HARPOON' harpoon generator. Click here_ for more information of harpoon.
+        - 'rawflow' rawflow generator.
+        - 'JING'
+    .. _here: http://cs.colgate.edu/~jsommers/harpoon/
+    """
     attr = dict()
     attr['autoack'] = '"False"'
     attr['ipdests'] = '"' + ipdests + '"'
@@ -178,6 +188,8 @@ def GenAttr(k, ipdests, ipdst, N, stype):
 ####################################
 
 class Network(Dot):
+    ''' Network Class specifiy the topology of the network.
+    '''
     def __init__(self):
         Dot.__init__(self, 'SimConf', graph_type='graph')
         self.nodeList = []
@@ -185,6 +197,22 @@ class Network(Dot):
         nodeSeq = 0
 
     def StarTopoMarkov(self, graphSize, link_attr, IPSrcSet):
+        '''Create a Star Topology Network with anomaly type of markov stationary probaility.
+
+        - *graphSize* :is the number of nodes
+        - *link_attr* :specify the attribute of link. All links are assumed to have the same attr. A link in fs can be considered either a
+            logical or physical link between two routers. Notice in Listing 1 that for each link,
+            *weight*, *capacity*, and *delay* attributes are configured. *Capacity* is specified
+            in bits per second, and *delay* is specified in seconds. Presently in fs, the configured
+            weights are fed into Dijkstra's algorithm for computing shortest-path routes across the
+            network (if there is more than one egress node for a given destination address the closest
+            node is used, mimicking hot potato routing).
+        - *IPSrcSet* :a set of IP address.
+        The settings.py parameter it uses **MARKOV_PARA**, **MARKOV_INTERVAL**, **MARKOV_P**,
+        **DEFAULT_PROFILE[1]**
+
+        This function will be merged into StarTopo in the future.
+        '''
         para = settings.MARKOV_PARA
         P = settings.MARKOV_P
         interval = settings.MARKOV_INTERVAL
@@ -208,6 +236,12 @@ class Network(Dot):
             self.add_edge(edge)
 
     def StarTopo(self, graphSize, link_attr, IPSrcSet):
+        '''Create a star topology network.
+
+        - *graphSize* :is the number of nodes
+        - *link_attr* :specify the attribute of link. All links are assumed to have the same attr
+        - *IPSrcSet* :a set of IP address.
+        '''
         print 'Creating the Star topology ....'
         self.link_attr = link_attr
         srvAddr = '165.14.130.9'
@@ -227,13 +261,20 @@ class Network(Dot):
             self.add_edge(edge)
 
     def write(self, fName):
+        '''write the DOT file to *fName*'''
         Dot.write(self, fName)
         FixQuoteBug(fName, float(self.link_attr['delay']))
 
     def InjectAnomaly(self, A):
+        '''Inject Anomaly into the network. A is the one type Anomaly'''
         A.Run(self)
 
 class NNode(Node):
+    '''NNode is a representation of dot node. It provides several functions
+    to modify the attribute of node. The original fs-simulator supports two
+    types of generator. 1. **Harpoon**. 2. **rawflow**. In revised version of
+    fs simulator, we add support of **JING** generator Just Incomplete and Not Good Generator.
+    '''
     def __init__(self, ipdest, ipdst, N=1, stype='JING'):
         global nodeSeq
         nodeSeq += 1
@@ -252,6 +293,9 @@ class NNode(Node):
         return str(self.obj_dict)
 
     def ModifyAttr(self, **args):
+        '''ModifyAttr will try to match the input argument with the attribute
+        of the node and revise the attribute accordingly. It will search layer
+        by layer.'''
         # Search Layer by Layer
         attr = self.obj_dict['attributes']
         # print args
@@ -291,6 +335,14 @@ class NNode(Node):
                         raise ValueError('not proper argument key value')
 
     def AddModulator(self, start, profile, generator):
+        '''It will try to add modulator to the node.
+
+        - *start* :start time of the modulator
+        - *profile* :the profile of the modulator The syntax for specifying a traffic profile consists of two ordered lists of numbers, enclosed in parentheses. The first list
+          indicates a series of 1 or more time durations (in seconds), and the second list indicates the number of instances of a particular traffic source that should be active.
+          The time durations and number of sources are matched in a circular fashion; in the example, the time duration 60 is repeated for each of the five values for number of
+          sources. An example is profile=((60,),(10,20,30,20,10)). the time duration 60 is repeated for each of the five values for number of sources
+        - *generator* :the name for generator'''
         attr = self.obj_dict['attributes']
         N = int(attr['N']) # Num of Modultor
         N += 1
@@ -314,6 +366,8 @@ class NNode(Node):
         attr[mName] = str(m)
 
     def GetJING(self, **para):
+        '''In JING Generator,  you need specifiy download rate, interval between two consequent flows
+        and duration of the flows.'''
         s = Attr(name='JING',
                 ipsrc=para['ipsrc'],
                 ipdst=para['ipdst'],
@@ -326,19 +380,25 @@ class NNode(Node):
         return str(s)
 
     def GetRawFlow(self, ipsrc, ipdst, flowlets, ipproto, dport, sport, pkts, bytes, interval, continuous):
+        '''raw flow generator can work as a one-flowlet generator (the entire flow is represented as one flowlet) or as a simple constant or variable bit-rate flow (e.g., to mimic a UDP-based media stream). '''
         return str( Attr(name='rawflow',
-                ipsrc=ipsrc,
-                ipdst=ipdst,
-                flowlets=flowlets,
-                ipproto=ipproto,
-                pkts=pkts,
-                bytes=bytes,
-                interval=interval,
-                sport=sport,
-                dport=dport,
-                continuous=continuous) )
+            ipsrc=ipsrc,
+            ipdst=ipdst,
+            flowlets=flowlets,
+            ipproto=ipproto,
+            pkts=pkts,
+            bytes=bytes,
+            interval=interval,
+            sport=sport,
+            dport=dport,
+            continuous=continuous) )
 
     def GetHarpoon(self, ipsrc, ipdst, flowsize, flowstart, sport, dport, lossrate):
+        '''While a Harpoon generator is active, a new flow is started after a time duration chosen from the flowstart distribution; that flow will have random IP source and
+        destination addresses chosen from the source and destination prefixes, and a random flow size chosen from the flowsize distribution. The next flow will start after another
+        random value chosen from the flowstart distribution, and so forth. The source and destina- tion prefixes can be constructed in such a way as to recreate a particular
+        distribution, similar to the way that Harpoon can be configured. For one instance of a Harpoon flow, source and destination ports are also chosen from the configured
+        settings, or each flow, a random loss rate is chosen from the configured parameter (as with other settings, this could just be a single value, if desired; there are no restrictions placed on how this is configured). This value, along with a computed round-trip time based on the link configurations are used as input to a TCP throughput model to estimate the average rate of the flow. The RTT computed for input to the model only considers propagation delay; transmission and queuing delays are ignored. For the TCP throughput model, fs incorporates the simple Mathis et al. model from [23] and the more complex Cardwell et al. model from [8]. We used these two models in order to investigate the sensitivity of fs to the TCP model used.'''
         return str( Attr(name='harpoon', ipsrc=ipsrc, ipdst=ipdst, flowsize=flowsize, flowstart=flowstart, sport=sport, dport=dport, lossrate=lossrate) )
 
     def AddHarpoon(self, start, end, para): # For Markovian Modulator
@@ -352,6 +412,7 @@ class NNode(Node):
         self.AddModulator(start, profile, g)
 
 class ServerNNode(Node):
+    '''One type of node that used as server'''
     def __init__(self, addr):
         destIP = addr
         attr = {'autoack':'"False"', 'ipdests':'"'+ destIP +'"'}

@@ -1,6 +1,7 @@
 from random import randint
 
 ### -- [2012-03-04 12:12:42] add binary_search
+### -- [2012-03-26 14:01:02] add docstring for each function.
 
 def binary_search(a, x, lo=0, hi=None):
     """
@@ -24,9 +25,36 @@ Find = binary_search
 
 
 def Load(var):
+    '''Load is useful when the some elements in var is specified as random value.
+    for example, if the var is ['rand(1)', 1], var[0] will be different random
+    value at each time.'''
     return [eval(x) for x in var]
 
 def Dump2Txt(var, fname, op):
+    """Dump2Txt will dump the variable to text file for use of other programs like Matlab.
+
+    - *fname* : is the name for output file
+    - *op* : is a option flag, ::
+
+        if op[0:2] == '1d':
+            m = len(var)
+            for i in xrange(m): fid.write("%f "%(var[i]))
+            fid.write('\\n')
+        elif op[0:2] == '2d':
+            if op[2:] == 'np': m, n = var.shape
+            elif op[2:] == 'list':
+                m = len(val)
+                m = len(val[0])
+            else:
+                raise ValueError('unknown op')
+
+            for i in xrange(m):
+                for j in xrange(n):
+                    fid.write("%s "%(var[i,j]))
+                fid.write("\\n")
+
+
+    """
     fid = open(fname, 'w')
     if op[0:2] == '1d':
         m = len(var)
@@ -52,6 +80,12 @@ def Dump2Txt(var, fname, op):
 
 import imp
 def CreateSettings(templateFilePath, settingsFilePath, **kwargs):
+    '''settings.py is a file contains all the global parameters.
+    Sometimes we need to do the sensitivity analysis and need to change the global
+    parameter on the fly. CreateSetting will faciliate the process through generating
+    settings.py based on a template file.
+    file.
+    '''
     settings_template = imp.load_source('settings_template', templateFilePath)
     namespace = settings_template.__dict__
     for k, v in kwargs.iteritems():
@@ -106,6 +140,7 @@ def PrintVar(namespace, outputFile = ''):
 
 import numpy as np
 def PrintModelFree(mfIndi, mbIndi):
+    '''Print the ModelFree Derivative which is not nan value'''
     # mfIndi = ModelFreeDetectAnoType()
     # mbIndi = ModelBaseDetectAnoType()
     for i in xrange(len(mfIndi)):
@@ -115,6 +150,7 @@ def PrintModelFree(mfIndi, mbIndi):
 
 
 def PrintModelBase(mbIndi):
+    '''print the model based derivative which is not nan value.'''
     m, n = mbIndi.shape
     for i in xrange(m):
         for j in xrange(n):
