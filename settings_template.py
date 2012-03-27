@@ -64,6 +64,11 @@ FLOW_SIZE_VAR = 100 # Absolute FLOW_SIZE_VARIANCE
 ## Sensitivity Analysis    ##
 #############################
 FLOW_RATE_RANGE = [4, 6, 8]
+FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
+# FLOW_SIZE_TEST_RANGE = [2]
+# FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
+
+
 
 
 ### ROOT is the root directory for you directory, be aware to change this before you try to run the code
@@ -156,18 +161,16 @@ def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):
 CROSS_VALIDATION_RATIO = 0.8
 
 
-FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
-# FLOW_SIZE_TEST_RANGE = [2]
-# FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
-
 
 ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 ANO_CONF_PARA_FILE = ROOT + '/Share/AnoPara.txt'
 
 
+#########################################
+### Parameters for Derivative Test  ####
+#########################################
 DERI_TEST_THRESHOLD = 0.1
 # DERI_TEST_THRESHOLD = 1
-
 
 # ANOMALY_TYPE_DETECT_INDI = 'derivative'
 # MODEL_FREE_DERI_DESCENDING_FIG = ROOT + '/res/mf-descending-deri.eps'

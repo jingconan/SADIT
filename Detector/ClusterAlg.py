@@ -1,4 +1,7 @@
 # from types import TupleType
+'''
+This module implement a typical K-means Clustering.
+'''
 from random import sample
 
 
@@ -72,4 +75,4 @@ def KMeans(data, k, distFunc):
 			break
 		centerPt = NewCenterPt
 
-	return cluster, centerPt 
+	return cluster, centerPt

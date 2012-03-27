@@ -183,10 +183,29 @@ address.</dd>
 <em>flowSize</em> is the size of the flow. <em>dur</em> is the flow duration. <em>flowRate</em>
 is the estimated arrival rate of flows. distToCenter</p>
 </dd>
+<dt>FALSE_ALARM_RATE</dt>
+<dd><p class="first">This is used to calculate the threshold. The threshold will be calculated
+according to Hoeffding&#8217;s optimal decision rule. Refer to the following paper
+for details:</p>
+<blockquote class="last">
+<div>Ioannis Ch. Paschalidis and Georgios Smaragdakis. Spatio-temporal
+network anomaly detection by assessing deviations of empirical mea-
+sures. IEEE/ACM Trans. Netw., 17:685–697, June 2009
+<a class="reference external" href="http://www.google.com/url?sa=t&amp;rct=j&amp;q=spatio-temporal%20network%20anomaly%20detection%20by%20assessing%20deviations%20of%20empirical%20mea-%20sures&amp;source=web&amp;cd=2&amp;ved=0CDoQFjAB&amp;url=http%3A%2F%2Fionia.bu.edu%2FPublications%2Fpapers%2Fanomaly-TNET-09.pdf&amp;ei=ESNyT-yQE6by0gG-9anoAQ&amp;usg=AFQjCNGBTIDvgysNvBDn2PqdS_dyuTYpmw&amp;cad=rja">Get</a></div></blockquote>
+</dd>
 </dl>
 </div>
 <div class="section" id="sensitivity-analysis">
 <h2>1.4. sensitivity analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>FLOW_SIZE_RANGE</dt>
+<dd>this is a list which contains the possible value of <em>FLOW_SZIE</em> in
+FLOW_SIZE type of anomaly. For each value in the list, the program will run
+for once and results will be shown in the same figure for comparison</dd>
+<dt>FLOW_RATE_RANGE</dt>
+<dd>similar to FLOW_SIZE_TEST_RANGE, but the value in the list is the value of <em>FLOW_RATE</em>
+in <strong>FLOW_RATE</strong> anomaly</dd>
+</dl>
 </div>
 <div class="section" id="miscellaneous">
 <h2>1.5. miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>

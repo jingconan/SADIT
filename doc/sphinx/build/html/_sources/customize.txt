@@ -126,10 +126,27 @@ _`LOAD_FEATURE`
     *flowSize* is the size of the flow. *dur* is the flow duration. *flowRate*
     is the estimated arrival rate of flows. distToCenter
 
+FALSE_ALARM_RATE
+    This is used to calculate the threshold. The threshold will be calculated
+    according to Hoeffding's optimal decision rule. Refer to the following paper
+    for details:
+
+        Ioannis Ch. Paschalidis and Georgios Smaragdakis. Spatio-temporal
+        network anomaly detection by assessing deviations of empirical mea-
+        sures. IEEE/ACM Trans. Netw., 17:685–697, June 2009
+        `Get <http://www.google.com/url?sa=t&rct=j&q=spatio-temporal%20network%20anomaly%20detection%20by%20assessing%20deviations%20of%20empirical%20mea-%20sures&source=web&cd=2&ved=0CDoQFjAB&url=http%3A%2F%2Fionia.bu.edu%2FPublications%2Fpapers%2Fanomaly-TNET-09.pdf&ei=ESNyT-yQE6by0gG-9anoAQ&usg=AFQjCNGBTIDvgysNvBDn2PqdS_dyuTYpmw&cad=rja>`_
+
 
 
 sensitivity analysis
 ------------------------
+FLOW_SIZE_RANGE
+    this is a list which contains the possible value of *FLOW_SZIE* in
+    FLOW_SIZE type of anomaly. For each value in the list, the program will run
+    for once and results will be shown in the same figure for comparison
+FLOW_RATE_RANGE
+    similar to FLOW_SIZE_TEST_RANGE, but the value in the list is the value of *FLOW_RATE* 
+    in **FLOW_RATE** anomaly
 
 
 miscellaneous
