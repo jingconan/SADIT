@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to SADIT’s documentation! SADIT is acronym for Statiscal Anomaly Detector of Internet Traffic &mdash; SADIT 0.0.0 documentation</title>
+    <title>Welcome to SADIT’s documentation! &mdash; SADIT 0.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SADIT 0.0.0 documentation" href="#" />
-    <link rel="next" title="1. Customization" href="customize.html" /> 
+    <link rel="next" title="1. Introduction" href="introduction.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,7 +39,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="customize.html" title="1. Customization"
+          <a href="introduction.html" title="1. Introduction"
              accesskey="N">next</a> |</li>
         <li><a href="#">SADIT 0.0.0 documentation</a> &raquo;</li> 
       </ul>
@@ -50,38 +50,59 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-sadit-s-documentation-sadit-is-acronym-for-statiscal-anomaly-detector-of-internet-traffic">
-<h1>Welcome to SADIT&#8217;s documentation! SADIT is  acronym for <strong>S</strong>tatiscal <strong>A</strong>nomaly <strong>D</strong>etector of <strong>I</strong>nternet <strong>T</strong>raffic<a class="headerlink" href="#welcome-to-sadit-s-documentation-sadit-is-acronym-for-statiscal-anomaly-detector-of-internet-traffic" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>SADIT is a byproduct of research project <strong>A Coordinated Approach to Cyber-Situation Awarness Based on Traffic Anomaly
-Detection</strong>.</p>
-<p>Cyber espionage poses a substantial threat to both corporate and government entities. Attacks can be precise and targeted efforts, such as extracting credit card transaction records from a central data server. Attacks can also be seemingly benign, such as randomly crawling through a server’s contents. It is thought that these attacks are trials to see if access to critical information can be gained. Data exfiltration varies over a broad spectrum. On one end is the case of a user, granted server access through legitimate means, exporting sensitive information to an external entity. On the other end is the case of an external user, through access inadvertently granted by a typical user, downloading random pieces of information.</p>
-<p>Some techniques to detect attacks are based on analyzing the information has been accessed. However, it is not effective in many cases. One case is that the attackers are authenticated users themselves or authoenticated users controlled by attackers. Another case is that, the web server owner resort third party software to detect anomaly and don&#8217;t want to disclose the information to third-party software.</p>
-<p>For some cases, a better approach would be to use statistical models to analyze the patterns of traffic to the webserver. The advatage is that this method is more general and have the ability to detect unknown anomalies.</p>
-</div>
+  <div class="section" id="welcome-to-sadit-s-documentation">
+<h1>Welcome to SADIT&#8217;s documentation!<a class="headerlink" href="#welcome-to-sadit-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="goal">
 <h2>Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h2>
-<p>A challenging problem in the research of anomaly detection is that there is no much traffic data avaiable.
-SADIT aims to provide research community an easy-to-use tool to validate and test
-statistical anomaly detecting method in both simulated and real environment.</p>
-<p>In the current developing stage, we focus on simulation. SADIT uses fs(flow-max)
+<p>A challenging problem in the research of anomaly detection is that there
+is little real traffic data with labelled malicious behavior. So most researchers resort simulation to test the algorithm
+, thus a good simulation of malicious attack becomes relevant.
+The second problem is that different researchers
+use different benchmarks, which makes comparison very hard. The thrid problem is
+that most of the test codes are throwed after paper is published. At the same
+time, programmers in industry need start from scratch when implementing a
+product using those algorithms.
+To address those problems, we developed <strong>SADIT</strong>, which is acronym for <strong>S</strong>tatistical <strong>A</strong>nomaly <strong>D</strong>etector of <strong>I</strong>nternet <strong>T</strong>raffic.
+<strong>SADIT</strong> aims to :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>provide research community an easy-to-use tool to validate and test
+statistical anomaly detecting method in simulated environment.</li>
+<li>provide a set of benchmarks for comparison.</li>
+<li>make the transition from test code to production code effortless.</li>
+</ol>
+</div></blockquote>
+<p>In the current developing stage, we focus on simulation. <strong>SADIT</strong> uses fs(flow-max)
 nework simulator, an efficient &amp; light-weight network simulator developed by UW Madison, to simulate
 the network flow traffic.</p>
-<p>Look at our <a class="reference external" href="http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf">poster</a> for more information of our work</p>
 </div>
 <div class="section" id="table-of-content">
 <h2>Table of Content<a class="headerlink" href="#table-of-content" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="customize.html">1. Customization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="customize.html#network-condition">1.1. network condition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="customize.html#parameter-for-anomaly">1.2. parameter for anomaly</a></li>
-<li class="toctree-l2"><a class="reference internal" href="customize.html#parameter-for-detector-module">1.3. parameter for detector module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="customize.html#sensitivity-analysis">1.4. sensitivity analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="customize.html#miscellaneous">1.5. miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#structure">1.1. Structure</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">2. Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html#installation">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">4. Customization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#network-condition">4.1. network condition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#parameter-for-anomaly">4.2. parameter for anomaly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#parameter-for-detector-module">4.3. parameter for detector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#sensitivity-analysis">4.4. sensitivity analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize.html#miscellaneous">4.5. miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li><a class="reference external" href="http://docs.python.org/glossary.html#glossary" title="(in Python v2.7)"><em>Glossary</em></a></li>
 </ul>
 </div>
 </div>
@@ -95,10 +116,10 @@ the network flow traffic.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to SADIT&#8217;s documentation! SADIT is  acronym for <strong>S</strong>tatiscal <strong>A</strong>nomaly <strong>D</strong>etector of <strong>I</strong>nternet <strong>T</strong>raffic</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#">Welcome to SADIT&#8217;s documentation!</a><ul>
 <li><a class="reference internal" href="#goal">Goal</a></li>
 <li><a class="reference internal" href="#table-of-content">Table of Content</a><ul>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
 </ul>
@@ -106,8 +127,8 @@ the network flow traffic.</p>
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="customize.html"
-                        title="next chapter">1. Customization</a></p>
+  <p class="topless"><a href="introduction.html"
+                        title="next chapter">1. Introduction</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -140,7 +161,7 @@ the network flow traffic.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="customize.html" title="1. Customization"
+          <a href="introduction.html" title="1. Introduction"
              >next</a> |</li>
         <li><a href="#">SADIT 0.0.0 documentation</a> &raquo;</li> 
       </ul>

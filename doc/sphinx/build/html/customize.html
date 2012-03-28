@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>1. Customization &mdash; SADIT 0.0.0 documentation</title>
+    <title>4. Customization &mdash; SADIT 0.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SADIT 0.0.0 documentation" href="index.html" />
-    <link rel="prev" title="Welcome to SADIT’s documentation! SADIT is acronym for Statiscal Anomaly Detector of Internet Traffic" href="index.html" /> 
+    <link rel="prev" title="2. Download and Install" href="download.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,7 +39,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to SADIT’s documentation! SADIT is acronym for Statiscal Anomaly Detector of Internet Traffic"
+          <a href="download.html" title="2. Download and Install"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">SADIT 0.0.0 documentation</a> &raquo;</li> 
       </ul>
@@ -51,7 +51,7 @@
           <div class="body">
             
   <div class="section" id="customization">
-<h1>1. Customization<a class="headerlink" href="#customization" title="Permalink to this headline">¶</a></h1>
+<h1>4. Customization<a class="headerlink" href="#customization" title="Permalink to this headline">¶</a></h1>
 <p>you can customize <strong>SADIT</strong> through changing settings_template.py or <strong>settings.py</strong> file.
 <strong>settings.py</strong> is a file contains all the global parameters. it is a typical python
 script, so you can use any non-trival python sentence in the <strong>settings.py</strong>.
@@ -63,7 +63,7 @@ functions to create <strong>settings.py</strong> on the fly.
 the condition of network and type of anomaly through  change
 of settings_tempalte.py file.</p>
 <div class="section" id="network-condition">
-<h2>1.1. network condition<a class="headerlink" href="#network-condition" title="Permalink to this headline">¶</a></h2>
+<h2>4.1. network condition<a class="headerlink" href="#network-condition" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>DEFAULT_PROFILE</dt>
 <dd>example (0, 2000, 1).
@@ -84,7 +84,7 @@ will be useful if GENERATOR == &#8216;HARPOON&#8217;.</dd>
 </dl>
 </div>
 <div class="section" id="parameter-for-anomaly">
-<h2>1.2. parameter for anomaly<a class="headerlink" href="#parameter-for-anomaly" title="Permalink to this headline">¶</a></h2>
+<h2>4.2. parameter for anomaly<a class="headerlink" href="#parameter-for-anomaly" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>ANOMATLY_TIME</dt>
 <dd><p class="first">example</p>
@@ -153,7 +153,7 @@ the arrival rate for possion distribution.</p>
 </dl>
 </div>
 <div class="section" id="parameter-for-detector-module">
-<h2>1.3. parameter for detector module<a class="headerlink" href="#parameter-for-detector-module" title="Permalink to this headline">¶</a></h2>
+<h2>4.3. parameter for detector module<a class="headerlink" href="#parameter-for-detector-module" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>WINDOW_TYPE</dt>
 <dd>specify the window type. can be either &#8216;TIME&#8217; or  &#8216;FLOW&#8217;. If WINDOW_TYPE ==
@@ -196,7 +196,7 @@ sures. IEEE/ACM Trans. Netw., 17:685–697, June 2009
 </dl>
 </div>
 <div class="section" id="sensitivity-analysis">
-<h2>1.4. sensitivity analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this headline">¶</a></h2>
+<h2>4.4. sensitivity analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>FLOW_SIZE_RANGE</dt>
 <dd>this is a list which contains the possible value of <em>FLOW_SZIE</em> in
@@ -208,7 +208,7 @@ in <strong>FLOW_RATE</strong> anomaly</dd>
 </dl>
 </div>
 <div class="section" id="miscellaneous">
-<h2>1.5. miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<h2>4.5. miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>ROOT</dt>
 <dd><p class="first">example value</p>
@@ -229,19 +229,19 @@ in <strong>FLOW_RATE</strong> anomaly</dd>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">1. Customization</a><ul>
-<li><a class="reference internal" href="#network-condition">1.1. network condition</a></li>
-<li><a class="reference internal" href="#parameter-for-anomaly">1.2. parameter for anomaly</a></li>
-<li><a class="reference internal" href="#parameter-for-detector-module">1.3. parameter for detector module</a></li>
-<li><a class="reference internal" href="#sensitivity-analysis">1.4. sensitivity analysis</a></li>
-<li><a class="reference internal" href="#miscellaneous">1.5. miscellaneous</a></li>
+<li><a class="reference internal" href="#">4. Customization</a><ul>
+<li><a class="reference internal" href="#network-condition">4.1. network condition</a></li>
+<li><a class="reference internal" href="#parameter-for-anomaly">4.2. parameter for anomaly</a></li>
+<li><a class="reference internal" href="#parameter-for-detector-module">4.3. parameter for detector module</a></li>
+<li><a class="reference internal" href="#sensitivity-analysis">4.4. sensitivity analysis</a></li>
+<li><a class="reference internal" href="#miscellaneous">4.5. miscellaneous</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to SADIT&#8217;s documentation! SADIT is  acronym for <strong>S</strong>tatiscal <strong>A</strong>nomaly <strong>D</strong>etector of <strong>I</strong>nternet <strong>T</strong>raffic</a></p>
+  <p class="topless"><a href="download.html"
+                        title="previous chapter">2. Download and Install</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/customize.txt"
@@ -274,7 +274,7 @@ in <strong>FLOW_RATE</strong> anomaly</dd>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to SADIT’s documentation! SADIT is acronym for Statiscal Anomaly Detector of Internet Traffic"
+          <a href="download.html" title="2. Download and Install"
              >previous</a> |</li>
         <li><a href="index.html">SADIT 0.0.0 documentation</a> &raquo;</li> 
       </ul>

@@ -76,7 +76,8 @@ FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
 #ROOT = '/Users/jingwang/Dropbox/Research/Cybersecurity/code/newanomalydetector/neat_code_sens'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code_sens'
 
-ROOT = '/home/wangjing/Documents/OpenSource/sadit-sphinx'
+ROOT = '/Users/wangjing/Dropbox/OpenSource/sadit-sphinx'
+# ROOT = '/home/wangjing/Documents/OpenSource/sadit-sphinx'
 
 # The path for output of configure
 OUTPUT_DOT_FILE = ROOT + '/Share/conf.dot'

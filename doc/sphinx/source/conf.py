@@ -246,5 +246,6 @@ texinfo_documents = [
 intersphinx_mapping = {'http://docs.python.org/': None}
 
 # ROOT = '../../../'
-ROOT = '/home/wangjing/Documents/OpenSource/sadit-sphinx/'
+# ROOT = '/home/wangjing/Documents/OpenSource/sadit-sphinx/'
+ROOT = '/Users/wangjing/Dropbox/OpenSource/sadit-sphinx/'
 sys.path.append(ROOT)
