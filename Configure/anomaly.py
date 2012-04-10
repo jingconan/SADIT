@@ -41,137 +41,9 @@ import cPickle as pickle
 # * ATYPICAL_IP_FILE
 # * IPS_FILE
 
-##################################
-####    Interface          #######
-##################################
-def GenAtypicalUserAnomalyDot(startTime, endTime, outputFileName):
-    """ Generate DOT file with anomaly of atypical user.
-    the topology is assumed to be start topology. You can change to other
-    topology by change the net.StarTopo() function.
-
-    - startTime: start time of the anomaly
-    - endTime: endTime of the anomaly
-    - outputFileName: name for the output DOT file.
-    """
-    IPSrcSet, AnoSet, graphSize = GetIPAdress()
-    net= Network()
-    net.StarTopo(graphSize, settings.link_attr, IPSrcSet)
-    A = AtypicalUser( (startTime, endTime), AnoSet )
-    net.InjectAnomaly( A )
-    net.write(outputFileName)
-
-
-def GenFlowSizeAnomalyDot(startTime, endTime, fSize_mean, fSize_var, outputFileName):
-    '''Generate DOT file with anomaly of flow size. The topology is assumed to be star topology.
-
-    - *fSize_mean* :the mean of flow size for anomaly
-    - *fSize_var* :the variance of flow size for anomaly,
-    - *outputFileName* : the name for output DOT File'''
-    IPSrcSet, AnoSet, graphSize = GetIPAdress()
-    net= Network()
-    net.StarTopo(graphSize, settings.link_attr, IPSrcSet[0:-2])
-    A = FlowSize((startTime, endTime),
-            IPSrcSet[-1], fSize_mean, fSize_var)
-    net.InjectAnomaly( A )
-    net.write(outputFileName)
-
-
-def GenFlowRateAnomalyDot(startTime, endTime, lamb, outputFileName):
-    '''Generate DOT file with anomaly of  flow arrival rate. the topology is assume to be
-    start topology
-
-    - *startTime* :start time of anomaly
-    - *endTime* :endTime of anomaly,
-    - *lamb* :flow arrvial rate during anomaly.
-    - *outputFileName* :name for output DOT file'''
-    IPSrcSet, AnoSet, graphSize = GetIPAdress()
-    net= Network()
-    net.StarTopo(graphSize, settings.link_attr, IPSrcSet[0:-2])
-    A = FlowRate((startTime, endTime),
-            IPSrcSet[-1], lamb)
-    net.InjectAnomaly( A )
-    net.write(outputFileName)
-
-
-##################################
-####    Utility Function  #######
-##################################
-def GetIPAdress():
-    '''
-    Select normal IP address and abnormal IP address,
-    the distance  between normal IP address and abnormal IP
-    address is very large
-    '''
-    IPMat = GetIPMat() #  Get All IPs
-    DF = lambda x,y:np.abs(x[0]-y[0])* (256 ** 3) + np.abs(x[1]- y[1]) * (256 ** 2) + np.abs(x[2] - y[2]) * (256) + np.abs(x[3] - y[3])
-    # Calculate the center and distance to centers
-    center, dis = CalIPCenter(IPMat, DF)
-    sortIdx = np.argsort(dis, axis=0)
-    ratio = 0.001 # Portion of selected points
-    IPNum = len(dis)
-    corePts = list( sortIdx[ range(int(IPNum * ratio)) ] );
-    anoPts = list( sortIdx[ range(int(IPNum * (1-ratio)), IPNum, 1) ] )
-
-    graphSize = len(corePts) + len(anoPts) # Size of the Graph
-
-    IPSrcSet = []
-    for pt in corePts:
-        IPSrcSet.append("%d.%d.%d.%d" %(IPMat[pt, 0], IPMat[pt, 1], IPMat[pt, 2], IPMat[pt, 3]))
-    AnoSet = []
-    for pt in anoPts:
-        AnoSet.append("%d.%d.%d.%d" %(IPMat[pt, 0], IPMat[pt, 1], IPMat[pt, 2], IPMat[pt, 3]))
-    return IPSrcSet, AnoSet, graphSize
-
-def CalIPCenter(IPMat, DF):
-    '''*IPMat* is a Mx4 numpy matrix contains M ip addresses.
-    *DF* is a user defined distance function'''
-    IPNum, y = np.shape(IPMat)
-    IPCenter = np.mean(IPMat, axis=0)
-    dis = np.zeros( (IPNum, 1) )
-    for i in range(IPNum):
-        dis[i] = DF(IPMat[i,:], IPCenter)
-    return IPCenter, dis
-
-
-def PlotPts(IPMat, corePts, anoPts, c):
-    figure()
-    for pt in corePts:
-        plot(IPMat[pt, 0], IPMat[pt, 1], 'bo')
-    for pt in anoPts:
-        plot(IPMat[pt, 0], IPMat[pt, 1], 'ro')
-    plot(c[0], c[1], 'go')
-
-
-def GetIPMat():
-    '''load valid ip adrees from setting.IPS_FILE'''
-    # IP = LoadValidIP('./ips.txt')
-    IP = LoadValidIP(settings.IPS_FILE)
-    IPNum = len(IP)
-    IPMat = np.zeros( (IPNum, 4) )
-    i = -1
-    for ip in IP:
-        i += 1
-        val = ip.split('.')
-        ipInt = [int(x) for x in val]
-        IPMat[i, :] = ipInt
-    return IPMat
-
-
-def P2F_RAW(flowRate, flowDuration, pktRate): # Change Prameter to FS Format for rawflow
-    pass
-# interval =
-    # flowlets # Number of Flowlets in Flow
-    # bytes # Number of Flowlets in each flow
-    # interval # Interval between flowlets.
-    # pkts # Number of packets in each emitted flow
-
-
-def F2P_RAW(flowlets, bytes, interval, pkts ):
-    pktRate = bytes * pkts / interval
-    flowDuration = flowlets * interval
-    flowRate = 1.0 / flowDuration
-
-
+##-- [2012-04-08 22:31:20] Add GenAnomalyDot
+##-- [2012-04-09 18:31:22] refactoring the whole file
+## -- [2012-04-10 01:14:07] FLOW_RATE can work
 
 
 ################################
@@ -182,12 +54,121 @@ def F2P_RAW(flowlets, bytes, interval, pkts ):
 #     Change of Flow Duration
 #     Change of Data Rate
 ###############################
+from numpy import cumsum, hstack, sort, argsort, diff
+def get_pos(l, v):
+    """index of largest element in l that is less than v"""
+    for i in xrange(len(l)):
+        if l[i] < v :
+            continue
+        return i - 1
 
+def insert_break_pt(b, dur, num):
+    """it return the new duration, new number,
+    the third thing returned in the idex of added
+    element"""
+    t = [0] + list(cumsum( dur ))
+    nt = copy.deepcopy(t)
+    new_num = list(copy.deepcopy(num))
+    i = get_pos(t, b)
+    if i == -1 :
+        return dur, num, i+1;
+    if i == len(t) - 1:
+        return dur, num, i+1
+    else:
+        nt.insert(i+1, b)
+        new_num.insert(i+1, num[i])
+        new_dur = list(diff(nt))
+        return new_dur, new_num, i+1
+
+class BadConfigError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+
+import copy
 class Anomaly:
     '''basis class for anomaly. Its subclass will provide Run() method'''
-    def __init__(self, t):
-        self.t = t # t is a tuple, the first element is start time, the second element is end time
-        self.ipdst = '165.14.130.9' # FIXME Should be a Parameter
+    def __init__(self, anoDesc):
+        self.anoDesc = anoDesc
+        self.ano_node = None
+
+    def get_profile_with_ano(self, mod_start, mod_profile, ano_t):
+        """in fs, one modulator can only one behaviour
+        toe simulate the change of behaviour of the modulator,
+        the abnormal haviour will be generator by new modulators."""
+        start, end = ano_t
+        start -= mod_start
+        end -= mod_start
+        d, n, i1 = insert_break_pt(start, mod_profile[0], mod_profile[1])
+        d, n, i2 = insert_break_pt(end, d, n)
+        normal_profile_1 = ( tuple(d[:i1]), tuple(n[:i1]) )
+        abnormal_profile = ( tuple(d[i1:i2]), tuple(n[i1:i2]) )
+        normal_profile_2 = ( tuple(d[i2:]), tuple(n[i2:]) )
+        return normal_profile_1, abnormal_profile, normal_profile_2
+
+    def cut_profile(profile, status):
+        """cut into three pieces"""
+
+    def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
+        # TODO consider more complex cases.
+        # self.get_profile_with_ano(mod_start, mod_profile, ano_t)
+        start, end = ano_t
+
+        ano_node = self.ano_node
+        generator = ano_node.generator
+        np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
+        # print 'np1, ',np1, 'ap, ', ap, 'np2', np2
+        # import pdb;pdb.set_trace()
+
+        ano_node.add_modulator(start=str(mod_start), profile=np1, generator = generator[s_id])
+
+        ano_type = self.anoDesc['anoType']
+        st = mod_start + float(np.sum(np1[0]))
+        assert(st == start)
+        ano_node.add_modulator(start=str(start),
+                profile=ap,
+                generator = generator[s_id].get_new_gen(ano_type, self.anoDesc['ratio']))
+
+        st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
+        assert(st == end)
+        ano_node.add_modulator(start=str(end), profile=np2, generator=generator[s_id])
+
+
+
+        # simT = mod_profile[0][0]
+
+        # ano_node.add_modulator(
+        #         start='0',
+        #         profile='((%d,),(1,))' %(start),
+        #         generator = generator[s_id],
+        #         )
+
+        # ano_type = self.anoDesc['anoType']
+        # ano_node.add_modulator(start=str(start),
+        #         profile='((%d,),(1,))' %(end-start),
+        #         generator = generator[s_id].get_new_gen(ano_type, self.anoDesc['ratio']))
+
+        # ano_node.add_modulator(start=str(end),
+        #         profile='((%d,),(1,))' %(simT - end),
+        #         generator=generator[s_id])
+
+        del ano_node.modulator[m_id]
+        del ano_node.generator[s_id]
+
+    def Run(self, net):
+        """inject itself into the network"""
+        self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
+        ano_t = self.anoDesc['T']
+
+        m_back = copy.deepcopy(self.ano_node.modulator)
+        for m_id, mod in m_back.iteritems(): # For each modulator
+            s_id = mod['generator'] # get id for source generator
+            mod_start = eval(mod['start'])
+            mod_profile = mod['profile']
+            self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
+
 
 class AtypicalUser(Anomaly):
     '''anomaly of atypical user. an atypical user joins to the network during some time.
@@ -195,7 +176,8 @@ class AtypicalUser(Anomaly):
     ATIP = None # Atypical IP Set. Will Select IP from this set and add a node with atypical ip
     idx = 0 # A indicator to seperate the IP that has been selected or not
     NAME = 'AtypicaUser'
-    def __init__(self, t, atip=[]):
+    def __init__(self, anoDesc, atip=[]):
+        t = anoDesc['T']
         Anomaly.__init__(self, t)
         if AtypicalUser.ATIP == None:
             AtypicalUser.ATIP = atip
@@ -220,82 +202,21 @@ class AtypicalUser(Anomaly):
         fid.write(ipdest)
         fid.close
 
+##################################
+###  Interface          #######
+##################################
+anoMap = {'ATYPICAL_USER':AtypicalUser,
+        'FLOW_ARRIVAL_RATE':Anomaly,
+        'FLOW_SIZE':Anomaly,
+        }
 
-class FlowRate(Anomaly):
-    '''anomaly of flow arrival rate, during the time of anomaly, the flow arrival rate of a user will change, you need specifiy *t*, which is tuple containing the starting time
-    and end time of the anomaly. *ip* is the ip adress of the user that cause the anomaly.
-    *ratio* is the ratio between abnormal and normal flow arrival rate.'''
-    # def __init__(self, t, ip, il):
-    def __init__(self, t, ip, ratio):
-        # fr is flow rate
-        Anomaly.__init__(self, t)
-        self.ip = ip
-        # self.il = il #interval_lambda
-        self.ratio = ratio
+def GenAnomalyDot(anoDesc, netDesc, normalDesc, outputFileName):
+    anoType = anoDesc['anoType']
+    AnoClass = anoMap[anoType]
+    A = AnoClass(anoDesc)
 
-    def Run(self, net):
-        para = settings.DEFAULT_PROFILE
-        simT = para[1]
-        node = NNode(self.ip, self.ipdst, 3)
-        start, end = self.t
-        node.ModifyAttr(seq=0, start='0',
-                profile='((%d,),(1,))' %(start))
-
-        normalRate = float( node.obj_dict['attributes']['gen_para'].rsplit(', ')[2] )
-        pickle.dump(self.ratio * normalRate, open(settings.ANO_CONF_PARA_FILE, 'w'))
-
-        node.ModifyAttr(seq=1, start=str(start),
-                profile='((%d,),(1,))' %(end-start),
-                flowstart='exponential(%f)' %(self.ratio * normalRate))
-                # flowstart='exponential(%f)' %(self.il))
-        # print 'self.il: ', self.il, 'start: ', start, 'end: ', end
-
-        node.ModifyAttr(seq=2, start=str(end),
-                profile='((%d,),(1,))' %(simT - end))
-
-        net.add_node(node)
-        edge = NEdge(node, net.srvNode, net.link_attr)
-        net.add_edge(edge)
-
-class FlowSize(Anomaly):
-    '''anomaly of flow size. during the time of anomaly, the flow size of a user will change.'''
-    def __init__(self, t, ip, fSize_mean_ratio, fSize_var):
-    # def __init__(self, t, ip, fSize_mean, fSize_var):
-        # fr is flow rate
-        Anomaly.__init__(self, t)
-        self.ip = ip
-        # self.fSize_mean = fSize_mean #interval_lambda
-        self.fSize_mean_ratio = fSize_mean_ratio #interval_lambda
-        self.fSize_var = fSize_var
-
-    def Run(self, net):
-        para = settings.DEFAULT_PROFILE
-        simT = para[1]
-        node = NNode(self.ip, self.ipdst, 3)
-        start, end = self.t
-
-        normalFSMean = float( node.obj_dict['attributes']['gen_para'].rsplit(', ')[0] )
-        pickle.dump(normalFSMean * self.fSize_mean_ratio, open(settings.ANO_CONF_PARA_FILE, 'w'))
-
-        node.ModifyAttr(seq=0, start='0',
-                profile='((%d,),(1,))' %(start))
-
-        node.ModifyAttr(seq=1, start=str(start),
-                profile='((%d,),(1,))' %(end-start),
-                flowsize='normal(%f,%f)' %(normalFSMean * self.fSize_mean_ratio, self.fSize_var))
-                # flowsize='normal(%f,%f)' %(self.fSize_mean, self.fSize_var))
-
-        node.ModifyAttr(seq=2, start=str(end),
-                profile='((%d,),(1,))' %(simT - end))
-
-        net.add_node(node)
-        edge = NEdge(node, net.srvNode, net.link_attr)
-        net.add_edge(edge)
-
-if __name__ == "__main__":
-    GenAtypicalUserAnomalyDot(2000, 3000, './out2.dot')
-    # GenFlowSizeAnomalyDot(2000, 3000, 40000, 400, './out3.dot')
-    # GenFlowRateAnomalyDot(2000, 3000, 1, './out4.dot')
-
-
+    net = Network()
+    net.init(netDesc, normalDesc)
+    net.InjectAnomaly( A )
+    net.write(outputFileName)
 

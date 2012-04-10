@@ -31,243 +31,88 @@ from pydot import *
 from random import sample
 import re
 from Markov import *
-nodeSeq = 0
+NODE_NUM = 0
 
 import sys
 sys.path.append("..")
 import settings
 from util import *
 
-def LoadValidIP(fileName):
-    fid = open(fileName, 'r')
-    content = fid.readline()
-    # print content
-    return content.split(',')
-
-
-def FixQuoteBug(fileName, delay=0.001):
-    """ There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote to value
-    which is not desirable. This function try to fix that problem """
-    fid = open(fileName, 'r')
-    content = fid.read()
-    content = re.sub('delay="[\d.]*"', 'delay='+str(delay), content)
-    fid.close()
-    fid = open(fileName, 'w')
-    fid.write(content)
-    fid.close()
-
-
-def ParseArg(string):
-    # print '---before--'
-    # print string
-    string = string.replace('"','')
-    # print string
-    # print '---after--'
-    val = string.rsplit(' ')
-    attr = dict()
-    for v in val:
-        sr = v.rsplit('=')
-        if len(sr) == 1:
-            attr['name'] = sr[0]
-        else:
-            x, y = sr
-            attr[x] = y
-    return attr
-
-# Both Modulator and Source are described by Attr
-class Attr():
-    '''Sub Class of String. __str__ method was overloaded, providing an easy way to
-    get DOT format attribute string.'''
-    def __init__(self, string=None, **args):
-        if not string:
-            self.attr = args
-        else:
-            self.attr = ParseArg(string)
-
-    def __str__(self):
-        string = '"' + self.attr['name']
-        for k, v in self.attr.iteritems():
-            if k == 'name':
-                continue
-            string = string + ' ' + k + '=' + v
-        string = string + '"'
-        return string
-
-def GenAttr(k, ipdests, ipdst, N, stype):
-    """Generate the default Attribute.
-
-    - k is NodeSeq,
-    - ipdests is the local ip address.
-    - ipdst is the destination
-    - N is the num of modulator and source. We assume for each modulator, there is one associated source
-    - stype can be:
-        - 'HARPOON' harpoon generator. Click here_ for more information of harpoon.
-        - 'rawflow' rawflow generator.
-        - 'JING'
-    .. _here: http://cs.colgate.edu/~jsommers/harpoon/
-    """
-    attr = dict()
-    attr['autoack'] = '"False"'
-    attr['ipdests'] = '"' + ipdests + '"'
-    mStr = '"'
-
-    stype = settings.GENERATOR
-    exec('gen_para = Load(settings.%s)'%(stype))
-    for i in range(N):
-        mName = 'm' + str(k) + '_' + str(i)
-        sName = 's' + str(k) + '_' + str(i)
-        mStr = mStr + mName + ' '
-
-        para = settings.DEFAULT_PROFILE
-        m = Attr(name='modulator',
-                start=str(para[0]),
-                generator=sName,
-                profile='((%d,),(%d,))' %(para[1], para[2]))
-
-        # stype = settings.GENERATOR
-        if stype == 'HARPOON':
-            # para = settings.HARPOON
-            para = gen_para
-            para = Load(settings.HARPOON)
-            fm = dict(fSize_mean=0, fSize_var=1, fStart_lambda=2)
-            s = Attr(name='harpoon',
-                    ipsrc=ipdests,
-                    ipdst=ipdst,
-                    flowsize='normal(%f,%f)' %(para[fm['fSize_mean']], para[fm['fSize_var']]),
-                    flowstart='exponential(%f)' %(para[fm['fStart_lambda']]),
-                    sport='randomchoice(22,80,443)',
-                    dport='randomunifint(1025,65535)',
-                    lossrate='randomchoice(0.001)')
-        elif stype == 'rawflow':
-            s = Attr(name='rawflow',
-                    ipsrc=ipdests,
-                    ipdst=ipdst,
-                    flowlets='1',
-                    ipproto='udp',
-                    pkts='5',
-                    bytes='1000',
-                    interval='0.2',
-                    sport='randomchoice(22,80,443)',
-                    dport='randomunifint(1025,65535)',
-                    continuous='1')
-        elif stype == 'JING':
-            para = settings.JING
-            # fm = dict(pkts=1, dRate_mean=2, dRate_variance=3, interval_lambda=4, duration_lambda=5)
-            fm = dict(pkts=0, dRate_mean=1, dRate_variance=2, interval_lambda=3, duration_lambda=4)
-            s = Attr(name='JING',
-                    ipsrc=ipdests,
-                    ipdst=ipdst,
-                    pkts=para[fm['pkts']], #FIXME
-                    dRate='normal(%f,%f)' %(para[fm['dRate_mean']], para[fm['dRate_variance']]),
-                    interval='exponential(%f)' %(para[fm['interval_lambda']]),
-                    duration='exponential(%f)' %(para[fm['duration_lambda']]),
-                    sport='randomchoice(22,80,443)',
-                    dport='randomunifint(1025,65535)')
-
-        else:
-            raise ValueError('unknown mtype')
-
-
-        attr[mName] = str(m)
-        attr[sName] = str(s)
-
-    if mStr == '"':
-        mStr = '""'
-    else:
-        mStr = mStr[0:-1] + '"'
-    attr['traffic'] = mStr
-    ##### Auxillary Attribute, will not be used by fs simulator #####
-    attr['modulator'] = mStr[1:-1] # Modulator Name
-    attr['node_seq'] = str(k) # Sequence num of node
-    attr['N'] = str(N) # Modulator Number
-    attr['gen_para'] = str(gen_para)[1:-1] # parameter for generater, likef default arrival rate, etc.
-    return attr
+from Generator import *
+from Modulator import *
 
 ####################################
 ##     Main Class Definition     ###
 ####################################
-
+from random import randint
 class Network(Dot):
     ''' Network Class specifiy the topology of the network.
     '''
     def __init__(self):
         Dot.__init__(self, 'SimConf', graph_type='graph')
-        self.nodeList = []
-        global nodeSeq
-        nodeSeq = 0
+        self.node_list = []
+        global NODE_NUM
+        NODE_NUM = 0
+        self.IPSrcSet, self.AnoSet, _ = GetIPAdress()
+        self.mv = None
 
-    def StarTopoMarkov(self, graphSize, link_attr, IPSrcSet):
-        '''Create a Star Topology Network with anomaly type of markov stationary probaility.
+    def init(self, net_desc, norm_desc):
+        self.net_desc = net_desc
+        self.norm_desc = norm_desc
+        self._topo(self.net_desc['topo'])
+        self._config_traffic()
 
-        - *graphSize* :is the number of nodes
-        - *link_attr* :specify the attribute of link. All links are assumed to have the same attr. A link in fs can be considered either a
-            logical or physical link between two routers. Notice in Listing 1 that for each link,
-            *weight*, *capacity*, and *delay* attributes are configured. *Capacity* is specified
-            in bits per second, and *delay* is specified in seconds. Presently in fs, the configured
-            weights are fed into Dijkstra's algorithm for computing shortest-path routes across the
-            network (if there is more than one egress node for a given destination address the closest
-            node is used, mimicking hot potato routing).
-        - *IPSrcSet* :a set of IP address.
-        The settings.py parameter it uses **MARKOV_PARA**, **MARKOV_INTERVAL**, **MARKOV_P**,
-        **DEFAULT_PROFILE[1]**
+    def choose_ip_addr(self, ip_addr_set):
+        n = len(ip_addr_set)
+        return ip_addr_set[randint(0, n-1)]
 
-        This function will be merged into StarTopo in the future.
-        '''
-        para = settings.MARKOV_PARA
-        P = settings.MARKOV_P
-        interval = settings.MARKOV_INTERVAL
-        simT = settings.DEFAULT_PROFILE[1]
-        # print 'para, ', para, 'P: ', P, 'simT:', simT
+    def _config_traffic(self):
+        """config the traffic of network"""
+        nn = len(self.node_list)
+        srv_node_list = [self.node_list[i] for i in xrange(nn) if i in self.net_desc['srv_list'] ]
+        for i in xrange(nn):
+            if i in self.net_desc['srv_list']:
+                continue
+            node = self.node_list[i]
+            for srv_node in srv_node_list:
+                start = self.norm_desc['start']
+                profile = self.norm_desc['profile']
+                para = Load(self.norm_desc['gen_desc'])
+                #FIXME should choose ip address randomly
+                para['ipsrc'] = self.choose_ip_addr(node.ipdests)
+                para['ipdst'] = self.choose_ip_addr(srv_node.ipdests)
+                node.add_modulator(start, profile,
+                        get_generator(para))
 
-        mv = Markov(para, P, interval, (0, simT))
-
-        self.link_attr = link_attr
-        srvAddr = '165.14.130.9'
-        srvNode = ServerNNode(srvAddr)
-        self.srvNode = srvNode
-        self.add_node(srvNode)
-
-        for ipsrc in IPSrcSet:
-            node = NNode(ipsrc, srvAddr, 0)
-            self.nodeList.append(node)
+    def _topo(self, topo):
+        """initialize the topology of the network"""
+        n, _ = topo.shape
+        assert(n == _)
+        self.NodeList = []
+        print 'n, ', n
+        for i in xrange(n):
+            node = NNode([self.IPSrcSet[i]])
+            self.node_list.append(node)
             self.add_node(node)
-            mv.MHarpoon(node) # Modulator the Behavior of the Node
-            edge = NEdge(node, srvNode, link_attr)
-            self.add_edge(edge)
+            if self.mv: mv.MHarpoon(node)
 
-    def StarTopo(self, graphSize, link_attr, IPSrcSet):
-        '''Create a star topology network.
-
-        - *graphSize* :is the number of nodes
-        - *link_attr* :specify the attribute of link. All links are assumed to have the same attr
-        - *IPSrcSet* :a set of IP address.
-        '''
-        print 'Creating the Star topology ....'
-        self.link_attr = link_attr
-        srvAddr = '165.14.130.9'
-        srvNode = ServerNNode(srvAddr)
-        self.srvNode = srvNode
-        self.add_node(srvNode)
-
-        # Add Node and Link
-        # validIP = LoadValidIP('./ips.txt')
-        # IPSrcSet = sample(validIP, graphSize-1)
-        for ipsrc in IPSrcSet:
-            print 'ipsrc, ', ipsrc
-            node = NNode(ipsrc, srvAddr)
-            self.nodeList.append(node)
-            self.add_node(node)
-            edge = NEdge(node, srvNode, link_attr)
-            self.add_edge(edge)
+        for i in xrange(n):
+            for j in xrange(n):
+                if topo[i, j]:
+                    edge = NEdge(self.node_list[i], self.node_list[j], self.net_desc['link_attr'])
+                    self.add_edge(edge)
 
     def write(self, fName):
         '''write the DOT file to *fName*'''
+        for node in self.node_list:
+            node.sync()
         Dot.write(self, fName)
-        FixQuoteBug(fName, float(self.link_attr['delay']))
+        FixQuoteBug(fName, float(self.net_desc['link_attr']['delay']))
 
     def InjectAnomaly(self, A):
         '''Inject Anomaly into the network. A is the one type Anomaly'''
         A.Run(self)
+
 
 class NNode(Node):
     '''NNode is a representation of dot node. It provides several functions
@@ -275,154 +120,80 @@ class NNode(Node):
     types of generator. 1. **Harpoon**. 2. **rawflow**. In revised version of
     fs simulator, we add support of **JING** generator Just Incomplete and Not Good Generator.
     '''
-    def __init__(self, ipdest, ipdst, N=1, stype='JING'):
-        global nodeSeq
-        nodeSeq += 1
-        attr =  GenAttr(nodeSeq, ipdest, ipdst, N, stype)
+    # node_seq = 0
+    def __init__(self, ipdests):
+        assert( type(ipdests)== types.TupleType or type(ipdests)== types.ListType )
+        global NODE_NUM
+        self.node_seq = NODE_NUM
+        NODE_NUM += 1
+        # default attribute
+        attr = dict(
+                autoack = '"False"',
+                ipdests = '"' + ' '.join(ipdests) + '"',
+                mod_num = '0',
+                traffic = ''
+                )
         obj_dict = {'attributes': attr,
-                'name': 'n'+str(nodeSeq),
+                'name': 'n'+str( self.node_seq ),
                 'parent_node_list': None,
                 'port': None,
                 'sequence': 1,
                 'type': 'node'}
-        Node.__init__(self, name = 'n'+str(nodeSeq), obj_dict = obj_dict)
-        self.ipdest = ipdest
-        self.ipdst = ipdst
+
+        Node.__init__(self, name = 'n'+str(self.node_seq), obj_dict = obj_dict)
+
+        self.ipdests = ipdests
+        self.mod_num = 0
+        self.modulator = dict()
+        self.generator = dict()
 
     def __str__(self):
         return str(self.obj_dict)
 
-    def ModifyAttr(self, **args):
-        '''ModifyAttr will try to match the input argument with the attribute
-        of the node and revise the attribute accordingly. It will search layer
-        by layer.'''
-        # Search Layer by Layer
-        attr = self.obj_dict['attributes']
-        # print args
-        for k, v in args.iteritems():
-            if k  == 'seq':
-                continue
-            if k in attr.iterkeys(): #TODO
-                attr[k] = v
-            else:
-                mName = attr['modulator']
-                # print attr[mName]
-                mSplit = mName.rsplit(' ')
-                if len(mSplit) != 1:
-                    # print "[Warning] Don't suppose node with multi modulator and source "
-                    # print mSplit
-                    if not args.has_key('seq'):
-                        raise TypeError('You need specify the modulator sequence number when there are multi modulator')
-                    else:
-                        mn = mSplit[args['seq']]
-                else:
-                    mn = mName
+    @property
+    def m_id(self):
+        """modulator identifier"""
+        return 'm' + str(self.node_seq) + '_' + str(self.mod_num)
 
-                m = Attr(attr[mn])
-                # print 'm: ', m
-                if k in m.attr.iterkeys():
-                    # print 'type(v)', type(v)
-                    # print 'v: ', v
-                    m.attr[k] = v
-                    attr[mn] = str(m)
-                else:
-                    sName = m.attr['generator']
-                    s = Attr(attr[sName])
-                    if k in s.attr.iterkeys():
-                        s.attr[k] = v
-                        attr[sName] = str(s)
-                    else:
-                        raise ValueError('not proper argument key value')
+    @property
+    def s_id(self):
+        """generator source identifier"""
+        return 's' + str(self.node_seq) + '_' + str(self.mod_num)
 
-    def AddModulator(self, start, profile, generator):
-        '''It will try to add modulator to the node.
+    def add_modulator(self, start, profile, generator):
+        """generator is a string"""
+        self.mod_num += 1
+        self.generator[self.s_id] = generator
 
-        - *start* :start time of the modulator
-        - *profile* :the profile of the modulator The syntax for specifying a traffic profile consists of two ordered lists of numbers, enclosed in parentheses. The first list
-          indicates a series of 1 or more time durations (in seconds), and the second list indicates the number of instances of a particular traffic source that should be active.
-          The time durations and number of sources are matched in a circular fashion; in the example, the time duration 60 is repeated for each of the five values for number of
-          sources. An example is profile=((60,),(10,20,30,20,10)). the time duration 60 is repeated for each of the five values for number of sources
-        - *generator* :the name for generator'''
-        attr = self.obj_dict['attributes']
-        N = int(attr['N']) # Num of Modultor
-        N += 1
-        attr['N'] = str(N)
-        nodeSeq = int(attr['node_seq'])
-        mName = 'm' + str(nodeSeq) + '_' + str(N)
-        mStr = attr['modulator']
-        if mStr == '':
-            mStr = mName
-        else:
-            mStr = mStr + ' ' + mName
-        attr['traffic'] = '"' + mStr + '"'
-        attr['modulator'] = mStr
-        sName = 's' + str(nodeSeq) + '_' + str(N)
-        attr[sName] = generator
-
-        m = Attr(name='modulator',
+        m = Modulator(name='modulator',
                 start=str(start),
-                generator=sName,
+                generator=self.s_id,
                 profile=profile)
-        attr[mName] = str(m)
+        self.modulator[self.m_id] = m
 
-    def GetJING(self, **para):
-        '''In JING Generator,  you need specifiy download rate, interval between two consequent flows
-        and duration of the flows.'''
-        s = Attr(name='JING',
-                ipsrc=para['ipsrc'],
-                ipdst=para['ipdst'],
-                pkts=para['pkts'],
-                dRate='normal(%s,%s)' %(para['dRate_mean'], para['dRate_variance']),
-                interval='exponential(%s)' %(para['interval_lambda']),
-                duration='exponential(%s)' %(para['duration_lambda']),
-                sport='randomchoice(22,80,443)',
-                dport='randomunifint(1025,65535)')
-        return str(s)
+    def sync(self):
+        """sync to the dot property"""
+        attr = self.obj_dict['attributes']
+        # update ipdests
+        s = '"'.join([ip + ' ' for ip in self.ipdests])
+        attr['ipdests'] = '"' + ' '.join(self.ipdests) + '"'
 
-    def GetRawFlow(self, ipsrc, ipdst, flowlets, ipproto, dport, sport, pkts, bytes, interval, continuous):
-        '''raw flow generator can work as a one-flowlet generator (the entire flow is represented as one flowlet) or as a simple constant or variable bit-rate flow (e.g., to mimic a UDP-based media stream). '''
-        return str( Attr(name='rawflow',
-            ipsrc=ipsrc,
-            ipdst=ipdst,
-            flowlets=flowlets,
-            ipproto=ipproto,
-            pkts=pkts,
-            bytes=bytes,
-            interval=interval,
-            sport=sport,
-            dport=dport,
-            continuous=continuous) )
+        # update traffic
+        attr['traffic'] = '"' + ' '.join(self.modulator.keys()) + '"'
 
-    def GetHarpoon(self, ipsrc, ipdst, flowsize, flowstart, sport, dport, lossrate):
-        '''While a Harpoon generator is active, a new flow is started after a time duration chosen from the flowstart distribution; that flow will have random IP source and
-        destination addresses chosen from the source and destination prefixes, and a random flow size chosen from the flowsize distribution. The next flow will start after another
-        random value chosen from the flowstart distribution, and so forth. The source and destina- tion prefixes can be constructed in such a way as to recreate a particular
-        distribution, similar to the way that Harpoon can be configured. For one instance of a Harpoon flow, source and destination ports are also chosen from the configured
-        settings, or each flow, a random loss rate is chosen from the configured parameter (as with other settings, this could just be a single value, if desired; there are no restrictions placed on how this is configured). This value, along with a computed round-trip time based on the link configurations are used as input to a TCP throughput model to estimate the average rate of the flow. The RTT computed for input to the model only considers propagation delay; transmission and queuing delays are ignored. For the TCP throughput model, fs incorporates the simple Mathis et al. model from [23] and the more complex Cardwell et al. model from [8]. We used these two models in order to investigate the sensitivity of fs to the TCP model used.'''
-        return str( Attr(name='harpoon', ipsrc=ipsrc, ipdst=ipdst, flowsize=flowsize, flowstart=flowstart, sport=sport, dport=dport, lossrate=lossrate) )
+        # update modultaor
+        for k, v in self.modulator.iteritems():
+            attr[k] = str(v)
 
-    def AddHarpoon(self, start, end, para): # For Markovian Modulator
-        # print 'para, ', para
-        flowsize, flowstart = para
-        profile = '((%f,),(%d,))' %(end-start, 1)
-        sport='randomchoice(22,80,443)'
-        dport='randomunifint(1025,65535)'
-        lossrate='randomchoice(0.001)'
-        g = self.GetHarpoon(self.ipdest, self.ipdst, flowsize, flowstart, sport, dport, lossrate)
-        self.AddModulator(start, profile, g)
+        # update generator
+        for k, v in self.generator.iteritems():
+            attr[k] = str(v)
 
-class ServerNNode(Node):
-    '''One type of node that used as server'''
-    def __init__(self, addr):
-        destIP = addr
-        attr = {'autoack':'"False"', 'ipdests':'"'+ destIP +'"'}
-        obj_dict = {'attributes': attr,
-                'name': 'n'+str(nodeSeq),
-                'parent_node_list': None,
-                'port': None,
-                'sequence': 1,
-                'type': 'node'}
-        Node.__init__(self, name = 'n'+str(nodeSeq), obj_dict = obj_dict)
+
+    def clear_modulator():
+        self.traffic = ''
+        self.obj_dict['attributes']['mod_num'] = '0'
+
 
 class NEdge(Edge):
     def __init__(self, src, dst, attr):
@@ -440,26 +211,3 @@ class NEdge(Edge):
         obj_dict['points'] = points
 
         Edge.__init__(self, src, dst, obj_dict)
-
-
-def main():
-    # Size of the Graph
-    # graphSize = 5
-    # link Attribute
-    # link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.001'}
-    # net = Network(graphSize, link_attr)
-    # net = Network(graphSize, link_attr)
-    # net.write('./output2.dot')
-    # string = 'harpoon ipdst=165.14.130.9 ipsrc=127.118.14.249 flowsize=normal(40000000,4000000) lossrate=randomchoice(0.001) flowstart=exponential(10.0) dport=randomunifint(1025,65535) sport=randomchoice(22,80,443)'
-    # x = ParseArg(string)
-    # print x
-    node = NNode('165.14.130.9', '1.1.1.1')
-    node.ModifyAttr(flowsize='asdfwofwlefw')
-    print node
-
-
-
-if __name__ == "__main__":
-    main()
-
-

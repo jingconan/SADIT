@@ -232,6 +232,11 @@ class Simulator(object):
                 print 'modulators',modulators
             for mkey in modulators:
                 mkey = mkey.replace('"','')
+                # Add by J.W. [2012-04-10 00:21:51]
+                if not mkey:
+                    print 'warning, one node has no modulator'
+                    continue
+
                 modspecstr = d[mkey].replace('"', '')
 
                 if self.debug:
@@ -246,6 +251,7 @@ class Simulator(object):
         modspeclist = modstr.split()
         moddict = {}
         for i in xrange(1,len(modspeclist)):
+            # import pdb;pdb.set_trace()
             k,v = modspeclist[i].split('=')
             moddict[k] = v
             # print moddict[k]

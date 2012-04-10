@@ -1,63 +1,119 @@
-# DEFAULT_PROFILE = (0, 8000, 1)
-DEFAULT_PROFILE = (0, 2000, 1)
+### ROOT is the root directory for you directory, be aware to change this before you try to run the code
+ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
+
+#################################
+##   Network Topology ##
+#################################
 # Specify the link property
 link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
+## start topology
+# NET_DESC = {'topo':'star',
+#         'size':10
+#         'srvList':[0]
+#         }
 
+# NET_DESC = dict(
+#         topo='star',
+#         size=10,
+#         srvList=[0],
+#         link_attr=link_attr,
+#         )
+
+from numpy import zeros, array
+# topo = array(
+        # [[0, 0, 0],
+        # [1, 0, 0],
+        # [0, 0, 1]]
+        # )
+# Generate Star topology
+g_size = 10
+srv_node = 0
+topo = zeros([g_size, g_size])
+for i in xrange(g_size):
+    if i == srv_node:
+        continue
+    topo[i, srv_node] = 1
+
+topo[3, 5] = 1
+topo[4, 6] = 1
+
+
+
+NET_DESC = dict(
+        topo=topo,
+        size=topo.shape[0],
+        # srv_list=[0],
+        srv_list=[srv_node],
+        link_attr=link_attr,
+        )
 
 #################################
 ##   Parameter For Normal Case ##
 #################################
-
-GENERATOR = 'HARPOON'
-# HARPOON = (4e5, 100, 0.5) # (fSize_mean, fSize_var, lambda)
-HARPOON = ('4e5', '100', '0.5')
+# DEFAULT_PROFILE = (0, 8000, 1)
+sim_t = 2000
+start = 0
+DEFAULT_PROFILE = ((sim_t,),(1,))
+# DEFAULT_PROFILE = ((1000, 3000),(2, 3))
+# GENERATOR = 'HARPOON'
+# HARPOON = ('4e5', '100', '0.5')
 # HARPOON = ('randint(4e3, 4e5)', '1000', '0.5')
 # JING = ''
 
-#############################
-##   Parameter For Markov  ##
-#############################
+NORM_DESC = dict(
+        TYPE = 'NORMAl',
+        start = '0',
+        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},
+        profile = DEFAULT_PROFILE,
+        )
+
+#######################################
+##   Parameter For Markov normal case ##
+#######################################
 MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state
         ('normal(4e5,10)', 'exponential(0.3)')] # low state
 MARKOV_P = [(0, 1), (0, 1)] # NORMAL
 MARKOV_INTERVAL = 0.1
 
-
+# NORM_DESC = dict(
+#         TYPE = 'MARKOV'
+#         GENERATOR = 'HARPOON',
+#         HARPOON = ('4e5', '100', '0.5'),
+#         MARKOV_PARA = MARKOV_PARA,
+#         MARKOV_P = MARKOV_P,
+#         MARKOV_INTERVAL = MARKOV_INTERVAL,
+#         )
 
 #############################
 ##   Parameter For Anomaly ##
 #############################
-# ANOMALY_TIME = (3000, 3500) # (startTime, endTime)
-# ANOMALY_TIME = (2000, 3000) # (startTime, endTime)
-# ANOMALY_TIME = (600, 800) # (startTime, endTime)
-ANOMALY_TIME = (1200, 1400) # (startTime, endTime)
-# ANOMALY_TIME = (200, 300) # (startTime, endTime)
-# ANOMALY_TIME = (1000, 1300) # (startTime, endTime)
-# ANOMALY_TIME = (6000, 7000) # (startTime, endTime)
+## Anomaly Description for Flow Rate type of anomaly
+ANOMALY_TIME = (1200, 1400) # for detector
+ANO_DESC = {'anoType':'FLOW_ARRIVAL_RATE',
+        'ano_node_seq':1,
+        'T':(1200, 1400),
+        'ratio':6,
+        }
+ANO_LIST = [ANO_DESC]
 
-##### Atypical User Anomaly #####
-# ANOMALY_TYPE = 'ATYPICAL_USER'
+# EXPORT_ABNORMAL_FLOW = True
+EXPORT_ABNORMAL_FLOW = False
 
-### FLOW_RATE Anomaly ####
-ANOMALY_TYPE = 'FLOW_RATE'
-FLOW_RATE = 6
-# FLOW_RATE = 0.1
+## Anomaly Description for Flow Size type of anomaly
+# MEAN is the ratio between abnormal and normal flow size mean
+# VAR is the absolute value of variance for the anomaly.
+# ANO_DESC = {'anoType':'FLOW_SIZE',
+        # 'T':(1200, 1400),
+        # 'MEAN_RATIO':3,
+        # 'VAR':100,
+        # }
 
-### FLOW_SIZE Anomaly ####
-# ANOMALY_TYPE = 'FLOW_SIZE'
-# FLOW_SIZE_MEAN = 3 # The ratio between abnormal and normal flow size mean
-# FLOW_SIZE_MEAN = 0.1 # The ratio between abnormal and normal flow size mean
-# FLOW_SIZE_MEAN = 1e6
-# FLOW_SIZE_MEAN = 1e3
-FLOW_SIZE_VAR = 100 # Absolute FLOW_SIZE_VARIANCE
-# FLOW_SIZE_VAR = 400
+## Anomaly Description for Markov type of anomaly
+# ANO_DESC = {'anoType':'MARKOV_TRAN_PROB',
+        # 'T':(1200, 1400),
+        # 'ABNORMAL_TRAN_PROB':[0.5, 0.5], # [p12, p21]
+        # }
 
-### FLOW_DURATION Anomaly ####
-# FLOW_DURATION = 0.1
-
-### Markovian Anomaly  #####
-# ANOMALY_TYPE = 'MARKOV_TRAN_PROB'
-# ABNORMAL_TRAN_PROB= [0.5, 0.5] # [p12, p21]
 
 
 #############################
@@ -71,13 +127,6 @@ FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
 
 
 
-### ROOT is the root directory for you directory, be aware to change this before you try to run the code
-# ROOT = '/Users/jingwang/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code'
-#ROOT = '/Users/jingwang/Dropbox/Research/Cybersecurity/code/newanomalydetector/neat_code_sens'
-# ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/newanomalydetector/neat_code_sens'
-
-ROOT = '/Users/wangjing/Dropbox/OpenSource/sadit-sphinx'
-# ROOT = '/home/wangjing/Documents/OpenSource/sadit-sphinx'
 
 # The path for output of configure
 OUTPUT_DOT_FILE = ROOT + '/Share/conf.dot'

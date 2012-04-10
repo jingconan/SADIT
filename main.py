@@ -37,13 +37,19 @@ def Run():
     copyfile('./settings_template.py', './settings.py')
     if settings.UNIFIED_NOMINAL_PDF: GlobalGenerateNominalPDF()
     print 'start to configure'
-    GlobalConfigure()
+    # GlobalConfigure()
+    reload(settings)
+    GenAnomalyDot(settings.ANO_DESC,
+            settings.NET_DESC,
+            settings.NORM_DESC,
+            settings.OUTPUT_DOT_FILE)
+
     print 'start to simulate'
     Simulate()
     print 'start to detect'
     GlobalDetect(settings.OUTPUT_FLOW_FILE)
-    anoType = GetAnomalyType()
-    print 'anoType, ', anoType
+    # anoType = GetAnomalyType()
+    # print 'anoType, ', anoType
 
 def Test():
     GlobalDetect(settings.OUTPUT_FLOW_FILE)

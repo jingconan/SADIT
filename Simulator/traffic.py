@@ -358,10 +358,15 @@ class HarpoonGeneratorNode(GeneratorNode):
             raise InvalidFlowConfiguration('Unrecognized tcp model for harpoon:'+str(tcpmodel))
 
         # Add By Jing Wang FIXME More complete way to abnormal flow
+        # revise at [2012-04-10 00:25:05] suppor new configure
         self.anoFlag = False
+        if not settings.EXPORT_ABNORMAL_FLOW:
+            return
         p_size = float(flowsize.rsplit(',')[0].rsplit('(')[1] )
         p_interval = float(flowstart.rsplit(')')[0].rsplit('(')[1] )
-        anoType = settings.ANOMALY_TYPE
+        # anoType = settings.ANOMALY_TYPE
+        assert( len(settings.ANO_LIST) == 1) # only support export for single anomaly
+        anoType = settings.ANO_LIST[0]['anoType']
         if anoType == 'ATYPICAL_USER':
             fid = open(settings.ATYPICAL_IP_FILE)
             tline = fid.readline()
