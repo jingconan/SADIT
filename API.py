@@ -60,3 +60,5 @@ def GlobalGenerateNominalPDF():
     GenNominalPDF(settings.OUTPUT_FLOW_FILE,
             settings.DISCRETE_LEVEL + [settings.CLUSTER_NUMBER],
             True)
+
+from Detector.MSDetector import Detect as MSDetect

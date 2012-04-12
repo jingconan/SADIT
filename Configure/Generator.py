@@ -29,10 +29,14 @@ class HarpoonG(Generator):
         self.sync()
         return str( Attr(name=self.para['TYPE'], **self.gen_desc) )
 
-    def get_new_gen(self, change_para=None, ratio=None):
+    def __getitem__(self, name):
+        return self.gen_desc[name]
+
+    def get_new_gen(self, change_para=None):
         new = copy.deepcopy(self)
         if change_para:
-            new.para[change_para.lower()] *= ratio
+            for attr, ratio in change_para.iteritems():
+                new.para[attr.lower()] *= ratio
             new.sync()
         return new
 

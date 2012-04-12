@@ -44,16 +44,8 @@ import cPickle as pickle
 ##-- [2012-04-08 22:31:20] Add GenAnomalyDot
 ##-- [2012-04-09 18:31:22] refactoring the whole file
 ## -- [2012-04-10 01:14:07] FLOW_RATE can work
+##-- [2012-04-10 17:16:27] add _infect_modulator, make anomaly more general
 
-
-################################
-##    Class Definition  ###
-# Anomaly Considered:
-#     Atypical USer
-#     Change of Flow Rate
-#     Change of Flow Duration
-#     Change of Data Rate
-###############################
 from numpy import cumsum, hstack, sort, argsort, diff
 def get_pos(l, v):
     """index of largest element in l that is less than v"""
@@ -63,17 +55,15 @@ def get_pos(l, v):
         return i - 1
 
 def insert_break_pt(b, dur, num):
-    """it return the new duration, new number,
-    the third thing returned in the idex of added
-    element"""
+    """b is a break point that will break dur, for example,
+    if b = 35, and dur = (20, 20, 10), num = (1, 2, 1)the result will be
+        (20, 15, 5, 10), the new num will be (1, 2, 2, 1)"""
     t = [0] + list(cumsum( dur ))
     nt = copy.deepcopy(t)
     new_num = list(copy.deepcopy(num))
     i = get_pos(t, b)
-    if i == -1 :
+    if i == -1 or i == len(t) - 1:
         return dur, num, i+1;
-    if i == len(t) - 1:
-        return dur, num, i+1
     else:
         nt.insert(i+1, b)
         new_num.insert(i+1, num[i])
@@ -89,7 +79,7 @@ class BadConfigError(Exception):
 
 import copy
 class Anomaly:
-    '''basis class for anomaly. Its subclass will provide Run() method'''
+    '''basis class for anomaly. Its subclass will provide run() method'''
     def __init__(self, anoDesc):
         self.anoDesc = anoDesc
         self.ano_node = None
@@ -112,52 +102,29 @@ class Anomaly:
         """cut into three pieces"""
 
     def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
-        # TODO consider more complex cases.
-        # self.get_profile_with_ano(mod_start, mod_profile, ano_t)
         start, end = ano_t
-
         ano_node = self.ano_node
         generator = ano_node.generator
+
         np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
-        # print 'np1, ',np1, 'ap, ', ap, 'np2', np2
-        # import pdb;pdb.set_trace()
 
         ano_node.add_modulator(start=str(mod_start), profile=np1, generator = generator[s_id])
 
-        ano_type = self.anoDesc['anoType']
         st = mod_start + float(np.sum(np1[0]))
         assert(st == start)
         ano_node.add_modulator(start=str(start),
                 profile=ap,
-                generator = generator[s_id].get_new_gen(ano_type, self.anoDesc['ratio']))
+                generator = generator[s_id].get_new_gen(self.anoDesc['change']))
 
         st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
         assert(st == end)
         ano_node.add_modulator(start=str(end), profile=np2, generator=generator[s_id])
 
-
-
-        # simT = mod_profile[0][0]
-
-        # ano_node.add_modulator(
-        #         start='0',
-        #         profile='((%d,),(1,))' %(start),
-        #         generator = generator[s_id],
-        #         )
-
-        # ano_type = self.anoDesc['anoType']
-        # ano_node.add_modulator(start=str(start),
-        #         profile='((%d,),(1,))' %(end-start),
-        #         generator = generator[s_id].get_new_gen(ano_type, self.anoDesc['ratio']))
-
-        # ano_node.add_modulator(start=str(end),
-        #         profile='((%d,),(1,))' %(simT - end),
-        #         generator=generator[s_id])
-
+        # delete original modulator
         del ano_node.modulator[m_id]
         del ano_node.generator[s_id]
 
-    def Run(self, net):
+    def run(self, net):
         """inject itself into the network"""
         self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
         ano_t = self.anoDesc['T']
@@ -169,54 +136,39 @@ class Anomaly:
             mod_profile = mod['profile']
             self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
 
-
-class AtypicalUser(Anomaly):
-    '''anomaly of atypical user. an atypical user joins to the network during some time.
-    Atypical user refer those user has large IP distance with users in the network.'''
-    ATIP = None # Atypical IP Set. Will Select IP from this set and add a node with atypical ip
-    idx = 0 # A indicator to seperate the IP that has been selected or not
-    NAME = 'AtypicaUser'
-    def __init__(self, anoDesc, atip=[]):
-        t = anoDesc['T']
-        Anomaly.__init__(self, t)
-        if AtypicalUser.ATIP == None:
-            AtypicalUser.ATIP = atip
-
-    def Run(self, net):
-        '''will add a node for atypical user to the network.
-        The IP address for atypical user is selected from. settings.ATYPICAL_IP_FILE'''
-        ipdest = AtypicalUser.ATIP[AtypicalUser.idx]
-        node = NNode(ipdest, self.ipdst)
-        start, end = self.t
-        node.ModifyAttr(start=str(start), profile='((%d,),(1,))' %(end-start))
-        AtypicalUser.idx += 1
-        net.add_node(node)
-        edge = NEdge(node, net.srvNode, net.link_attr)
-        net.add_edge(edge)
-        print node
-
-        # Output the local IP address
-        # fid = open('../atypical_IP.txt', 'w')
-        fid = open(settings.ATYPICAL_IP_FILE, 'w')
-        print 'ipdest: ', ipdest
-        fid.write(ipdest)
-        fid.close
+class TargetOneServer(Anomaly):
+    """Only change the behaviour in one server
+    ano_desc should have id **srv_id** of that sever node"""
+    def run(self, net):
+        self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
+        ano_t = self.anoDesc['T']
+        srv_id = self.anoDesc['srv_id']
+        srv_ip_addr = net.node_list[srv_id].ipdests
+        m_back = copy.deepcopy(self.ano_node.modulator)
+        for m_id, mod in m_back.iteritems(): # For each modulator
+            s_id = mod['generator'] # get id for source generator
+            if self.ano_node.generator[s_id]['ipdst'] not in srv_ip_addr:
+                continue
+            self._infect_modulator(eval(mod['start']), mod['profile'], ano_t, m_id, s_id)
 
 ##################################
 ###  Interface          #######
 ##################################
-anoMap = {'ATYPICAL_USER':AtypicalUser,
+ano_map = {
+        # 'ATYPICAL_USER':AtypicalUser,
         'FLOW_ARRIVAL_RATE':Anomaly,
         'FLOW_SIZE':Anomaly,
+        'TARGET_ONE_SERVER':TargetOneServer
         }
 
-def GenAnomalyDot(anoDesc, netDesc, normalDesc, outputFileName):
-    anoType = anoDesc['anoType']
-    AnoClass = anoMap[anoType]
-    A = AnoClass(anoDesc)
-
+def GenAnomalyDot(ano_list, netDesc, normalDesc, outputFileName):
     net = Network()
     net.init(netDesc, normalDesc)
-    net.InjectAnomaly( A )
+    for ano_desc in ano_list:
+        ano_type = ano_desc['anoType']
+        AnoClass = ano_map[ano_type]
+        A = AnoClass(ano_desc)
+        net.InjectAnomaly( A )
+
     net.write(outputFileName)
 

@@ -7,12 +7,8 @@ ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
 # Specify the link property
 link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
 from numpy import zeros, array
-# topo = array(
-        # [[0, 0, 0],
-        # [1, 0, 0],
-        # [0, 0, 1]]
-        # )
-# Generate Star topology
+## Generate Star topology ##
+# total number of nodes
 g_size = 10
 srv_node_list = [0, 1]
 # srv_node_list = [0]
@@ -21,9 +17,6 @@ for i in xrange(g_size):
     if i in srv_node_list:
         continue
     topo[i, srv_node_list] = 1
-
-# topo[3, 5] = 1
-# topo[4, 6] = 1
 
 NET_DESC = dict(
         topo=topo,
@@ -35,8 +28,7 @@ NET_DESC = dict(
 #################################
 ##   Parameter For Normal Case ##
 #################################
-# DEFAULT_PROFILE = (0, 8000, 1)
-sim_t = 2000
+sim_t = 3000
 start = 0
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
@@ -58,12 +50,17 @@ MARKOV_INTERVAL = 0.1
 #############################
 ##   Parameter For Anomaly ##
 #############################
-## Anomaly Description for Flow Rate type of anomaly
+## Anomaly Description
 ANOMALY_TIME = (1200, 1400) # for detector
-ANO_DESC = {'anoType':'FLOW_ARRIVAL_RATE',
+ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
         'ano_node_seq':2,
         'T':(1200, 1400),
-        'ratio':6,
+        # 'change':{'flow_arrival_rate':6},
+        'change':{'flow_arrival_rate':1.5},
+        # 'change':{'flow_arrival_rate':3},
+        # 'change':{'flow_arrival_rate':2},
+        # 'change':{'flow_arrival_rate':1.25},
+        'srv_id':0,
         }
 # add normal to every node except for servers
 import copy
@@ -74,26 +71,10 @@ for i in xrange(g_size):
     ad = copy.deepcopy(ANO_DESC)
     ad['ano_node_seq'] = i
     ANO_LIST.append(ad)
-# ANO_LIST = [ANO_DESC]
 
 # EXPORT_ABNORMAL_FLOW = True
 EXPORT_ABNORMAL_FLOW = False
-
-## Anomaly Description for Flow Size type of anomaly
-# MEAN is the ratio between abnormal and normal flow size mean
-# VAR is the absolute value of variance for the anomaly.
-# ANO_DESC = {'anoType':'FLOW_SIZE',
-        # 'T':(1200, 1400),
-        # 'MEAN_RATIO':3,
-        # 'VAR':100,
-        # }
-
-## Anomaly Description for Markov type of anomaly
-# ANO_DESC = {'anoType':'MARKOV_TRAN_PROB',
-        # 'T':(1200, 1400),
-        # 'ABNORMAL_TRAN_PROB':[0.5, 0.5], # [p12, p21]
-        # }
-
+ENTROPY_FIG_FILE = ROOT + '/res/entropy.eps'
 
 
 #############################
@@ -103,9 +84,6 @@ FLOW_RATE_RANGE = [4, 6, 8]
 FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
 # FLOW_SIZE_TEST_RANGE = [2]
 # FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
-
-
-
 
 
 # The path for output of configure

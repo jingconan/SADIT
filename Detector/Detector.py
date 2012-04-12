@@ -24,12 +24,15 @@ def Compare(fName, dataName= ''):
         data = t2, IF2, IB2, threshold
         pickle.dump( data, open(dataName, 'w') )
     else:
+        mt = min(t2)
+        rt = [t-mt for t in t2]
         figure()
         subplot(211)
-        plot(t2, IF2)
+        plot(rt, IF2)
         subplot(212)
-        plot(t2, IB2)
-        savefig(settings.ROOT + '/res/entropy.eps')
+        plot(rt, IB2)
+        # savefig(settings.ROOT + '/res/entropy.eps')
+        savefig(settings.ENTROPY_FIG_FILE)
         # show()
 
 import operator
@@ -107,9 +110,13 @@ def VectorQuantizeState(feaVec , feaQN, feaRange, quanFlag=None):
                  the length of the second dimension is two.
 
     '''
-    if not quanFlag: quanFlag = len(data) * [1]
-    QS = lambda a, b, c, flag: QuantizeState(a, b, c)[1] if flag else a
-    return [ QS(a, b, c, flag) for a, b, c, flag in zip(feaVec , feaQN, feaRange, quanFlag) ]
+    if not quanFlag: quanFlag = len(feaQN) * [1]
+    try:
+        QS = lambda a, b, c, flag: QuantizeState(a, b, c)[1] if flag else a
+        res = [ QS(a, b, c, flag) for a, b, c, flag in zip(feaVec , feaQN, feaRange, quanFlag) ]
+    except:
+        import pdb;pdb.set_trace()
+    return res
 
 def GetAllPMF(feaVec, feaQN, feaRange,  quanFlag=None):
     '''This Function Support Multiple Features, get probability mass function
@@ -124,6 +131,7 @@ def GetAllPMF(feaVec, feaQN, feaRange,  quanFlag=None):
 
     '''
     qFeaVec = VectorQuantizeState(feaVec, feaQN, feaRange, quanFlag)
+    # import pdb;pdb.set_trace()
     pmf = ModelFree(qFeaVec, feaQN)
     Pmb, mpmb = ModelBased(qFeaVec, feaQN)
     return pmf, Pmb, mpmb
@@ -160,6 +168,7 @@ def GetFeature(fName, clusterNum, cutHead=True):
     flow = ParseData(fName);
     srcIPVec, flowSize, t, dur = TransData(flow)
 
+    # import pdb;pdb.set_trace()
     cluster, centerPt = KMeans(srcIPVec, clusterNum, DF)
     distToCenter = GetDistToCenter(srcIPVec, cluster, centerPt, DF)
     flowRate = GetFlowRate(t, cluster)

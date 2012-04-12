@@ -26,28 +26,25 @@
 
 from shutil import copyfile
 from time import clock as now
-import settings
 
-from util import *
-from Sensitivity import *
-
+# from util import *
+# from Sensitivity import *
 from API import *
 
-def Run():
-    copyfile('./settings_template.py', './settings.py')
+def run():
+    # copyfile('./settings_template.py', './settings.py')
+    reload(settings)
     if settings.UNIFIED_NOMINAL_PDF: GlobalGenerateNominalPDF()
     print 'start to configure'
-    # GlobalConfigure()
-    reload(settings)
-    GenAnomalyDot(settings.ANO_DESC,
+    GenAnomalyDot(settings.ANO_LIST,
             settings.NET_DESC,
             settings.NORM_DESC,
             settings.OUTPUT_DOT_FILE)
 
     print 'start to simulate'
     Simulate()
-    print 'start to detect'
-    GlobalDetect(settings.OUTPUT_FLOW_FILE)
+    # print 'start to detect'
+    # GlobalDetect(settings.OUTPUT_FLOW_FILE)
     # anoType = GetAnomalyType()
     # print 'anoType, ', anoType
 
@@ -62,9 +59,6 @@ def Test():
     ModelBaseHTest(mbIndi)
     anoType = GetAnomalyType()
     # print 'anoType, ', anoType
-
-
-
 
 
 def MultiRun():
@@ -82,13 +76,51 @@ def MultiRun():
     # case = 'FlowSizeIncr'
     # FlowSizeChange(rg, case)
 
+from pylab import *
+def test_msdesctor():
+    print 'start to detect'
+    copyfile('./settings/multi_srv_targ_one.py', './settings.py')
+    reload(settings)
+    GlobalDetect(settings.OUTPUT_FLOW_FILE)
+
+    IF2, IB2, t2, threshold  = MSDetect(settings.NET_DESC['srv_list'],
+            settings.DISCRETE_LEVEL + [settings.CLUSTER_NUMBER],
+            settings.DETECTOR_WINDOW_SIZE)
+    rt = array(t2) - min(t2)
+    figure()
+    subplot(211)
+    plot(rt, IF2)
+    subplot(212)
+    plot(rt, IB2)
+    savefig(settings.ROOT + '/res/entropy-multi-server.eps')
+    import pdb;pdb.set_trace()
+    # show()
+
+def old_detector():
+    copyfile('./settings/multi_srv_targ_one_with_fr.py', './settings.py')
+    reload(settings)
+    GlobalDetect(settings.OUTPUT_FLOW_FILE)
+
+
+def multi_srv_targ_one():
+    copyfile('./settings/multi_srv_targ_one.py', './settings.py')
+    reload(settings)
+    run()
+
+dispatcher = {
+        'ms':multi_srv_targ_one,
+        't':test_msdesctor,
+        'od':old_detector,
+        }
 if __name__ == "__main__":
+    import sys
+    dispatcher[sys.argv[1]]()
     # Test()
     # mfIndi = ModelFreeDetectAnoType()
     # mbIndi = ModelBaseDetectAnoType()
     # Print(mfIndi, mbIndi)
     # GetAnomalyType()
-    Run()
+    # Run()
     # MultiRun()
 
 
