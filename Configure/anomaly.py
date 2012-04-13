@@ -104,10 +104,12 @@ class Anomaly:
         """cut into three pieces"""
 
     def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
-        ano_node = self.ano_node
+        exec IN('ano_node', 'anoDesc')
+        # ano_node = self.ano_node
         generator = ano_node.generator
 
         np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
+        # np1, ap, np2 = get_profile_with_ano(mod_start, mod_profile, ano_t)
 
         ano_node.add_modulator(start=str(mod_start), profile=np1, generator = generator[s_id])
 
@@ -116,7 +118,8 @@ class Anomaly:
         assert(st == start)
         ano_node.add_modulator(start=str(start),
                 profile=ap,
-                generator = generator[s_id].get_new_gen(self.anoDesc['change']))
+                # generator = generator[s_id].get_new_gen(self.anoDesc['change']))
+                generator = generator[s_id].get_new_gen(anoDesc['change']))
 
         st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
         assert(st == end)
@@ -128,15 +131,22 @@ class Anomaly:
 
     def run(self, net):
         """inject itself into the network"""
-        self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
-        ano_t = self.anoDesc['T']
+        exec IN('ano_node', 'anoDesc')
+        # self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
+        ano_node = net.node_list[anoDesc['ano_node_seq']]
+        # ano_t = self.anoDesc['T']
+        ano_t = anoDesc['T']
 
-        m_back = copy.deepcopy(self.ano_node.modulator)
+        # m_back = copy.deepcopy(self.ano_node.modulator)
+        m_back = copy.deepcopy(ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator
             s_id = mod['generator'] # get id for source generator
             mod_start = eval(mod['start'])
             mod_profile = mod['profile']
             self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
+
+        print 'ano_node'
+        exec OUT('ano_node')
 
 class AtypicalUserAnomaly(Anomaly):
     """anomaly of atypical user. an atypical user joins to the network during some time.
