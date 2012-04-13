@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 from util import *
+from mod_util import *
 class Modulator(object):
     def __init__(self, **desc):
         self.desc = desc

@@ -115,6 +115,7 @@ dispatcher = {
 if __name__ == "__main__":
     import sys
     dispatcher[sys.argv[1]]()
+
     # Test()
     # mfIndi = ModelFreeDetectAnoType()
     # mbIndi = ModelBaseDetectAnoType()

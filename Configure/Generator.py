@@ -2,6 +2,7 @@
 import sys
 sys.path.append("..")
 from util import *
+from mod_util import *
 
 class Generator(object):
     pass

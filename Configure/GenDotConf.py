@@ -37,6 +37,7 @@ import sys
 sys.path.append("..")
 import settings
 from util import *
+from mod_util import *
 
 from Generator import *
 from Modulator import *
@@ -44,7 +45,6 @@ from Modulator import *
 ####################################
 ##     Main Class Definition     ###
 ####################################
-from random import randint
 class Network(Dot):
     ''' Network Class specifiy the topology of the network.
     '''
@@ -62,9 +62,6 @@ class Network(Dot):
         self._topo(self.net_desc['topo'])
         self._config_traffic()
 
-    def choose_ip_addr(self, ip_addr_set):
-        n = len(ip_addr_set)
-        return ip_addr_set[randint(0, n-1)]
 
     def _config_traffic(self):
         """config the traffic of network"""
@@ -79,8 +76,8 @@ class Network(Dot):
                 profile = self.norm_desc['profile']
                 para = Load(self.norm_desc['gen_desc'])
                 #FIXME should choose ip address randomly
-                para['ipsrc'] = self.choose_ip_addr(node.ipdests)
-                para['ipdst'] = self.choose_ip_addr(srv_node.ipdests)
+                para['ipsrc'] = choose_ip_addr(node.ipdests)
+                para['ipdst'] = choose_ip_addr(srv_node.ipdests)
                 node.add_modulator(start, profile,
                         get_generator(para))
 

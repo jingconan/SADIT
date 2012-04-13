@@ -7,3 +7,5 @@ ms:
 	rm ./settings.pyc
 	cp ./settings/multi_srv_targ_one.py ./settings.py
 	./main.py
+t:
+	cd test && ./ConfigureTest.py

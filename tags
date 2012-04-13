@@ -64,8 +64,19 @@ Modulator	Configure/Modulator.py	/^class Modulator(object):$/;"	c
 __init__	Configure/Modulator.py	/^    def __init__(self, **desc):$/;"	m	class:Modulator
 __getitem__	Configure/Modulator.py	/^    def __getitem__(self, name):$/;"	m	class:Modulator	file:
 __str__	Configure/Modulator.py	/^    def __str__(self):$/;"	m	class:Modulator	file:
-MyTest	Configure/test.py	/^class MyTest(TestCase):$/;"	c
-testDot	Configure/test.py	/^    def testDot(self):$/;"	m	class:MyTest
+LoadValidIP	Configure/util.py	/^def LoadValidIP(fileName):$/;"	f
+GetIPAdress	Configure/util.py	/^def GetIPAdress():$/;"	f
+CalIPCenter	Configure/util.py	/^def CalIPCenter(IPMat, DF):$/;"	f
+ined	Configure/util.py	/^    *DF* is a user defined distance function'''$/;"	f	function:CalIPCenter
+PlotPts	Configure/util.py	/^def PlotPts(IPMat, corePts, anoPts, c):$/;"	f
+GetIPMat	Configure/util.py	/^def GetIPMat():$/;"	f
+P2F_RAW	Configure/util.py	/^def P2F_RAW(flowRate, flowDuration, pktRate): # Change Prameter to FS Format for rawflow$/;"	f
+F2P_RAW	Configure/util.py	/^def F2P_RAW(flowlets, bytes, interval, pkts ):$/;"	f
+FixQuoteBug	Configure/util.py	/^def FixQuoteBug(fileName, delay=0.001):$/;"	f
+ParseArg	Configure/util.py	/^def ParseArg(string):$/;"	f
+Attr	Configure/util.py	/^class Attr():$/;"	c
+__init__	Configure/util.py	/^    def __init__(self, string=None, **args):$/;"	m	class:Attr
+__str__	Configure/util.py	/^    def __str__(self):$/;"	m	class:Attr	file:
 RFHash	Detector/AnomalyAna.py	/^def RFHash(v, q):$/;"	f
 GetStateTable	Detector/AnomalyAna.py	/^def GetStateTable():$/;"	f
 sFilter	Detector/AnomalyAna.py	/^def sFilter(cond):$/;"	f
@@ -124,6 +135,7 @@ Detect	Detector/Detector.py	/^def Detect(fName, feaQN, wSize):$/;"	f
 ModelBased_Dur	Detector/DurationDetector.py	/^def ModelBased_Dur(gc, gd, gf, K, ND, NF, gr, NR):$/;"	f
 ModelFree_Dur	Detector/DurationDetector.py	/^def ModelFree_Dur(gc, gd, gf, K, ND, NF, gr, NR):$/;"	f
 Detect3	Detector/DurationDetector.py	/^def Detect3(fName, clusterNum, ND, NF, wSize):$/;"	f
+TransData	Detector/MSDetector.py	/^def TransData(flow):$/;"	f
 GetSrvFlowFile	Detector/MSDetector.py	/^def GetSrvFlowFile(sl):$/;"	f
 MS_GetFeature	Detector/MSDetector.py	/^def MS_GetFeature(srvFlowNameList, clusterNum):$/;"	f
 CombineMSRecord	Detector/MSDetector.py	/^def CombineMSRecord(feaSet):$/;"	f

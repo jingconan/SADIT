@@ -36,6 +36,8 @@ import sys
 sys.path.append("..")
 import settings
 import cPickle as pickle
+from util import *
+from mod_util import *
 # Used global parameters,
 # * link_attr
 # * ATYPICAL_IP_FILE
@@ -102,7 +104,6 @@ class Anomaly:
         """cut into three pieces"""
 
     def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
-        start, end = ano_t
         ano_node = self.ano_node
         generator = ano_node.generator
 
@@ -110,6 +111,7 @@ class Anomaly:
 
         ano_node.add_modulator(start=str(mod_start), profile=np1, generator = generator[s_id])
 
+        start, end = ano_t
         st = mod_start + float(np.sum(np1[0]))
         assert(st == start)
         ano_node.add_modulator(start=str(start),
@@ -136,6 +138,69 @@ class Anomaly:
             mod_profile = mod['profile']
             self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
 
+class AtypicalUserAnomaly(Anomaly):
+    """anomaly of atypical user. an atypical user joins to the network during some time.
+    Atypical user refer those user has large IP distance with users in the network."""
+    ATIP = None # Atypical IP Set. Will Select IP from this set and add a node with atypical ip
+    idx = 0 # A indicator to seperate the IP that has been selected or not
+    NAME = 'AtypicaUser'
+    def __init__(self, ano_desc):
+        """link_to is a list of variables representing the connection to all other nodes
+        * link_to[i] == 1 means there is link from atypical node to node i.
+        * link_to[i] == -1 means there is link from node i to this atypical node.
+        """
+        self.ano_desc = ano_desc
+        Anomaly.__init__(self, ano_desc)
+        if self.ATIP == None:
+            self.ATIP = ano_desc['ATIP']
+        self.net = None
+        self.ano_node = None
+
+    def _change_topology(self):
+        link_to = self.ano_desc['link_to']
+        link_attr = self.ano_desc['link_attr']
+        for i in xrange(len(link_to)):
+            if link_to[i] == 1:
+                edge = NEdge(self.ano_node, self.net.node_list[i], link_attr )
+            elif link_to[i] == -1:
+                edge = NEdge(self.net.node_list[i], self.ano._ode, link_attr )
+            else:
+                raise ValueError('unknown link_to value')
+            self.net.add_edge(edge)
+
+    def _config_traffic(self):
+        nn = len(self.net.node_list)
+        srv_node_list = [self.net.node_list[i] for i in xrange(nn) if i in self.net.net_desc['srv_list'] ]
+        start, end = self.ano_desc['T']
+        for srv_node in srv_node_list:
+            gen_desc = Load(self.ano_desc['gen_desc'])
+            gen_desc['ipsrc'] = choose_ip_addr(self.ano_node.ipdests)
+            gen_desc['ipdst'] = choose_ip_addr(srv_node.ipdests)
+            self.ano_node.add_modulator(start=str(start),
+                    profile='((%d,),(1,))' %(end-start),
+                    generator=get_generator(gen_desc) )
+
+    def _get_ano_node(self):
+        ipdest = [ self.ATIP[self.idx] ]
+        self.idx += 1
+        self.ano_node = NNode(ipdest)
+        self._config_traffic()
+
+    def _export_ip_addr(self):
+        fid = open(settings.ATYPICAL_IP_FILE, 'w')
+        fid.write( ' '.join([str(i) for i in self.ano_node.ipdests]) )
+        fid.close()
+
+    def run(self, net):
+        '''will add a node for atypical user to the network.
+        The IP address for atypical user is selected from. settings.atypical_ip_file'''
+        self.net = net
+        self._get_ano_node()
+        net.add_node(self.ano_node)
+        self._change_topology()
+
+        self._export_ip_addr()
+
 class TargetOneServer(Anomaly):
     """Only change the behaviour in one server
     ano_desc should have id **srv_id** of that sever node"""
@@ -156,16 +221,20 @@ class TargetOneServer(Anomaly):
 ##################################
 ano_map = {
         # 'ATYPICAL_USER':AtypicalUser,
-        'FLOW_ARRIVAL_RATE':Anomaly,
-        'FLOW_SIZE':Anomaly,
-        'TARGET_ONE_SERVER':TargetOneServer
+        'atypical_user':AtypicalUserAnomaly,
+        'flow_arrival_rate':Anomaly,
+        'flow_size_mean':Anomaly,
+        'flow_size_var':Anomaly,
+        'target_one_server':TargetOneServer,
         }
 
 def GenAnomalyDot(ano_list, netDesc, normalDesc, outputFileName):
     net = Network()
     net.init(netDesc, normalDesc)
     for ano_desc in ano_list:
-        ano_type = ano_desc['anoType']
+        # print ano_desc
+        # import pdb;pdb.set_trace()
+        ano_type = ano_desc['anoType'].lower()
         AnoClass = ano_map[ano_type]
         A = AnoClass(ano_desc)
         net.InjectAnomaly( A )
