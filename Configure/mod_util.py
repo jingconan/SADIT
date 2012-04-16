@@ -140,3 +140,30 @@ from random import randint
 def choose_ip_addr(ip_addr_set):
     n = len(ip_addr_set)
     return ip_addr_set[randint(0, n-1)]
+
+
+import random
+
+def RandDist(dist):
+    '''Generate Random Variable According to Certain Kind of
+    Distribution'''
+
+    # TODO Finish A Complete Version
+    s = 0
+    rv = random.random()
+    m = -1
+    for p in dist:
+        m += 1
+        s += p
+        if s > rv:
+            break
+
+    return m
+
+def FROM_CLS(*val_list):
+    return ";".join(['%s=self.%s'%(v, v) for v in val_list])
+
+def TO_CLS(*val_list):
+    return ";".join(['self.%s=%s'%(v, v) for v in val_list])
+
+

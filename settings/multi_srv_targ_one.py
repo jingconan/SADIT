@@ -23,6 +23,7 @@ NET_DESC = dict(
         size=topo.shape[0],
         srv_list=srv_node_list,
         link_attr=link_attr,
+        node_type = 'NNode',
         )
 
 #################################

@@ -1,0 +1,21 @@
+Network
+
+NNode
+
+MarkovNode
+
+Network should be indepedent to NNode
+
+there should be a initialization parameter in the constructor 
+
+how to descript markov behaviour
+start-end. transition
+
+we use profile to describe a modulator in normal node
+
+we can also use  profile to describe a modulator in markov node.
+simply use profile
+
+modulator in markove case
+
+

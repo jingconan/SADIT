@@ -103,12 +103,16 @@ class Anomaly:
     def cut_profile(profile, status):
         """cut into three pieces"""
 
-    def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
+    # def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
+    def _infect_modulator(self, ano_t, m_id, mod):
         ano_node = self.ano_node
         generator = ano_node.generator
 
+        mod_start = eval(mod['start'])
+        mod_profile = mod['profile']
         np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
 
+        s_id = mod['generator'] # get id for source generator
         ano_node.add_modulator(start=str(mod_start), profile=np1, generator = generator[s_id])
 
         start, end = ano_t
@@ -133,10 +137,11 @@ class Anomaly:
 
         m_back = copy.deepcopy(self.ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator
-            s_id = mod['generator'] # get id for source generator
-            mod_start = eval(mod['start'])
-            mod_profile = mod['profile']
-            self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
+            # s_id = mod['generator'] # get id for source generator
+            # mod_start = eval(mod['start'])
+            # mod_profile = mod['profile']
+            # self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
+            self._infect_modulator(ano_t, m_id, mod)
 
 class AtypicalUserAnomaly(Anomaly):
     """anomaly of atypical user. an atypical user joins to the network during some time.
@@ -216,28 +221,4 @@ class TargetOneServer(Anomaly):
                 continue
             self._infect_modulator(eval(mod['start']), mod['profile'], ano_t, m_id, s_id)
 
-##################################
-###  Interface          #######
-##################################
-ano_map = {
-        # 'ATYPICAL_USER':AtypicalUser,
-        'atypical_user':AtypicalUserAnomaly,
-        'flow_arrival_rate':Anomaly,
-        'flow_size_mean':Anomaly,
-        'flow_size_var':Anomaly,
-        'target_one_server':TargetOneServer,
-        }
-
-def GenAnomalyDot(ano_list, netDesc, normalDesc, outputFileName):
-    net = Network()
-    net.init(netDesc, normalDesc)
-    for ano_desc in ano_list:
-        # print ano_desc
-        # import pdb;pdb.set_trace()
-        ano_type = ano_desc['anoType'].lower()
-        AnoClass = ano_map[ano_type]
-        A = AnoClass(ano_desc)
-        net.InjectAnomaly( A )
-
-    net.write(outputFileName)
 
