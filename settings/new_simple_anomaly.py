@@ -3,17 +3,9 @@ ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
 ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
 
 #################################
-##   Network Topology ##
+##   topology ##
 #################################
-# Specify the link property
-link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
-from numpy import zeros, array
-# topo = array(
-        # [[0, 0, 0],
-        # [1, 0, 0],
-        # [0, 0, 1]]
-        # )
-# Generate Star topology
+from numpy import zeros
 g_size = 10
 srv_node_list = [0, 1]
 # srv_node_list = [0]
@@ -22,79 +14,53 @@ for i in xrange(g_size):
     if i in srv_node_list:
         continue
     topo[i, srv_node_list] = 1
+link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
 
-# topo[3, 5] = 1
-# topo[4, 6] = 1
+#################################
+##   Parameter For Normal Case ##
+#################################
+sim_t = 3000
+start = 0
+DEFAULT_PROFILE = ((sim_t,),(1,))
+
+
+gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'}
+NORM_DESC = dict(
+        TYPE = 'NORMAl',
+        start = '0',
+        node_para = {'states':[gen_desc]},
+        profile = DEFAULT_PROFILE,
+        )
+
+ANOMALY_TIME = (1200, 1400)
+ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
+        'ano_node_seq':2,
+        'T':(1200, 1400),
+        'change':{'flow_arrival_rate':6},
+        # 'change':{'flow_size_mean':6},
+        # 'change':{'flow_size_var':6},
+        'srv_id':0,
+        }
+
+ANO_LIST = [ANO_DESC]
+
 
 NET_DESC = dict(
         topo=topo,
         size=topo.shape[0],
         srv_list=srv_node_list,
         link_attr=link_attr,
+        node_type='NNode',
+        node_para={},
         )
 
-#################################
-##   Parameter For Normal Case ##
-#################################
-# DEFAULT_PROFILE = (0, 8000, 1)
-sim_t = 2000
-start = 0
-DEFAULT_PROFILE = ((sim_t,),(1,))
 
-NORM_DESC = dict(
-        TYPE = 'NORMAl',
-        start = '0',
-        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},
-        profile = DEFAULT_PROFILE,
-        )
+OUTPUT_DOT_FILE = ROOT + '/test/conf.dot'
+IPS_FILE = ROOT + '/Configure/ips.txt'
 
-#######################################
-##   Parameter For Markov normal case ##
-#######################################
-MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state
-        ('normal(4e5,10)', 'exponential(0.3)')] # low state
-MARKOV_P = [(0, 1), (0, 1)] # NORMAL
-MARKOV_INTERVAL = 0.1
-
-#############################
-##   Parameter For Anomaly ##
-#############################
-## Anomaly Description for Flow Rate type of anomaly
-ANOMALY_TIME = (1200, 1400) # for detector
-ANO_DESC = {'anoType':'FLOW_ARRIVAL_RATE',
-        'ano_node_seq':2,
-        'T':(1200, 1400),
-        'ratio':6,
-        }
-# add normal to every node except for servers
-import copy
-ANO_LIST = []
-for i in xrange(g_size):
-    if i in srv_node_list:
-        continue
-    ad = copy.deepcopy(ANO_DESC)
-    ad['ano_node_seq'] = i
-    ANO_LIST.append(ad)
-# ANO_LIST = [ANO_DESC]
 
 # EXPORT_ABNORMAL_FLOW = True
 EXPORT_ABNORMAL_FLOW = False
-
-## Anomaly Description for Flow Size type of anomaly
-# MEAN is the ratio between abnormal and normal flow size mean
-# VAR is the absolute value of variance for the anomaly.
-# ANO_DESC = {'anoType':'FLOW_SIZE',
-        # 'T':(1200, 1400),
-        # 'MEAN_RATIO':3,
-        # 'VAR':100,
-        # }
-
-## Anomaly Description for Markov type of anomaly
-# ANO_DESC = {'anoType':'MARKOV_TRAN_PROB',
-        # 'T':(1200, 1400),
-        # 'ABNORMAL_TRAN_PROB':[0.5, 0.5], # [p12, p21]
-        # }
-
 
 
 #############################

@@ -1,34 +1,8 @@
 #!/usr/bin/env python
-##
-# @file allinone.py
-# @brief
-# @author Jing Conan Wang, hbhzwj@gmail.com
-# @version 1.3
-# @date 2012-02-15
-# Copyright (C)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-
 ### -- [2012-03-01 14:44:26] seperate some functions to API.py, rename run, main
 
 from shutil import copyfile
 from time import clock as now
-
-# from util import *
-# from Sensitivity import *
 from API import *
 
 def run():
@@ -113,8 +87,9 @@ dispatcher = {
         'od':old_detector,
         }
 if __name__ == "__main__":
-    import sys
-    dispatcher[sys.argv[1]]()
+    run()
+    # import sys
+    # dispatcher[sys.argv[1]]()
 
     # Test()
     # mfIndi = ModelFreeDetectAnoType()

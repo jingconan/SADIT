@@ -17,10 +17,10 @@ I should use Class to replace is this relationship.
 Base Class for Detector
 
 class Detector():
-    def DetectOneWindow():
+    def detect_one_window():
         pass
-    def GeneratorNorminalPDF():
+    def generator_norminal_PDF():
         pass
-
+    def 
     
 

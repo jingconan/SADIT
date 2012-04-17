@@ -1,30 +1,10 @@
 #!/usr/bin/env python
-# Copyright (C)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-
-##
-# @file anomaly.py
-# @brief Anomalies Related
-# @author Jing Conan Wang, hbhzwj@gmail.com
-# @version 0.1
-# @date 2011-11-01
-
 ### -- [2012-03-04 14:56:03] FlowRate and FlowSize anomaly parameter has be changed as
 ### -- ratio instead of absolute value
+##-- [2012-04-08 22:31:20] Add GenAnomalyDot
+##-- [2012-04-09 18:31:22] refactoring the whole file
+## -- [2012-04-10 01:14:07] FLOW_RATE can work
+##-- [2012-04-10 17:16:27] add _infect_modulator, make anomaly more general
 
 
 from Network import *
@@ -41,15 +21,6 @@ import settings
 import cPickle as pickle
 from util import *
 from mod_util import *
-# Used global parameters,
-# * link_attr
-# * ATYPICAL_IP_FILE
-# * IPS_FILE
-
-##-- [2012-04-08 22:31:20] Add GenAnomalyDot
-##-- [2012-04-09 18:31:22] refactoring the whole file
-## -- [2012-04-10 01:14:07] FLOW_RATE can work
-##-- [2012-04-10 17:16:27] add _infect_modulator, make anomaly more general
 
 from numpy import cumsum, hstack, sort, argsort, diff
 def get_pos(l, v):
@@ -106,7 +77,6 @@ class Anomaly:
     def cut_profile(profile, status):
         """cut into three pieces"""
 
-    # def _infect_modulator(self, mod_start, mod_profile, ano_t, m_id, s_id):
     def _infect_modulator(self, ano_t, m_id, mod):
         ano_node = self.ano_node
         generator = ano_node.generator
@@ -116,18 +86,18 @@ class Anomaly:
         np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
 
         s_id = mod['generator'] # get id for source generator
-        ano_node.add_modulator(start=str(mod_start), profile=np1, generator = generator[s_id])
+        ano_node.add_modulator(start=str(mod_start), profile=np1, generator = [generator[s_id]])
 
         start, end = ano_t
         st = mod_start + float(np.sum(np1[0]))
         assert(st == start)
         ano_node.add_modulator(start=str(start),
                 profile=ap,
-                generator = generator[s_id].get_new_gen(self.anoDesc['change']))
+                generator = [ generator[s_id].get_new_gen(self.anoDesc['change']) ])
 
         st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
         assert(st == end)
-        ano_node.add_modulator(start=str(end), profile=np2, generator=generator[s_id])
+        ano_node.add_modulator(start=str(end), profile=np2, generator=[ generator[s_id] ])
 
         # delete original modulator
         del ano_node.modulator[m_id]
@@ -140,10 +110,6 @@ class Anomaly:
 
         m_back = copy.deepcopy(self.ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator
-            # s_id = mod['generator'] # get id for source generator
-            # mod_start = eval(mod['start'])
-            # mod_profile = mod['profile']
-            # self._infect_modulator(mod_start, mod_profile, ano_t, m_id, s_id)
             self._infect_modulator(ano_t, m_id, mod)
 
 class AtypicalUserAnomaly(Anomaly):
@@ -222,6 +188,6 @@ class TargetOneServer(Anomaly):
             s_id = mod['generator'] # get id for source generator
             if self.ano_node.generator[s_id]['ipdst'] not in srv_ip_addr:
                 continue
-            self._infect_modulator(eval(mod['start']), mod['profile'], ano_t, m_id, s_id)
+            self._infect_modulator(ano_t, m_id, mod)
 
 

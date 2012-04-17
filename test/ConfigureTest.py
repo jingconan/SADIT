@@ -54,12 +54,12 @@ class Configure(TestCase):
         import markov_p_ano as ST
         GenAnomalyDot(ST.ANO_LIST, ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
-    def _testNormal(self):
-        import normal as ST
-        NET_DESC  = ST.NET_DESC
-        NET_DESC['node_type'] = 'NNode'
-        NORM_DESC = ST.NORM_DESC
-        del NORM_DESC['node_para']['states'][1]
+    def _testNoAnomaly(self):
+        import simple as ST
+        GenAnomalyDot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
+
+    def _testSimpleAnomaly(self):
+        import simple as ST
         GenAnomalyDot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
     def _testAttriAnomaly(self):

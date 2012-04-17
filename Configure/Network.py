@@ -30,9 +30,11 @@ class Network(Dot):
         self._config_traffic()
 
     def _get_generator(self, src_node, dst_node):
+        # import pdb;pdb.set_trace()
         para = self.norm_desc['node_para']
         res = []
-        for s in para['states']:
+        for state in para['states']:
+            s = Load(state)
             s['ipsrc'] = choose_ip_addr(src_node.ipdests)
             s['ipdst'] = choose_ip_addr(dst_node.ipdests)
             gen = get_generator(s)

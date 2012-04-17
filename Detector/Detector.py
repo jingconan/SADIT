@@ -304,6 +304,6 @@ def Detect(fName, feaQN, wSize):
 
 
 if __name__ == "__main__":
-    import sys,os
-    os.system('cp ../settings_template.py ../settings.py')
+    # import sys,os
+    # os.system('cp ../settings_template.py ../settings.py')
     Compare(sys.argv[1], sys.argv[2])

@@ -4,12 +4,18 @@ class A(self):
         pass
 
     def f1(self):
-        x = 2
+        self.extracted_f1()
         print 'f1'
+
+    def extracted_f1(self):
+        x = 2
 
     def f2(self):
         print 'f2'
 
+def B():
+    print 'B'
+
 
 if __name__ == "__main__":
-    test3.main()
+    test2.main()
