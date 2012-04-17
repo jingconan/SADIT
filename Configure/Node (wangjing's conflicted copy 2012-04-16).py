@@ -107,6 +107,7 @@ class MarkovNode(NNode):
         s_id_list = []
         for gen in generator_list:
             self.gen_num += 1
+            # print 'self.s_id, ', self.s_id
             self.generator[self.s_id] = gen
             s_id_list.append(self.s_id)
 
@@ -145,6 +146,7 @@ class MarkovNode(NNode):
         # update generator
         for k, v in self.generator.iteritems():
             attr[k] = str(v)
+
 
 
 

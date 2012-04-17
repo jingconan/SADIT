@@ -1,5 +1,7 @@
 all:
 	./allinone.py
+s:
+	cd Simulator && ./fs.py ../test/conf.dot -t 3000
 d:
 	cd Detector && ./Detector.py  ../Simulator/n0_flow.txt ''
 ms:
@@ -9,3 +11,5 @@ ms:
 	./main.py
 t:
 	cd test && ./ConfigureTest.py
+clean:
+	./clean.sh

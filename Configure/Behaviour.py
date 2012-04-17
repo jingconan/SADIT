@@ -22,7 +22,7 @@ class MarkovBehaviour(object):
         t = start
         while t <= end:
             self.cs = RandDist(self.P[self.cs])
-            inter = exponential(self.interval)
+            inter = exponential(1.0 / self.interval)
             self.run_para = dict(r_start=t, r_end=t+inter)
             self.stage()
             t += inter

@@ -7,8 +7,12 @@ ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
 # Specify the link property
 link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
 from numpy import zeros, array
-## Generate Star topology ##
-# total number of nodes
+# topo = array(
+        # [[0, 0, 0],
+        # [1, 0, 0],
+        # [0, 0, 1]]
+        # )
+# Generate Star topology
 g_size = 10
 srv_node_list = [0, 1]
 # srv_node_list = [0]
@@ -17,6 +21,9 @@ for i in xrange(g_size):
     if i in srv_node_list:
         continue
     topo[i, srv_node_list] = 1
+
+# topo[3, 5] = 1
+# topo[4, 6] = 1
 
 NET_DESC = dict(
         topo=topo,
@@ -28,7 +35,8 @@ NET_DESC = dict(
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 3000
+# DEFAULT_PROFILE = (0, 8000, 1)
+sim_t = 2000
 start = 0
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
@@ -50,14 +58,12 @@ MARKOV_INTERVAL = 0.1
 #############################
 ##   Parameter For Anomaly ##
 #############################
-## Anomaly Description
+## Anomaly Description for Flow Rate type of anomaly
 ANOMALY_TIME = (1200, 1400) # for detector
-ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
+ANO_DESC = {'anoType':'FLOW_ARRIVAL_RATE',
         'ano_node_seq':2,
         'T':(1200, 1400),
-        # 'change':{'flow_arrival_rate':1.5},
-        'change':{'flow_arrival_rate':6},
-        'srv_id':0,
+        'ratio':6,
         }
 # add normal to every node except for servers
 import copy
@@ -68,11 +74,27 @@ for i in xrange(g_size):
     ad = copy.deepcopy(ANO_DESC)
     ad['ano_node_seq'] = i
     ANO_LIST.append(ad)
+# ANO_LIST = [ANO_DESC]
 
 # EXPORT_ABNORMAL_FLOW = True
 EXPORT_ABNORMAL_FLOW = False
 
-ENTROPY_FIG_FILE = ROOT + '/res/entropy-with-fr.eps'
+## Anomaly Description for Flow Size type of anomaly
+# MEAN is the ratio between abnormal and normal flow size mean
+# VAR is the absolute value of variance for the anomaly.
+# ANO_DESC = {'anoType':'FLOW_SIZE',
+        # 'T':(1200, 1400),
+        # 'MEAN_RATIO':3,
+        # 'VAR':100,
+        # }
+
+## Anomaly Description for Markov type of anomaly
+# ANO_DESC = {'anoType':'MARKOV_TRAN_PROB',
+        # 'T':(1200, 1400),
+        # 'ABNORMAL_TRAN_PROB':[0.5, 0.5], # [p12, p21]
+        # }
+
+
 
 #############################
 ## Sensitivity Analysis    ##
@@ -81,6 +103,9 @@ FLOW_RATE_RANGE = [4, 6, 8]
 FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
 # FLOW_SIZE_TEST_RANGE = [2]
 # FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
+
+
+
 
 
 # The path for output of configure
@@ -112,8 +137,8 @@ FLOW_RATE_ESTIMATE_WINDOW = 100
 #    the second, flow size determine the first dimensition
 #    index = [gc[i] + gd[i]*K + gf[i]*K*ND for i in xrange(fl)
 # DISCRETE_LEVEL = (4, 4)
-# DISCRETE_LEVEL = [2, 2]
-DISCRETE_LEVEL = [2, 2, 2]
+DISCRETE_LEVEL = [2, 2]
+# DISCRETE_LEVEL = [2, 2, 2]
 # DISCRETE_LEVEL = [2, 2, 2, 2]
 CLUSTER_NUMBER = 2
 
@@ -122,7 +147,7 @@ LOAD_FEATURE = """
 feaVec = [
          flowSize,
          # dur,
-         flowRate,
+         # flowRate,
          distToCenter,
          cluster]"""
 

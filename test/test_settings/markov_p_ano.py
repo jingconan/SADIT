@@ -48,13 +48,15 @@ L = dict(
         flow_arrival_rate = 0.1,
         )
 MARKOV_DESC = dict(
-        interval=0.1,
+        # interval=0.1,
+        interval=10,
         P=[[0.5, 0.5], [0.5, 0.5]],
         states=[H,L],
         )
 
 ANO_MARKOV_DESC = dict(
-        interval=0.1,
+        # interval=0.1,
+        interval=10,
         P=[[0.1, 0.9], [0.1, 0.9]],
         states=[H,L],
         )

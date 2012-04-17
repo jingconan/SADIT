@@ -9,11 +9,11 @@ class MyTest(TestCase):
         import test_settings.target_one_server as ST
         GenAnomalyDot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
-    def testMarkovPAnomaly(self):
+    def _testMarkovPAnomaly(self):
         import test_settings.markov_p_ano as ST
         GenAnomalyDot(ST.ANO_LIST, ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
-    def _testNormal(self):
+    def testNormal(self):
         import test_settings.target_one_server as ST
         NET_DESC  = ST.NET_DESC
         NET_DESC['node_type'] = 'NNode'

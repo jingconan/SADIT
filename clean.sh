@@ -13,3 +13,4 @@ rm ./res/*
 dat=`date +%y-%m-%d_%H_%M_%S`
 cp -r ./share/sens/  ./share/sens_${dat}
 rm -r ./share/sens/*
+rm  ./test/conf.dot

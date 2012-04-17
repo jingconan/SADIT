@@ -31,6 +31,7 @@ def Compare(fName, dataName= ''):
         plot(rt, IF2)
         subplot(212)
         plot(rt, IB2)
+        show()
         # savefig(settings.ROOT + '/res/entropy.eps')
         savefig(settings.ENTROPY_FIG_FILE)
         # show()

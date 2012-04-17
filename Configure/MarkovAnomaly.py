@@ -16,6 +16,8 @@ class MarkovAnomaly(Anomaly):
         # s_id = mod['generator'] # get id for source generator
         generator_list = [ generator[s] for s in mod.states ]
         # import pdb;pdb.set_trace()
+        # print 'generator_list', generator_list
+        # import pdb;pdb.set_trace()
         ano_node.add_modulator(
                 start=str(mod_start),
                 profile=np1,
