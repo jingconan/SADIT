@@ -1,5 +1,5 @@
 from Network import *
-from anomaly import *
+from Anomaly import *
 from MarkovAnomaly import *
 ##################################
 ###  Interface          #######

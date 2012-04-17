@@ -39,16 +39,23 @@ def Load(var):
     for example, if the var is ['rand(1)', 1], var[0] will be different random
     value at each time.'''
     t = type(var)
-    # print 'type, ', t
-    # print 'var, ', var
     if t == types.TupleType or t == types.ListType:
-        return [eval(x) for x in var]
+        return [Load(x) for x in var]
     elif t == types.DictType:
         res = dict()
         for k, v in var.iteritems():
-            try: res[k] = eval(v)
-            except: res[k] = v
+            # If cannot properly loaded, use origianl value
+            try:
+                res[k] = Load(v)
+            except Exception as e:
+                res[k] = v
         return res
+    elif t == types.StringType:
+        return eval(var)
+    elif t == types.FloatType or t == types.IntType:
+        return var
+    else:
+        raise TypeError('unknown type of var')
 
 def Dump2Txt(var, fname, op):
     """Dump2Txt will dump the variable to text file for use of other programs like Matlab.

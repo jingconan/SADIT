@@ -37,8 +37,6 @@ class Network(Dot):
             s['ipdst'] = choose_ip_addr(dst_node.ipdests)
             gen = get_generator(s)
             res.append(gen)
-        # if len(res) == 1:
-            # res = res[0]
         return res
 
     def _config_traffic(self):

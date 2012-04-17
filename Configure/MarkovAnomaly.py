@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from anomaly import *
+from Anomaly import *
 import sys
 sys.path.append("..")
 import settings

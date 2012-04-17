@@ -1,4 +1,4 @@
 from API import *
-from anomaly import *
+from Anomaly import *
 from MarkovAnomaly import *
 

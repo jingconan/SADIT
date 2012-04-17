@@ -20,7 +20,7 @@ class Configure(TestCase):
 
     def testGenerator(self):
         import Configure as TM
-        import normal
+        # import normal
         gen_desc = {'TYPE':'harpoon',
                 'flow_size_mean':'4e5',
                 'flow_size_var':'100',
