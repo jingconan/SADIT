@@ -99,7 +99,7 @@ def AnoGetFeature(fName, centerPt):
     feaRange = GetRange(feaVec)
     return feaVec, feaRange, quanFlag, t
 
-from Detector import VectorQuantizeState
+from Detector import vector_quantize_states
 import cPickle as pickle
 # @profile
 def GetAbnormalFlowQType():
@@ -113,17 +113,17 @@ def GetAbnormalFlowQType():
     # print 'feaVec, ', feaVec
     # import pdb;pdb.set_trace()
     # print 'feaVec, ', feaVec
-    qFeaVec = VectorQuantizeState(feaVec , feaQN, feaRange, quanFlag)
+    qFeaVec = vector_quantize_states(feaVec , feaQN, feaRange, quanFlag)
     return qFeaVec
 
-from Detector import FHash, GetFeatureHashList
+from Detector import f_hash, get_feature_hash_list
 import collections
 def GetAnomalyType():
     '''Get the Type for each abnormal flows, print them out'''
     qFeaVec = GetAbnormalFlowQType()
     # print 'qFeaVec, ', qFeaVec
     feaQN = settings.DISCRETE_LEVEL + [settings.CLUSTER_NUMBER]
-    feaHash = GetFeatureHashList(qFeaVec, feaQN)
+    feaHash = get_feature_hash_list(qFeaVec, feaQN)
     counter=collections.Counter(feaHash)
     print 'the anomaly flows are type, ', counter
 

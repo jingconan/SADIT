@@ -31,15 +31,15 @@ def Simulate():
 #########################################
 ####          Simulator API          ###
 #########################################
-from Detector.Detector import Compare as GlobalDetect
-from Detector.Detector import GenNominalPDF
+from Detector.Detector import compare as GlobalDetect
+from Detector.Detector import gen_norminal_pdf
 
 def GlobalGenerateNominalPDF():
     reload(settings)
     GlobalConfigure()
     Simulate()
     print 'Simulate Done'
-    GenNominalPDF(settings.OUTPUT_FLOW_FILE,
+    gen_norminal_pdf(settings.OUTPUT_FLOW_FILE,
             settings.DISCRETE_LEVEL + [settings.CLUSTER_NUMBER],
             True)
 
