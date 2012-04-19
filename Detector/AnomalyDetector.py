@@ -3,20 +3,22 @@ import sys
 sys.path.append("..")
 import settings
 # from Derivative import *
-from DetectorLib import get_feature, I1, I2, SL, get_all_pmf, gen_norminal_pdf, get_flow_rate, get_dist_to_center, vector_quantize_states, model_based, model_free
+# from DetectorLib import get_feature, I1, I2, SL, get_all_pmf, gen_norminal_pdf, get_flow_rate, get_dist_to_center, vector_quantize_states, model_based, model_free
+from DetectorLib import I1, I2, get_dist_to_center, vector_quantize_states, model_based, model_free
 # from DetectorLib import ModelFreeDerivative, ModelBaseDerivative, CleanGlobalDeri, PlotModelFree, PlotModelBase
 
-from util import *
-from matplotlib.pyplot import *
+# from util import *
+from util import np, Find
+from matplotlib.pyplot import figure, plot, subplot, show
 import cPickle as pickle
 
-from ClusterAlg import *
+from ClusterAlg import KMeans
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
 from DataParser import ParseData
 from operator import itemgetter
 import copy
-from sets import Set
+# from sets import Set
 
 QUAN = 1
 NOT_QUAN = 0
@@ -113,6 +115,21 @@ class DataFile(object):
     def get_fea_range_vec(self):
         return np.array( self.get_fea_range().values() ).T
 
+
+    def quantize_fea(self, rg=None, rg_type='time'):
+        fea_vec = self.get_fea_slice(rg, rg_type)
+        fea_range = self.get_fea_range_vec()
+        q_fea_vec = vector_quantize_states(list(fea_vec.T), self.fea_QN, list(fea_range.T), self.quan_flag)
+        return q_fea_vec
+
+    def get_em(self, rg=None, rg_type='time'):
+        """get empirical measure"""
+#FIXME move this to data_file
+        q_fea_vec = self.quantize_fea(rg, rg_type )
+        pmf = model_free( q_fea_vec, self.fea_QN )
+        Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        return pmf, Pmb, mpmb
+
     ### Function For Extracting Features ###
     def get_cluster(self): return self.cluster
     def get_flow_size(self): return self.get_value_list('flowSize')
@@ -157,25 +174,6 @@ class AnoDetector (object):
         for k, v in self.record_data.iteritems():
             self.record_data[k] = []
 
-    def quantize_fea(self, data_file, rg=None, rg_type='time'):
-        """quantize feature"""
-#FIXME move this to data_file
-        fea_vec = data_file.get_fea_slice(rg, rg_type)
-        fea_QN = data_file.fea_QN
-        fea_range = data_file.get_fea_range_vec()
-        quan_flag = data_file.quan_flag
-        q_fea_vec = vector_quantize_states(list(fea_vec.T), fea_QN, list(fea_range.T), quan_flag)
-        return q_fea_vec
-
-    def get_em(self, data_file, rg=None, rg_type='time'):
-        """get empirical measure"""
-#FIXME move this to data_file
-        fea_QN = data_file.fea_QN
-        q_fea_vec = self.quantize_fea( data_file, rg, rg_type )
-        pmf = model_free( q_fea_vec, fea_QN )
-        Pmb, mpmb = model_based( q_fea_vec, fea_QN )
-        return pmf, Pmb, mpmb
-
     def detect(self, fName):
         self.data_file = DataFile(fName, cluster_num=2,
                 fr_win_size=100,
@@ -184,18 +182,18 @@ class AnoDetector (object):
                 )
 
         ### Generate Nominal PDF ###
-        pmf, Pmb, mpmb = self.get_em(self.data_file, rg=[0, 1000], rg_type='time')
+        pmf, Pmb, mpmb = self.data_file.get_em(rg=[0, 1000], rg_type='time')
 
         wSize = self.desc['win_size']
         interval = self.desc['interval']
-        t = self.data_file.t
+        # t = self.data_file.t
         time = self.desc['fr_win_size']
 
         # CleanGlobalDeri()
         while True:
             print 'time: %f' %(time)
             try:
-                d_pmf, d_Pmb, d_mpmb = self.get_em(self.data_file, rg=[time, time+wSize], rg_type='time')
+                d_pmf, d_Pmb, d_mpmb = self.data_file.get_em(rg=[time, time+wSize], rg_type='time')
             except DataEndException:
                 print 'reach data end, break'
                 break
@@ -240,25 +238,25 @@ class AnoDetector (object):
     def get_feature(self):
         self.data = [ DataFile(fn) for fn in self.data_file_name ]
 
-    def get_feature_nominal_pmf(self, feaQN, fName):
-        if self.desc['unified_nominal_pdf']:
-            pmf, Pmb, mpmb, feaRange = pickle.load(open(NominalPDFFile, 'r'))
-            feaVec, feaRange, quanFlag, t, centerPt = get_feature(fName)
-        else:
-            pmf, Pmb, mpmb, feaVec, feaQN, feaRange,  quanFlag, t, centerPt = gen_norminal_pdf(fName, feaQN)
-        return feaRange, feaVec, quanFlag, pmf, t, Pmb, mpmb
+    # def get_feature_nominal_pmf(self, feaQN, fName):
+        # if self.desc['unified_nominal_pdf']:
+            # pmf, Pmb, mpmb, feaRange = pickle.load(open(NominalPDFFile, 'r'))
+            # feaVec, feaRange, quanFlag, t, centerPt = get_feature(fName)
+        # else:
+            # pmf, Pmb, mpmb, feaVec, feaQN, feaRange,  quanFlag, t, centerPt = gen_norminal_pdf(fName, feaQN)
+        # return feaRange, feaVec, quanFlag, pmf, t, Pmb, mpmb
 
-def ModelFreeDetector(AnoDetector):
-    def get_em(self, data_file, rg=None, rg_type='t'):
-        q_fea_vec = self.quantize_fea(data_file, rg, rg_type)
-        pmf = model_free(qFeaVec, fea_QN)
-        return pmf
+# def ModelFreeDetector(AnoDetector):
+#     def get_em(self, data_file, rg=None, rg_type='t'):
+#         q_fea_vec = self.quantize_fea(data_file, rg, rg_type)
+#         pmf = model_free(qFeaVec, fea_QN)
+#         return pmf
 
-def ModelBaseDetector(AnoDetector):
-    def get_em(self, data_file, rg=None, rg_type='t'):
-        q_fea_vec = self.quantize_fea(data_file, rg, rg_type)
-        Pmb, mpmb = model_based(qFeaVec, fea_QN)
-        return Pmb, mpmb
+# def ModelBaseDetector(AnoDetector):
+#     def get_em(self, data_file, rg=None, rg_type='t'):
+#         q_fea_vec = self.quantize_fea(data_file, rg, rg_type)
+#         Pmb, mpmb = model_based(qFeaVec, fea_QN)
+#         return Pmb, mpmb
 
 def compare(fName):
     detect = AnoDetector(**settings.DETECTOR_DESC)
