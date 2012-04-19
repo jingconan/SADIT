@@ -8,6 +8,7 @@ A	New_Detector/test_rope.py	/^class A(self):$/;"	c
 ALLSPHINXOPTS	doc/sphinx/Makefile	/^ALLSPHINXOPTS   = -d $(BUILDDIR)\/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source$/;"	m
 Add	Detector/ClusterAlg.py	/^def Add(x, y):$/;"	f
 AnoDetector	Detector/AnomalyDetector.py	/^class AnoDetector (object):$/;"	c
+AnoDetectorWithDeri	Detector/AnomalyDetector.py	/^class AnoDetectorWithDeri (AnoDetector):$/;"	c
 AnoGetFeature	Detector/AnomalyAna.py	/^def AnoGetFeature(fName, centerPt):$/;"	f
 Anomaly	Configure/Anomaly.py	/^class Anomaly:$/;"	c
 AnomalyTest	test/ConfigureTest.py	/^class AnomalyTest(TestCase):$/;"	c
@@ -23,20 +24,22 @@ CalIndicator	Detector/AnomalyAna.py	/^def CalIndicator(deri, intervalRatio):$/;"
 CflowdExporter	Simulator/flowexport.py	/^class CflowdExporter(FlowExporter):$/;"	c
 CleanGlobalDeri	Detector/Derivative.py	/^def CleanGlobalDeri():$/;"	f
 CombineMSRecord	Detector/MSDetector.py	/^def CombineMSRecord(feaSet):$/;"	f
-Compare	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def Compare(fName, dataName= ''):$/;"	f
+Compare	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def Compare(fName, dataName= ''):$/;"	f
 Compare	Detector/backup/OldDetector.py	/^def Compare(fName, dataName= ''):$/;"	f
 Configure	test/ConfigureTest.py	/^class Configure(TestCase):$/;"	c
 CreateSettings	util.py	/^def CreateSettings(templateFilePath, settingsFilePath, **kwargs):$/;"	f
-Detect	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def Detect(fName, feaQN, wSize):$/;"	f
+DataEndException	Detector/AnomalyDetector.py	/^class DataEndException(Exception):$/;"	c
+DataFile	Detector/AnomalyDetector.py	/^class DataFile(object):$/;"	c
 Detect	Detector/MSDetector.py	/^def Detect(srvList, feaQN, wSize):$/;"	f
+Detect	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def Detect(fName, feaQN, wSize):$/;"	f
 Detect	Detector/backup/OldDetector.py	/^def Detect(fName, clusterNum, ND, NF, wSize):$/;"	f
 Detect3	Detector/DurationDetector.py	/^def Detect3(fName, clusterNum, ND, NF, wSize):$/;"	f
 Dump2Txt	util.py	/^def Dump2Txt(var, fname, op):$/;"	f
 DumpDerivative	Detector/Derivative.py	/^def DumpDerivative():$/;"	f
 Equal	Detector/ClusterAlg.py	/^def Equal(x, y):$/;"	f
 F2P_RAW	Configure/mod_util.py	/^def F2P_RAW(flowlets, bytes, interval, pkts ):$/;"	f
-FHash	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def FHash(digit, level):$/;"	f
-FROM_CLS	Configure/mod_util.py	/^def FROM_CLS(*val_list):$/;"	f
+FHash	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def FHash(digit, level):$/;"	f
+FROM_CLS	util.py	/^def FROM_CLS(*val_list):$/;"	f
 FeatureHash	Detector/backup/OldDetector.py	/^def FeatureHash(digit, level):$/;"	f
 FindCenter	Detector/backup/OldDetector.py	/^def FindCenter(data, centerPt, DF):$/;"	f
 FiveTuple	Simulator/flowlet.py	/^class FiveTuple(object):$/;"	c
@@ -47,25 +50,25 @@ FlowRateChange	Sensitivity.py	/^def FlowRateChange(rg, case):$/;"	f
 Flowlet	Simulator/flowlet.py	/^class Flowlet(object):$/;"	c
 GCC_HASCLASSVISIBILITY	Simulator/ipaddrgen/ipaddrgen_wrap.c	83;"	d	file:
 GenAnomalyDot	Configure/API.py	/^def GenAnomalyDot(ano_list, netDesc, normalDesc, outputFileName):$/;"	f
-GenNominalPDF	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GenNominalPDF(fName, feaQN, dumpFlag =False):$/;"	f
+GenNominalPDF	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GenNominalPDF(fName, feaQN, dumpFlag =False):$/;"	f
 GenNominalPDF	Detector/backup/OldDetector.py	/^def GenNominalPDF(fName, clusterNum, ND, NF):$/;"	f
 Generator	Configure/Generator.py	/^class Generator(object):$/;"	c
 GeneratorNode	Simulator/traffic.py	/^class GeneratorNode(object):$/;"	c
 GetAbnormalFlowQType	Detector/AnomalyAna.py	/^def GetAbnormalFlowQType():$/;"	f
 GetAllPDF_MF	Detector/backup/OldDetector.py	/^def GetAllPDF_MF(srcIPVec, cluster, centerPt, feature, distRange, featureRange,  clusterNum, ND, featureQ):$/;"	f
-GetAllPMF	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetAllPMF(feaVec, feaQN, feaRange,  quanFlag=None):$/;"	f
+GetAllPMF	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetAllPMF(feaVec, feaQN, feaRange,  quanFlag=None):$/;"	f
 GetAnomalyType	Detector/AnomalyAna.py	/^def GetAnomalyType():$/;"	f
 GetCombineFeature	Detector/MSDetector.py	/^def GetCombineFeature(srvFlowNameList, feaQN):$/;"	f
 GetCondProb	Detector/Derivative.py	/^def GetCondProb(P1, mp1, P2, mp2):$/;"	f
 GetDistToCenter	Detector/backup/OldDetector.py	/^def GetDistToCenter(data, cluster, centerPt, DF):$/;"	f
-GetFeature	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFeature(fName, clusterNum):$/;"	f
+GetFeature	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFeature(fName, clusterNum):$/;"	f
 GetFeature	Detector/backup/OldDetector.py	/^def GetFeature(srcIPVec, cluster, centerPt, flowSize, distRange, flowSizeRange, ND, NF):$/;"	f
-GetFeatureHashList	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFeatureHashList(F, Q):$/;"	f
+GetFeatureHashList	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFeatureHashList(F, Q):$/;"	f
 GetFeatureHashList	Detector/backup/OldDetector.py	/^def GetFeatureHashList(gc, gd, posFeature, K, ND, featureQ):$/;"	f
-GetFlowRate	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFlowRate(t, cluster):$/;"	f
+GetFlowRate	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFlowRate(t, cluster):$/;"	f
 GetIPAdress	Configure/mod_util.py	/^def GetIPAdress():$/;"	f
 GetIPMat	Configure/mod_util.py	/^def GetIPMat():$/;"	f
-GetRange	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetRange(data):$/;"	f
+GetRange	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetRange(data):$/;"	f
 GetRange	Detector/backup/OldDetector.py	/^def GetRange(srcIPVec, clusterNum, flowSize):$/;"	f
 GetSrvFlowFile	Detector/MSDetector.py	/^def GetSrvFlowFile(sl):$/;"	f
 GetStateTable	Detector/AnomalyAna.py	/^def GetStateTable():$/;"	f
@@ -103,11 +106,11 @@ MarkovNode	Configure/back_Node.py	/^class MarkovNode(NNode):$/;"	c
 ModelBaseDerivative	Detector/Derivative.py	/^def ModelBaseDerivative(P1, mp1, P2, mp2):$/;"	f
 ModelBaseDetectAnoType	Detector/AnomalyAna.py	/^def ModelBaseDetectAnoType():$/;"	f
 ModelBaseHTest	Detector/AnomalyAna.py	/^def ModelBaseHTest(v):$/;"	f
-ModelBased	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def ModelBased(qFeaVec, feaQN):$/;"	f
+ModelBased	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def ModelBased(qFeaVec, feaQN):$/;"	f
 ModelBased	Detector/backup/OldDetector.py	/^def ModelBased(gc, gd, gf, K, ND, NF):$/;"	f
 ModelBased_Dur	Detector/DurationDetector.py	/^def ModelBased_Dur(gc, gd, gf, K, ND, NF, gr, NR):$/;"	f
 ModelBased_MF	Detector/backup/OldDetector.py	/^def ModelBased_MF(gc, gd, posFeature, K, ND, featureQ):$/;"	f
-ModelFree	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def ModelFree(qFeaVec, feaQN):$/;"	f
+ModelFree	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def ModelFree(qFeaVec, feaQN):$/;"	f
 ModelFree	Detector/backup/OldDetector.py	/^def ModelFree(gc, gd, gf, K, ND, NF):$/;"	f
 ModelFreeDerivative	Detector/Derivative.py	/^def ModelFreeDerivative(P1, P2):$/;"	f
 ModelFreeDetectAnoType	Detector/AnomalyAna.py	/^def ModelFreeDetectAnoType():$/;"	f
@@ -180,8 +183,8 @@ RFHash	misc/test.py	/^def RFHash(v, q):$/;"	f
 RandDist	Configure/mod_util.py	/^def RandDist(dist):$/;"	f
 ReClustering	Detector/ClusterAlg.py	/^def ReClustering(data, centerPt, DF):$/;"	f
 Router	Simulator/fs.py	/^class Router(object):$/;"	c
-SL	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def SL(data, st, ed):$/;"	f
 SL	Detector/DetectorLib.py	/^def SL(data, st, ed):$/;"	f
+SL	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def SL(data, st, ed):$/;"	f
 SPHINXBUILD	doc/sphinx/Makefile	/^SPHINXBUILD   = sphinx-build$/;"	m
 SPHINXOPTS	doc/sphinx/Makefile	/^SPHINXOPTS    =$/;"	m
 SVM_EASY_EXE	settings.py	/^def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):$/;"	f
@@ -457,7 +460,7 @@ SwigPyPacked_print	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_print(Swi
 SwigPyPacked_repr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_repr(SwigPyPacked *v)$/;"	f
 SwigPyPacked_str	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_str(SwigPyPacked *v)$/;"	f
 SwigPyPacked_type	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_type(void) {$/;"	f
-TO_CLS	Configure/mod_util.py	/^def TO_CLS(*val_list):$/;"	f
+TO_CLS	util.py	/^def TO_CLS(*val_list):$/;"	f
 TargetOneServer	Configure/Anomaly.py	/^class TargetOneServer(Anomaly):$/;"	c
 Test	main.py	/^def Test():$/;"	f
 Tester	Detector/test	/^class Tester:$/;"	c
@@ -466,7 +469,7 @@ TransData	Detector/MSDetector.py	/^def TransData(flow):$/;"	f
 TransData	Detector/backup/OldDetector.py	/^def TransData(flow):$/;"	f
 TypeBlindTest	BlindTest.py	/^def TypeBlindTest():$/;"	f
 UnifyF	Detector/backup/OldDetector.py	/^def UnifyF(c, d, feature):$/;"	f
-VectorQuantizeState	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def VectorQuantizeState(feaVec , feaQN, feaRange, quanFlag=None):$/;"	f
+VectorQuantizeState	Detector/backup/Detector (wangjing's conflicted copy 2012-03-01).py	/^def VectorQuantizeState(feaVec , feaQN, feaRange, quanFlag=None):$/;"	f
 X	doc/sphinx/build/html/_static/jquery.js	/^(function(A,w){function ma(){if(!c.isReady){try{s.documentElement.doScroll("left")}catch(a){setTimeout(ma,1);return}c.ready()}}function Qa(a,b){b.src?c.ajax({url:b.src,async:false,dataType:"script"}):c.globalEval(b.text||b.textContent||b.innerHTML||"");b.parentNode&&b.parentNode.removeChild(b)}function X(a,b,d,f,e,j){var i=a.length;if(typeof b==="object"){for(var o in b)X(a,o,b[o],f,e,d);return a}if(d!==w){f=!j&&f&&c.isFunction(d);for(o=0;o<i;o++)e(a[o],b,f?d.call(a[o],o,e(a[o],b)):d,j);return a}return i?$/;"	f
 Y	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
 Z	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
@@ -476,6 +479,7 @@ _SCL_SECURE_NO_DEPRECATE	Simulator/ipaddrgen/ipaddrgen_wrap.c	119;"	d	file:
 _SWIG_Py_None	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^_SWIG_Py_None(void)$/;"	f
 _SWIG_This	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^_SWIG_This(void)$/;"	f
 __TRIE_H__	Simulator/ipaddrgen/addrgen_trie.h	11;"	d
+__add__	Detector/AnomalyDetector.py	/^    def __add__(self, other):$/;"	m	class:DataFile	file:
 __add__	Simulator/flowlet.py	/^    def __add__(self, other):$/;"	m	class:Flowlet	file:
 __addupd_router	Simulator/fs.py	/^    def __addupd_router(self, rname, rdict):$/;"	m	class:Simulator	file:
 __call__	Detector/AnomalyDetector.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:AnoDetector	file:
@@ -504,6 +508,7 @@ __init__	Configure/back_Node.py	/^    def __init__(self, ipdests, **argv):$/;"	m
 __init__	Configure/back_Node.py	/^    def __init__(self, ipdests, **markov_desc):$/;"	m	class:MarkovNode
 __init__	Configure/mod_util.py	/^    def __init__(self, string=None, **args):$/;"	m	class:Attr
 __init__	Detector/AnomalyDetector.py	/^    def __init__(self, **desc):$/;"	m	class:AnoDetector
+__init__	Detector/AnomalyDetector.py	/^    def __init__(self, f_name, fr_win_size, fea_list):$/;"	m	class:DataFile
 __init__	New_Detector/test_rope.py	/^    def __init__(self):$/;"	m	class:A
 __init__	Simulator/flowexport.py	/^    def __init__(self, rname):$/;"	m	class:CflowdExporter
 __init__	Simulator/flowexport.py	/^    def __init__(self, rname):$/;"	m	class:FlowExporter
@@ -536,6 +541,7 @@ __str__	Configure/back_Node.py	/^    def __str__(self):$/;"	m	class:NNode	file:
 __str__	Configure/mod_util.py	/^    def __str__(self):$/;"	m	class:Attr	file:
 __str__	Simulator/flowlet.py	/^    def __str__(self):$/;"	m	class:Flowlet	file:
 _change_topology	Configure/Anomaly.py	/^    def _change_topology(self):$/;"	m	class:AtypicalUserAnomaly
+_cluster_src_ip	Detector/AnomalyDetector.py	/^    def _cluster_src_ip(self):$/;"	m	class:DataFile
 _config_traffic	Configure/Anomaly.py	/^    def _config_traffic(self):$/;"	m	class:AtypicalUserAnomaly
 _config_traffic	Configure/Network.py	/^    def _config_traffic(self):$/;"	m	class:Network
 _export_ip_addr	Configure/Anomaly.py	/^    def _export_ip_addr(self):$/;"	m	class:AtypicalUserAnomaly
@@ -543,6 +549,7 @@ _gen_generator	Configure/Node.py	/^    def _gen_generator(self, ipdst):$/;"	m	cl
 _gen_generator	Configure/back_Node.py	/^    def _gen_generator(self, ipdst):$/;"	m	class:MarkovNode
 _gen_modulator_list	Configure/Modulator.py	/^    def _gen_modulator_list(self):$/;"	m	class:MarkovModulator
 _get_ano_node	Configure/Anomaly.py	/^    def _get_ano_node(self):$/;"	m	class:AtypicalUserAnomaly
+_get_flow_src_cluster	Detector/AnomalyDetector.py	/^    def _get_flow_src_cluster(self, f):$/;"	m	class:DataFile
 _get_generator	Configure/Network.py	/^    def _get_generator(self, src_node, dst_node):$/;"	m	class:Network
 _infect_modulator	Configure/Anomaly.py	/^    def _infect_modulator(self, ano_t, m_id, mod):$/;"	m	class:Anomaly
 _infect_modulator	Configure/MarkovAnomaly.py	/^    def _infect_modulator(self, ano_t, m_id, mod):$/;"	m	class:MarkovAnomaly
@@ -580,10 +587,12 @@ add_modulator	Configure/Node.py	/^    def add_modulator(self, start, profile, ge
 add_modulator	Configure/Node.py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
 add_modulator	Configure/back_Node.py	/^    def add_modulator(self, start, profile, generator):$/;"	m	class:NNode
 add_modulator	Configure/back_Node.py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
+add_quan_num	Detector/AnomalyDetector.py	/^    def add_quan_num(self, fea_list):$/;"	m	class:DataFile
 add_tcp_flag	Simulator/flowlet.py	/^    def add_tcp_flag(self, flag):$/;"	m	class:Flowlet
 after	Simulator/fs.py	/^    def after(self, delay, evid, fn, *fnargs):$/;"	m	class:Simulator
 appendComments	doc/sphinx/build/html/_static/websupport.js	/^  function appendComments(comments, ul) {$/;"	f
 argsort	Simulator/fs.py	/^def argsort(seq):$/;"	f
+argsort_flow	Detector/AnomalyDetector.py	/^    def argsort_flow(self, key='time'):$/;"	m	class:DataFile
 as_buffer	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyBufferProcs as_buffer;$/;"	m	struct:__anon1	file:
 as_mapping	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyMappingMethods as_mapping;$/;"	m	struct:__anon1	file:
 as_number	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyNumberMethods as_number;$/;"	m	struct:__anon1	file:
@@ -694,7 +703,8 @@ delay	Simulator/fs.py	/^    def delay(self, a, b):$/;"	m	class:Simulator
 deleteComment	doc/sphinx/build/html/_static/websupport.js	/^  function deleteComment(id) {$/;"	f
 destnode	Simulator/fs.py	/^    def destnode(self, node, dest):$/;"	m	class:Simulator
 destroy	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *destroy;$/;"	m	struct:__anon2	file:
-detect	Detector/AnomalyDetector.py	/^    def detect(self, fName):$/;"	m	class:AnoDetector
+detect	Detector/AnomalyDetector.py	/^    def detect(self, f_name):$/;"	m	class:AnoDetector
+detect	Detector/AnomalyDetector.py	/^    def detect(self, f_name):$/;"	m	class:AnoDetectorWithDeri
 dict	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *dict;$/;"	m	struct:__anon3	file:
 dottedQuadToNum	Detector/DataParser.py	/^def dottedQuadToNum(ip):$/;"	f
 dstaddr	Simulator/flowlet.py	/^    def dstaddr(self):$/;"	m	class:Flowlet
@@ -725,34 +735,44 @@ flowsampling	Simulator/fs.py	/^    def flowsampling(self):$/;"	m	class:Router
 flowsampling	Simulator/fs.py	/^    def flowsampling(self, fs):$/;"	m	class:Router
 flowstart	Simulator/flowlet.py	/^    def flowstart(self):$/;"	m	class:Flowlet
 flowstart	Simulator/flowlet.py	/^    def flowstart(self, fstart):$/;"	m	class:Flowlet
-fn.autogrow	doc/sphinx/build/html/_static/websupport.js	/^= createCommentDiv(this);$/;"	f
+fn.autogrow	doc/sphinx/build/html/_static/websupport.js	/^$/;"	f
 fn.autogrow.resize	doc/sphinx/build/html/_static/websupport.js	/^        clearInterval(textarea.interval);$/;"	f
 fn.comment	doc/sphinx/build/html/_static/websupport.js	/^      .fadeOut("slow");$/;"	f
 for	Configure/Anomaly.py	/^    '''basis class for anomaly. Its subclass will provide run() method'''$/;"	c	class:Anomaly
 frange	Simulator/traffic.py	/^def frange(a, b, c):$/;"	f
 freefunc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef destructor freefunc;$/;"	t	file:
 gamma	Simulator/traffic.py	/^def gamma(alpha, beta):$/;"	f
-gen_norminal_pdf	Detector/DetectorLib.py	/^def gen_norminal_pdf(fName, feaQN, dumpFlag =False):$/;"	f
+gen_fea	Detector/AnomalyDetector.py	/^    def gen_fea(self):$/;"	m	class:DataFile
+gen_norminal_pdf	Detector/DetectorLib.py	/^def gen_norminal_pdf(f_name, fea_QN, dump_flag =False):$/;"	f
 genbeta	Simulator/ipaddrgen/addrgen_trie.c	/^static double genbeta(double aa)$/;"	f	file:
 generate_addressv4	Simulator/ipaddrgen/addrgen_trie.c	/^uint32_t generate_addressv4(struct gentrie *trie)$/;"	f
 generate_addressv4	Simulator/ipaddrgen/ipaddrgen.py	/^def generate_addressv4(*args):$/;"	f
 gentrie	Simulator/ipaddrgen/addrgen_trie.h	/^struct gentrie $/;"	s
 getChildren	doc/sphinx/build/html/_static/websupport.js	/^  function getChildren(ul, recursive) {$/;"	f
 getComments	doc/sphinx/build/html/_static/websupport.js	/^  function getComments(id) {$/;"	f
-get_all_pmf	Detector/DetectorLib.py	/^def get_all_pmf(feaVec, feaQN, feaRange,  quanFlag=None):$/;"	f
+get_all_pmf	Detector/DetectorLib.py	/^def get_all_pmf(fea_vec, fea_QN, fea_range,  quan_flag=None):$/;"	f
 get_attr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    PyObject *(*get_attr)(void);       \/* Return the current value *\/$/;"	m	struct:swig_globalvar	file:
+get_cluster	Detector/AnomalyDetector.py	/^    def get_cluster(self): return self.cluster$/;"	m	class:DataFile
+get_dist_to_center	Detector/AnomalyDetector.py	/^    def get_dist_to_center(self):$/;"	m	class:DataFile
 get_dist_to_center	Detector/DetectorLib.py	/^def get_dist_to_center(data, cluster, centerPt, DF):$/;"	f
 get_done	Simulator/traffic.py	/^    def get_done(self):$/;"	m	class:GeneratorNode
+get_em	Detector/AnomalyDetector.py	/^    def get_em(self, rg=None, rg_type='time'):$/;"	m	class:DataFile
+get_fea_range	Detector/AnomalyDetector.py	/^    def get_fea_range(self):$/;"	m	class:DataFile
+get_fea_range_vec	Detector/AnomalyDetector.py	/^    def get_fea_range_vec(self):$/;"	m	class:DataFile
+get_fea_slice	Detector/AnomalyDetector.py	/^    def get_fea_slice(self, rg, rg_type):$/;"	m	class:DataFile
+get_feature	Detector/AnomalyDetector.py	/^    def get_feature(self):$/;"	m	class:AnoDetector
 get_feature	Detector/DetectorLib.py	/^def get_feature(fName, clusterNum, cutHead=True):$/;"	f
 get_feature_hash_list	Detector/DetectorLib.py	/^def get_feature_hash_list(F, Q):$/;"	f
-get_feature_nominal_pmf	Detector/AnomalyDetector.py	/^    def get_feature_nominal_pmf(self, feaQN, fName):$/;"	m	class:AnoDetector
+get_flow_rate	Detector/AnomalyDetector.py	/^    def get_flow_rate(self):$/;"	m	class:DataFile
 get_flow_rate	Detector/DetectorLib.py	/^def get_flow_rate(t, cluster):$/;"	f
+get_flow_size	Detector/AnomalyDetector.py	/^    def get_flow_size(self): return self.get_value_list('flowSize')$/;"	m	class:DataFile
 get_generator	Configure/Generator.py	/^def get_generator(gen_desc):$/;"	f
 get_link	Simulator/fs.py	/^    def get_link(self, next_router):$/;"	m	class:Router
 get_new_gen	Configure/Generator.py	/^    def get_new_gen(self, change_para=None):$/;"	m	class:HarpoonG
 get_pos	Configure/Anomaly.py	/^def get_pos(l, v):$/;"	f
 get_profile_with_ano	Configure/Anomaly.py	/^    def get_profile_with_ano(self, mod_start, mod_profile, ano_t):$/;"	m	class:Anomaly
 get_range	Detector/DetectorLib.py	/^def get_range(data):$/;"	f
+get_value_list	Detector/AnomalyDetector.py	/^    def get_value_list(self, key): return [ f.get(key) for f in self.flow ]$/;"	m	class:DataFile
 handleReSort	doc/sphinx/build/html/_static/websupport.js	/^  function handleReSort(link) {$/;"	f
 handleVote	doc/sphinx/build/html/_static/websupport.js	/^  function handleVote(link) {$/;"	f
 hide	doc/sphinx/build/html/_static/websupport.js	/^  function hide(id) {$/;"	f
@@ -769,6 +789,7 @@ init	Configure/Network.py	/^    def init(self, net_desc, norm_desc):$/;"	m	class
 init	doc/sphinx/build/html/_static/websupport.js	/^  function init() {$/;"	f
 initComparator	doc/sphinx/build/html/_static/websupport.js	/^  function initComparator() {$/;"	f
 initEvents	doc/sphinx/build/html/_static/websupport.js	/^  function initEvents() {$/;"	f
+init_flow_src_cluser	Detector/AnomalyDetector.py	/^    def init_flow_src_cluser(self):$/;"	m	class:DataFile
 initialize_trie	Simulator/ipaddrgen/addrgen_trie.c	/^struct gentrie *initialize_trie(uint32_t netaddr, uint8_t prefixlen, double beta)$/;"	f
 initialize_trie	Simulator/ipaddrgen/ipaddrgen.py	/^def initialize_trie(*args):$/;"	f
 insertComment	doc/sphinx/build/html/_static/websupport.js	/^  function insertComment(comment) {$/;"	f
@@ -809,8 +830,8 @@ method	Simulator/ipfix.py	/^    @classmethod$/;"	c	class:ipfix
 method	Simulator/netflow9.py	/^    @classmethod$/;"	c	class:netflow9
 mkdict	Simulator/traffic.py	/^def mkdict(s):$/;"	f
 mkreverse	Simulator/flowlet.py	/^    def mkreverse(self):$/;"	m	class:FiveTuple
-model_based	Detector/DetectorLib.py	/^def model_based(qFeaVec, feaQN):$/;"	f
-model_free	Detector/DetectorLib.py	/^def model_free(qFeaVec, feaQN):$/;"	f
+model_based	Detector/DetectorLib.py	/^def model_based(q_fea_vec, fea_QN):$/;"	f
+model_free	Detector/DetectorLib.py	/^def model_free(q_fea_vec, fea_QN):$/;"	f
 modulation_generator	Simulator/traffic.py	/^def modulation_generator(xlist):$/;"	f
 mss	Simulator/flowlet.py	/^    def mss(self):$/;"	m	class:Flowlet
 mss	Simulator/flowlet.py	/^    def mss(self, m):$/;"	m	class:Flowlet
@@ -859,6 +880,7 @@ packrecord	Simulator/cflow.py	/^    def packrecord(cls, inputif=0, outputif=0, r
 packrecord	Simulator/ipfix.py	/^    def packrecord(cls, inputif=0, outputif=0, rtraddr=int(ipaddr.IPAddress('0.0.0.0')), srcaddr=int(ipaddr.IPAddress('0.0.0.0')), dstaddr=int(ipaddr.IPAddress('0.0.0.0')), pkts=0, bytes=0, start=0, end=0, srcport=0, dstport=0, tcpflags=0, ipproto=0, iptos=0, ipnexthop=int(ipaddr.IPAddress('0.0.0.0')), srcas=0, dstas=0, srcmasklen=0, dstmasklen=0, enginetype=0, engineid=0):$/;"	m	class:ipfix
 packrecord	Simulator/netflow9.py	/^    def packrecord(cls, inputif=0, outputif=0, rtraddr=int(ipaddr.IPAddress('0.0.0.0')), srcaddr=int(ipaddr.IPAddress('0.0.0.0')), dstaddr=int(ipaddr.IPAddress('0.0.0.0')), pkts=0, bytes=0, start=0, end=0, srcport=0, dstport=0, tcpflags=0, ipproto=0, iptos=0, ipnexthop=int(ipaddr.IPAddress('0.0.0.0')), srcas=0, dstas=0, srcmasklen=0, dstmasklen=0, enginetype=0, engineid=0):$/;"	m	class:netflow9
 pareto	Simulator/traffic.py	/^def pareto(offset,alpha):$/;"	f
+parse	Detector/AnomalyDetector.py	/^    def parse(self):$/;"	m	class:DataFile
 pkts	Simulator/flowlet.py	/^    def pkts(self):$/;"	m	class:Flowlet
 pkts	Simulator/flowlet.py	/^    def pkts(self, p):$/;"	m	class:Flowlet
 pktsampling	Simulator/fs.py	/^    def pktsampling(self):$/;"	m	class:Router
@@ -875,6 +897,7 @@ ptype	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info **ptype;$/;"	m	str
 pulse	doc/sphinx/build/html/_static/searchtools.js	/^    function pulse() {$/;"	f
 pvalue	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  void   *pvalue;$/;"	m	struct:swig_const_info	file:
 pytype	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyTypeObject *pytype;$/;"	m	struct:__anon2	file:
+quantize_fea	Detector/AnomalyDetector.py	/^    def quantize_fea(self, rg=None, rg_type='time'):$/;"	m	class:DataFile
 quantize_state	Detector/DetectorLib.py	/^def quantize_state(x, nx, rg):$/;"	f
 randomchoice	Simulator/traffic.py	/^def randomchoice(*choices):$/;"	f
 randomchoicefile	Simulator/traffic.py	/^def randomchoicefile(infilename):$/;"	f
@@ -936,6 +959,7 @@ size	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  size_t size;$/;"	m	struct:__anon4	
 slots	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *name, *slots;$/;"	m	struct:__anon1	file:
 snmp_export	Simulator/fs.py	/^    def snmp_export(self):$/;"	m	class:Router
 sortComments	doc/sphinx/build/html/_static/websupport.js	/^  function sortComments(comments) {$/;"	f
+sort_flow	Detector/AnomalyDetector.py	/^    def sort_flow(self, key='time'):$/;"	m	class:DataFile
 srcaddr	Simulator/flowlet.py	/^    def srcaddr(self):$/;"	m	class:Flowlet
 srcport	Simulator/flowlet.py	/^    def srcport(self):$/;"	m	class:Flowlet
 ssizeargfunc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef intargfunc ssizeargfunc;$/;"	t	file:
@@ -1015,7 +1039,7 @@ types	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info         **types;		
 unifrand	Simulator/ipaddrgen/addrgen_trie.c	/^static inline double unifrand()$/;"	f	file:
 unimportantResults	doc/sphinx/build/html/_static/searchtools.js	/^    var unimportantResults = [];$/;"	v
 vars	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    swig_globalvar *vars;$/;"	m	struct:swig_varlinkobject	file:
-vector_quantize_states	Detector/DetectorLib.py	/^def vector_quantize_states(feaVec , feaQN, feaRange, quanFlag=None):$/;"	f
+vector_quantize_states	Detector/DetectorLib.py	/^def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):$/;"	f
 weibull	Simulator/traffic.py	/^def weibull(alpha, beta):$/;"	f
 withdraw_phase	Simulator/traffic.py	/^    def withdraw_phase(self):$/;"	m	class:FlowEventGenModulator
 write	Configure/Network.py	/^    def write(self, fName):$/;"	m	class:Network

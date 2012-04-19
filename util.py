@@ -191,3 +191,11 @@ def abstract_method():
     implemented by a subclass. It should not be called in situations where no implementation
     (i.e. a 'pass' behavior) is acceptable. """
     raise NotImplementedError('Method not implemented!')
+
+def FROM_CLS(*val_list):
+    return ";".join(['%s=self.%s'%(v, v) for v in val_list])
+
+def TO_CLS(*val_list):
+    return ";".join(['self.%s=%s'%(v, v) for v in val_list])
+
+

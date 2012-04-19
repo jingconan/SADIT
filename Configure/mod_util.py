@@ -160,10 +160,4 @@ def RandDist(dist):
 
     return m
 
-def FROM_CLS(*val_list):
-    return ";".join(['%s=self.%s'%(v, v) for v in val_list])
-
-def TO_CLS(*val_list):
-    return ";".join(['self.%s=%s'%(v, v) for v in val_list])
-
 

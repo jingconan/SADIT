@@ -105,8 +105,9 @@ DETECTOR_DESC = dict(
         fr_win_size=100, # window size for estimation of flow rate
         false_alarm_rate = 0.001,
         unified_nominal_pdf = False, # used in sensitivities analysis
-        discrete_level = DISCRETE_LEVEL,
-        cluster_number = CLUSTER_NUMBER,
+        # discrete_level = DISCRETE_LEVEL,
+        # cluster_number = CLUSTER_NUMBER,
+        fea_list = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
         )
 FLOW_RATE_ESTIMATE_WINDOW = 100 #only for test
