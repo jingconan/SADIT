@@ -63,15 +63,6 @@ IPS_FILE = ROOT + '/Configure/ips.txt'
 EXPORT_ABNORMAL_FLOW = False
 
 
-#############################
-## Sensitivity Analysis    ##
-#############################
-FLOW_RATE_RANGE = [4, 6, 8]
-FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
-# FLOW_SIZE_TEST_RANGE = [2]
-# FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
-
-
 
 
 
@@ -90,15 +81,12 @@ IPS_FILE = ROOT + '/Configure/ips.txt'
 #############################
 ##   Parameters For Detector ##
 #############################
-# DETECTOR_WINDOW_SIZE = 200
-DETECTOR_INTERVAL = 10
-DETECTOR_WINDOW_SIZE = 150
-# WINDOW_TYPE = 'FLOW'
-WINDOW_TYPE = 'TIME'
-DETECTOR_PREFIX = 'markov'
-FLOW_RATE_ESTIMATE_WINDOW = 100
+# DETECTOR_INTERVAL = 10
+# DETECTOR_WINDOW_SIZE = 150
+# WINDOW_TYPE = 'TIME'
+# DETECTOR_PREFIX = 'markov'
+# FLOW_RATE_ESTIMATE_WINDOW = 100
 
-# the state sequence
 #    m_list = [gc[i] + gd[i]*K + gf[i]*K*ND for i in xrange(fl)]
 #    CLUSTER_NUMBER determine the last dimension, distance to center determines
 #    the second, flow size determine the first dimensition
@@ -109,6 +97,25 @@ DISCRETE_LEVEL = [2, 2]
 # DISCRETE_LEVEL = [2, 2, 2, 2]
 CLUSTER_NUMBER = 2
 
+ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
+DETECTOR_DESC = dict(
+        interval=10,
+        win_size=150,
+        win_type='time', # 'time'|'flow'
+        fr_win_size=100, # window size for estimation of flow rate
+        false_alarm_rate = 0.001,
+        unified_nominal_pdf = False, # used in sensitivities analysis
+        discrete_level = DISCRETE_LEVEL,
+        cluster_number = CLUSTER_NUMBER,
+        ano_ana_data_file = ANO_ANA_DATA_FILE,
+        )
+FLOW_RATE_ESTIMATE_WINDOW = 100 #only for test
+
+# 'unified_nominal_pdf',
+                # 'ano_ana_data_file',
+                # 'detector_interval',
+                # 'flow_rate_estimate_window',
+                # 'window_type'
 
 LOAD_FEATURE = """
 feaVec = [
@@ -125,6 +132,18 @@ FALSE_ALARM_RATE = 0.001 # false alarm rate
 
 NominalPDFFile = ROOT + '/Share/nominal.p'
 UNIFIED_NOMINAL_PDF = False
+
+
+
+#############################
+## Sensitivity Analysis    ##
+#############################
+FLOW_RATE_RANGE = [4, 6, 8]
+FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
+# FLOW_SIZE_TEST_RANGE = [2]
+# FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
+
+
 
 
 #####################################
@@ -159,7 +178,6 @@ CROSS_VALIDATION_RATIO = 0.8
 
 
 
-ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 ANO_CONF_PARA_FILE = ROOT + '/Share/AnoPara.txt'
 
 

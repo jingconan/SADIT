@@ -11,12 +11,15 @@
 from Configure import *
 
 from Detector.AnomalyAna import ModelFreeDetectAnoType, ModelBaseDetectAnoType,GetAnomalyType, ModelFreeHTest, ModelBaseHTest
+from os import chdir as cd
+from os import system as sh
+from Detector.DetectorLib import compare as GlobalDetect
+from Detector.DetectorLib import gen_norminal_pdf
 
+from Detector.MSDetector import Detect as MSDetect
 #########################################
 ####          Simulator API          ###
 #########################################
-from os import chdir as cd
-from os import system as sh
 def Simulate():
     simTime = settings.sim_t
     dotPath = settings.OUTPUT_DOT_FILE
@@ -31,8 +34,6 @@ def Simulate():
 #########################################
 ####          Simulator API          ###
 #########################################
-from Detector.Detector import compare as GlobalDetect
-from Detector.Detector import gen_norminal_pdf
 
 def GlobalGenerateNominalPDF():
     reload(settings)
@@ -43,4 +44,3 @@ def GlobalGenerateNominalPDF():
             settings.DISCRETE_LEVEL + [settings.CLUSTER_NUMBER],
             True)
 
-from Detector.MSDetector import Detect as MSDetect

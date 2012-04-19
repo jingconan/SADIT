@@ -3,77 +3,20 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-$.fn.autogrow.resize	doc/sphinx/build/html/_static/websupport.js	/^  $.fn.autogrow.resize = function(textarea) {$/;"	f
-$.fn.comment	doc/sphinx/build/html/_static/websupport.js	/^  $.fn.comment = function() {$/;"	f
-ABNORMAL_USER_IP_FILE	misc/settings copy.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
-ABNORMAL_USER_IP_FILE	settings.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
-ABNORMAL_USER_IP_FILE	settings/multi_srv_targ_one.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
-ABNORMAL_USER_IP_FILE	settings/multi_srv_targ_one_with_fr.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
-ABNORMAL_USER_IP_FILE	settings_template.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
+!_TAG_PROGRAM_VERSION	5.7	//
+A	New_Detector/test_rope.py	/^class A(self):$/;"	c
 ALLSPHINXOPTS	doc/sphinx/Makefile	/^ALLSPHINXOPTS   = -d $(BUILDDIR)\/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source$/;"	m
-ALLSPHINXOPTS	doc/sphinx/make.bat	/^	set ALLSPHINXOPTS=-D latex_paper_size=%PAPER% %ALLSPHINXOPTS%$/;"	v
-ALLSPHINXOPTS	doc/sphinx/make.bat	/^set ALLSPHINXOPTS=-d %BUILDDIR%\/doctrees %SPHINXOPTS% source$/;"	v
-ANOMALY_TIME	misc/settings copy.py	/^ANOMALY_TIME = (2000, 3000) # (startTime, endTime)$/;"	v
-ANOMALY_TIME	settings.py	/^ANOMALY_TIME = (1200, 1400) # for detector$/;"	v
-ANOMALY_TIME	settings/multi_srv_targ_one.py	/^ANOMALY_TIME = (1200, 1400) # for detector$/;"	v
-ANOMALY_TIME	settings/multi_srv_targ_one_with_fr.py	/^ANOMALY_TIME = (1200, 1400) # for detector$/;"	v
-ANOMALY_TIME	settings_template.py	/^ANOMALY_TIME = (1200, 1400) # for detector$/;"	v
-ANOMALY_TYPE	misc/settings copy.py	/^ANOMALY_TYPE = 'ATYPICAL_USER'$/;"	v
-ANOMALY_TYPE_DETECT_INDI	settings.py	/^ANOMALY_TYPE_DETECT_INDI = 'component'$/;"	v
-ANOMALY_TYPE_DETECT_INDI	settings/multi_srv_targ_one.py	/^ANOMALY_TYPE_DETECT_INDI = 'component'$/;"	v
-ANOMALY_TYPE_DETECT_INDI	settings/multi_srv_targ_one_with_fr.py	/^ANOMALY_TYPE_DETECT_INDI = 'component'$/;"	v
-ANOMALY_TYPE_DETECT_INDI	settings_template.py	/^ANOMALY_TYPE_DETECT_INDI = 'component'$/;"	v
-ANOMALY_TYPE_SELECTION_SET	settings.py	/^ANOMALY_TYPE_SELECTION_SET = ['FLOW_SIZE', 'FLOW_RATE', 'ATYPICAL_USER']$/;"	v
-ANOMALY_TYPE_SELECTION_SET	settings/multi_srv_targ_one.py	/^ANOMALY_TYPE_SELECTION_SET = ['FLOW_SIZE', 'FLOW_RATE', 'ATYPICAL_USER']$/;"	v
-ANOMALY_TYPE_SELECTION_SET	settings/multi_srv_targ_one_with_fr.py	/^ANOMALY_TYPE_SELECTION_SET = ['FLOW_SIZE', 'FLOW_RATE', 'ATYPICAL_USER']$/;"	v
-ANOMALY_TYPE_SELECTION_SET	settings_template.py	/^ANOMALY_TYPE_SELECTION_SET = ['FLOW_SIZE', 'FLOW_RATE', 'ATYPICAL_USER']$/;"	v
-ANO_ANA_DATA_FILE	settings.py	/^ANO_ANA_DATA_FILE = ROOT + '\/Share\/AnoAna.txt'$/;"	v
-ANO_ANA_DATA_FILE	settings/multi_srv_targ_one.py	/^ANO_ANA_DATA_FILE = ROOT + '\/Share\/AnoAna.txt'$/;"	v
-ANO_ANA_DATA_FILE	settings/multi_srv_targ_one_with_fr.py	/^ANO_ANA_DATA_FILE = ROOT + '\/Share\/AnoAna.txt'$/;"	v
-ANO_ANA_DATA_FILE	settings_template.py	/^ANO_ANA_DATA_FILE = ROOT + '\/Share\/AnoAna.txt'$/;"	v
-ANO_CONF_PARA_FILE	settings.py	/^ANO_CONF_PARA_FILE = ROOT + '\/Share\/AnoPara.txt'$/;"	v
-ANO_CONF_PARA_FILE	settings/multi_srv_targ_one.py	/^ANO_CONF_PARA_FILE = ROOT + '\/Share\/AnoPara.txt'$/;"	v
-ANO_CONF_PARA_FILE	settings/multi_srv_targ_one_with_fr.py	/^ANO_CONF_PARA_FILE = ROOT + '\/Share\/AnoPara.txt'$/;"	v
-ANO_CONF_PARA_FILE	settings_template.py	/^ANO_CONF_PARA_FILE = ROOT + '\/Share\/AnoPara.txt'$/;"	v
-ANO_DESC	settings.py	/^ANO_DESC = {'anoType':'FLOW_ARRIVAL_RATE',$/;"	v
-ANO_DESC	settings/multi_srv_targ_one.py	/^ANO_DESC = {'anoType':'TARGET_ONE_SERVER',$/;"	v
-ANO_DESC	settings/multi_srv_targ_one_with_fr.py	/^ANO_DESC = {'anoType':'TARGET_ONE_SERVER',$/;"	v
-ANO_DESC	settings_template.py	/^ANO_DESC = {'anoType':'FLOW_ARRIVAL_RATE',$/;"	v
-ANO_DESC	test/markov_p_ano.py	/^ANO_DESC = {'anoType':'MARKOV_ANOMALY',$/;"	v
-ANO_DESC	test/normal.py	/^ANO_DESC = {'anoType':'TARGET_ONE_SERVER',$/;"	v
-ANO_LIST	settings.py	/^ANO_LIST = []$/;"	v
-ANO_LIST	settings/multi_srv_targ_one.py	/^ANO_LIST = []$/;"	v
-ANO_LIST	settings/multi_srv_targ_one_with_fr.py	/^ANO_LIST = []$/;"	v
-ANO_LIST	settings_template.py	/^ANO_LIST = []$/;"	v
-ANO_LIST	test/markov_p_ano.py	/^ANO_LIST = [ANO_DESC]$/;"	v
-ANO_LIST	test/normal.py	/^ANO_LIST = [ANO_DESC]$/;"	v
-ANO_MARKOV_DESC	test/markov_p_ano.py	/^ANO_MARKOV_DESC = dict($/;"	v
-ATIP	Configure/Anomaly.py	/^    ATIP = None # Atypical IP Set. Will Select IP from this set and add a node with atypical ip$/;"	v	class:AtypicalUserAnomaly
-ATYPICAL_IP_FILE	misc/settings copy.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
-ATYPICAL_IP_FILE	settings.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
-ATYPICAL_IP_FILE	settings/multi_srv_targ_one.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
-ATYPICAL_IP_FILE	settings/multi_srv_targ_one_with_fr.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
-ATYPICAL_IP_FILE	settings_template.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
 Add	Detector/ClusterAlg.py	/^def Add(x, y):$/;"	f
+AnoDetector	Detector/AnomalyDetector.py	/^class AnoDetector (object):$/;"	c
 AnoGetFeature	Detector/AnomalyAna.py	/^def AnoGetFeature(fName, centerPt):$/;"	f
 Anomaly	Configure/Anomaly.py	/^class Anomaly:$/;"	c
+AnomalyTest	test/ConfigureTest.py	/^class AnomalyTest(TestCase):$/;"	c
 Attr	Configure/mod_util.py	/^class Attr():$/;"	c
 AtypicalUserAnomaly	Configure/Anomaly.py	/^class AtypicalUserAnomaly(Anomaly):$/;"	c
+B	New_Detector/test_rope.py	/^def B():$/;"	f
 BUILDDIR	doc/sphinx/Makefile	/^BUILDDIR      = build$/;"	m
-BUILDDIR	doc/sphinx/make.bat	/^set BUILDDIR=build$/;"	v
-BYTECOUNT	Simulator/fs.py	/^    BYTECOUNT = 0$/;"	v	class:Router
 BadConfigError	Configure/Anomaly.py	/^class BadConfigError(Exception):$/;"	c
 Behaviour	Configure/Behaviour.py	/^class Behaviour(object):$/;"	c
-CLUSTER_NUMBER	misc/settings copy.py	/^CLUSTER_NUMBER = 1$/;"	v
-CLUSTER_NUMBER	settings.py	/^CLUSTER_NUMBER = 2$/;"	v
-CLUSTER_NUMBER	settings/multi_srv_targ_one.py	/^CLUSTER_NUMBER = 2$/;"	v
-CLUSTER_NUMBER	settings/multi_srv_targ_one_with_fr.py	/^CLUSTER_NUMBER = 2$/;"	v
-CLUSTER_NUMBER	settings_template.py	/^CLUSTER_NUMBER = 2$/;"	v
-CROSS_VALIDATION_RATIO	settings.py	/^CROSS_VALIDATION_RATIO = 0.8$/;"	v
-CROSS_VALIDATION_RATIO	settings/multi_srv_targ_one.py	/^CROSS_VALIDATION_RATIO = 0.8$/;"	v
-CROSS_VALIDATION_RATIO	settings/multi_srv_targ_one_with_fr.py	/^CROSS_VALIDATION_RATIO = 0.8$/;"	v
-CROSS_VALIDATION_RATIO	settings_template.py	/^CROSS_VALIDATION_RATIO = 0.8$/;"	v
 CalClusteringCenter	Detector/ClusterAlg.py	/^def CalClusteringCenter(data, cluster):$/;"	f
 CalIPCenter	Configure/mod_util.py	/^def CalIPCenter(IPMat, DF):$/;"	f
 CalIndicator	Detector/AnomalyAna.py	/^def CalIndicator(deri, intervalRatio):$/;"	f
@@ -81,95 +24,21 @@ CflowdExporter	Simulator/flowexport.py	/^class CflowdExporter(FlowExporter):$/;"
 CleanGlobalDeri	Detector/Derivative.py	/^def CleanGlobalDeri():$/;"	f
 CombineMSRecord	Detector/MSDetector.py	/^def CombineMSRecord(feaSet):$/;"	f
 Compare	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def Compare(fName, dataName= ''):$/;"	f
-Compare	Detector/Detector.py	/^def Compare(fName, dataName= ''):$/;"	f
-Compare	Detector/OldDetector.py	/^def Compare(fName, dataName= ''):$/;"	f
+Compare	Detector/backup/OldDetector.py	/^def Compare(fName, dataName= ''):$/;"	f
+Configure	test/ConfigureTest.py	/^class Configure(TestCase):$/;"	c
 CreateSettings	util.py	/^def CreateSettings(templateFilePath, settingsFilePath, **kwargs):$/;"	f
-DEFAULT_PROFILE	misc/settings copy.py	/^DEFAULT_PROFILE = (0, 8000, 1)$/;"	v
-DEFAULT_PROFILE	settings.py	/^DEFAULT_PROFILE = ((sim_t,),(1,))$/;"	v
-DEFAULT_PROFILE	settings/multi_srv_targ_one.py	/^DEFAULT_PROFILE = ((sim_t,),(1,))$/;"	v
-DEFAULT_PROFILE	settings/multi_srv_targ_one_with_fr.py	/^DEFAULT_PROFILE = ((sim_t,),(1,))$/;"	v
-DEFAULT_PROFILE	settings_template.py	/^DEFAULT_PROFILE = ((sim_t,),(1,))$/;"	v
-DEFAULT_PROFILE	test/markov_p_ano.py	/^DEFAULT_PROFILE = ((sim_t,),(1,))$/;"	v
-DEFAULT_PROFILE	test/normal.py	/^DEFAULT_PROFILE = ((sim_t,),(1,))$/;"	v
-DEGREE_SELECTION_SET	settings.py	/^DEGREE_SELECTION_SET = ['increase', 'decrease']$/;"	v
-DEGREE_SELECTION_SET	settings/multi_srv_targ_one.py	/^DEGREE_SELECTION_SET = ['increase', 'decrease']$/;"	v
-DEGREE_SELECTION_SET	settings/multi_srv_targ_one_with_fr.py	/^DEGREE_SELECTION_SET = ['increase', 'decrease']$/;"	v
-DEGREE_SELECTION_SET	settings_template.py	/^DEGREE_SELECTION_SET = ['increase', 'decrease']$/;"	v
-DERIVATIVE_FIGURE_DIR	settings.py	/^DERIVATIVE_FIGURE_DIR = ROOT + '\/res\/Derivative\/'$/;"	v
-DERIVATIVE_FIGURE_DIR	settings/multi_srv_targ_one.py	/^DERIVATIVE_FIGURE_DIR = ROOT + '\/res\/Derivative\/'$/;"	v
-DERIVATIVE_FIGURE_DIR	settings/multi_srv_targ_one_with_fr.py	/^DERIVATIVE_FIGURE_DIR = ROOT + '\/res\/Derivative\/'$/;"	v
-DERIVATIVE_FIGURE_DIR	settings_template.py	/^DERIVATIVE_FIGURE_DIR = ROOT + '\/res\/Derivative\/'$/;"	v
-DERI_TEST_THRESHOLD	settings.py	/^DERI_TEST_THRESHOLD = 0.1$/;"	v
-DERI_TEST_THRESHOLD	settings/multi_srv_targ_one.py	/^DERI_TEST_THRESHOLD = 0.1$/;"	v
-DERI_TEST_THRESHOLD	settings/multi_srv_targ_one_with_fr.py	/^DERI_TEST_THRESHOLD = 0.1$/;"	v
-DERI_TEST_THRESHOLD	settings_template.py	/^DERI_TEST_THRESHOLD = 0.1$/;"	v
-DETECTOR_INTERVAL	settings.py	/^DETECTOR_INTERVAL = 10$/;"	v
-DETECTOR_INTERVAL	settings/multi_srv_targ_one.py	/^DETECTOR_INTERVAL = 10$/;"	v
-DETECTOR_INTERVAL	settings/multi_srv_targ_one_with_fr.py	/^DETECTOR_INTERVAL = 10$/;"	v
-DETECTOR_INTERVAL	settings_template.py	/^DETECTOR_INTERVAL = 10$/;"	v
-DETECTOR_PREFIX	misc/settings copy.py	/^DETECTOR_PREFIX = 'markov'$/;"	v
-DETECTOR_PREFIX	settings.py	/^DETECTOR_PREFIX = 'markov'$/;"	v
-DETECTOR_PREFIX	settings/multi_srv_targ_one.py	/^DETECTOR_PREFIX = 'markov'$/;"	v
-DETECTOR_PREFIX	settings/multi_srv_targ_one_with_fr.py	/^DETECTOR_PREFIX = 'markov'$/;"	v
-DETECTOR_PREFIX	settings_template.py	/^DETECTOR_PREFIX = 'markov'$/;"	v
-DETECTOR_WINDOW_SIZE	misc/settings copy.py	/^DETECTOR_WINDOW_SIZE = 200$/;"	v
-DETECTOR_WINDOW_SIZE	settings.py	/^DETECTOR_WINDOW_SIZE = 150$/;"	v
-DETECTOR_WINDOW_SIZE	settings/multi_srv_targ_one.py	/^DETECTOR_WINDOW_SIZE = 150$/;"	v
-DETECTOR_WINDOW_SIZE	settings/multi_srv_targ_one_with_fr.py	/^DETECTOR_WINDOW_SIZE = 150$/;"	v
-DETECTOR_WINDOW_SIZE	settings_template.py	/^DETECTOR_WINDOW_SIZE = 150$/;"	v
-DF	Detector/OldDetector.py	/^DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])$/;"	v
-DISCRETE_LEVEL	misc/settings copy.py	/^DISCRETE_LEVEL = (4, 4)$/;"	v
-DISCRETE_LEVEL	settings.py	/^DISCRETE_LEVEL = [2, 2]$/;"	v
-DISCRETE_LEVEL	settings/multi_srv_targ_one.py	/^DISCRETE_LEVEL = [2, 2]$/;"	v
-DISCRETE_LEVEL	settings/multi_srv_targ_one_with_fr.py	/^DISCRETE_LEVEL = [2, 2, 2]$/;"	v
-DISCRETE_LEVEL	settings_template.py	/^DISCRETE_LEVEL = [2, 2]$/;"	v
 Detect	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def Detect(fName, feaQN, wSize):$/;"	f
-Detect	Detector/Detector.py	/^def Detect(fName, feaQN, wSize):$/;"	f
 Detect	Detector/MSDetector.py	/^def Detect(srvList, feaQN, wSize):$/;"	f
-Detect	Detector/OldDetector.py	/^def Detect(fName, clusterNum, ND, NF, wSize):$/;"	f
+Detect	Detector/backup/OldDetector.py	/^def Detect(fName, clusterNum, ND, NF, wSize):$/;"	f
 Detect3	Detector/DurationDetector.py	/^def Detect3(fName, clusterNum, ND, NF, wSize):$/;"	f
-Documentation.TRANSLATIONS	doc/sphinx/build/html/_static/doctools.js	/^  TRANSLATIONS : {},$/;"	p
-Documentation.init	doc/sphinx/build/html/_static/doctools.js	/^  init : function() {$/;"	m
 Dump2Txt	util.py	/^def Dump2Txt(var, fname, op):$/;"	f
 DumpDerivative	Detector/Derivative.py	/^def DumpDerivative():$/;"	f
-ENTROPY_FIG_FILE	settings/multi_srv_targ_one.py	/^ENTROPY_FIG_FILE = ROOT + '\/res\/entropy.eps'$/;"	v
-ENTROPY_FIG_FILE	settings/multi_srv_targ_one_with_fr.py	/^ENTROPY_FIG_FILE = ROOT + '\/res\/entropy-with-fr.eps'$/;"	v
-EXPORT_ABNORMAL_FLOW	settings.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
-EXPORT_ABNORMAL_FLOW	settings/multi_srv_targ_one.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
-EXPORT_ABNORMAL_FLOW	settings/multi_srv_targ_one_with_fr.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
-EXPORT_ABNORMAL_FLOW	settings_template.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
 Equal	Detector/ClusterAlg.py	/^def Equal(x, y):$/;"	f
 F2P_RAW	Configure/mod_util.py	/^def F2P_RAW(flowlets, bytes, interval, pkts ):$/;"	f
-FALSE_ALARM_RATE	settings.py	/^FALSE_ALARM_RATE = 0.001 # false alarm rate$/;"	v
-FALSE_ALARM_RATE	settings/multi_srv_targ_one.py	/^FALSE_ALARM_RATE = 0.001 # false alarm rate$/;"	v
-FALSE_ALARM_RATE	settings/multi_srv_targ_one_with_fr.py	/^FALSE_ALARM_RATE = 0.001 # false alarm rate$/;"	v
-FALSE_ALARM_RATE	settings_template.py	/^FALSE_ALARM_RATE = 0.001 # false alarm rate$/;"	v
 FHash	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def FHash(digit, level):$/;"	f
-FHash	Detector/Detector.py	/^def FHash(digit, level):$/;"	f
-FLOWCOUNT	Simulator/fs.py	/^    FLOWCOUNT = 2$/;"	v	class:Router
-FLOW_DURATION	misc/settings copy.py	/^FLOW_DURATION = 0.1$/;"	v
-FLOW_RATE	misc/settings copy.py	/^FLOW_RATE = 1$/;"	v
-FLOW_RATE_ESTIMATE_WINDOW	settings.py	/^FLOW_RATE_ESTIMATE_WINDOW = 100$/;"	v
-FLOW_RATE_ESTIMATE_WINDOW	settings/multi_srv_targ_one.py	/^FLOW_RATE_ESTIMATE_WINDOW = 100$/;"	v
-FLOW_RATE_ESTIMATE_WINDOW	settings/multi_srv_targ_one_with_fr.py	/^FLOW_RATE_ESTIMATE_WINDOW = 100$/;"	v
-FLOW_RATE_ESTIMATE_WINDOW	settings_template.py	/^FLOW_RATE_ESTIMATE_WINDOW = 100$/;"	v
-FLOW_RATE_RANGE	settings.py	/^FLOW_RATE_RANGE = [4, 6, 8]$/;"	v
-FLOW_RATE_RANGE	settings/multi_srv_targ_one.py	/^FLOW_RATE_RANGE = [4, 6, 8]$/;"	v
-FLOW_RATE_RANGE	settings/multi_srv_targ_one_with_fr.py	/^FLOW_RATE_RANGE = [4, 6, 8]$/;"	v
-FLOW_RATE_RANGE	settings_template.py	/^FLOW_RATE_RANGE = [4, 6, 8]$/;"	v
-FLOW_SIZE_MEAN	misc/settings copy.py	/^FLOW_SIZE_MEAN = 4e4$/;"	v
-FLOW_SIZE_TEST_RANGE	settings.py	/^FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]$/;"	v
-FLOW_SIZE_TEST_RANGE	settings/multi_srv_targ_one.py	/^FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]$/;"	v
-FLOW_SIZE_TEST_RANGE	settings/multi_srv_targ_one_with_fr.py	/^FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]$/;"	v
-FLOW_SIZE_TEST_RANGE	settings_template.py	/^FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]$/;"	v
-FLOW_SIZE_VAR	misc/settings copy.py	/^FLOW_SIZE_VAR = 400$/;"	v
 FROM_CLS	Configure/mod_util.py	/^def FROM_CLS(*val_list):$/;"	f
-FV	Detector/AnomalyAna.py	/^FV = ['flowSize', 'flowRate', 'distToCenter', 'cluster']$/;"	v
-FV	misc/test.py	/^FV = ['flowSize', 'flowRate', 'distToCenter', 'cluster']$/;"	v
-FeatureHash	Detector/OldDetector.py	/^def FeatureHash(digit, level):$/;"	f
-Find	misc/test.py	/^Find = binary_search$/;"	v
-Find	util.py	/^Find = binary_search$/;"	v
-FindCenter	Detector/OldDetector.py	/^def FindCenter(data, centerPt, DF):$/;"	f
+FeatureHash	Detector/backup/OldDetector.py	/^def FeatureHash(digit, level):$/;"	f
+FindCenter	Detector/backup/OldDetector.py	/^def FindCenter(data, centerPt, DF):$/;"	f
 FiveTuple	Simulator/flowlet.py	/^class FiveTuple(object):$/;"	c
 FixQuoteBug	Configure/mod_util.py	/^def FixQuoteBug(fileName, delay=0.001):$/;"	f
 FlowEventGenModulator	Simulator/traffic.py	/^class FlowEventGenModulator(object):$/;"	c
@@ -177,193 +46,87 @@ FlowExporter	Simulator/flowexport.py	/^class FlowExporter(object):$/;"	c
 FlowRateChange	Sensitivity.py	/^def FlowRateChange(rg, case):$/;"	f
 Flowlet	Simulator/flowlet.py	/^class Flowlet(object):$/;"	c
 GCC_HASCLASSVISIBILITY	Simulator/ipaddrgen/ipaddrgen_wrap.c	83;"	d	file:
-GENERATOR	misc/settings copy.py	/^GENERATOR = 'HARPOON'$/;"	v
 GenAnomalyDot	Configure/API.py	/^def GenAnomalyDot(ano_list, netDesc, normalDesc, outputFileName):$/;"	f
 GenNominalPDF	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GenNominalPDF(fName, feaQN, dumpFlag =False):$/;"	f
-GenNominalPDF	Detector/Detector.py	/^def GenNominalPDF(fName, feaQN, dumpFlag =False):$/;"	f
-GenNominalPDF	Detector/OldDetector.py	/^def GenNominalPDF(fName, clusterNum, ND, NF):$/;"	f
+GenNominalPDF	Detector/backup/OldDetector.py	/^def GenNominalPDF(fName, clusterNum, ND, NF):$/;"	f
 Generator	Configure/Generator.py	/^class Generator(object):$/;"	c
 GeneratorNode	Simulator/traffic.py	/^class GeneratorNode(object):$/;"	c
 GetAbnormalFlowQType	Detector/AnomalyAna.py	/^def GetAbnormalFlowQType():$/;"	f
-GetAllPDF_MF	Detector/OldDetector.py	/^def GetAllPDF_MF(srcIPVec, cluster, centerPt, feature, distRange, featureRange,  clusterNum, ND, featureQ):$/;"	f
+GetAllPDF_MF	Detector/backup/OldDetector.py	/^def GetAllPDF_MF(srcIPVec, cluster, centerPt, feature, distRange, featureRange,  clusterNum, ND, featureQ):$/;"	f
 GetAllPMF	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetAllPMF(feaVec, feaQN, feaRange,  quanFlag=None):$/;"	f
-GetAllPMF	Detector/Detector.py	/^def GetAllPMF(feaVec, feaQN, feaRange,  quanFlag=None):$/;"	f
 GetAnomalyType	Detector/AnomalyAna.py	/^def GetAnomalyType():$/;"	f
 GetCombineFeature	Detector/MSDetector.py	/^def GetCombineFeature(srvFlowNameList, feaQN):$/;"	f
 GetCondProb	Detector/Derivative.py	/^def GetCondProb(P1, mp1, P2, mp2):$/;"	f
-GetDistToCenter	Detector/OldDetector.py	/^def GetDistToCenter(data, cluster, centerPt, DF):$/;"	f
+GetDistToCenter	Detector/backup/OldDetector.py	/^def GetDistToCenter(data, cluster, centerPt, DF):$/;"	f
 GetFeature	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFeature(fName, clusterNum):$/;"	f
-GetFeature	Detector/Detector.py	/^def GetFeature(fName, clusterNum, cutHead=True):$/;"	f
-GetFeature	Detector/OldDetector.py	/^def GetFeature(srcIPVec, cluster, centerPt, flowSize, distRange, flowSizeRange, ND, NF):$/;"	f
+GetFeature	Detector/backup/OldDetector.py	/^def GetFeature(srcIPVec, cluster, centerPt, flowSize, distRange, flowSizeRange, ND, NF):$/;"	f
 GetFeatureHashList	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFeatureHashList(F, Q):$/;"	f
-GetFeatureHashList	Detector/Detector.py	/^def GetFeatureHashList(F, Q):$/;"	f
-GetFeatureHashList	Detector/OldDetector.py	/^def GetFeatureHashList(gc, gd, posFeature, K, ND, featureQ):$/;"	f
+GetFeatureHashList	Detector/backup/OldDetector.py	/^def GetFeatureHashList(gc, gd, posFeature, K, ND, featureQ):$/;"	f
 GetFlowRate	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetFlowRate(t, cluster):$/;"	f
-GetFlowRate	Detector/Detector.py	/^def GetFlowRate(t, cluster):$/;"	f
 GetIPAdress	Configure/mod_util.py	/^def GetIPAdress():$/;"	f
 GetIPMat	Configure/mod_util.py	/^def GetIPMat():$/;"	f
 GetRange	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def GetRange(data):$/;"	f
-GetRange	Detector/Detector.py	/^def GetRange(data):$/;"	f
-GetRange	Detector/OldDetector.py	/^def GetRange(srcIPVec, clusterNum, flowSize):$/;"	f
+GetRange	Detector/backup/OldDetector.py	/^def GetRange(srcIPVec, clusterNum, flowSize):$/;"	f
 GetSrvFlowFile	Detector/MSDetector.py	/^def GetSrvFlowFile(sl):$/;"	f
 GetStateTable	Detector/AnomalyAna.py	/^def GetStateTable():$/;"	f
 GetStateTable	misc/test.py	/^def GetStateTable():$/;"	f
 GlobalGenerateNominalPDF	API.py	/^def GlobalGenerateNominalPDF():$/;"	f
-H	test/markov_p_ano.py	/^H = dict($/;"	v
 H1	misc/test.py	/^def H1(v):$/;"	f
-HARPOON	misc/settings copy.py	/^HARPOON = (4e5, 1, 0.5)$/;"	v
 HarpoonG	Configure/Generator.py	/^class HarpoonG(Generator):$/;"	c
 HarpoonGeneratorNode	Simulator/traffic.py	/^class HarpoonGeneratorNode(GeneratorNode):$/;"	c
-I1	Detector/OldDetector.py	/^def I1(nu, mu):$/;"	f
+I1	Detector/DetectorLib.py	/^def I1(nu, mu):$/;"	f
+I1	Detector/backup/OldDetector.py	/^def I1(nu, mu):$/;"	f
 I18NSPHINXOPTS	doc/sphinx/Makefile	/^I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source$/;"	m
-I18NSPHINXOPTS	doc/sphinx/make.bat	/^	set I18NSPHINXOPTS=-D latex_paper_size=%PAPER% %I18NSPHINXOPTS%$/;"	v
-I18NSPHINXOPTS	doc/sphinx/make.bat	/^set I18NSPHINXOPTS=%SPHINXOPTS% source$/;"	v
-I2	Detector/OldDetector.py	/^def I2(P1, mp1, P2, mp2):$/;"	f
+I2	Detector/DetectorLib.py	/^def I2(P1, mp1, P2, mp2):$/;"	f
+I2	Detector/backup/OldDetector.py	/^def I2(P1, mp1, P2, mp2):$/;"	f
 IN	util.py	/^def IN(*val_list):$/;"	f
-IPS_FILE	misc/settings copy.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
-IPS_FILE	settings.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
-IPS_FILE	settings/multi_srv_targ_one.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
-IPS_FILE	settings/multi_srv_targ_one_with_fr.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
-IPS_FILE	settings_template.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
-IPS_FILE	test/markov_p_ano.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
-IPS_FILE	test/normal.py	/^IPS_FILE = ROOT + '\/Configure\/ips.txt'$/;"	v
 IncompatibleFlowlets	Simulator/flowlet.py	/^class IncompatibleFlowlets(Exception):$/;"	c
-Index	Detector/AnomalyAna.py	/^Index = lambda mylist, ti:[i for i,n in enumerate(mylist) if n == ti]$/;"	v
-Index	misc/test.py	/^Index = lambda mylist, ti:[i for i,n in enumerate(mylist) if n == ti]$/;"	v
 InjectAnomaly	Configure/Network.py	/^    def InjectAnomaly(self, A):$/;"	m	class:Network
 InvalidFlowConfiguration	Simulator/traffic.py	/^class InvalidFlowConfiguration(Exception):$/;"	c
 InvalidRoutingConfiguration	Simulator/fs.py	/^class InvalidRoutingConfiguration(Exception):$/;"	c
 InvalidTrafficSpecification	Simulator/fs.py	/^class InvalidTrafficSpecification(Exception):$/;"	c
 J	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
-JING	misc/settings copy.py	/^JING = ''$/;"	v
 KMeans	Detector/ClusterAlg.py	/^def KMeans(data, k, distFunc):$/;"	f
-L	test/markov_p_ano.py	/^L = dict($/;"	v
-LIB_SVM_ROOT	settings.py	/^LIB_SVM_ROOT = ROOT + '\/libsvm-3.11'$/;"	v
-LIB_SVM_ROOT	settings/multi_srv_targ_one.py	/^LIB_SVM_ROOT = ROOT + '\/libsvm-3.11'$/;"	v
-LIB_SVM_ROOT	settings/multi_srv_targ_one_with_fr.py	/^LIB_SVM_ROOT = ROOT + '\/libsvm-3.11'$/;"	v
-LIB_SVM_ROOT	settings_template.py	/^LIB_SVM_ROOT = ROOT + '\/libsvm-3.11'$/;"	v
 Link	Simulator/fs.py	/^class Link(object):$/;"	c
 Load	util.py	/^def Load(var):$/;"	f
 LoadDeriData	Detector/AnomalyAna.py	/^def LoadDeriData():$/;"	f
 LoadValidIP	Configure/mod_util.py	/^def LoadValidIP(fileName):$/;"	f
-MARKOV_DESC	test/markov_p_ano.py	/^MARKOV_DESC = dict($/;"	v
-MARKOV_INTERVAL	misc/settings copy.py	/^MARKOV_INTERVAL = 0.1$/;"	v
-MARKOV_INTERVAL	settings.py	/^MARKOV_INTERVAL = 0.1$/;"	v
-MARKOV_INTERVAL	settings/multi_srv_targ_one.py	/^MARKOV_INTERVAL = 0.1$/;"	v
-MARKOV_INTERVAL	settings/multi_srv_targ_one_with_fr.py	/^MARKOV_INTERVAL = 0.1$/;"	v
-MARKOV_INTERVAL	settings_template.py	/^MARKOV_INTERVAL = 0.1$/;"	v
-MARKOV_P	misc/settings copy.py	/^MARKOV_P = [(0, 1), (0, 1)] # NORMAL$/;"	v
-MARKOV_P	settings.py	/^MARKOV_P = [(0, 1), (0, 1)] # NORMAL$/;"	v
-MARKOV_P	settings/multi_srv_targ_one.py	/^MARKOV_P = [(0, 1), (0, 1)] # NORMAL$/;"	v
-MARKOV_P	settings/multi_srv_targ_one_with_fr.py	/^MARKOV_P = [(0, 1), (0, 1)] # NORMAL$/;"	v
-MARKOV_P	settings_template.py	/^MARKOV_P = [(0, 1), (0, 1)] # NORMAL$/;"	v
-MARKOV_PARA	misc/settings copy.py	/^MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state$/;"	v
-MARKOV_PARA	settings.py	/^MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state$/;"	v
-MARKOV_PARA	settings/multi_srv_targ_one.py	/^MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state$/;"	v
-MARKOV_PARA	settings/multi_srv_targ_one_with_fr.py	/^MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state$/;"	v
-MARKOV_PARA	settings_template.py	/^MARKOV_PARA = [( 'normal(4e5,10)', 'exponential(3)'), # flow size for high state , interarrival time for high state$/;"	v
 MAX	Simulator/ipaddrgen/addrgen_trie.c	16;"	d	file:
 MIN	Simulator/ipaddrgen/addrgen_trie.c	20;"	d	file:
-MODEL_BASE_DERI_DESCENDING_FIG	settings.py	/^MODEL_BASE_DERI_DESCENDING_FIG = ROOT + '\/res\/mb-descending-comp.eps'$/;"	v
-MODEL_BASE_DERI_DESCENDING_FIG	settings/multi_srv_targ_one.py	/^MODEL_BASE_DERI_DESCENDING_FIG = ROOT + '\/res\/mb-descending-comp.eps'$/;"	v
-MODEL_BASE_DERI_DESCENDING_FIG	settings/multi_srv_targ_one_with_fr.py	/^MODEL_BASE_DERI_DESCENDING_FIG = ROOT + '\/res\/mb-descending-comp.eps'$/;"	v
-MODEL_BASE_DERI_DESCENDING_FIG	settings_template.py	/^MODEL_BASE_DERI_DESCENDING_FIG = ROOT + '\/res\/mb-descending-comp.eps'$/;"	v
-MODEL_BASE_DERI_DUMP_FILE	settings.py	/^MODEL_BASE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-base-deri.p'$/;"	v
-MODEL_BASE_DERI_DUMP_FILE	settings/multi_srv_targ_one.py	/^MODEL_BASE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-base-deri.p'$/;"	v
-MODEL_BASE_DERI_DUMP_FILE	settings/multi_srv_targ_one_with_fr.py	/^MODEL_BASE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-base-deri.p'$/;"	v
-MODEL_BASE_DERI_DUMP_FILE	settings_template.py	/^MODEL_BASE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-base-deri.p'$/;"	v
-MODEL_FREE_DERI_DESCENDING_FIG	settings.py	/^MODEL_FREE_DERI_DESCENDING_FIG = ROOT + '\/res\/mf-descending-comp.eps'$/;"	v
-MODEL_FREE_DERI_DESCENDING_FIG	settings/multi_srv_targ_one.py	/^MODEL_FREE_DERI_DESCENDING_FIG = ROOT + '\/res\/mf-descending-comp.eps'$/;"	v
-MODEL_FREE_DERI_DESCENDING_FIG	settings/multi_srv_targ_one_with_fr.py	/^MODEL_FREE_DERI_DESCENDING_FIG = ROOT + '\/res\/mf-descending-comp.eps'$/;"	v
-MODEL_FREE_DERI_DESCENDING_FIG	settings_template.py	/^MODEL_FREE_DERI_DESCENDING_FIG = ROOT + '\/res\/mf-descending-comp.eps'$/;"	v
-MODEL_FREE_DERI_DUMP_FILE	settings.py	/^MODEL_FREE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-free-deri.p'$/;"	v
-MODEL_FREE_DERI_DUMP_FILE	settings/multi_srv_targ_one.py	/^MODEL_FREE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-free-deri.p'$/;"	v
-MODEL_FREE_DERI_DUMP_FILE	settings/multi_srv_targ_one_with_fr.py	/^MODEL_FREE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-free-deri.p'$/;"	v
-MODEL_FREE_DERI_DUMP_FILE	settings_template.py	/^MODEL_FREE_DERI_DUMP_FILE = ROOT + '\/Detector\/model-free-deri.p'$/;"	v
 MS_GenNominalPDF	Detector/MSDetector.py	/^def MS_GenNominalPDF(srvFlowNameList, feaQN, dumpFlag =False):$/;"	f
 MS_GetFeature	Detector/MSDetector.py	/^def MS_GetFeature(srvFlowNameList, clusterNum):$/;"	f
 MarkovAnomaly	Configure/MarkovAnomaly.py	/^class MarkovAnomaly(Anomaly):$/;"	c
 MarkovBehaviour	Configure/Behaviour.py	/^class MarkovBehaviour(object):$/;"	c
 MarkovModulator	Configure/Modulator.py	/^class MarkovModulator(Modulator, MarkovBehaviour):$/;"	c
-MarkovNode	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^class MarkovNode(NNode):$/;"	c
 MarkovNode	Configure/Node.py	/^class MarkovNode(NNode):$/;"	c
-ModelBase	Detector/Derivative.py	/^ModelBase = []$/;"	v
+MarkovNode	Configure/back_Node.py	/^class MarkovNode(NNode):$/;"	c
 ModelBaseDerivative	Detector/Derivative.py	/^def ModelBaseDerivative(P1, mp1, P2, mp2):$/;"	f
 ModelBaseDetectAnoType	Detector/AnomalyAna.py	/^def ModelBaseDetectAnoType():$/;"	f
 ModelBaseHTest	Detector/AnomalyAna.py	/^def ModelBaseHTest(v):$/;"	f
-ModelBaseLargest	Detector/Derivative.py	/^ModelBaseLargest = []$/;"	v
-ModelBaseSmallest	Detector/Derivative.py	/^ModelBaseSmallest = []$/;"	v
 ModelBased	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def ModelBased(qFeaVec, feaQN):$/;"	f
-ModelBased	Detector/Detector.py	/^def ModelBased(qFeaVec, feaQN):$/;"	f
-ModelBased	Detector/OldDetector.py	/^def ModelBased(gc, gd, gf, K, ND, NF):$/;"	f
+ModelBased	Detector/backup/OldDetector.py	/^def ModelBased(gc, gd, gf, K, ND, NF):$/;"	f
 ModelBased_Dur	Detector/DurationDetector.py	/^def ModelBased_Dur(gc, gd, gf, K, ND, NF, gr, NR):$/;"	f
-ModelBased_MF	Detector/OldDetector.py	/^def ModelBased_MF(gc, gd, posFeature, K, ND, featureQ):$/;"	f
-ModelFree	Detector/Derivative.py	/^ModelFree = []$/;"	v
+ModelBased_MF	Detector/backup/OldDetector.py	/^def ModelBased_MF(gc, gd, posFeature, K, ND, featureQ):$/;"	f
 ModelFree	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def ModelFree(qFeaVec, feaQN):$/;"	f
-ModelFree	Detector/Detector.py	/^def ModelFree(qFeaVec, feaQN):$/;"	f
-ModelFree	Detector/OldDetector.py	/^def ModelFree(gc, gd, gf, K, ND, NF):$/;"	f
+ModelFree	Detector/backup/OldDetector.py	/^def ModelFree(gc, gd, gf, K, ND, NF):$/;"	f
 ModelFreeDerivative	Detector/Derivative.py	/^def ModelFreeDerivative(P1, P2):$/;"	f
 ModelFreeDetectAnoType	Detector/AnomalyAna.py	/^def ModelFreeDetectAnoType():$/;"	f
 ModelFreeHTest	Detector/AnomalyAna.py	/^def ModelFreeHTest(v):$/;"	f
-ModelFreeLargest	Detector/Derivative.py	/^ModelFreeLargest = []$/;"	v
-ModelFreeSmallest	Detector/Derivative.py	/^ModelFreeSmallest = []$/;"	v
 ModelFree_Dur	Detector/DurationDetector.py	/^def ModelFree_Dur(gc, gd, gf, K, ND, NF, gr, NR):$/;"	f
-ModelFree_MF	Detector/OldDetector.py	/^def ModelFree_MF(gc, gd, posFeature, K, ND, featureQ):$/;"	f
+ModelFree_MF	Detector/backup/OldDetector.py	/^def ModelFree_MF(gc, gd, posFeature, K, ND, featureQ):$/;"	f
 Modulator	Configure/Modulator.py	/^class Modulator(object):$/;"	c
 MultiRun	main.py	/^def MultiRun():$/;"	f
-MyTest	test/ConfigureTest.py	/^class MyTest(TestCase):$/;"	c
-NAME	Configure/Anomaly.py	/^    NAME = 'AtypicaUser'$/;"	v	class:AtypicalUserAnomaly
 NDivide	Detector/ClusterAlg.py	/^def NDivide(cSum, cLen):$/;"	f
-NET_DESC	settings.py	/^NET_DESC = dict($/;"	v
-NET_DESC	settings/multi_srv_targ_one.py	/^NET_DESC = dict($/;"	v
-NET_DESC	settings/multi_srv_targ_one_with_fr.py	/^NET_DESC = dict($/;"	v
-NET_DESC	settings_template.py	/^NET_DESC = dict($/;"	v
-NET_DESC	test/markov_p_ano.py	/^NET_DESC = dict($/;"	v
-NET_DESC	test/normal.py	/^NET_DESC = dict($/;"	v
 NEdge	Configure/Edge.py	/^class NEdge(Edge):$/;"	c
-NNode	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^class NNode(Node):$/;"	c
 NNode	Configure/Node.py	/^class NNode(Node):$/;"	c
-NODE_NUM	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^NODE_NUM = 0$/;"	v
-NODE_NUM	Configure/Node.py	/^NODE_NUM = 0$/;"	v
-NORM_DESC	settings.py	/^NORM_DESC = dict($/;"	v
-NORM_DESC	settings/multi_srv_targ_one.py	/^NORM_DESC = dict($/;"	v
-NORM_DESC	settings/multi_srv_targ_one_with_fr.py	/^NORM_DESC = dict($/;"	v
-NORM_DESC	settings_template.py	/^NORM_DESC = dict($/;"	v
-NORM_DESC	test/markov_p_ano.py	/^NORM_DESC = dict($/;"	v
-NORM_DESC	test/normal.py	/^NORM_DESC = dict($/;"	v
+NNode	Configure/back_Node.py	/^class NNode(Node):$/;"	c
 Network	Configure/Network.py	/^class Network(Dot):$/;"	c
-NominalPDFFile	Detector/OldDetector.py	/^NominalPDFFile = settings.NominalPDFFile$/;"	v
-NominalPDFFile	misc/settings copy.py	/^NominalPDFFile = ROOT + '\/Share\/nominal.p'$/;"	v
-NominalPDFFile	settings.py	/^NominalPDFFile = ROOT + '\/Share\/nominal.p'$/;"	v
-NominalPDFFile	settings/multi_srv_targ_one.py	/^NominalPDFFile = ROOT + '\/Share\/nominal.p'$/;"	v
-NominalPDFFile	settings/multi_srv_targ_one_with_fr.py	/^NominalPDFFile = ROOT + '\/Share\/nominal.p'$/;"	v
-NominalPDFFile	settings_template.py	/^NominalPDFFile = ROOT + '\/Share\/nominal.p'$/;"	v
 NullExporter	Simulator/flowexport.py	/^class NullExporter(FlowExporter):$/;"	c
 OUT	util.py	/^def OUT(*val_list):$/;"	f
-OUTPUT_DOT_FILE	misc/settings copy.py	/^OUTPUT_DOT_FILE = ROOT + '\/Share\/conf.dot'$/;"	v
-OUTPUT_DOT_FILE	settings.py	/^OUTPUT_DOT_FILE = ROOT + '\/Share\/conf.dot'$/;"	v
-OUTPUT_DOT_FILE	settings/multi_srv_targ_one.py	/^OUTPUT_DOT_FILE = ROOT + '\/Share\/conf.dot'$/;"	v
-OUTPUT_DOT_FILE	settings/multi_srv_targ_one_with_fr.py	/^OUTPUT_DOT_FILE = ROOT + '\/Share\/conf.dot'$/;"	v
-OUTPUT_DOT_FILE	settings_template.py	/^OUTPUT_DOT_FILE = ROOT + '\/Share\/conf.dot'$/;"	v
-OUTPUT_DOT_FILE	test/markov_p_ano.py	/^OUTPUT_DOT_FILE = ROOT + '\/test\/conf.dot'$/;"	v
-OUTPUT_DOT_FILE	test/normal.py	/^OUTPUT_DOT_FILE = ROOT + '\/test\/conf.dot'$/;"	v
-OUTPUT_FLOW_FILE	misc/settings copy.py	/^OUTPUT_FLOW_FILE = ROOT + '\/Simulator\/n0_flow.txt'$/;"	v
-OUTPUT_FLOW_FILE	settings.py	/^OUTPUT_FLOW_FILE = ROOT + '\/Simulator\/n0_flow.txt'$/;"	v
-OUTPUT_FLOW_FILE	settings/multi_srv_targ_one.py	/^OUTPUT_FLOW_FILE = ROOT + '\/Simulator\/n0_flow.txt'$/;"	v
-OUTPUT_FLOW_FILE	settings/multi_srv_targ_one_with_fr.py	/^OUTPUT_FLOW_FILE = ROOT + '\/Simulator\/n0_flow.txt'$/;"	v
-OUTPUT_FLOW_FILE	settings_template.py	/^OUTPUT_FLOW_FILE = ROOT + '\/Simulator\/n0_flow.txt'$/;"	v
-P	test/markov_p_ano.py	/^        P=[[0.1, 0.9], [0.1, 0.9]],$/;"	v
-P	test/markov_p_ano.py	/^        P=[[0.5, 0.5], [0.5, 0.5]],$/;"	v
 P2F_RAW	Configure/mod_util.py	/^def P2F_RAW(flowRate, flowDuration, pktRate): # Change Prameter to FS Format for rawflow$/;"	f
 PAPER	doc/sphinx/Makefile	/^PAPER         =$/;"	m
-PAPER	doc/sphinx/make.bat	/^	echo.  latex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter$/;"	v
 PAPEROPT_a4	doc/sphinx/Makefile	/^PAPEROPT_a4     = -D latex_paper_size=a4$/;"	m
 PAPEROPT_letter	doc/sphinx/Makefile	/^PAPEROPT_letter = -D latex_paper_size=letter$/;"	m
-PKTCOUNT	Simulator/fs.py	/^    PKTCOUNT = 1$/;"	v	class:Router
-PLOT_DERIVATIVE	settings.py	/^PLOT_DERIVATIVE = False$/;"	v
-PLOT_DERIVATIVE	settings/multi_srv_targ_one.py	/^PLOT_DERIVATIVE = False$/;"	v
-PLOT_DERIVATIVE	settings/multi_srv_targ_one_with_fr.py	/^PLOT_DERIVATIVE = False$/;"	v
-PLOT_DERIVATIVE	settings_template.py	/^PLOT_DERIVATIVE = False$/;"	v
 PLURAL_EXPR	doc/sphinx/build/html/_static/doctools.js	/^    this.PLURAL_EXPR = new Function('n', 'return +(' + catalog.plural_expr + ')');$/;"	f
 PY_SSIZE_T_MAX	Simulator/ipaddrgen/ipaddrgen_wrap.c	881;"	d	file:
 PY_SSIZE_T_MIN	Simulator/ipaddrgen/ipaddrgen_wrap.c	882;"	d	file:
@@ -411,50 +174,20 @@ Py_TYPE	Simulator/ipaddrgen/ipaddrgen_wrap.c	748;"	d	file:
 Py_VISIT	Simulator/ipaddrgen/ipaddrgen_wrap.c	905;"	d	file:
 Py_ssize_t	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef int Py_ssize_t;$/;"	t	file:
 Qa	doc/sphinx/build/html/_static/jquery.js	/^(function(A,w){function ma(){if(!c.isReady){try{s.documentElement.doScroll("left")}catch(a){setTimeout(ma,1);return}c.ready()}}function Qa(a,b){b.src?c.ajax({url:b.src,async:false,dataType:"script"}):c.globalEval(b.text||b.textContent||b.innerHTML||"");b.parentNode&&b.parentNode.removeChild(b)}function X(a,b,d,f,e,j){var i=a.length;if(typeof b==="object"){for(var o in b)X(a,o,b[o],f,e,d);return a}if(d!==w){f=!j&&f&&c.isFunction(d);for(o=0;o<i;o++)e(a[o],b,f?d.call(a[o],o,e(a[o],b)):d,j);return a}return i?$/;"	f
-QuantizeState	Detector/OldDetector.py	/^def QuantizeState(x, nx, rg):$/;"	f
+QuantizeState	Detector/backup/OldDetector.py	/^def QuantizeState(x, nx, rg):$/;"	f
 RFHash	Detector/AnomalyAna.py	/^def RFHash(v, q):$/;"	f
 RFHash	misc/test.py	/^def RFHash(v, q):$/;"	f
-ROOT	doc/sphinx/source/conf.py	/^ROOT = '\/Users\/wangjing\/Dropbox\/OpenSource\/sadit-sphinx\/'$/;"	v
-ROOT	misc/settings copy.py	/^ROOT = '\/Users\/jingwang\/Dropbox\/Research\/CyberSecurity\/code\/newanomalydetector\/neat_code'$/;"	v
-ROOT	settings.py	/^ROOT = '\/home\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
-ROOT	settings/multi_srv_targ_one.py	/^ROOT = '\/Users\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
-ROOT	settings/multi_srv_targ_one_with_fr.py	/^ROOT = '\/Users\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
-ROOT	settings_template.py	/^ROOT = '\/Users\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
-ROOT	settings_template.py	/^ROOT = '\/home\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
-ROOT	test/markov_p_ano.py	/^ROOT = '\/Users\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
-ROOT	test/normal.py	/^ROOT = '\/home\/wangjing\/Dropbox\/Research\/CyberSecurity\/code\/sadit'$/;"	v
 RandDist	Configure/mod_util.py	/^def RandDist(dist):$/;"	f
 ReClustering	Detector/ClusterAlg.py	/^def ReClustering(data, centerPt, DF):$/;"	f
 Router	Simulator/fs.py	/^class Router(object):$/;"	c
 SL	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def SL(data, st, ed):$/;"	f
-SL	Detector/Detector.py	/^def SL(data, st, ed):$/;"	f
+SL	Detector/DetectorLib.py	/^def SL(data, st, ed):$/;"	f
 SPHINXBUILD	doc/sphinx/Makefile	/^SPHINXBUILD   = sphinx-build$/;"	m
-SPHINXBUILD	doc/sphinx/make.bat	/^	set SPHINXBUILD=sphinx-build$/;"	v
 SPHINXOPTS	doc/sphinx/Makefile	/^SPHINXOPTS    =$/;"	m
 SVM_EASY_EXE	settings.py	/^def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):$/;"	f
 SVM_EASY_EXE	settings/multi_srv_targ_one.py	/^def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):$/;"	f
 SVM_EASY_EXE	settings/multi_srv_targ_one_with_fr.py	/^def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):$/;"	f
-SVM_EASY_EXE	settings_template.py	/^def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):$/;"	f
-SVM_MODEL_BASE_DATA_FILE	settings.py	/^SVM_MODEL_BASE_DATA_FILE = ROOT + '\/Share\/SVM\/modelbase'$/;"	v
-SVM_MODEL_BASE_DATA_FILE	settings/multi_srv_targ_one.py	/^SVM_MODEL_BASE_DATA_FILE = ROOT + '\/Share\/SVM\/modelbase'$/;"	v
-SVM_MODEL_BASE_DATA_FILE	settings/multi_srv_targ_one_with_fr.py	/^SVM_MODEL_BASE_DATA_FILE = ROOT + '\/Share\/SVM\/modelbase'$/;"	v
-SVM_MODEL_BASE_DATA_FILE	settings_template.py	/^SVM_MODEL_BASE_DATA_FILE = ROOT + '\/Share\/SVM\/modelbase'$/;"	v
-SVM_MODEL_FREE_DATA_FILE	settings.py	/^SVM_MODEL_FREE_DATA_FILE = ROOT + '\/Share\/SVM\/modelfree'$/;"	v
-SVM_MODEL_FREE_DATA_FILE	settings/multi_srv_targ_one.py	/^SVM_MODEL_FREE_DATA_FILE = ROOT + '\/Share\/SVM\/modelfree'$/;"	v
-SVM_MODEL_FREE_DATA_FILE	settings/multi_srv_targ_one_with_fr.py	/^SVM_MODEL_FREE_DATA_FILE = ROOT + '\/Share\/SVM\/modelfree'$/;"	v
-SVM_MODEL_FREE_DATA_FILE	settings_template.py	/^SVM_MODEL_FREE_DATA_FILE = ROOT + '\/Share\/SVM\/modelfree'$/;"	v
-SVM_OUTPUT_FILE	settings.py	/^SVM_OUTPUT_FILE = ROOT + '\/Share\/SVM\/a.out'$/;"	v
-SVM_OUTPUT_FILE	settings/multi_srv_targ_one.py	/^SVM_OUTPUT_FILE = ROOT + '\/Share\/SVM\/a.out'$/;"	v
-SVM_OUTPUT_FILE	settings/multi_srv_targ_one_with_fr.py	/^SVM_OUTPUT_FILE = ROOT + '\/Share\/SVM\/a.out'$/;"	v
-SVM_OUTPUT_FILE	settings_template.py	/^SVM_OUTPUT_FILE = ROOT + '\/Share\/SVM\/a.out'$/;"	v
-SVM_PREDICT_EXE	settings.py	/^SVM_PREDICT_EXE = LIB_SVM_ROOT + '\/svm-predict'$/;"	v
-SVM_PREDICT_EXE	settings/multi_srv_targ_one.py	/^SVM_PREDICT_EXE = LIB_SVM_ROOT + '\/svm-predict'$/;"	v
-SVM_PREDICT_EXE	settings/multi_srv_targ_one_with_fr.py	/^SVM_PREDICT_EXE = LIB_SVM_ROOT + '\/svm-predict'$/;"	v
-SVM_PREDICT_EXE	settings_template.py	/^SVM_PREDICT_EXE = LIB_SVM_ROOT + '\/svm-predict'$/;"	v
-SVM_TRAIN_EXE	settings.py	/^SVM_TRAIN_EXE = LIB_SVM_ROOT + '\/svm-train'$/;"	v
-SVM_TRAIN_EXE	settings/multi_srv_targ_one.py	/^SVM_TRAIN_EXE = LIB_SVM_ROOT + '\/svm-train'$/;"	v
-SVM_TRAIN_EXE	settings/multi_srv_targ_one_with_fr.py	/^SVM_TRAIN_EXE = LIB_SVM_ROOT + '\/svm-train'$/;"	v
-SVM_TRAIN_EXE	settings_template.py	/^SVM_TRAIN_EXE = LIB_SVM_ROOT + '\/svm-train'$/;"	v
+SVM_EASY_EXE	settings/new_simple_anomaly.py	/^def SVM_EASY_EXE(trainFile, testFile, outFile = 'a.out'):$/;"	f
 SWIGEXPORT	Simulator/ipaddrgen/ipaddrgen_wrap.c	90;"	d	file:
 SWIGEXPORT	Simulator/ipaddrgen/ipaddrgen_wrap.c	92;"	d	file:
 SWIGEXPORT	Simulator/ipaddrgen/ipaddrgen_wrap.c	96;"	d	file:
@@ -677,45 +410,13 @@ SWIG_init	Simulator/ipaddrgen/ipaddrgen_wrap.c	2945;"	d	file:
 SWIG_init	Simulator/ipaddrgen/ipaddrgen_wrap.c	2948;"	d	file:
 SWIG_name	Simulator/ipaddrgen/ipaddrgen_wrap.c	2951;"	d	file:
 SWIG_newvarlink	Simulator/ipaddrgen/ipaddrgen_wrap.c	3403;"	d	file:
-Search._index	doc/sphinx/build/html/_static/searchtools.js	/^  _index : null,$/;"	p
-Search._pulse_status	doc/sphinx/build/html/_static/searchtools.js	/^  _pulse_status : -1,$/;"	p
-Search._queued_query	doc/sphinx/build/html/_static/searchtools.js	/^  _queued_query : null,$/;"	p
 Sensitivity	Sensitivity.py	/^def Sensitivity(case):$/;"	f
 SensitivityCompareThreshold	Sensitivity.py	/^def SensitivityCompareThreshold(case, ratio):$/;"	f
 SimpleGeneratorNode	Simulator/traffic.py	/^class SimpleGeneratorNode(GeneratorNode):$/;"	c
 Simulate	API.py	/^def Simulate():$/;"	f
 Simulator	Simulator/fs.py	/^class Simulator(object):$/;"	c
-StateMap	Detector/AnomalyAna.py	/^StateMap = [('low flow size', 'small distance'),$/;"	v
 Stemmer	doc/sphinx/build/html/_static/searchtools.js	/^var Stemmer = function() {$/;"	c
 Stemmer.stemWord	doc/sphinx/build/html/_static/searchtools.js	/^  this.stemWord = function (w) {$/;"	m
-Stemmer.step2list.alism	doc/sphinx/build/html/_static/searchtools.js	/^    alism: 'al',$/;"	p
-Stemmer.step2list.aliti	doc/sphinx/build/html/_static/searchtools.js	/^    aliti: 'al',$/;"	p
-Stemmer.step2list.alli	doc/sphinx/build/html/_static/searchtools.js	/^    alli: 'al',$/;"	p
-Stemmer.step2list.anci	doc/sphinx/build/html/_static/searchtools.js	/^    anci: 'ance',$/;"	p
-Stemmer.step2list.ation	doc/sphinx/build/html/_static/searchtools.js	/^    ation: 'ate',$/;"	p
-Stemmer.step2list.ational	doc/sphinx/build/html/_static/searchtools.js	/^    ational: 'ate',$/;"	p
-Stemmer.step2list.ator	doc/sphinx/build/html/_static/searchtools.js	/^    ator: 'ate',$/;"	p
-Stemmer.step2list.biliti	doc/sphinx/build/html/_static/searchtools.js	/^    biliti: 'ble',$/;"	p
-Stemmer.step2list.bli	doc/sphinx/build/html/_static/searchtools.js	/^    bli: 'ble',$/;"	p
-Stemmer.step2list.eli	doc/sphinx/build/html/_static/searchtools.js	/^    eli: 'e',$/;"	p
-Stemmer.step2list.enci	doc/sphinx/build/html/_static/searchtools.js	/^    enci: 'ence',$/;"	p
-Stemmer.step2list.entli	doc/sphinx/build/html/_static/searchtools.js	/^    entli: 'ent',$/;"	p
-Stemmer.step2list.fulness	doc/sphinx/build/html/_static/searchtools.js	/^    fulness: 'ful',$/;"	p
-Stemmer.step2list.iveness	doc/sphinx/build/html/_static/searchtools.js	/^    iveness: 'ive',$/;"	p
-Stemmer.step2list.iviti	doc/sphinx/build/html/_static/searchtools.js	/^    iviti: 'ive',$/;"	p
-Stemmer.step2list.ization	doc/sphinx/build/html/_static/searchtools.js	/^    ization: 'ize',$/;"	p
-Stemmer.step2list.izer	doc/sphinx/build/html/_static/searchtools.js	/^    izer: 'ize',$/;"	p
-Stemmer.step2list.logi	doc/sphinx/build/html/_static/searchtools.js	/^    logi: 'log'$/;"	p
-Stemmer.step2list.ousli	doc/sphinx/build/html/_static/searchtools.js	/^    ousli: 'ous',$/;"	p
-Stemmer.step2list.ousness	doc/sphinx/build/html/_static/searchtools.js	/^    ousness: 'ous',$/;"	p
-Stemmer.step2list.tional	doc/sphinx/build/html/_static/searchtools.js	/^    tional: 'tion',$/;"	p
-Stemmer.step3list.alize	doc/sphinx/build/html/_static/searchtools.js	/^    alize: 'al',$/;"	p
-Stemmer.step3list.ative	doc/sphinx/build/html/_static/searchtools.js	/^    ative: '',$/;"	p
-Stemmer.step3list.ful	doc/sphinx/build/html/_static/searchtools.js	/^    ful: '',$/;"	p
-Stemmer.step3list.ical	doc/sphinx/build/html/_static/searchtools.js	/^    ical: 'ic',$/;"	p
-Stemmer.step3list.icate	doc/sphinx/build/html/_static/searchtools.js	/^    icate: 'ic',$/;"	p
-Stemmer.step3list.iciti	doc/sphinx/build/html/_static/searchtools.js	/^    iciti: 'ic',$/;"	p
-Stemmer.step3list.ness	doc/sphinx/build/html/_static/searchtools.js	/^    ness: ''$/;"	p
 SubtractiveGeneratorNode	Simulator/traffic.py	/^class SubtractiveGeneratorNode(GeneratorNode):$/;"	c
 SwigMethods	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static PyMethodDef SwigMethods[] = {$/;"	v	file:
 SwigPyBuiltin_AddPublicSymbol	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyBuiltin_AddPublicSymbol(PyObject *seq, const char *key) {$/;"	f
@@ -756,40 +457,16 @@ SwigPyPacked_print	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_print(Swi
 SwigPyPacked_repr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_repr(SwigPyPacked *v)$/;"	f
 SwigPyPacked_str	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_str(SwigPyPacked *v)$/;"	f
 SwigPyPacked_type	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^SwigPyPacked_type(void) {$/;"	f
-TEST_NUM	settings.py	/^TEST_NUM = 20$/;"	v
-TEST_NUM	settings/multi_srv_targ_one.py	/^TEST_NUM = 20$/;"	v
-TEST_NUM	settings/multi_srv_targ_one_with_fr.py	/^TEST_NUM = 20$/;"	v
-TEST_NUM	settings_template.py	/^TEST_NUM = 20$/;"	v
 TO_CLS	Configure/mod_util.py	/^def TO_CLS(*val_list):$/;"	f
-TRAN_PROB	misc/settings copy.py	/^TRAN_PROB = [(0.1, 0.9), (0.3, 0.7)]$/;"	v
-TV	Detector/AnomalyAna.py	/^TV = ['low', 'high']$/;"	v
-TV	misc/test.py	/^TV = ['low', 'high']$/;"	v
-TYPE	settings.py	/^        TYPE = 'NORMAl',$/;"	v
-TYPE	settings/multi_srv_targ_one.py	/^        TYPE = 'NORMAl',$/;"	v
-TYPE	settings/multi_srv_targ_one_with_fr.py	/^        TYPE = 'NORMAl',$/;"	v
-TYPE	settings_template.py	/^        TYPE = 'NORMAl',$/;"	v
-TYPE	test/markov_p_ano.py	/^        TYPE = 'Markov',$/;"	v
-TYPE	test/markov_p_ano.py	/^        TYPE = 'harpoon',$/;"	v
-TYPE	test/normal.py	/^        TYPE = 'NORMAl',$/;"	v
 TargetOneServer	Configure/Anomaly.py	/^class TargetOneServer(Anomaly):$/;"	c
 Test	main.py	/^def Test():$/;"	f
 Tester	Detector/test	/^class Tester:$/;"	c
 TextExporter	Simulator/flowexport.py	/^class TextExporter(FlowExporter):$/;"	c
 TransData	Detector/MSDetector.py	/^def TransData(flow):$/;"	f
-TransData	Detector/OldDetector.py	/^def TransData(flow):$/;"	f
+TransData	Detector/backup/OldDetector.py	/^def TransData(flow):$/;"	f
 TypeBlindTest	BlindTest.py	/^def TypeBlindTest():$/;"	f
-UNIFIED_NOMINAL_PDF	settings.py	/^UNIFIED_NOMINAL_PDF = False$/;"	v
-UNIFIED_NOMINAL_PDF	settings/multi_srv_targ_one.py	/^UNIFIED_NOMINAL_PDF = False$/;"	v
-UNIFIED_NOMINAL_PDF	settings/multi_srv_targ_one_with_fr.py	/^UNIFIED_NOMINAL_PDF = False$/;"	v
-UNIFIED_NOMINAL_PDF	settings_template.py	/^UNIFIED_NOMINAL_PDF = False$/;"	v
-UnifyF	Detector/OldDetector.py	/^def UnifyF(c, d, feature):$/;"	f
-VB	Detector/Derivative.py	/^VB = False$/;"	v
+UnifyF	Detector/backup/OldDetector.py	/^def UnifyF(c, d, feature):$/;"	f
 VectorQuantizeState	Detector/Detector (wangjing's conflicted copy 2012-03-01).py	/^def VectorQuantizeState(feaVec , feaQN, feaRange, quanFlag=None):$/;"	f
-VectorQuantizeState	Detector/Detector.py	/^def VectorQuantizeState(feaVec , feaQN, feaRange, quanFlag=None):$/;"	f
-WINDOW_TYPE	settings.py	/^WINDOW_TYPE = 'TIME'$/;"	v
-WINDOW_TYPE	settings/multi_srv_targ_one.py	/^WINDOW_TYPE = 'TIME'$/;"	v
-WINDOW_TYPE	settings/multi_srv_targ_one_with_fr.py	/^WINDOW_TYPE = 'TIME'$/;"	v
-WINDOW_TYPE	settings_template.py	/^WINDOW_TYPE = 'TIME'$/;"	v
 X	doc/sphinx/build/html/_static/jquery.js	/^(function(A,w){function ma(){if(!c.isReady){try{s.documentElement.doScroll("left")}catch(a){setTimeout(ma,1);return}c.ready()}}function Qa(a,b){b.src?c.ajax({url:b.src,async:false,dataType:"script"}):c.globalEval(b.text||b.textContent||b.innerHTML||"");b.parentNode&&b.parentNode.removeChild(b)}function X(a,b,d,f,e,j){var i=a.length;if(typeof b==="object"){for(var o in b)X(a,o,b[o],f,e,d);return a}if(d!==w){f=!j&&f&&c.isFunction(d);for(o=0;o<i;o++)e(a[o],b,f?d.call(a[o],o,e(a[o],b)):d,j);return a}return i?$/;"	f
 Y	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
 Z	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
@@ -801,13 +478,7 @@ _SWIG_This	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^_SWIG_This(void)$/;"	f
 __TRIE_H__	Simulator/ipaddrgen/addrgen_trie.h	11;"	d
 __add__	Simulator/flowlet.py	/^    def __add__(self, other):$/;"	m	class:Flowlet	file:
 __addupd_router	Simulator/fs.py	/^    def __addupd_router(self, rname, rdict):$/;"	m	class:Simulator	file:
-__author__	Simulator/cflow.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
-__author__	Simulator/flowexport.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
-__author__	Simulator/flowlet.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
-__author__	Simulator/fs.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
-__author__	Simulator/ipfix.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
-__author__	Simulator/netflow9.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
-__author__	Simulator/traffic.py	/^__author__ = 'jsommers@colgate.edu'$/;"	v
+__call__	Detector/AnomalyDetector.py	/^    def __call__(self, *args, **kwargs):$/;"	m	class:AnoDetector	file:
 __cmp__	Simulator/flowlet.py	/^    def __cmp__(self, other):$/;"	m	class:Flowlet	file:
 __configure_edge_reliability	Simulator/fs.py	/^    def __configure_edge_reliability(self, a, b, relistr, edict):$/;"	m	class:Simulator	file:
 __configure_parallel_universe	Simulator/fs.py	/^    def __configure_parallel_universe(self):$/;"	m	class:Simulator	file:
@@ -827,11 +498,13 @@ __init__	Configure/Generator.py	/^    def __init__(self, **para):$/;"	m	class:Ha
 __init__	Configure/Modulator.py	/^    def __init__(self, **desc):$/;"	m	class:Modulator
 __init__	Configure/Modulator.py	/^    def __init__(self, interval, P, generator_states, **desc):$/;"	m	class:MarkovModulator
 __init__	Configure/Network.py	/^    def __init__(self):$/;"	m	class:Network
-__init__	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def __init__(self, ipdests, **argv):$/;"	m	class:NNode
-__init__	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def __init__(self, ipdests, **markov_desc):$/;"	m	class:MarkovNode
 __init__	Configure/Node.py	/^    def __init__(self, ipdests, **argv):$/;"	m	class:NNode
 __init__	Configure/Node.py	/^    def __init__(self, ipdests, **markov_desc):$/;"	m	class:MarkovNode
+__init__	Configure/back_Node.py	/^    def __init__(self, ipdests, **argv):$/;"	m	class:NNode
+__init__	Configure/back_Node.py	/^    def __init__(self, ipdests, **markov_desc):$/;"	m	class:MarkovNode
 __init__	Configure/mod_util.py	/^    def __init__(self, string=None, **args):$/;"	m	class:Attr
+__init__	Detector/AnomalyDetector.py	/^    def __init__(self, **desc):$/;"	m	class:AnoDetector
+__init__	New_Detector/test_rope.py	/^    def __init__(self):$/;"	m	class:A
 __init__	Simulator/flowexport.py	/^    def __init__(self, rname):$/;"	m	class:CflowdExporter
 __init__	Simulator/flowexport.py	/^    def __init__(self, rname):$/;"	m	class:FlowExporter
 __init__	Simulator/flowexport.py	/^    def __init__(self, rname):$/;"	m	class:TextExporter
@@ -852,36 +525,29 @@ __makeflow	Simulator/traffic.py	/^    def __makeflow(self):$/;"	m	class:HarpoonG
 __makeflow	Simulator/traffic.py	/^    def __makeflow(self):$/;"	m	class:SimpleGeneratorNode	file:
 __modulate	Simulator/traffic.py	/^    def __modulate(self, target_sources):$/;"	m	class:FlowEventGenModulator	file:
 __remove_flowlet	Simulator/fs.py	/^    def __remove_flowlet(self, flowlet):$/;"	m	class:Router	file:
-__slots__	Simulator/flowlet.py	/^    __slots__ = ['__mss','__iptos','__pkts','__bytes','fivetuple','xtype','xdata','__tcpflags','__ackflow','__flowstart','__flowend','ingress_intf', 'anoFlag']$/;"	v	class:Flowlet
-__slots__	Simulator/flowlet.py	/^    __slots__ = ['key']$/;"	v	class:FiveTuple
-__slots__	Simulator/fs.py	/^    __slots__ = ['name','sim','flow_table','link_table','maintenance_cycle','autoack','longflowtmo','flowinactivetmo','debug','logger','__flowsampling','__pktsampling','exporter','counters','snmpexportinterval','snmpexportfile','snmpexportfh','anoExporter']$/;"	v	class:Router
-__slots__	Simulator/fs.py	/^    __slots__ = ['sim','capacity','delay','egress_node','ingress_node','backlog','bdp','queuealarm','lastalarm','alarminterval','doqdelay','logger']$/;"	v	class:Link
 __start_routers	Simulator/fs.py	/^    def __start_routers(self):$/;"	m	class:Simulator	file:
 __store_flowlet	Simulator/fs.py	/^    def __store_flowlet(self, flowlet, prevnode):$/;"	m	class:Router	file:
 __str__	Configure/Anomaly.py	/^    def __str__(self):$/;"	m	class:BadConfigError	file:
 __str__	Configure/Generator.py	/^    def __str__(self):$/;"	m	class:HarpoonG	file:
 __str__	Configure/Modulator.py	/^    def __str__(self):$/;"	m	class:MarkovModulator	file:
 __str__	Configure/Modulator.py	/^    def __str__(self):$/;"	m	class:Modulator	file:
-__str__	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def __str__(self):$/;"	m	class:NNode	file:
 __str__	Configure/Node.py	/^    def __str__(self):$/;"	m	class:NNode	file:
+__str__	Configure/back_Node.py	/^    def __str__(self):$/;"	m	class:NNode	file:
 __str__	Configure/mod_util.py	/^    def __str__(self):$/;"	m	class:Attr	file:
 __str__	Simulator/flowlet.py	/^    def __str__(self):$/;"	m	class:Flowlet	file:
 _change_topology	Configure/Anomaly.py	/^    def _change_topology(self):$/;"	m	class:AtypicalUserAnomaly
 _config_traffic	Configure/Anomaly.py	/^    def _config_traffic(self):$/;"	m	class:AtypicalUserAnomaly
 _config_traffic	Configure/Network.py	/^    def _config_traffic(self):$/;"	m	class:Network
 _export_ip_addr	Configure/Anomaly.py	/^    def _export_ip_addr(self):$/;"	m	class:AtypicalUserAnomaly
-_gen_generator	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def _gen_generator(self, ipdst):$/;"	m	class:MarkovNode
 _gen_generator	Configure/Node.py	/^    def _gen_generator(self, ipdst):$/;"	m	class:MarkovNode
+_gen_generator	Configure/back_Node.py	/^    def _gen_generator(self, ipdst):$/;"	m	class:MarkovNode
 _gen_modulator_list	Configure/Modulator.py	/^    def _gen_modulator_list(self):$/;"	m	class:MarkovModulator
 _get_ano_node	Configure/Anomaly.py	/^    def _get_ano_node(self):$/;"	m	class:AtypicalUserAnomaly
 _get_generator	Configure/Network.py	/^    def _get_generator(self, src_node, dst_node):$/;"	m	class:Network
 _infect_modulator	Configure/Anomaly.py	/^    def _infect_modulator(self, ano_t, m_id, mod):$/;"	m	class:Anomaly
 _infect_modulator	Configure/MarkovAnomaly.py	/^    def _infect_modulator(self, ano_t, m_id, mod):$/;"	m	class:MarkovAnomaly
-_ipaddrgen	Simulator/ipaddrgen/ipaddrgen.py	/^    _ipaddrgen = swig_import_helper()$/;"	v
-_newclass	Simulator/ipaddrgen/ipaddrgen.py	/^    _newclass = 0$/;"	v
-_object	Simulator/ipaddrgen/ipaddrgen.py	/^    class _object : pass$/;"	c
+_object	Simulator/ipaddrgen/ipaddrgen.py	/^    class _object : pass$/;"	c	function:_swig_repr
 _swig_getattr	Simulator/ipaddrgen/ipaddrgen.py	/^def _swig_getattr(self,class_type,name):$/;"	f
-_swig_property	Simulator/ipaddrgen/ipaddrgen.py	/^    _swig_property = property$/;"	v
 _swig_repr	Simulator/ipaddrgen/ipaddrgen.py	/^def _swig_repr(self):$/;"	f
 _swig_setattr	Simulator/ipaddrgen/ipaddrgen.py	/^def _swig_setattr(self,class_type,name,value):$/;"	f
 _swig_setattr_nondynamic	Simulator/ipaddrgen/ipaddrgen.py	/^def _swig_setattr_nondynamic(self,class_type,name,value,static=1):$/;"	f
@@ -894,40 +560,41 @@ _swigt__p_char	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static swig_type_info _swi
 _swigt__p_gentrie	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static swig_type_info _swigt__p_gentrie = {"_p_gentrie", "struct gentrie *", 0, 0, (void*)0, 0};$/;"	v	file:
 _swigt__p_uint32_t	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *", 0, 0, (void*)0, 0};$/;"	v	file:
 _swigt__p_uint8_t	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "uint8_t *", 0, 0, (void*)0, 0};$/;"	v	file:
-_testAttriAnomaly	test/ConfigureTest.py	/^    def _testAttriAnomaly(self):$/;"	m	class:MyTest
-_testMarkov	test/ConfigureTest.py	/^    def _testMarkov(self):$/;"	m	class:MyTest
-_testMarkovBehaviour	test/ConfigureTest.py	/^    def _testMarkovBehaviour(self):$/;"	m	class:MyTest
-_testMarkovPAnomaly	test/ConfigureTest.py	/^    def _testMarkovPAnomaly(self):$/;"	m	class:MyTest
-_testNormal	test/ConfigureTest.py	/^    def _testNormal(self):$/;"	m	class:MyTest
+_testAttriAnomaly	test/ConfigureTest.py	/^    def _testAttriAnomaly(self):$/;"	m	class:Configure
+_testMarkov	test/ConfigureTest.py	/^    def _testMarkov(self):$/;"	m	class:Configure
+_testMarkovBehaviour	test/ConfigureTest.py	/^    def _testMarkovBehaviour(self):$/;"	m	class:Configure
+_testMarkovPAnomaly	test/ConfigureTest.py	/^    def _testMarkovPAnomaly(self):$/;"	m	class:Configure
+_testNoAnomaly	test/ConfigureTest.py	/^    def _testNoAnomaly(self):$/;"	m	class:Configure
+_testSimpleAnomaly	test/ConfigureTest.py	/^    def _testSimpleAnomaly(self):$/;"	m	class:Configure
 _topo	Configure/Network.py	/^    def _topo(self, topo):$/;"	m	class:Network
-a	Simulator/ipaddrgen/trietest.py	/^    a = ipaddr.IPv4Address(ipaddrgen.generate_addressv4(t))$/;"	v
+_type	Simulator/ipaddrgen/ipaddrgen.py	/^    method = class_type.__swig_getmethods__.get(name,None)$/;"	c	function:_swig_getattr
+_type	Simulator/ipaddrgen/ipaddrgen.py	/^    method = class_type.__swig_setmethods__.get(name,None)$/;"	c	function:_swig_setattr_nondynamic
+_type	Simulator/ipaddrgen/ipaddrgen.py	/^    return _swig_setattr_nondynamic(self,class_type,name,value,0)$/;"	c	function:_swig_setattr
 abstract_method	util.py	/^def abstract_method():$/;"	f
 acceptComment	doc/sphinx/build/html/_static/websupport.js	/^  function acceptComment(id) {$/;"	f
 ackflow	Simulator/flowlet.py	/^    def ackflow(self):$/;"	m	class:Flowlet
 ackflow	Simulator/flowlet.py	/^    def ackflow(self, a):$/;"	m	class:Flowlet
-ad	settings.py	/^    ad = copy.deepcopy(ANO_DESC)$/;"	v
-ad	settings/multi_srv_targ_one.py	/^    ad = copy.deepcopy(ANO_DESC)$/;"	v
-ad	settings/multi_srv_targ_one_with_fr.py	/^    ad = copy.deepcopy(ANO_DESC)$/;"	v
-ad	settings_template.py	/^    ad = copy.deepcopy(ANO_DESC)$/;"	v
 addComment	doc/sphinx/build/html/_static/websupport.js	/^  function addComment(form) {$/;"	f
 add_link	Simulator/fs.py	/^    def add_link(self, link, next_router):$/;"	m	class:Router
-add_modulator	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def add_modulator(self, start, profile, generator):$/;"	m	class:NNode
-add_modulator	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
 add_modulator	Configure/Node.py	/^    def add_modulator(self, start, profile, generator):$/;"	m	class:NNode
 add_modulator	Configure/Node.py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
+add_modulator	Configure/back_Node.py	/^    def add_modulator(self, start, profile, generator):$/;"	m	class:NNode
+add_modulator	Configure/back_Node.py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
 add_tcp_flag	Simulator/flowlet.py	/^    def add_tcp_flag(self, flag):$/;"	m	class:Flowlet
 after	Simulator/fs.py	/^    def after(self, delay, evid, fn, *fnargs):$/;"	m	class:Simulator
-ano_map	Configure/API.py	/^ano_map = {$/;"	v
 appendComments	doc/sphinx/build/html/_static/websupport.js	/^  function appendComments(comments, ul) {$/;"	f
 argsort	Simulator/fs.py	/^def argsort(seq):$/;"	f
 as_buffer	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyBufferProcs as_buffer;$/;"	m	struct:__anon1	file:
 as_mapping	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyMappingMethods as_mapping;$/;"	m	struct:__anon1	file:
 as_number	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyNumberMethods as_number;$/;"	m	struct:__anon1	file:
 as_sequence	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PySequenceMethods as_sequence;$/;"	m	struct:__anon1	file:
-author	Simulator/ipaddrgen/setup.py	/^      author='J. Raffensperger and J. Sommers',$/;"	v
-author_email	Simulator/ipaddrgen/setup.py	/^      author_email='jsommers@colgate.edu',$/;"	v
-b	doc/sphinx/build/html/_static/underscore.js	/^(function(){var j=this,n=j._,i=function(a){this._wrapped=a},m=typeof StopIteration!=="undefined"?StopIteration:"__break__",b=j._=function(a){return new i(a)};if(typeof exports!=="undefined")exports._=b;var k=Array.prototype.slice,o=Array.prototype.unshift,p=Object.prototype.toString,q=Object.prototype.hasOwnProperty,r=Object.prototype.propertyIsEnumerable;b.VERSION="0.5.5";b.each=function(a,c,d){try{if(a.forEach)a.forEach(c,d);else if(b.isArray(a)||b.isArguments(a))for(var e=0,f=a.length;e<f;e++)c.call(d,$/;"	m
-b	doc/sphinx/build/html/_static/underscore.js	/^return a};b.delay=function(a,c){var d=b.rest(arguments,2);return setTimeout(function(){return a.apply(a,d)},c)};b.defer=function(a){return b.delay.apply(b,[a,1].concat(b.rest(arguments)))};b.wrap=function(a,c){return function(){var d=[a].concat(b.toArray(arguments));return c.apply(c,d)}};b.compose=function(){var a=b.toArray(arguments);return function(){for(var c=b.toArray(arguments),d=a.length-1;d>=0;d--)c=[a[d].apply(this,c)];return c[0]}};b.keys=function(a){if(b.isArray(a))return b.range(0,a.length);$/;"	m
+ault	Simulator/fs.py	/^    parser.add_option("-S", "--snmpexportfile", dest="snmpexportfile", default=None,$/;"	f	function:main
+ault	Simulator/fs.py	/^    parser.add_option("-e", "--exporter", dest="exporter", default="text",$/;"	f	function:main
+ault	Simulator/fs.py	/^    parser.add_option("-i", "--interval", dest="interval", default=1.0, type=float,$/;"	f	function:main
+ault	Simulator/fs.py	/^    parser.add_option("-s", "--snmpinterval", dest="snmpinterval", default=0.0, type=float,$/;"	f	function:main
+ault	Simulator/fs.py	/^    parser.add_option("-t", "--simtime", dest="simtime", default=300, type=int,$/;"	f	function:main
+ault	Simulator/fs.py	/^    parser.add_option("-x", "--debug", dest="debug", default=False,$/;"	f	function:main
+ault	Simulator/fs.py	/^    parser.add_option("-z", "--usepsyco", action="store_true", default=False,$/;"	f	function:main
 b.all	doc/sphinx/build/html/_static/underscore.js	/^var f=b.clone(b.toArray(a)).reverse();b.each(f,function(g,h){c=d.call(e,c,g,h,a)});return c};b.detect=function(a,c,d){var e;b.each(a,function(f,g,h){if(c.call(d,f,g,h)){e=f;b.breakLoop()}});return e};b.select=function(a,c,d){if(a&&b.isFunction(a.filter))return a.filter(c,d);var e=[];b.each(a,function(f,g,h){c.call(d,f,g,h)&&e.push(f)});return e};b.reject=function(a,c,d){var e=[];b.each(a,function(f,g,h){!c.call(d,f,g,h)&&e.push(f)});return e};b.all=function(a,c,d){c=c||b.identity;if(a&&b.isFunction(a.every))return a.every(c,$/;"	f
 b.any	doc/sphinx/build/html/_static/underscore.js	/^d);var e=true;b.each(a,function(f,g,h){(e=e&&c.call(d,f,g,h))||b.breakLoop()});return e};b.any=function(a,c,d){c=c||b.identity;if(a&&b.isFunction(a.some))return a.some(c,d);var e=false;b.each(a,function(f,g,h){if(e=c.call(d,f,g,h))b.breakLoop()});return e};b.include=function(a,c){if(b.isArray(a))return b.indexOf(a,c)!=-1;var d=false;b.each(a,function(e){if(d=e===c)b.breakLoop()});return d};b.invoke=function(a,c){var d=b.rest(arguments,2);return b.map(a,function(e){return(c?e[c]:e).apply(e,d)})};b.pluck=$/;"	f
 b.bind	doc/sphinx/build/html/_static/underscore.js	/^a.length;d--;)if(a[d]===c)return d;return-1};b.range=function(a,c,d){var e=b.toArray(arguments),f=e.length<=1;a=f?0:e[0];c=f?e[0]:e[1];d=e[2]||1;e=Math.ceil((c-a)\/d);if(e<=0)return[];e=new Array(e);f=a;for(var g=0;1;f+=d){if((d>0?f-c:c-f)>=0)return e;e[g++]=f}};b.bind=function(a,c){var d=b.rest(arguments,2);return function(){return a.apply(c||j,d.concat(b.toArray(arguments)))}};b.bindAll=function(a){var c=b.rest(arguments);if(c.length==0)c=b.functions(a);b.each(c,function(d){a[d]=b.bind(a[d],a)});$/;"	f
@@ -935,9 +602,11 @@ b.bindAll	doc/sphinx/build/html/_static/underscore.js	/^a.length;d--;)if(a[d]===
 b.breakLoop	doc/sphinx/build/html/_static/underscore.js	/^a.test&&a.exec&&(a.ignoreCase||a.ignoreCase===false))};b.isNaN=function(a){return b.isNumber(a)&&isNaN(a)};b.isNull=function(a){return a===null};b.isUndefined=function(a){return typeof a=="undefined"};b.noConflict=function(){j._=n;return this};b.identity=function(a){return a};b.breakLoop=function(){throw m;};var s=0;b.uniqueId=function(a){var c=s++;return a?a+c:c};b.template=function(a,c){a=new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+a.replace(\/[\\r\\t\\n]\/g,$/;"	f
 b.clone	doc/sphinx/build/html/_static/underscore.js	/^var c=[];for(var d in a)q.call(a,d)&&c.push(d);return c};b.values=function(a){return b.map(a,b.identity)};b.functions=function(a){return b.select(b.keys(a),function(c){return b.isFunction(a[c])}).sort()};b.extend=function(a,c){for(var d in c)a[d]=c[d];return a};b.clone=function(a){if(b.isArray(a))return a.slice(0);return b.extend({},a)};b.tap=function(a,c){c(a);return a};b.isEqual=function(a,c){if(a===c)return true;var d=typeof a;if(d!=typeof c)return false;if(a==c)return true;if(!a&&c||a&&!c)return false;$/;"	f
 b.compact	doc/sphinx/build/html/_static/underscore.js	/^0,c):a[0]};b.rest=function(a,c,d){return k.call(a,b.isUndefined(c)||d?1:c)};b.last=function(a){return a[a.length-1]};b.compact=function(a){return b.select(a,function(c){return!!c})};b.flatten=function(a){return b.reduce(a,[],function(c,d){if(b.isArray(d))return c.concat(b.flatten(d));c.push(d);return c})};b.without=function(a){var c=b.rest(arguments);return b.select(a,function(d){return!b.include(c,d)})};b.uniq=function(a,c){return b.reduce(a,[],function(d,e,f){if(0==f||(c===true?b.last(d)!=e:!b.include(d,$/;"	f
+b.compose	doc/sphinx/build/html/_static/underscore.js	/^return a};b.delay=function(a,c){var d=b.rest(arguments,2);return setTimeout(function(){return a.apply(a,d)},c)};b.defer=function(a){return b.delay.apply(b,[a,1].concat(b.rest(arguments)))};b.wrap=function(a,c){return function(){var d=[a].concat(b.toArray(arguments));return c.apply(c,d)}};b.compose=function(){var a=b.toArray(arguments);return function(){for(var c=b.toArray(arguments),d=a.length-1;d>=0;d--)c=[a[d].apply(this,c)];return c[0]}};b.keys=function(a){if(b.isArray(a))return b.range(0,a.length);$/;"	f
 b.defer	doc/sphinx/build/html/_static/underscore.js	/^return a};b.delay=function(a,c){var d=b.rest(arguments,2);return setTimeout(function(){return a.apply(a,d)},c)};b.defer=function(a){return b.delay.apply(b,[a,1].concat(b.rest(arguments)))};b.wrap=function(a,c){return function(){var d=[a].concat(b.toArray(arguments));return c.apply(c,d)}};b.compose=function(){var a=b.toArray(arguments);return function(){for(var c=b.toArray(arguments),d=a.length-1;d>=0;d--)c=[a[d].apply(this,c)];return c[0]}};b.keys=function(a){if(b.isArray(a))return b.range(0,a.length);$/;"	f
 b.delay	doc/sphinx/build/html/_static/underscore.js	/^return a};b.delay=function(a,c){var d=b.rest(arguments,2);return setTimeout(function(){return a.apply(a,d)},c)};b.defer=function(a){return b.delay.apply(b,[a,1].concat(b.rest(arguments)))};b.wrap=function(a,c){return function(){var d=[a].concat(b.toArray(arguments));return c.apply(c,d)}};b.compose=function(){var a=b.toArray(arguments);return function(){for(var c=b.toArray(arguments),d=a.length-1;d>=0;d--)c=[a[d].apply(this,c)];return c[0]}};b.keys=function(a){if(b.isArray(a))return b.range(0,a.length);$/;"	f
 b.detect	doc/sphinx/build/html/_static/underscore.js	/^var f=b.clone(b.toArray(a)).reverse();b.each(f,function(g,h){c=d.call(e,c,g,h,a)});return c};b.detect=function(a,c,d){var e;b.each(a,function(f,g,h){if(c.call(d,f,g,h)){e=f;b.breakLoop()}});return e};b.select=function(a,c,d){if(a&&b.isFunction(a.filter))return a.filter(c,d);var e=[];b.each(a,function(f,g,h){c.call(d,f,g,h)&&e.push(f)});return e};b.reject=function(a,c,d){var e=[];b.each(a,function(f,g,h){!c.call(d,f,g,h)&&e.push(f)});return e};b.all=function(a,c,d){c=c||b.identity;if(a&&b.isFunction(a.every))return a.every(c,$/;"	f
+b.each	doc/sphinx/build/html/_static/underscore.js	/^(function(){var j=this,n=j._,i=function(a){this._wrapped=a},m=typeof StopIteration!=="undefined"?StopIteration:"__break__",b=j._=function(a){return new i(a)};if(typeof exports!=="undefined")exports._=b;var k=Array.prototype.slice,o=Array.prototype.unshift,p=Object.prototype.toString,q=Object.prototype.hasOwnProperty,r=Object.prototype.propertyIsEnumerable;b.VERSION="0.5.5";b.each=function(a,c,d){try{if(a.forEach)a.forEach(c,d);else if(b.isArray(a)||b.isArguments(a))for(var e=0,f=a.length;e<f;e++)c.call(d,$/;"	f
 b.extend	doc/sphinx/build/html/_static/underscore.js	/^var c=[];for(var d in a)q.call(a,d)&&c.push(d);return c};b.values=function(a){return b.map(a,b.identity)};b.functions=function(a){return b.select(b.keys(a),function(c){return b.isFunction(a[c])}).sort()};b.extend=function(a,c){for(var d in c)a[d]=c[d];return a};b.clone=function(a){if(b.isArray(a))return a.slice(0);return b.extend({},a)};b.tap=function(a,c){c(a);return a};b.isEqual=function(a,c){if(a===c)return true;var d=typeof a;if(d!=typeof c)return false;if(a==c)return true;if(!a&&c||a&&!c)return false;$/;"	f
 b.first	doc/sphinx/build/html/_static/underscore.js	/^function(e,f,g){return{value:e,criteria:c.call(d,e,f,g)}}).sort(function(e,f){e=e.criteria;f=f.criteria;return e<f?-1:e>f?1:0}),"value")};b.sortedIndex=function(a,c,d){d=d||b.identity;for(var e=0,f=a.length;e<f;){var g=e+f>>1;d(a[g])<d(c)?(e=g+1):(f=g)}return e};b.toArray=function(a){if(!a)return[];if(a.toArray)return a.toArray();if(b.isArray(a))return a;if(b.isArguments(a))return k.call(a);return b.values(a)};b.size=function(a){return b.toArray(a).length};b.first=function(a,c,d){return c&&!d?k.call(a,$/;"	f
 b.flatten	doc/sphinx/build/html/_static/underscore.js	/^0,c):a[0]};b.rest=function(a,c,d){return k.call(a,b.isUndefined(c)||d?1:c)};b.last=function(a){return a[a.length-1]};b.compact=function(a){return b.select(a,function(c){return!!c})};b.flatten=function(a){return b.reduce(a,[],function(c,d){if(b.isArray(d))return c.concat(b.flatten(d));c.push(d);return c})};b.without=function(a){var c=b.rest(arguments);return b.select(a,function(d){return!b.include(c,d)})};b.uniq=function(a,c){return b.reduce(a,[],function(d,e,f){if(0==f||(c===true?b.last(d)!=e:!b.include(d,$/;"	f
@@ -951,11 +620,15 @@ b.isArguments	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=funct
 b.isArray	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
 b.isDate	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
 b.isElement	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
+b.isEmpty	doc/sphinx/build/html/_static/underscore.js	/^if(a.isEqual)return a.isEqual(c);if(b.isDate(a)&&b.isDate(c))return a.getTime()===c.getTime();if(b.isNaN(a)&&b.isNaN(c))return true;if(b.isRegExp(a)&&b.isRegExp(c))return a.source===c.source&&a.global===c.global&&a.ignoreCase===c.ignoreCase&&a.multiline===c.multiline;if(d!=="object")return false;if(a.length&&a.length!==c.length)return false;d=b.keys(a);var e=b.keys(c);if(d.length!=e.length)return false;for(var f in a)if(!b.isEqual(a[f],c[f]))return false;return true};b.isEmpty=function(a){return b.keys(a).length==$/;"	f
 b.isEqual	doc/sphinx/build/html/_static/underscore.js	/^var c=[];for(var d in a)q.call(a,d)&&c.push(d);return c};b.values=function(a){return b.map(a,b.identity)};b.functions=function(a){return b.select(b.keys(a),function(c){return b.isFunction(a[c])}).sort()};b.extend=function(a,c){for(var d in c)a[d]=c[d];return a};b.clone=function(a){if(b.isArray(a))return a.slice(0);return b.extend({},a)};b.tap=function(a,c){c(a);return a};b.isEqual=function(a,c){if(a===c)return true;var d=typeof a;if(d!=typeof c)return false;if(a==c)return true;if(!a&&c||a&&!c)return false;$/;"	f
 b.isFunction	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
 b.isNaN	doc/sphinx/build/html/_static/underscore.js	/^a.test&&a.exec&&(a.ignoreCase||a.ignoreCase===false))};b.isNaN=function(a){return b.isNumber(a)&&isNaN(a)};b.isNull=function(a){return a===null};b.isUndefined=function(a){return typeof a=="undefined"};b.noConflict=function(){j._=n;return this};b.identity=function(a){return a};b.breakLoop=function(){throw m;};var s=0;b.uniqueId=function(a){var c=s++;return a?a+c:c};b.template=function(a,c){a=new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+a.replace(\/[\\r\\t\\n]\/g,$/;"	f
+b.isNull	doc/sphinx/build/html/_static/underscore.js	/^a.test&&a.exec&&(a.ignoreCase||a.ignoreCase===false))};b.isNaN=function(a){return b.isNumber(a)&&isNaN(a)};b.isNull=function(a){return a===null};b.isUndefined=function(a){return typeof a=="undefined"};b.noConflict=function(){j._=n;return this};b.identity=function(a){return a};b.breakLoop=function(){throw m;};var s=0;b.uniqueId=function(a){var c=s++;return a?a+c:c};b.template=function(a,c){a=new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+a.replace(\/[\\r\\t\\n]\/g,$/;"	f
+b.isNumber	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
 b.isRegExp	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
 b.isString	doc/sphinx/build/html/_static/underscore.js	/^0};b.isElement=function(a){return!!(a&&a.nodeType==1)};b.isArray=function(a){return!!(a&&a.concat&&a.unshift)};b.isArguments=function(a){return a&&b.isNumber(a.length)&&!b.isArray(a)&&!r.call(a,"length")};b.isFunction=function(a){return!!(a&&a.constructor&&a.call&&a.apply)};b.isString=function(a){return!!(a===""||a&&a.charCodeAt&&a.substr)};b.isNumber=function(a){return p.call(a)==="[object Number]"};b.isDate=function(a){return!!(a&&a.getTimezoneOffset&&a.setUTCFullYear)};b.isRegExp=function(a){return!!(a&&$/;"	f
+b.isUndefined	doc/sphinx/build/html/_static/underscore.js	/^a.test&&a.exec&&(a.ignoreCase||a.ignoreCase===false))};b.isNaN=function(a){return b.isNumber(a)&&isNaN(a)};b.isNull=function(a){return a===null};b.isUndefined=function(a){return typeof a=="undefined"};b.noConflict=function(){j._=n;return this};b.identity=function(a){return a};b.breakLoop=function(){throw m;};var s=0;b.uniqueId=function(a){var c=s++;return a?a+c:c};b.template=function(a,c){a=new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+a.replace(\/[\\r\\t\\n]\/g,$/;"	f
 b.keys	doc/sphinx/build/html/_static/underscore.js	/^return a};b.delay=function(a,c){var d=b.rest(arguments,2);return setTimeout(function(){return a.apply(a,d)},c)};b.defer=function(a){return b.delay.apply(b,[a,1].concat(b.rest(arguments)))};b.wrap=function(a,c){return function(){var d=[a].concat(b.toArray(arguments));return c.apply(c,d)}};b.compose=function(){var a=b.toArray(arguments);return function(){for(var c=b.toArray(arguments),d=a.length-1;d>=0;d--)c=[a[d].apply(this,c)];return c[0]}};b.keys=function(a){if(b.isArray(a))return b.range(0,a.length);$/;"	f
 b.last	doc/sphinx/build/html/_static/underscore.js	/^0,c):a[0]};b.rest=function(a,c,d){return k.call(a,b.isUndefined(c)||d?1:c)};b.last=function(a){return a[a.length-1]};b.compact=function(a){return b.select(a,function(c){return!!c})};b.flatten=function(a){return b.reduce(a,[],function(c,d){if(b.isArray(d))return c.concat(b.flatten(d));c.push(d);return c})};b.without=function(a){var c=b.rest(arguments);return b.select(a,function(d){return!b.include(c,d)})};b.uniq=function(a,c){return b.reduce(a,[],function(d,e,f){if(0==f||(c===true?b.last(d)!=e:!b.include(d,$/;"	f
 b.lastIndexOf	doc/sphinx/build/html/_static/underscore.js	/^e)))d.push(e);return d})};b.intersect=function(a){var c=b.rest(arguments);return b.select(b.uniq(a),function(d){return b.all(c,function(e){return b.indexOf(e,d)>=0})})};b.zip=function(){for(var a=b.toArray(arguments),c=b.max(b.pluck(a,"length")),d=new Array(c),e=0;e<c;e++)d[e]=b.pluck(a,String(e));return d};b.indexOf=function(a,c){if(a.indexOf)return a.indexOf(c);for(var d=0,e=a.length;d<e;d++)if(a[d]===c)return d;return-1};b.lastIndexOf=function(a,c){if(a.lastIndexOf)return a.lastIndexOf(c);for(var d=$/;"	f
@@ -999,19 +672,18 @@ cflowd_export_factory	Simulator/flowexport.py	/^def cflowd_export_factory(rname)
 charbufferproc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef getcharbufferproc charbufferproc;$/;"	t	file:
 children	Simulator/ipaddrgen/addrgen_trie.h	/^    struct node *children[2];$/;"	m	struct:node	typeref:struct:node::node
 choose_ip_addr	Configure/mod_util.py	/^def choose_ip_addr(ip_addr_set):$/;"	f
-clear_modulator	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def clear_modulator():$/;"	m	class:NNode
 clear_modulator	Configure/Node.py	/^    def clear_modulator():$/;"	m	class:NNode
+clear_modulator	Configure/back_Node.py	/^    def clear_modulator():$/;"	m	class:NNode
 clear_tcp_flags	Simulator/flowlet.py	/^    def clear_tcp_flags(self):$/;"	m	class:Flowlet
 clientdata	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  void                    *clientdata;		\/* Language specific module data *\/$/;"	m	struct:swig_module_info	file:
 clientdata	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  void                   *clientdata;		\/* language specific type data *\/$/;"	m	struct:swig_type_info	file:
 closeReply	doc/sphinx/build/html/_static/websupport.js	/^  function closeReply(id) {$/;"	f
 commentTemplate	doc/sphinx/build/html/_static/websupport.js	/^  var commentTemplate = '\\$/;"	v
 comp	doc/sphinx/build/html/_static/websupport.js	/^      comp = function(a, b) { return a[i] - b[i]; };$/;"	f
+compare	Detector/AnomalyDetector.py	/^def compare(fName):$/;"	f
 converter	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_converter_func     converter;		\/* function to cast the void pointers *\/$/;"	m	struct:swig_cast_info	file:
-copyright	doc/sphinx/source/conf.py	/^copyright = u'2012, Jing Conan Wang'$/;"	v
 count_helper	Simulator/ipaddrgen/addrgen_trie.c	/^static inline uint64_t count_helper(struct node *curr)$/;"	f	file:
 count_nodes	Simulator/ipaddrgen/addrgen_trie.c	/^uint64_t count_nodes(struct gentrie *trie)$/;"	f
-count_nodes	Simulator/ipaddrgen/ipaddrgen.py	/^count_nodes = _ipaddrgen.count_nodes$/;"	v
 count_nodes	Simulator/ipaddrgen/ipaddrgen.py	/^def count_nodes(*args):$/;"	f
 createCommentDiv	doc/sphinx/build/html/_static/websupport.js	/^  function createCommentDiv(comment) {$/;"	f
 cut_profile	Configure/Anomaly.py	/^    def cut_profile(profile, status):$/;"	m	class:Anomaly
@@ -1020,22 +692,17 @@ decrbacklog	Simulator/fs.py	/^    def decrbacklog(self, amt):$/;"	m	class:Link
 delargs	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  int delargs;$/;"	m	struct:__anon2	file:
 delay	Simulator/fs.py	/^    def delay(self, a, b):$/;"	m	class:Simulator
 deleteComment	doc/sphinx/build/html/_static/websupport.js	/^  function deleteComment(id) {$/;"	f
-description	Simulator/ipaddrgen/setup.py	/^      description='Module for realistic generation of IP addresses',$/;"	v
 destnode	Simulator/fs.py	/^    def destnode(self, node, dest):$/;"	m	class:Simulator
 destroy	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *destroy;$/;"	m	struct:__anon2	file:
+detect	Detector/AnomalyDetector.py	/^    def detect(self, fName):$/;"	m	class:AnoDetector
 dict	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *dict;$/;"	m	struct:__anon3	file:
-dispatcher	main.py	/^dispatcher = {$/;"	v
-displayNextItem	doc/sphinx/build/html/_static/searchtools.js	/^    function displayNextItem() {$/;"	f
-done	Simulator/traffic.py	/^    done = property(get_done, set_done, None, 'done flag')$/;"	v	class:GeneratorNode
 dottedQuadToNum	Detector/DataParser.py	/^def dottedQuadToNum(ip):$/;"	f
 dstaddr	Simulator/flowlet.py	/^    def dstaddr(self):$/;"	m	class:Flowlet
 dstport	Simulator/flowlet.py	/^    def dstport(self):$/;"	m	class:Flowlet
+dump	Detector/AnomalyDetector.py	/^    def dump(self, data_name):$/;"	m	class:AnoDetector
 dvalue	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  double dvalue;$/;"	m	struct:swig_const_info	file:
-e.computed	doc/sphinx/build/html/_static/underscore.js	/^function(a,c){return b.map(a,function(d){return d[c]})};b.max=function(a,c,d){if(!c&&b.isArray(a))return Math.max.apply(Math,a);var e={computed:-Infinity};b.each(a,function(f,g,h){g=c?c.call(d,f,g,h):f;g>=e.computed&&(e={value:f,computed:g})});return e.value};b.min=function(a,c,d){if(!c&&b.isArray(a))return Math.min.apply(Math,a);var e={computed:Infinity};b.each(a,function(f,g,h){g=c?c.call(d,f,g,h):f;g<e.computed&&(e={value:f,computed:g})});return e.value};b.sortBy=function(a,c,d){return b.pluck(b.map(a,$/;"	p
 emerge_phase	Simulator/traffic.py	/^    def emerge_phase(self):$/;"	m	class:FlowEventGenModulator
-end	doc/sphinx/make.bat	/^:end$/;"	l
 endofflow	Simulator/flowlet.py	/^    def endofflow(self):$/;"	m	class:Flowlet
-exclude_patterns	doc/sphinx/source/conf.py	/^exclude_patterns = []$/;"	v
 excluded	doc/sphinx/build/html/_static/searchtools.js	/^    var excluded = [];$/;"	v
 expmax	Simulator/ipaddrgen/addrgen_trie.c	159;"	d	file:
 expmax	Simulator/ipaddrgen/addrgen_trie.c	294;"	d	file:
@@ -1043,17 +710,11 @@ exponential	Simulator/traffic.py	/^def exponential(lam):$/;"	f
 exportflow	Simulator/flowexport.py	/^    def exportflow(self, ts, flet):$/;"	m	class:CflowdExporter
 exportflow	Simulator/flowexport.py	/^    def exportflow(self, ts, flet):$/;"	m	class:FlowExporter
 exportflow	Simulator/flowexport.py	/^    def exportflow(self, ts, flet):$/;"	m	class:TextExporter
-ext_modules	Simulator/ipaddrgen/setup.py	/^      ext_modules=[Extension('_ipaddrgen', ['ipaddrgen.i','addrgen_trie.c'],$/;"	v
-extensions	doc/sphinx/source/conf.py	/^extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.pngmath', 'sphinx.ext.viewcode']$/;"	v
-f1	Simulator/flowlet.py	/^    f1 = Flowlet(ft)$/;"	v
-f2	Simulator/flowlet.py	/^    f2 = copy.copy(f1)$/;"	v
-fileMap	doc/sphinx/build/html/_static/searchtools.js	/^    var fileMap = {};$/;"	v
+extracted_f1	New_Detector/test_rope.py	/^    def extracted_f1(self):$/;"	m	class:A
+f1	New_Detector/test_rope.py	/^    def f1(self):$/;"	m	class:A
+f2	New_Detector/test_rope.py	/^    def f2(self):$/;"	m	class:A
+f_hash	Detector/DetectorLib.py	/^def f_hash(digit, level):$/;"	f
 files	doc/sphinx/build/html/_static/searchtools.js	/^    var files = null;$/;"	v
-flow_arrival_rate	test/markov_p_ano.py	/^        flow_arrival_rate = 0.1,$/;"	v
-flow_arrival_rate	test/markov_p_ano.py	/^        flow_arrival_rate = 1,$/;"	v
-flow_size_mean	test/markov_p_ano.py	/^        flow_size_mean = 1e3,$/;"	v
-flow_size_mean	test/markov_p_ano.py	/^        flow_size_mean = 1e4,$/;"	v
-flow_size_var	test/markov_p_ano.py	/^        flow_size_var = 100,$/;"	v
 flowemit	Simulator/traffic.py	/^    def flowemit(self, flowlet, destnode, xinterval, ticks):$/;"	m	class:SimpleGeneratorNode
 flowemit	Simulator/traffic.py	/^    def flowemit(self, flowlet, numsent, emitrv, destnode, test=False):$/;"	m	class:HarpoonGeneratorNode
 flowend	Simulator/flowlet.py	/^    def flowend(self):$/;"	m	class:Flowlet
@@ -1064,57 +725,44 @@ flowsampling	Simulator/fs.py	/^    def flowsampling(self):$/;"	m	class:Router
 flowsampling	Simulator/fs.py	/^    def flowsampling(self, fs):$/;"	m	class:Router
 flowstart	Simulator/flowlet.py	/^    def flowstart(self):$/;"	m	class:Flowlet
 flowstart	Simulator/flowlet.py	/^    def flowstart(self, fstart):$/;"	m	class:Flowlet
-fn.autogrow	doc/sphinx/build/html/_static/websupport.js	/^(function($) {$/;"	f
+fn.autogrow	doc/sphinx/build/html/_static/websupport.js	/^= createCommentDiv(this);$/;"	f
+fn.autogrow.resize	doc/sphinx/build/html/_static/websupport.js	/^        clearInterval(textarea.interval);$/;"	f
+fn.comment	doc/sphinx/build/html/_static/websupport.js	/^      .fadeOut("slow");$/;"	f
+for	Configure/Anomaly.py	/^    '''basis class for anomaly. Its subclass will provide run() method'''$/;"	c	class:Anomaly
 frange	Simulator/traffic.py	/^def frange(a, b, c):$/;"	f
 freefunc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef destructor freefunc;$/;"	t	file:
-ft	Simulator/flowlet.py	/^    ft = FiveTuple(str(ipaddr.IPAddress('10.0.1.1')), str(ipaddr.IPAddress('192.168.5.2')), 17, 5, 42)$/;"	v
-function.pa	doc/sphinx/build/html/_static/jquery.js	/^j.length;n<r;n++)for(k=0;k<u.length;k++){i=u[k];if(j[n].selector===i.selector){o=j[n].elem;f=null;if(i.preType==="mouseenter"||i.preType==="mouseleave")f=c(a.relatedTarget).closest(i.selector)[0];if(!f||f!==o)d.push({elem:o,handleObj:i})}}n=0;for(r=d.length;n<r;n++){j=d[n];a.currentTarget=j.elem;a.data=j.handleObj.data;a.handleObj=j.handleObj;if(j.handleObj.origHandler.apply(j.elem,e)===false){b=false;break}}return b}}function pa(a,b){return"live."+(a&&a!=="*"?a+".":"")+b.replace(\/\\.\/g,"`").replace(\/ \/g,$/;"	f
-function.qa	doc/sphinx/build/html/_static/jquery.js	/^"&")}function qa(a){return!a||!a.parentNode||a.parentNode.nodeType===11}function ra(a,b){var d=0;b.each(function(){if(this.nodeName===(a[d]&&a[d].nodeName)){var f=c.data(a[d++]),e=c.data(this,f);if(f=f&&f.events){delete e.handle;e.events={};for(var j in f)for(var i in f[j])c.event.add(this,j,f[j][i],f[j][i].data)}}})}function sa(a,b,d){var f,e,j;b=b&&b[0]?b[0].ownerDocument||b[0]:s;if(a.length===1&&typeof a[0]==="string"&&a[0].length<512&&b===s&&!ta.test(a[0])&&(c.support.checkClone||!ua.test(a[0]))){e=$/;"	f
-g_size	settings.py	/^g_size = 10$/;"	v
-g_size	settings/multi_srv_targ_one.py	/^g_size = 10$/;"	v
-g_size	settings/multi_srv_targ_one_with_fr.py	/^g_size = 10$/;"	v
-g_size	settings_template.py	/^g_size = 10$/;"	v
-g_size	test/markov_p_ano.py	/^g_size = 10$/;"	v
-g_size	test/normal.py	/^g_size = 10$/;"	v
 gamma	Simulator/traffic.py	/^def gamma(alpha, beta):$/;"	f
-gen_desc	settings.py	/^        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},$/;"	v
-gen_desc	settings/multi_srv_targ_one.py	/^        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},$/;"	v
-gen_desc	settings/multi_srv_targ_one_with_fr.py	/^        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},$/;"	v
-gen_desc	settings_template.py	/^        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},$/;"	v
-gen_desc	test/normal.py	/^        gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'},$/;"	v
+gen_norminal_pdf	Detector/DetectorLib.py	/^def gen_norminal_pdf(fName, feaQN, dumpFlag =False):$/;"	f
 genbeta	Simulator/ipaddrgen/addrgen_trie.c	/^static double genbeta(double aa)$/;"	f	file:
 generate_addressv4	Simulator/ipaddrgen/addrgen_trie.c	/^uint32_t generate_addressv4(struct gentrie *trie)$/;"	f
 generate_addressv4	Simulator/ipaddrgen/ipaddrgen.py	/^def generate_addressv4(*args):$/;"	f
-generate_addressv4	Simulator/ipaddrgen/ipaddrgen.py	/^generate_addressv4 = _ipaddrgen.generate_addressv4$/;"	v
 gentrie	Simulator/ipaddrgen/addrgen_trie.h	/^struct gentrie $/;"	s
 getChildren	doc/sphinx/build/html/_static/websupport.js	/^  function getChildren(ul, recursive) {$/;"	f
 getComments	doc/sphinx/build/html/_static/websupport.js	/^  function getComments(id) {$/;"	f
+get_all_pmf	Detector/DetectorLib.py	/^def get_all_pmf(feaVec, feaQN, feaRange,  quanFlag=None):$/;"	f
 get_attr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    PyObject *(*get_attr)(void);       \/* Return the current value *\/$/;"	m	struct:swig_globalvar	file:
+get_dist_to_center	Detector/DetectorLib.py	/^def get_dist_to_center(data, cluster, centerPt, DF):$/;"	f
 get_done	Simulator/traffic.py	/^    def get_done(self):$/;"	m	class:GeneratorNode
+get_feature	Detector/DetectorLib.py	/^def get_feature(fName, clusterNum, cutHead=True):$/;"	f
+get_feature_hash_list	Detector/DetectorLib.py	/^def get_feature_hash_list(F, Q):$/;"	f
+get_feature_nominal_pmf	Detector/AnomalyDetector.py	/^    def get_feature_nominal_pmf(self, feaQN, fName):$/;"	m	class:AnoDetector
+get_flow_rate	Detector/DetectorLib.py	/^def get_flow_rate(t, cluster):$/;"	f
 get_generator	Configure/Generator.py	/^def get_generator(gen_desc):$/;"	f
 get_link	Simulator/fs.py	/^    def get_link(self, next_router):$/;"	m	class:Router
 get_new_gen	Configure/Generator.py	/^    def get_new_gen(self, change_para=None):$/;"	m	class:HarpoonG
 get_pos	Configure/Anomaly.py	/^def get_pos(l, v):$/;"	f
 get_profile_with_ano	Configure/Anomaly.py	/^    def get_profile_with_ano(self, mod_start, mod_profile, ano_t):$/;"	m	class:Anomaly
-gmap	Configure/Generator.py	/^gmap = {'harpoon':HarpoonG}$/;"	v
+get_range	Detector/DetectorLib.py	/^def get_range(data):$/;"	f
 handleReSort	doc/sphinx/build/html/_static/websupport.js	/^  function handleReSort(link) {$/;"	f
 handleVote	doc/sphinx/build/html/_static/websupport.js	/^  function handleVote(link) {$/;"	f
-handleVote.d.comment_id	doc/sphinx/build/html/_static/websupport.js	/^      comment_id: id.substring(2),$/;"	p
-haveIPAddrGen	Simulator/traffic.py	/^    haveIPAddrGen = True$/;"	v
-haveIPAddrGen	Simulator/traffic.py	/^haveIPAddrGen = False$/;"	v
 hide	doc/sphinx/build/html/_static/websupport.js	/^  function hide(id) {$/;"	f
 hideProposal	doc/sphinx/build/html/_static/websupport.js	/^  function hideProposal(id) {$/;"	f
 hideProposeChange	doc/sphinx/build/html/_static/websupport.js	/^  function hideProposeChange(id) {$/;"	f
 highlightstring	doc/sphinx/build/html/_static/searchtools.js	/^    var highlightstring = '?highlight=' + $.urlencode(hlterms.join(" "));$/;"	v
 hlterms	doc/sphinx/build/html/_static/searchtools.js	/^    var hlterms = [];$/;"	v
-html_static_path	doc/sphinx/source/conf.py	/^html_static_path = ['_static']$/;"	v
-html_theme	doc/sphinx/source/conf.py	/^html_theme = 'default'$/;"	v
-htmlhelp_basename	doc/sphinx/source/conf.py	/^htmlhelp_basename = 'SADITdoc'$/;"	v
-idx	Configure/Anomaly.py	/^    idx = 0 # A indicator to seperate the IP that has been selected or not$/;"	v	class:AtypicalUserAnomaly
 implicitconv	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  int implicitconv;$/;"	m	struct:__anon2	file:
 importantResults	doc/sphinx/build/html/_static/searchtools.js	/^    var importantResults = [];$/;"	v
-imports	misc/PrintVar.py	/^imports = 'types', 'sys', 'PrintVar', 'os', 'settings'$/;"	v
-imports	util.py	/^imports = 'types', 'sys', 'PrintVar', 'os', 'settings'$/;"	v
+ined	Configure/mod_util.py	/^    *DF* is a user defined distance function'''$/;"	f	function:CalIPCenter
 infnty	Simulator/ipaddrgen/addrgen_trie.c	160;"	d	file:
 infnty	Simulator/ipaddrgen/addrgen_trie.c	295;"	d	file:
 init	Configure/Network.py	/^    def init(self, net_desc, norm_desc):$/;"	m	class:Network
@@ -1123,12 +771,9 @@ initComparator	doc/sphinx/build/html/_static/websupport.js	/^  function initComp
 initEvents	doc/sphinx/build/html/_static/websupport.js	/^  function initEvents() {$/;"	f
 initialize_trie	Simulator/ipaddrgen/addrgen_trie.c	/^struct gentrie *initialize_trie(uint32_t netaddr, uint8_t prefixlen, double beta)$/;"	f
 initialize_trie	Simulator/ipaddrgen/ipaddrgen.py	/^def initialize_trie(*args):$/;"	f
-initialize_trie	Simulator/ipaddrgen/ipaddrgen.py	/^initialize_trie = _ipaddrgen.initialize_trie$/;"	v
 insertComment	doc/sphinx/build/html/_static/websupport.js	/^  function insertComment(comment) {$/;"	f
 insert_break_pt	Configure/Anomaly.py	/^def insert_break_pt(b, dur, num):$/;"	f
-intersphinx_mapping	doc/sphinx/source/conf.py	/^intersphinx_mapping = {'http:\/\/docs.python.org\/': None}$/;"	v
 interval	Simulator/fs.py	/^    def interval(self):$/;"	m	class:Simulator
-interval	test/markov_p_ano.py	/^        interval=10,$/;"	v
 ipfix	Simulator/ipfix.py	/^class ipfix(object):$/;"	c
 ipproto	Simulator/flowlet.py	/^    def ipproto(self):$/;"	m	class:Flowlet
 ipprotoname	Simulator/flowlet.py	/^    def ipprotoname(self):$/;"	m	class:Flowlet
@@ -1140,52 +785,17 @@ jQuery.fn.highlightText.highlight	doc/sphinx/build/html/_static/doctools.js	/^  
 jQuery.getQueryParameters	doc/sphinx/build/html/_static/doctools.js	/^jQuery.getQueryParameters = function(s) {$/;"	f
 jQuery.makeSearchSummary	doc/sphinx/build/html/_static/searchtools.js	/^jQuery.makeSearchSummary = function(text, keywords, hlwords) {$/;"	f
 jQuery.urldecode	doc/sphinx/build/html/_static/doctools.js	/^jQuery.urldecode = function(x) {$/;"	f
-k_bytesMask	Simulator/cflow.py	/^    k_bytesMask         = 0x00000100 $/;"	v	class:cflow
-k_dstAsMask	Simulator/cflow.py	/^    k_dstAsMask         = 0x00008000 $/;"	v	class:cflow
-k_dstIpAddrMask	Simulator/cflow.py	/^    k_dstIpAddrMask     = 0x00000004 $/;"	v	class:cflow
-k_dstMaskLenMask	Simulator/cflow.py	/^    k_dstMaskLenMask    = 0x00020000 $/;"	v	class:cflow
-k_dstPortMask	Simulator/cflow.py	/^    k_dstPortMask       = 0x00000040 $/;"	v	class:cflow
-k_endTimeMask	Simulator/cflow.py	/^    k_endTimeMask       = 0x00000800 $/;"	v	class:cflow
-k_engineIdMask	Simulator/cflow.py	/^    k_engineIdMask      = 0x00800000 $/;"	v	class:cflow
-k_engineTypeMask	Simulator/cflow.py	/^    k_engineTypeMask    = 0x00400000 $/;"	v	class:cflow
-k_fullmask	Simulator/cflow.py	/^    k_fullmask = 0x00c7ffff$/;"	v	class:cflow
-k_inputIfIndexMask	Simulator/cflow.py	/^    k_inputIfIndexMask  = 0x00000008 $/;"	v	class:cflow
-k_ipNextHopMask	Simulator/cflow.py	/^    k_ipNextHopMask     = 0x00000200 $/;"	v	class:cflow
-k_outputIfIndexMask	Simulator/cflow.py	/^    k_outputIfIndexMask = 0x00000010 $/;"	v	class:cflow
-k_pktsMask	Simulator/cflow.py	/^    k_pktsMask          = 0x00000080 $/;"	v	class:cflow
-k_protocolMask	Simulator/cflow.py	/^    k_protocolMask      = 0x00001000 $/;"	v	class:cflow
-k_routerMask	Simulator/cflow.py	/^    k_routerMask        = 0x00000001 $/;"	v	class:cflow
-k_srcAsMask	Simulator/cflow.py	/^    k_srcAsMask         = 0x00004000 $/;"	v	class:cflow
-k_srcIpAddrMask	Simulator/cflow.py	/^    k_srcIpAddrMask     = 0x00000002 $/;"	v	class:cflow
-k_srcMaskLenMask	Simulator/cflow.py	/^    k_srcMaskLenMask    = 0x00010000 $/;"	v	class:cflow
-k_srcPortMask	Simulator/cflow.py	/^    k_srcPortMask       = 0x00000020 $/;"	v	class:cflow
-k_startTimeMask	Simulator/cflow.py	/^    k_startTimeMask     = 0x00000400 $/;"	v	class:cflow
-k_tcpFlagsMask	Simulator/cflow.py	/^    k_tcpFlagsMask      = 0x00040000 $/;"	v	class:cflow
-k_tosMask	Simulator/cflow.py	/^    k_tosMask           = 0x00002000 $/;"	v	class:cflow
+k	doc/sphinx/build/html/_static/underscore.js	/^(function(){var j=this,n=j._,i=function(a){this._wrapped=a},m=typeof StopIteration!=="undefined"?StopIteration:"__break__",b=j._=function(a){return new i(a)};if(typeof exports!=="undefined")exports._=b;var k=Array.prototype.slice,o=Array.prototype.unshift,p=Object.prototype.toString,q=Object.prototype.hasOwnProperty,r=Object.prototype.propertyIsEnumerable;b.VERSION="0.5.5";b.each=function(a,c,d){try{if(a.forEach)a.forEach(c,d);else if(b.isArray(a)||b.isArguments(a))for(var e=0,f=a.length;e<f;e++)c.call(d,$/;"	v
 key	Simulator/flowlet.py	/^    def key(self):$/;"	m	class:Flowlet
 kill_all_generator	Simulator/traffic.py	/^    def kill_all_generator(self): # Add by Jing Wang$/;"	m	class:FlowEventGenModulator
 kill_generator	Simulator/traffic.py	/^    def kill_generator(self):$/;"	m	class:FlowEventGenModulator
 klass	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *klass;$/;"	m	struct:__anon2	file:
-latex_documents	doc/sphinx/source/conf.py	/^latex_documents = [$/;"	v
-latex_elements	doc/sphinx/source/conf.py	/^latex_elements = {$/;"	v
 lenfunc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef inquiry lenfunc;$/;"	t	file:
-link_attr	misc/settings copy.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
-link_attr	settings.py	/^        link_attr=link_attr,$/;"	v
-link_attr	settings.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
-link_attr	settings/multi_srv_targ_one.py	/^        link_attr=link_attr,$/;"	v
-link_attr	settings/multi_srv_targ_one.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
-link_attr	settings/multi_srv_targ_one_with_fr.py	/^        link_attr=link_attr,$/;"	v
-link_attr	settings/multi_srv_targ_one_with_fr.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
-link_attr	settings_template.py	/^        link_attr=link_attr,$/;"	v
-link_attr	settings_template.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
-link_attr	test/markov_p_ano.py	/^        link_attr=link_attr,$/;"	v
-link_attr	test/markov_p_ano.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
-link_attr	test/normal.py	/^        link_attr=link_attr,$/;"	v
-link_attr	test/normal.py	/^link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute$/;"	v
 lognormal	Simulator/traffic.py	/^def lognormal(mean, sdev):$/;"	f
 lvalue	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  long lvalue;$/;"	m	struct:swig_const_info	file:
-m_id	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def m_id(self):$/;"	m	class:NNode
 m_id	Configure/Node.py	/^    def m_id(self):$/;"	m	class:NNode
+m_id	Configure/back_Node.py	/^    def m_id(self):$/;"	m	class:NNode
+main	New_Detector/test3.py	/^def main():$/;"	f
 main	Simulator/cflow.py	/^def main():$/;"	f
 main	Simulator/flowexport.py	/^def main():$/;"	f
 main	Simulator/fs.py	/^def main():$/;"	f
@@ -1194,21 +804,22 @@ main	Simulator/ipaddrgen/testmain.c	/^int main(int argc, char **argv)$/;"	f
 main	Simulator/ipfix.py	/^def main():$/;"	f
 main	Simulator/netflow9.py	/^def main():$/;"	f
 main	Simulator/traffic.py	/^def main():$/;"	f
-man_pages	doc/sphinx/source/conf.py	/^man_pages = [$/;"	v
-master_doc	doc/sphinx/source/conf.py	/^master_doc = 'index'$/;"	v
+method	Simulator/cflow.py	/^    @classmethod$/;"	c	class:cflow
+method	Simulator/ipfix.py	/^    @classmethod$/;"	c	class:ipfix
+method	Simulator/netflow9.py	/^    @classmethod$/;"	c	class:netflow9
 mkdict	Simulator/traffic.py	/^def mkdict(s):$/;"	f
 mkreverse	Simulator/flowlet.py	/^    def mkreverse(self):$/;"	m	class:FiveTuple
+model_based	Detector/DetectorLib.py	/^def model_based(qFeaVec, feaQN):$/;"	f
+model_free	Detector/DetectorLib.py	/^def model_free(qFeaVec, feaQN):$/;"	f
 modulation_generator	Simulator/traffic.py	/^def modulation_generator(xlist):$/;"	f
 mss	Simulator/flowlet.py	/^    def mss(self):$/;"	m	class:Flowlet
 mss	Simulator/flowlet.py	/^    def mss(self, m):$/;"	m	class:Flowlet
 multi_srv_targ_one	main.py	/^def multi_srv_targ_one():$/;"	f
-n	Simulator/ipaddrgen/trietest.py	/^n = ipaddrgen.count_nodes(t)$/;"	v
 na	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
 name	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    char       *name;                  \/* Name of global variable *\/$/;"	m	struct:swig_globalvar	file:
 name	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *name, *slots;$/;"	m	struct:__anon1	file:
 name	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  char *name;$/;"	m	struct:swig_const_info	file:
 name	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  const char             *name;			\/* mangled name of this type *\/$/;"	m	struct:swig_type_info	file:
-net	Simulator/ipaddrgen/trietest.py	/^net = ipaddr.IPv4Network('127.0.0.0\/8')$/;"	v
 netaddr	Simulator/ipaddrgen/addrgen_trie.h	/^    uint32_t netaddr;$/;"	m	struct:gentrie
 netflow9	Simulator/netflow9.py	/^class netflow9(object):$/;"	c
 new_node	Simulator/ipaddrgen/addrgen_trie.c	/^static inline struct node *new_node()$/;"	f	file:
@@ -1221,36 +832,22 @@ next	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  struct swig_cast_info  *next;			\/
 next	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  struct swig_module_info *next;		\/* Pointer to next element in circularly linked list *\/$/;"	m	struct:swig_module_info	typeref:struct:swig_module_info::swig_module_info	file:
 nexthop	Simulator/fs.py	/^    def nexthop(self, node, dest):$/;"	m	class:Simulator
 node	Simulator/ipaddrgen/addrgen_trie.h	/^struct node $/;"	s
-node_map	Configure/Network.py	/^node_map = {$/;"	v
-node_para	test/markov_p_ano.py	/^        node_para=MARKOV_DESC,$/;"	v
-node_para	test/normal.py	/^        node_para={},$/;"	v
-node_type	settings/multi_srv_targ_one.py	/^        node_type = 'NNode',$/;"	v
-node_type	test/markov_p_ano.py	/^        node_type='MarkovNode',$/;"	v
-node_type	test/normal.py	/^        node_type='NNode',$/;"	v
 normal	Simulator/traffic.py	/^def normal(mean, sdev):$/;"	f
 now	Simulator/fs.py	/^    def now(self):$/;"	m	class:Simulator
 null_export_factory	Simulator/flowexport.py	/^def null_export_factory(rname):$/;"	f
 numToDottedQuad	Detector/DataParser.py	/^def numToDottedQuad(n):$/;"	f
 oa	doc/sphinx/build/html/_static/jquery.js	/^e(a[0],b):w}function J(){return(new Date).getTime()}function Y(){return false}function Z(){return true}function na(a,b,d){d[0].type=a;return c.event.handle.apply(b,d)}function oa(a){var b,d=[],f=[],e=arguments,j,i,o,k,n,r;i=c.data(this,"events");if(!(a.liveFired===this||!i||!i.live||a.button&&a.type==="click")){a.liveFired=this;var u=i.live.slice(0);for(k=0;k<u.length;k++){i=u[k];i.origType.replace(O,"")===a.type?f.push(i.selector):u.splice(k--,1)}j=c(a.target).closest(f,a.currentTarget);n=0;for(r=$/;"	f
+oa.K	doc/sphinx/build/html/_static/jquery.js	/^true;if(j=c.fragments[a[0]])if(j!==1)f=j}if(!f){f=b.createDocumentFragment();c.clean(a,b,f,d)}if(e)c.fragments[a[0]]=j?f:1;return{fragment:f,cacheable:e}}function K(a,b){var d={};c.each(va.concat.apply([],va.slice(0,b)),function(){d[this]=a});return d}function wa(a){return"scrollTo"in a&&a.document?a:a.nodeType===9?a.defaultView||a.parentWindow:false}var c=function(a,b){return new c.fn.init(a,b)},Ra=A.jQuery,Sa=A.$,s=A.document,T,Ta=\/^[^<]*(<[\\w\\W]+>)[^>]*$|^#([\\w-]+)$\/,Ua=\/^.[^:#\\[\\.,]*$\/,Va=\/\\S\/,$/;"	f
+oa.c	doc/sphinx/build/html/_static/jquery.js	/^true;if(j=c.fragments[a[0]])if(j!==1)f=j}if(!f){f=b.createDocumentFragment();c.clean(a,b,f,d)}if(e)c.fragments[a[0]]=j?f:1;return{fragment:f,cacheable:e}}function K(a,b){var d={};c.each(va.concat.apply([],va.slice(0,b)),function(){d[this]=a});return d}function wa(a){return"scrollTo"in a&&a.document?a:a.nodeType===9?a.defaultView||a.parentWindow:false}var c=function(a,b){return new c.fn.init(a,b)},Ra=A.jQuery,Sa=A.$,s=A.document,T,Ta=\/^[^<]*(<[\\w\\W]+>)[^>]*$|^#([\\w-]+)$\/,Ua=\/^.[^:#\\[\\.,]*$\/,Va=\/\\S\/,$/;"	f
+oa.pa	doc/sphinx/build/html/_static/jquery.js	/^j.length;n<r;n++)for(k=0;k<u.length;k++){i=u[k];if(j[n].selector===i.selector){o=j[n].elem;f=null;if(i.preType==="mouseenter"||i.preType==="mouseleave")f=c(a.relatedTarget).closest(i.selector)[0];if(!f||f!==o)d.push({elem:o,handleObj:i})}}n=0;for(r=d.length;n<r;n++){j=d[n];a.currentTarget=j.elem;a.data=j.handleObj.data;a.handleObj=j.handleObj;if(j.handleObj.origHandler.apply(j.elem,e)===false){b=false;break}}return b}}function pa(a,b){return"live."+(a&&a!=="*"?a+".":"")+b.replace(\/\\.\/g,"`").replace(\/ \/g,$/;"	f
+oa.qa	doc/sphinx/build/html/_static/jquery.js	/^"&")}function qa(a){return!a||!a.parentNode||a.parentNode.nodeType===11}function ra(a,b){var d=0;b.each(function(){if(this.nodeName===(a[d]&&a[d].nodeName)){var f=c.data(a[d++]),e=c.data(this,f);if(f=f&&f.events){delete e.handle;e.events={};for(var j in f)for(var i in f[j])c.event.add(this,j,f[j][i],f[j][i].data)}}})}function sa(a,b,d){var f,e,j;b=b&&b[0]?b[0].ownerDocument||b[0]:s;if(a.length===1&&typeof a[0]==="string"&&a[0].length<512&&b===s&&!ta.test(a[0])&&(c.support.checkClone||!ua.test(a[0]))){e=$/;"	f
+oa.ra	doc/sphinx/build/html/_static/jquery.js	/^"&")}function qa(a){return!a||!a.parentNode||a.parentNode.nodeType===11}function ra(a,b){var d=0;b.each(function(){if(this.nodeName===(a[d]&&a[d].nodeName)){var f=c.data(a[d++]),e=c.data(this,f);if(f=f&&f.events){delete e.handle;e.events={};for(var j in f)for(var i in f[j])c.event.add(this,j,f[j][i],f[j][i].data)}}})}function sa(a,b,d){var f,e,j;b=b&&b[0]?b[0].ownerDocument||b[0]:s;if(a.length===1&&typeof a[0]==="string"&&a[0].length<512&&b===s&&!ta.test(a[0])&&(c.support.checkClone||!ua.test(a[0]))){e=$/;"	f
+oa.sa	doc/sphinx/build/html/_static/jquery.js	/^"&")}function qa(a){return!a||!a.parentNode||a.parentNode.nodeType===11}function ra(a,b){var d=0;b.each(function(){if(this.nodeName===(a[d]&&a[d].nodeName)){var f=c.data(a[d++]),e=c.data(this,f);if(f=f&&f.events){delete e.handle;e.events={};for(var j in f)for(var i in f[j])c.event.add(this,j,f[j][i],f[j][i].data)}}})}function sa(a,b,d){var f,e,j;b=b&&b[0]?b[0].ownerDocument||b[0]:s;if(a.length===1&&typeof a[0]==="string"&&a[0].length<512&&b===s&&!ta.test(a[0])&&(c.support.checkClone||!ua.test(a[0]))){e=$/;"	f
+oa.wa	doc/sphinx/build/html/_static/jquery.js	/^true;if(j=c.fragments[a[0]])if(j!==1)f=j}if(!f){f=b.createDocumentFragment();c.clean(a,b,f,d)}if(e)c.fragments[a[0]]=j?f:1;return{fragment:f,cacheable:e}}function K(a,b){var d={};c.each(va.concat.apply([],va.slice(0,b)),function(){d[this]=a});return d}function wa(a){return"scrollTo"in a&&a.document?a:a.nodeType===9?a.defaultView||a.parentWindow:false}var c=function(a,b){return new c.fn.init(a,b)},Ra=A.jQuery,Sa=A.$,s=A.document,T,Ta=\/^[^<]*(<[\\w\\W]+>)[^>]*$|^#([\\w-]+)$\/,Ua=\/^.[^:#\\[\\.,]*$\/,Va=\/\\S\/,$/;"	f
 objectResults	doc/sphinx/build/html/_static/searchtools.js	/^    var objectResults = [];$/;"	v
 objectterms	doc/sphinx/build/html/_static/searchtools.js	/^    var objectterms = [];$/;"	v
 old_detector	main.py	/^def old_detector():$/;"	f
 openReply	doc/sphinx/build/html/_static/websupport.js	/^  function openReply(id) {$/;"	f
-opts.acceptCommentURL	doc/sphinx/build/html/_static/websupport.js	/^    acceptCommentURL: '\/_accept_comment',$/;"	p
-opts.addCommentURL	doc/sphinx/build/html/_static/websupport.js	/^    addCommentURL: '\/_add_comment',$/;"	p
-opts.closeCommentImage	doc/sphinx/build/html/_static/websupport.js	/^    closeCommentImage: '\/static\/_static\/comment-close.png',$/;"	p
-opts.commentBrightImage	doc/sphinx/build/html/_static/websupport.js	/^    commentBrightImage: '\/static\/_static\/comment-bright.png',$/;"	p
-opts.commentImage	doc/sphinx/build/html/_static/websupport.js	/^    commentImage: '\/static\/_static\/comment.png',$/;"	p
-opts.deleteCommentURL	doc/sphinx/build/html/_static/websupport.js	/^    deleteCommentURL: '\/_delete_comment',$/;"	p
-opts.downArrow	doc/sphinx/build/html/_static/websupport.js	/^    downArrow: '\/static\/_static\/down.png',$/;"	p
-opts.downArrowPressed	doc/sphinx/build/html/_static/websupport.js	/^    downArrowPressed: '\/static\/_static\/down-pressed.png',$/;"	p
-opts.getCommentsURL	doc/sphinx/build/html/_static/websupport.js	/^    getCommentsURL: '\/_get_comments',$/;"	p
-opts.loadingImage	doc/sphinx/build/html/_static/websupport.js	/^    loadingImage: '\/static\/_static\/ajax-loader.gif',$/;"	p
-opts.moderator	doc/sphinx/build/html/_static/websupport.js	/^    moderator: false$/;"	p
-opts.processVoteURL	doc/sphinx/build/html/_static/websupport.js	/^    processVoteURL: '\/_process_vote',$/;"	p
-opts.upArrow	doc/sphinx/build/html/_static/websupport.js	/^    upArrow: '\/static\/_static\/up.png',$/;"	p
-opts.upArrowPressed	doc/sphinx/build/html/_static/websupport.js	/^    upArrowPressed: '\/static\/_static\/up-pressed.png',$/;"	p
-opts.voting	doc/sphinx/build/html/_static/websupport.js	/^    voting: false,$/;"	p
 owd	Simulator/fs.py	/^    def owd(self, a, b):$/;"	m	class:Simulator
 own	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  int own;$/;"	m	struct:__anon3	file:
 owndata	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  int                    owndata;		\/* flag if the structure owns the clientdata *\/$/;"	m	struct:swig_type_info	file:
@@ -1266,47 +863,37 @@ pkts	Simulator/flowlet.py	/^    def pkts(self):$/;"	m	class:Flowlet
 pkts	Simulator/flowlet.py	/^    def pkts(self, p):$/;"	m	class:Flowlet
 pktsampling	Simulator/fs.py	/^    def pktsampling(self):$/;"	m	class:Router
 pktsampling	Simulator/fs.py	/^    def pktsampling(self, ps):$/;"	m	class:Router
+plot_entropy	Detector/AnomalyDetector.py	/^    def plot_entropy(self):$/;"	m	class:AnoDetector
 popupTemplate	doc/sphinx/build/html/_static/websupport.js	/^  var popupTemplate = '\\$/;"	v
 prefixlen	Simulator/ipaddrgen/addrgen_trie.h	/^    int prefixlen;$/;"	m	struct:gentrie
 prev	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  struct swig_cast_info  *prev;			\/* pointer to the previous cast *\/$/;"	m	struct:swig_cast_info	typeref:struct:swig_cast_info::swig_cast_info	file:
-profile	settings.py	/^        profile = DEFAULT_PROFILE,$/;"	v
-profile	settings/multi_srv_targ_one.py	/^        profile = DEFAULT_PROFILE,$/;"	v
-profile	settings/multi_srv_targ_one_with_fr.py	/^        profile = DEFAULT_PROFILE,$/;"	v
-profile	settings_template.py	/^        profile = DEFAULT_PROFILE,$/;"	v
-profile	test/markov_p_ano.py	/^        profile = DEFAULT_PROFILE,$/;"	v
-profile	test/normal.py	/^        profile = DEFAULT_PROFILE,$/;"	v
 progress	Simulator/fs.py	/^    def progress(self):$/;"	m	class:Simulator
-project	doc/sphinx/source/conf.py	/^project = u'SADIT'$/;"	v
 project_opened	.ropeproject/config.py	/^def project_opened(project):$/;"	f
+project_opened	New_Detector/.ropeproject/config.py	/^def project_opened(project):$/;"	f
 ptr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  void *ptr;$/;"	m	struct:__anon3	file:
 ptype	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info **ptype;$/;"	m	struct:swig_const_info	file:
 pulse	doc/sphinx/build/html/_static/searchtools.js	/^    function pulse() {$/;"	f
 pvalue	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  void   *pvalue;$/;"	m	struct:swig_const_info	file:
-py_modules	Simulator/ipaddrgen/setup.py	/^      py_modules=['ipaddrgen'],$/;"	v
-pygments_style	doc/sphinx/source/conf.py	/^pygments_style = 'sphinx'$/;"	v
 pytype	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyTypeObject *pytype;$/;"	m	struct:__anon2	file:
-qa.K	doc/sphinx/build/html/_static/jquery.js	/^true;if(j=c.fragments[a[0]])if(j!==1)f=j}if(!f){f=b.createDocumentFragment();c.clean(a,b,f,d)}if(e)c.fragments[a[0]]=j?f:1;return{fragment:f,cacheable:e}}function K(a,b){var d={};c.each(va.concat.apply([],va.slice(0,b)),function(){d[this]=a});return d}function wa(a){return"scrollTo"in a&&a.document?a:a.nodeType===9?a.defaultView||a.parentWindow:false}var c=function(a,b){return new c.fn.init(a,b)},Ra=A.jQuery,Sa=A.$,s=A.document,T,Ta=\/^[^<]*(<[\\w\\W]+>)[^>]*$|^#([\\w-]+)$\/,Ua=\/^.[^:#\\[\\.,]*$\/,Va=\/\\S\/,$/;"	f
-qa.ra	doc/sphinx/build/html/_static/jquery.js	/^"&")}function qa(a){return!a||!a.parentNode||a.parentNode.nodeType===11}function ra(a,b){var d=0;b.each(function(){if(this.nodeName===(a[d]&&a[d].nodeName)){var f=c.data(a[d++]),e=c.data(this,f);if(f=f&&f.events){delete e.handle;e.events={};for(var j in f)for(var i in f[j])c.event.add(this,j,f[j][i],f[j][i].data)}}})}function sa(a,b,d){var f,e,j;b=b&&b[0]?b[0].ownerDocument||b[0]:s;if(a.length===1&&typeof a[0]==="string"&&a[0].length<512&&b===s&&!ta.test(a[0])&&(c.support.checkClone||!ua.test(a[0]))){e=$/;"	f
-qa.sa	doc/sphinx/build/html/_static/jquery.js	/^"&")}function qa(a){return!a||!a.parentNode||a.parentNode.nodeType===11}function ra(a,b){var d=0;b.each(function(){if(this.nodeName===(a[d]&&a[d].nodeName)){var f=c.data(a[d++]),e=c.data(this,f);if(f=f&&f.events){delete e.handle;e.events={};for(var j in f)for(var i in f[j])c.event.add(this,j,f[j][i],f[j][i].data)}}})}function sa(a,b,d){var f,e,j;b=b&&b[0]?b[0].ownerDocument||b[0]:s;if(a.length===1&&typeof a[0]==="string"&&a[0].length<512&&b===s&&!ta.test(a[0])&&(c.support.checkClone||!ua.test(a[0]))){e=$/;"	f
-qa.wa	doc/sphinx/build/html/_static/jquery.js	/^true;if(j=c.fragments[a[0]])if(j!==1)f=j}if(!f){f=b.createDocumentFragment();c.clean(a,b,f,d)}if(e)c.fragments[a[0]]=j?f:1;return{fragment:f,cacheable:e}}function K(a,b){var d={};c.each(va.concat.apply([],va.slice(0,b)),function(){d[this]=a});return d}function wa(a){return"scrollTo"in a&&a.document?a:a.nodeType===9?a.defaultView||a.parentWindow:false}var c=function(a,b){return new c.fn.init(a,b)},Ra=A.jQuery,Sa=A.$,s=A.document,T,Ta=\/^[^<]*(<[\\w\\W]+>)[^>]*$|^#([\\w-]+)$\/,Ua=\/^.[^:#\\[\\.,]*$\/,Va=\/\\S\/,$/;"	f
+quantize_state	Detector/DetectorLib.py	/^def quantize_state(x, nx, rg):$/;"	f
 randomchoice	Simulator/traffic.py	/^def randomchoice(*choices):$/;"	f
 randomchoicefile	Simulator/traffic.py	/^def randomchoicefile(infilename):$/;"	f
 randomuniffloat	Simulator/traffic.py	/^def randomuniffloat(lo, hi):$/;"	f
 randomunifint	Simulator/traffic.py	/^def randomunifint(lo, hi):$/;"	f
 readbufferproc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef getreadbufferproc readbufferproc;$/;"	t	file:
 reap_generators	Simulator/traffic.py	/^    def reap_generators(self):$/;"	m	class:FlowEventGenModulator
+record	Detector/AnomalyDetector.py	/^    def record(self, **kwargs):$/;"	m	class:AnoDetector
 regression	Simulator/fs.py	/^def regression():$/;"	f
 regularResults	doc/sphinx/build/html/_static/searchtools.js	/^    var regularResults = [];$/;"	v
-release	doc/sphinx/source/conf.py	/^release = '0.0.0'$/;"	v
 release_helper	Simulator/ipaddrgen/addrgen_trie.c	/^static void release_helper(struct node *n)$/;"	f	file:
 release_trie	Simulator/ipaddrgen/addrgen_trie.c	/^void release_trie(struct gentrie *t)$/;"	f
 release_trie	Simulator/ipaddrgen/ipaddrgen.py	/^def release_trie(*args):$/;"	f
-release_trie	Simulator/ipaddrgen/ipaddrgen.py	/^release_trie = _ipaddrgen.release_trie$/;"	v
 removeuniform	Simulator/traffic.py	/^def removeuniform(p):$/;"	f
 renderTemplate	doc/sphinx/build/html/_static/websupport.js	/^  function renderTemplate(template, context) {$/;"	f
 renderTemplate.handle	doc/sphinx/build/html/_static/websupport.js	/^    function handle(ph, escape) {$/;"	f
 replyTemplate	doc/sphinx/build/html/_static/websupport.js	/^  var replyTemplate = '\\$/;"	v
 reseed	Simulator/ipaddrgen/addrgen_trie.c	/^static void reseed()$/;"	f	file:
+reset_record	Detector/AnomalyDetector.py	/^    def reset_record(self):$/;"	m	class:AnoDetector
 resultCount	doc/sphinx/build/html/_static/searchtools.js	/^    var resultCount = results.length;$/;"	v
 results	doc/sphinx/build/html/_static/searchtools.js	/^    var results = unimportantResults.concat(regularResults)$/;"	v
 root	Simulator/ipaddrgen/addrgen_trie.h	/^    struct node *root;$/;"	m	struct:gentrie	typeref:struct:gentrie::node
@@ -1318,21 +905,22 @@ run	Configure/Anomaly.py	/^    def run(self, net):$/;"	m	class:TargetOneServer
 run	Configure/Behaviour.py	/^    def run(): abstract_method()$/;"	m	class:Behaviour
 run	Simulator/fs.py	/^    def run(self):$/;"	m	class:Simulator
 run	main.py	/^def run():$/;"	f
+s	doc/sphinx/build/html/_static/underscore.js	/^a.test&&a.exec&&(a.ignoreCase||a.ignoreCase===false))};b.isNaN=function(a){return b.isNumber(a)&&isNaN(a)};b.isNull=function(a){return a===null};b.isUndefined=function(a){return typeof a=="undefined"};b.noConflict=function(){j._=n;return this};b.identity=function(a){return a};b.breakLoop=function(){throw m;};var s=0;b.uniqueId=function(a){var c=s++;return a?a+c:c};b.template=function(a,c){a=new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+a.replace(\/[\\r\\t\\n]\/g,$/;"	v
 sFilter	Detector/AnomalyAna.py	/^def sFilter(cond):$/;"	f
 sFilter	misc/test.py	/^def sFilter(cond):$/;"	f
-sTable	Detector/AnomalyAna.py	/^sTable = GetStateTable()$/;"	v
-sTable	misc/test.py	/^sTable = GetStateTable()$/;"	v
-s_id	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def s_id(self):$/;"	m	class:MarkovNode
-s_id	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def s_id(self):$/;"	m	class:NNode
 s_id	Configure/Node.py	/^    def s_id(self):$/;"	m	class:MarkovNode
 s_id	Configure/Node.py	/^    def s_id(self):$/;"	m	class:NNode
+s_id	Configure/back_Node.py	/^    def s_id(self):$/;"	m	class:MarkovNode
+s_id	Configure/back_Node.py	/^    def s_id(self):$/;"	m	class:NNode
 searchterms	doc/sphinx/build/html/_static/searchtools.js	/^    var searchterms = [];$/;"	v
 segcountproc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef getsegcountproc segcountproc;$/;"	t	file:
 setComparator	doc/sphinx/build/html/_static/websupport.js	/^  function setComparator() {$/;"	f
+setUp	test/ConfigureTest.py	/^    def setUp(self):$/;"	m	class:AnomalyTest
 set_attr	Simulator/ipaddrgen/ipaddrgen.py	/^    def set_attr(self,name,value):$/;"	f	function:_swig_setattr_nondynamic_method
 set_attr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    int       (*set_attr)(PyObject *); \/* Set the value *\/$/;"	m	struct:swig_globalvar	file:
 set_done	Simulator/traffic.py	/^    def set_done(self, tf):$/;"	m	class:GeneratorNode
 set_prefs	.ropeproject/config.py	/^def set_prefs(prefs):$/;"	f
+set_prefs	New_Detector/.ropeproject/config.py	/^def set_prefs(prefs):$/;"	f
 show	doc/sphinx/build/html/_static/websupport.js	/^  function show(id) {$/;"	f
 showError	doc/sphinx/build/html/_static/websupport.js	/^  function showError(message) {$/;"	f
 showProposal	doc/sphinx/build/html/_static/websupport.js	/^  function showProposal(id) {$/;"	f
@@ -1342,39 +930,14 @@ shutdown	Simulator/flowexport.py	/^    def shutdown(self):$/;"	m	class:FlowExpor
 shutdown	Simulator/flowexport.py	/^    def shutdown(self):$/;"	m	class:TextExporter
 shutdown	Simulator/fs.py	/^    def shutdown(self):$/;"	m	class:Router
 sighandler	Simulator/fs.py	/^    def sighandler(self, signum, stackframe):$/;"	m	class:Simulator
-sim_t	settings.py	/^sim_t = 2000$/;"	v
-sim_t	settings/multi_srv_targ_one.py	/^sim_t = 3000$/;"	v
-sim_t	settings/multi_srv_targ_one_with_fr.py	/^sim_t = 3000$/;"	v
-sim_t	settings_template.py	/^sim_t = 2000$/;"	v
-sim_t	test/markov_p_ano.py	/^sim_t = 3000$/;"	v
-sim_t	test/normal.py	/^sim_t = 3000$/;"	v
 size	Simulator/flowlet.py	/^    def size(self):$/;"	m	class:Flowlet
 size	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  size_t                 size;		        \/* Number of types in this module *\/$/;"	m	struct:swig_module_info	file:
 size	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  size_t size;$/;"	m	struct:__anon4	file:
-size	settings.py	/^        size=topo.shape[0],$/;"	v
-size	settings/multi_srv_targ_one.py	/^        size=topo.shape[0],$/;"	v
-size	settings/multi_srv_targ_one_with_fr.py	/^        size=topo.shape[0],$/;"	v
-size	settings_template.py	/^        size=topo.shape[0],$/;"	v
-size	test/markov_p_ano.py	/^        size=topo.shape[0],$/;"	v
-size	test/normal.py	/^        size=topo.shape[0],$/;"	v
 slots	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyObject *name, *slots;$/;"	m	struct:__anon1	file:
 snmp_export	Simulator/fs.py	/^    def snmp_export(self):$/;"	m	class:Router
 sortComments	doc/sphinx/build/html/_static/websupport.js	/^  function sortComments(comments) {$/;"	f
-source_suffix	doc/sphinx/source/conf.py	/^source_suffix = '.rst'$/;"	v
 srcaddr	Simulator/flowlet.py	/^    def srcaddr(self):$/;"	m	class:Flowlet
 srcport	Simulator/flowlet.py	/^    def srcport(self):$/;"	m	class:Flowlet
-srv_list	settings.py	/^        srv_list=srv_node_list,$/;"	v
-srv_list	settings/multi_srv_targ_one.py	/^        srv_list=srv_node_list,$/;"	v
-srv_list	settings/multi_srv_targ_one_with_fr.py	/^        srv_list=srv_node_list,$/;"	v
-srv_list	settings_template.py	/^        srv_list=srv_node_list,$/;"	v
-srv_list	test/markov_p_ano.py	/^        srv_list=srv_node_list,$/;"	v
-srv_list	test/normal.py	/^        srv_list=srv_node_list,$/;"	v
-srv_node_list	settings.py	/^srv_node_list = [0, 1]$/;"	v
-srv_node_list	settings/multi_srv_targ_one.py	/^srv_node_list = [0, 1]$/;"	v
-srv_node_list	settings/multi_srv_targ_one_with_fr.py	/^srv_node_list = [0, 1]$/;"	v
-srv_node_list	settings_template.py	/^srv_node_list = [0, 1]$/;"	v
-srv_node_list	test/markov_p_ano.py	/^srv_node_list = [0, 1]$/;"	v
-srv_node_list	test/normal.py	/^srv_node_list = [0, 1]$/;"	v
 ssizeargfunc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef intargfunc ssizeargfunc;$/;"	t	file:
 ssizeobjargproc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef intobjargproc ssizeobjargproc;$/;"	t	file:
 ssizessizeargfunc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef intintargfunc ssizessizeargfunc;$/;"	t	file:
@@ -1385,28 +948,10 @@ start	Simulator/fs.py	/^    def start(self):$/;"	m	class:Router
 start	Simulator/traffic.py	/^    def start(self):$/;"	m	class:FlowEventGenModulator
 start	Simulator/traffic.py	/^    def start(self):$/;"	m	class:GeneratorNode
 start	Simulator/traffic.py	/^    def start(self):$/;"	m	class:HarpoonGeneratorNode
-start	settings.py	/^        start = '0',$/;"	v
-start	settings.py	/^start = 0$/;"	v
-start	settings/multi_srv_targ_one.py	/^        start = '0',$/;"	v
-start	settings/multi_srv_targ_one.py	/^start = 0$/;"	v
-start	settings/multi_srv_targ_one_with_fr.py	/^        start = '0',$/;"	v
-start	settings/multi_srv_targ_one_with_fr.py	/^start = 0$/;"	v
-start	settings_template.py	/^        start = '0',$/;"	v
-start	settings_template.py	/^start = 0$/;"	v
-start	test/markov_p_ano.py	/^        start = '0',$/;"	v
-start	test/markov_p_ano.py	/^start = 0$/;"	v
-start	test/normal.py	/^        start = '0',$/;"	v
-start	test/normal.py	/^start = 0$/;"	v
 start_generator	Simulator/traffic.py	/^    def start_generator(self):$/;"	m	class:FlowEventGenModulator
-states	test/markov_p_ano.py	/^        states=[H,L],$/;"	v
 stop	Simulator/fs.py	/^    def stop(self):$/;"	m	class:Simulator
 stop	Simulator/traffic.py	/^    def stop(self):$/;"	m	class:GeneratorNode
 str	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  const char             *str;			\/* human readable name of this type *\/$/;"	m	struct:swig_type_info	file:
-struct_headertemplate	Simulator/ipfix.py	/^    struct_headertemplate = '!HHIII'$/;"	v	class:ipfix
-struct_headertemplate	Simulator/netflow9.py	/^    struct_headertemplate = '!HHIIII'$/;"	v	class:netflow9
-struct_rectemplate	Simulator/ipfix.py	/^    struct_rectemplate = '!IIIIHHHHIIIIIBBHHBBBB'$/;"	v	class:ipfix
-struct_rectemplate	Simulator/netflow9.py	/^    struct_rectemplate = '!IIIIHHHHIIIIIBBHHBBBB'$/;"	v	class:netflow9
-struct_template	Simulator/cflow.py	/^    struct_template = '!IIIIHHHHIIIIIBBHHBBBBB'$/;"	v	class:cflow
 sustain_phase	Simulator/traffic.py	/^    def sustain_phase(self):$/;"	m	class:FlowEventGenModulator
 swig_cast_info	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef struct swig_cast_info {$/;"	s	file:
 swig_cast_info	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^} swig_cast_info;$/;"	t	typeref:struct:swig_cast_info	file:
@@ -1422,7 +967,6 @@ swig_import_helper	Simulator/ipaddrgen/ipaddrgen.py	/^    def swig_import_helper
 swig_module	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static swig_module_info swig_module = {swig_types, 4, 0, 0, 0, 0};$/;"	v	file:
 swig_module_info	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef struct swig_module_info {$/;"	s	file:
 swig_module_info	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^} swig_module_info;$/;"	t	typeref:struct:swig_module_info	file:
-swig_opts	Simulator/ipaddrgen/setup.py	/^                             swig_opts=['-modern', '-I.'])],$/;"	v
 swig_owntype	Simulator/ipaddrgen/ipaddrgen_wrap.c	1154;"	d	file:
 swig_this	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^static PyObject *swig_this = NULL;$/;"	v	file:
 swig_type_info	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef struct swig_type_info {$/;"	s	file:
@@ -1440,41 +984,27 @@ swig_varlinkobject	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  } swig_varlinkobject
 swigobject_methods	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^swigobject_methods[] = {$/;"	v	file:
 sync	Configure/Generator.py	/^    def sync(self):$/;"	m	class:HarpoonG
 sync	Configure/Modulator.py	/^    def sync(self):$/;"	m	class:MarkovModulator
-sync	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def sync(self):$/;"	m	class:MarkovNode
-sync	Configure/Node (wangjing's conflicted copy 2012-04-16).py	/^    def sync(self):$/;"	m	class:NNode
 sync	Configure/Node.py	/^    def sync(self):$/;"	m	class:MarkovNode
 sync	Configure/Node.py	/^    def sync(self):$/;"	m	class:NNode
-t	Simulator/ipaddrgen/trietest.py	/^t = ipaddrgen.initialize_trie(int(net), net.prefixlen, 0.61)$/;"	v
+sync	Configure/back_Node.py	/^    def sync(self):$/;"	m	class:MarkovNode
+sync	Configure/back_Node.py	/^    def sync(self):$/;"	m	class:NNode
 tcpflags	Simulator/flowlet.py	/^    def tcpflags(self):$/;"	m	class:Flowlet
 tcpflags	Simulator/flowlet.py	/^    def tcpflags(self, flags):$/;"	m	class:Flowlet
 tcpflagsstr	Simulator/flowlet.py	/^    def tcpflagsstr(self):$/;"	m	class:Flowlet
-templates_path	doc/sphinx/source/conf.py	/^templates_path = ['_templates']$/;"	v
 test	Detector/test	/^	def test(self):$/;"	m	class:Tester
-testAnomaly	test/ConfigureTest.py	/^    def testAnomaly(self):$/;"	m	class:MyTest
-testEdge	test/ConfigureTest.py	/^    def testEdge(self):$/;"	m	class:MyTest
-testGenerator	test/ConfigureTest.py	/^    def testGenerator(self):$/;"	m	class:MyTest
+testAnomaly	test/ConfigureTest.py	/^    def testAnomaly(self):$/;"	m	class:AnomalyTest
+testEdge	test/ConfigureTest.py	/^    def testEdge(self):$/;"	m	class:Configure
+testGenerator	test/ConfigureTest.py	/^    def testGenerator(self):$/;"	m	class:Configure
 testI1	Detector/test	/^	def testI1(self):$/;"	m	class:Tester
-testMarkovAnomaly	test/ConfigureTest.py	/^    def testMarkovAnomaly(self):$/;"	m	class:MyTest
-testModulator	test/ConfigureTest.py	/^    def testModulator(self):$/;"	m	class:MyTest
-testNetwork	test/ConfigureTest.py	/^    def testNetwork(self):$/;"	m	class:MyTest
-testNode	test/ConfigureTest.py	/^    def testNode(self):$/;"	m	class:MyTest
+testMarkovAnomaly	test/ConfigureTest.py	/^    def testMarkovAnomaly(self):$/;"	m	class:AnomalyTest
+testModulator	test/ConfigureTest.py	/^    def testModulator(self):$/;"	m	class:Configure
+testNetwork	test/ConfigureTest.py	/^    def testNetwork(self):$/;"	m	class:Configure
+testNode	test/ConfigureTest.py	/^    def testNode(self):$/;"	m	class:Configure
 test_msdesctor	main.py	/^def test_msdesctor():$/;"	f
-texinfo_documents	doc/sphinx/source/conf.py	/^texinfo_documents = [$/;"	v
 text_export_factory	Simulator/flowexport.py	/^def text_export_factory(rname):$/;"	f
 tmp	doc/sphinx/build/html/_static/searchtools.js	/^    var tmp = query.split(\/\\s+\/);$/;"	v
 toggleCommentMarkupBox	doc/sphinx/build/html/_static/websupport.js	/^  function toggleCommentMarkupBox(id) {$/;"	f
-topo	settings.py	/^        topo=topo,$/;"	v
-topo	settings.py	/^topo = zeros([g_size, g_size])$/;"	v
-topo	settings/multi_srv_targ_one.py	/^        topo=topo,$/;"	v
-topo	settings/multi_srv_targ_one.py	/^topo = zeros([g_size, g_size])$/;"	v
-topo	settings/multi_srv_targ_one_with_fr.py	/^        topo=topo,$/;"	v
-topo	settings/multi_srv_targ_one_with_fr.py	/^topo = zeros([g_size, g_size])$/;"	v
-topo	settings_template.py	/^        topo=topo,$/;"	v
-topo	settings_template.py	/^topo = zeros([g_size, g_size])$/;"	v
-topo	test/markov_p_ano.py	/^        topo=topo,$/;"	v
-topo	test/markov_p_ano.py	/^topo = zeros([g_size, g_size])$/;"	v
-topo	test/normal.py	/^        topo=topo,$/;"	v
-topo	test/normal.py	/^topo = zeros([g_size, g_size])$/;"	v
+trans_data	Detector/DetectorLib.py	/^def trans_data(flow):$/;"	f
 ty	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info *ty;$/;"	m	struct:__anon3	file:
 ty	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info *ty;$/;"	m	struct:__anon4	file:
 type	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  PyTypeObject type;$/;"	m	struct:__anon1	file:
@@ -1484,14 +1014,10 @@ type_initial	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info         **t
 types	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^  swig_type_info         **types;		\/* Array of pointers to swig_type_info structures that are in this module *\/$/;"	m	struct:swig_module_info	file:
 unifrand	Simulator/ipaddrgen/addrgen_trie.c	/^static inline double unifrand()$/;"	f	file:
 unimportantResults	doc/sphinx/build/html/_static/searchtools.js	/^    var unimportantResults = [];$/;"	v
-url	Simulator/ipaddrgen/setup.py	/^      url='http:\/\/cs.colgate.edu\/faculty\/jsommers',$/;"	v
 vars	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    swig_globalvar *vars;$/;"	m	struct:swig_varlinkobject	file:
-version	Simulator/ipaddrgen/setup.py	/^      version='032011-alpha',$/;"	v
-version	doc/sphinx/source/conf.py	/^version = '0.0'$/;"	v
-wa.c	doc/sphinx/build/html/_static/jquery.js	/^true;if(j=c.fragments[a[0]])if(j!==1)f=j}if(!f){f=b.createDocumentFragment();c.clean(a,b,f,d)}if(e)c.fragments[a[0]]=j?f:1;return{fragment:f,cacheable:e}}function K(a,b){var d={};c.each(va.concat.apply([],va.slice(0,b)),function(){d[this]=a});return d}function wa(a){return"scrollTo"in a&&a.document?a:a.nodeType===9?a.defaultView||a.parentWindow:false}var c=function(a,b){return new c.fn.init(a,b)},Ra=A.jQuery,Sa=A.$,s=A.document,T,Ta=\/^[^<]*(<[\\w\\W]+>)[^>]*$|^#([\\w-]+)$\/,Ua=\/^.[^:#\\[\\.,]*$\/,Va=\/\\S\/,$/;"	f
+vector_quantize_states	Detector/DetectorLib.py	/^def vector_quantize_states(feaVec , feaQN, feaRange, quanFlag=None):$/;"	f
 weibull	Simulator/traffic.py	/^def weibull(alpha, beta):$/;"	f
 withdraw_phase	Simulator/traffic.py	/^    def withdraw_phase(self):$/;"	m	class:FlowEventGenModulator
 write	Configure/Network.py	/^    def write(self, fName):$/;"	m	class:Network
 writebufferproc	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^typedef getwritebufferproc writebufferproc;$/;"	t	file:
-x	Detector/test	/^	x = Tester()$/;"	v	class:Tester
 zipit	Simulator/traffic.py	/^def zipit(xtup):$/;"	f

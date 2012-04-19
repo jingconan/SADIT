@@ -80,14 +80,14 @@ def ParseData(fileName):
                 f['srcIP'] = dottedQuadToNum(srcIPStr)
                 f['srcPort'] = int(srcPortStr)
                 IPDigit = srcIPStr.rsplit('.')
-                f['srcIPVec'] = [int(IPDigit[0]), int(IPDigit[1]), int(IPDigit[2]), int(IPDigit[3]) ]
+                f['srcIPVec'] = (int(IPDigit[0]), int(IPDigit[1]), int(IPDigit[2]), int(IPDigit[3]) )
 
                 [destIPStr, destPortStr] = sd[1].rsplit(':')
                 f['destIPStr'] = destIPStr
                 f['destIP'] = dottedQuadToNum(destIPStr)
                 f['destPort'] = int(destPortStr)
                 IPDigit = destIPStr.rsplit('.')
-                f['destIPVec'] = [int(IPDigit[0]), int(IPDigit[1]), int(IPDigit[2]), int(IPDigit[3]) ]
+                f['destIPVec'] = (int(IPDigit[0]), int(IPDigit[1]), int(IPDigit[2]), int(IPDigit[3]) )
             else:
                 f[k] = item[v]
 
