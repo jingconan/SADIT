@@ -3,9 +3,10 @@ import sys
 sys.path.append("..")
 import settings
 # from Derivative import *
+from Derivative import ModelFreeDerivative, ModelBaseDerivative
 from DetectorLib import I1, I2, get_dist_to_center, vector_quantize_states, model_based, model_free, SL
 
-from util import Find
+from util import Find, abstract_method
 from matplotlib.pyplot import figure, plot, subplot, show
 import cPickle as pickle
 
@@ -162,10 +163,10 @@ class DataFile(object):
 
 
 class AnoDetector (object):
-    def __init__(self, **desc):
+    def __init__(self, desc):
         self.desc = desc
-        self.record_data = dict(IF=[], IB=[], winT=[], threshold=[])
-        self.data_file = []
+        # self.record_data = dict(IF=[], IB=[], winT=[], threshold=[], em=[])
+        self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
 
     def __call__(self, *args, **kwargs):
         return self.detect(*args, **kwargs)
@@ -178,31 +179,29 @@ class AnoDetector (object):
         for k, v in self.record_data.iteritems():
             self.record_data[k] = []
 
-    def detect(self, f_name):
-        self.data_file = DataFile(f_name,
-                self.desc['win_size'],
-                self.desc['fea_list'])
-
-        pmf, Pmb, mpmb = self.data_file.get_em(rg=[0, 1000], rg_type='time')
+    # def detect(self, f_name):
+        # self.data_file = DataFile(f_name,
+                # self.desc['win_size'],
+                # self.desc['fea_list'])
+    def detect(self, data_file):
+        self.data_file = data_file
+        self.norm_em = self.get_em(rg=[0, 1000], rg_type='time')
 
         win_size = self.desc['win_size']
         interval = self.desc['interval']
         time = self.desc['fr_win_size']
-        # t = self.data_file.t
 
         while True:
             print 'time: %f' %(time)
             try:
-                d_pmf, d_Pmb, d_mpmb = self.data_file.get_em(rg=[time, time+win_size], rg_type='time')
+                # d_pmf, d_Pmb, d_mpmb = self.data_file.get_em(rg=[time, time+win_size], rg_type='time')
+                em = self.get_em(rg=[time, time+win_size], rg_type='time')
+                entropy = self.I(em, self.norm_em)
+                self.record( entropy=entropy, winT = time, threshold = 0, em=em )
+                time += interval
             except DataEndException:
                 print 'reach data end, break'
                 break
-            time += interval
-
-            mfEntro = I1(d_pmf, pmf)
-            mbEntro = I2(d_Pmb, d_mpmb, Pmb, mpmb)
-
-            self.record( IF = mfEntro, IB = mbEntro, winT = time, threshold = 0)
         return self.record_data
 
     def plot_entropy(self):
@@ -210,49 +209,100 @@ class AnoDetector (object):
         mt = min(t2)
         rt = [t-mt for t in t2]
         figure()
-        subplot(211)
-        plot(rt, self.record_data['IF'])
-        subplot(212)
-        plot(rt, self.record_data['IB'])
+        plot(rt, self.record_data['entropy'])
         show()
+
+
+    # def plot_entropy(self):
+    #     t2 = self.record_data['winT']
+    #     mt = min(t2)
+    #     rt = [t-mt for t in t2]
+    #     figure()
+    #     subplot(211)
+    #     plot(rt, self.record_data['IF'])
+    #     subplot(212)
+    #     plot(rt, self.record_data['IB'])
+    #     show()
 
     def dump(self, data_name):
         pickle.dump( self.record_data, open(data_name, 'w') )
 
-    # def get_feature(self):
-        # self.data = [ DataFile(fn) for fn in self.data_file_name ]
+class ModelFreeAnoDetector(AnoDetector):
+    def I(self, d_pmf, pmf):
+        return I1(d_pmf, pmf)
 
-class AnoDetectorWithDeri (AnoDetector):
-    def detect(self, f_name):
-        # CleanGlobalDeri()
-        AnoDetector.detect(self, f_name)
-            # Identify the Most significant state transition for model-base case
-            # modelFreeDeri= ModelFreeDerivative(d_pmf, pmf)
-            # modelBaseDeri = ModelBaseDerivative(d_Pmb, d_mpmb, Pmb, mpmb)
-            # util.Dump2Txt(deri, './deri.res', '2dnp')
+    def get_em(self, rg, rg_type):
+        """get empirical measure"""
+        pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
+        return pmf
 
-        # DumpDerivative()
-        # if settings.PLOT_DERIVATIVE:
-            # PlotModelBase()
-            # PlotModelFree()
-        pass
+class ModelBaseAnoDetector(AnoDetector):
+    def I(self, em, norm_em):
+        d_Pmb, d_mpmb = em
+        Pmb, mpmb = norm_em
+        return I2(d_Pmb, d_mpmb, Pmb, mpmb)
 
-# def ModelFreeDetector(AnoDetector):
-#     def get_em(self, data_file, rg=None, rg_type='t'):
-#         q_fea_vec = self.quantize_fea(data_file, rg, rg_type)
-#         pmf = model_free(qFeaVec, fea_QN)
-#         return pmf
+    def get_em(self, rg, rg_type):
+        """get empirical measure"""
+        pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
+        return Pmb, mpmb
 
-# def ModelBaseDetector(AnoDetector):
-#     def get_em(self, data_file, rg=None, rg_type='t'):
-#         q_fea_vec = self.quantize_fea(data_file, rg, rg_type)
-#         Pmb, mpmb = model_based(qFeaVec, fea_QN)
-#         return Pmb, mpmb
+import numpy as np
+def CalIndicator(deri, intervalRatio):
+    '''Calculate the difference of derivative on anomaly time w.r.t normal '''
+    tn = len(deri)
+    anoStart = int( tn * intervalRatio[0])
+    anoStop = int( tn * intervalRatio[1] )
+    anoDeri = deri[anoStart:anoStop+1]
+    anoAveDeri = np.nansum(anoDeri, axis=0) * 1.0 / len(anoDeri)
+    normalAnoValue = np.nansum(deri, axis=0) * 1.0 / tn
+    GetChangePercent = lambda a, b:np.array(a)-np.array(b)
+    changePer = GetChangePercent(anoAveDeri, normalAnoValue)
+    return changePer
 
-def compare(fName):
-    detect = AnoDetector(**settings.DETECTOR_DESC)
-    detect(fName)
+class AnoTypeTest(AnoDetector):
+    def __init__(self, detector, total_t, ano_t):
+        self.detector = detector
+        self.total_t = total_t
+        self.ano_t = ano_t
+
+    def get_ano_indi(self):
+        return CalIndicator(self.deri, self.get_interval_ratio())
+
+    def get_interval_ratio(self):
+        return [self.ano_t[0] * 1.0/self.total_t, self.ano_t[1] * 1.0/self.total_t]
+
+    def detect_ano_type(self): abstract_method()
+
+class ModelFreeAnoTypeTest(AnoTypeTest):
+    def get_em_vec(self):
+        return [ em for em in self.detector.record_data['em'] ]
+
+    def detect_ano_type(self):
+        norm_em = self.detector.norm_em
+        # import pdb;pdb.set_trace()
+        self.deri = [ ModelFreeDerivative(d_pmf, norm_em) for d_pmf in self.get_em_vec() ]
+        print 'self.deri', self.deri
+        self.ano_indi = self.get_ano_indi()
+        print 'self.ano_indi', self.ano_indi
+
+def compare(f_name):
+    data_file = DataFile(f_name,
+                settings.DETECTOR_DESC['win_size'],
+                settings.DETECTOR_DESC['fea_list'])
+    # detect = ModelFreeAnoDetector(settings.DETECTOR_DESC)
+    detect = ModelBaseAnoDetector(settings.DETECTOR_DESC)
+    detect(data_file)
     detect.plot_entropy()
+
+    detect = ModelFreeAnoDetector(settings.DETECTOR_DESC)
+    detect(data_file)
+    detect.plot_entropy()
+    # type_detector = ModelFreeAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
+    # type_detector.detect_ano_type()
+
+    # import pdb;pdb.set_trace()
+    # detect.plot_entropy()
 
 if __name__ == "__main__":
     import sys
