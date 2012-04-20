@@ -139,21 +139,6 @@ StateMap = [('low flow size', 'small distance'),
         ('large flow size', 'small distance'),
         ('large flow size', 'large distance')]
 
-def CalIndicator(deri, intervalRatio):
-    '''Calculate the difference of derivative on anomaly time w.r.t normal '''
-    tn = len(deri)
-    anoStart = int( tn * intervalRatio[0])
-    anoStop = int( tn * intervalRatio[1] )
-    anoDeri = deri[anoStart:anoStop+1]
-    anoAveDeri = np.nansum(anoDeri, axis=0) * 1.0 / len(anoDeri)
-    normalAnoValue = np.nansum(deri, axis=0) * 1.0 / tn
-    # print 'normalAnoValue, ', normalAnoValue
-    # GetChangePercent = lambda a, b:np.abs(np.array(a)-np.array(b)) / np.abs(np.array(b))
-    # GetChangePercent = lambda a, b:np.abs(np.array(a)-np.array(b))
-    GetChangePercent = lambda a, b:np.array(a)-np.array(b)
-    changePer = GetChangePercent(anoAveDeri, normalAnoValue)
-    return changePer
-
 
 def ModelFreeDetectAnoType():
     modelFreeDeri = pickle.load(open(settings.MODEL_FREE_DERI_DUMP_FILE, 'r'))

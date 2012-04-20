@@ -199,3 +199,11 @@ def TO_CLS(*val_list):
     return ";".join(['self.%s=%s'%(v, v) for v in val_list])
 
 
+class DataEndException(Exception):
+    pass
+
+QUAN = 1
+NOT_QUAN = 0
+
+# The Distance Function
+DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
