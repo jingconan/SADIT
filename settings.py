@@ -107,8 +107,9 @@ DETECTOR_DESC = dict(
         unified_nominal_pdf = False, # used in sensitivities analysis
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
-        fea_list = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
+        detector_type = 'mfmb',
         )
 FLOW_RATE_ESTIMATE_WINDOW = 100 #only for test
 
@@ -143,9 +144,6 @@ FLOW_RATE_RANGE = [4, 6, 8]
 FLOW_SIZE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
 # FLOW_SIZE_TEST_RANGE = [2]
 # FLOW_RATE_TEST_RANGE = [1.5, 2.0, 2.5, 3.0]
-
-
-
 
 #####################################
 ###    Parameters for Analyzing Derivative  ###

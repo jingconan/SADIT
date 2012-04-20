@@ -48,19 +48,19 @@ class Configure(TestCase):
 
     def _testMarkov(self):
         import target_one_server as ST
-        GenAnomalyDot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
+        gen_anomaly_dot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
     def _testMarkovPAnomaly(self):
         import markov_p_ano as ST
-        GenAnomalyDot(ST.ANO_LIST, ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
+        gen_anomaly_dot(ST.ANO_LIST, ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
     def _testNoAnomaly(self):
         import simple as ST
-        GenAnomalyDot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
+        gen_anomaly_dot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
     def _testSimpleAnomaly(self):
         import simple as ST
-        GenAnomalyDot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
+        gen_anomaly_dot([], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
     def _testAttriAnomaly(self):
         import target_one_server as ST
@@ -73,7 +73,7 @@ class Configure(TestCase):
                     'change':{ano:1.5},
                     'srv_id':0,
                     }
-            GenAnomalyDot([ANO_DESC], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
+            gen_anomaly_dot([ANO_DESC], ST.NET_DESC, ST.NORM_DESC, ST.OUTPUT_DOT_FILE)
 
 class AnomalyTest(TestCase):
     def setUp(self):
@@ -90,5 +90,5 @@ class AnomalyTest(TestCase):
 if __name__ == "__main__":
     main()
     # main()
-    # GenAnomalyDot(settings.ANO_LIST, settings.NET_DESC,
+    # gen_anomaly_dot(settings.ANO_LIST, settings.NET_DESC,
                 # settings.NORM_DESC, settings.OUTPUT_DOT_FILE)

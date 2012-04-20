@@ -1,4 +1,1 @@
-from API import *
-from Anomaly import *
-from MarkovAnomaly import *
-
+from API import gen_anomaly_dot

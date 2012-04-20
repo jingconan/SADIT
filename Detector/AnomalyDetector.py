@@ -7,7 +7,7 @@ from util import DataEndException
 from matplotlib.pyplot import figure, plot, show, subplot, title
 import cPickle as pickle
 # from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
-import Detector.DataFile
+from Detector.DataFile import DataFile
 
 class AnoDetector (object):
     def __init__(self, desc):
@@ -100,22 +100,21 @@ class FBAnoDetector(AnoDetector):
         title('model based')
         show()
 
-def compare(f_name):
-    data_file = Detector.DataFile.DataFile(f_name,
-                settings.DETECTOR_DESC['win_size'],
-                settings.DETECTOR_DESC['fea_list'])
-    # detect = ModelFreeAnoDetector(settings.DETECTOR_DESC)
-    detect = FBAnoDetector(settings.DETECTOR_DESC)
-    detect(data_file)
-    detect.plot_entropy()
 
-    # detect = ModelBaseAnoDetector(settings.DETECTOR_DESC)
-    # detect(data_file)
-    # detect.plot_entropy()
-
+def detect(f_name, win_size, fea_option, detector_type):
+    detector_map = {
+            'mf':ModelFreeAnoDetector,
+            'mb':ModelBaseAnoDetector,
+            'mfmb':FBAnoDetector,
+            }
+    # data_file = Detector.DataFile.DataFile(f_name,
+                # settings.DETECTOR_DESC['win_size'],
+                # settings.DETECTOR_DESC['fea_list'])
+    data_file = DataFile(f_name, win_size, fea_option)
     # detect = ModelFreeAnoDetector(settings.DETECTOR_DESC)
-    # detect(data_file)
-    # detect.plot_entropy()
+    detector = detector_map[detector_type](settings.DETECTOR_DESC)
+    detector(data_file)
+    detector.plot_entropy()
 
     # type_detector = ModelFreeAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
     # type_detector.detect_ano_type()
@@ -129,7 +128,7 @@ def compare(f_name):
 if __name__ == "__main__":
     import sys
     print 'sys.argv, ', sys.argv
-    compare(sys.argv[1])
+    # compare(sys.argv[1])
 
     # import pdb;pdb.set_trace()
     # detect.plot_entropy()

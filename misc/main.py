@@ -10,7 +10,7 @@ def run():
     reload(settings)
     if settings.UNIFIED_NOMINAL_PDF: GlobalGenerateNominalPDF()
     print 'start to configure'
-    GenAnomalyDot(settings.ANO_LIST,
+    gen_anomaly_dot(settings.ANO_LIST,
             settings.NET_DESC,
             settings.NORM_DESC,
             settings.OUTPUT_DOT_FILE)

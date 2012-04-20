@@ -14,7 +14,7 @@ ano_map = {
         'markov_anomaly':MarkovAnomaly,
         }
 
-def GenAnomalyDot(ano_list, netDesc, normalDesc, outputFileName):
+def gen_anomaly_dot(ano_list, netDesc, normalDesc, outputFileName):
     net = Network()
     net.init(netDesc, normalDesc)
     for ano_desc in ano_list:
