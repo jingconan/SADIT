@@ -1,7 +1,8 @@
 import sys
 sys.path.append("..")
-from util import *
-from mod_util import *
+# from util import *
+# from mod_util import *
+from mod_util import Attr
 class Modulator(object):
     """ * name
         * start
@@ -62,3 +63,25 @@ class MarkovModulator(Modulator, MarkovBehaviour):
                 self.behave(start, end)
             start = end
 
+from Behaviour import MVBehaviour
+class MVModulator(Modulator, MVBehaviour):
+    """implement the stage function. for each stage, add modulator
+    using corresponding generator. the profile of modulator is specfied
+    as (start_time, duration)"""
+    def __init__(self, interval, generator_states, **desc):
+        Modulator.__init__(self, **desc)
+        MVBehaviour.__init__(self, interval, generator_states)
+        self.mod_list = []
+        self._gen_modulator_list()
+
+    def stage(self):
+        """for one markov stage"""
+        r_start = self.run_para['r_start']
+        r_end = self.run_para['r_end']
+        mod = Modulator(
+                name=self.desc['name'],
+                start=r_start,
+                profile=( (r_end-r_start,), (1,) ) ,
+                generator=self.states[self.cs],
+                )
+        self.mod_list.append(mod)

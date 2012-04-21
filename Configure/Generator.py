@@ -1,14 +1,21 @@
 
 import sys
 sys.path.append("..")
-from util import *
-from mod_util import *
+# from util import *
+# from mod_util import *
+from mod_util import Attr
 
 class Generator(object):
     pass
 
 import copy
 class HarpoonG(Generator):
+    """Harpoon Generator, described by
+       1. flow_size_mean 2. flow_size_var, 3 flow_arrival_rate
+       flow size is normally distributed
+       flow arrival is possion distributed
+       flow duration is determined by the network condition.
+       """
     def __init__(self, **para):
         self.para = para
         self.sync()
@@ -40,6 +47,7 @@ class HarpoonG(Generator):
                 new.para[attr.lower()] *= ratio
             new.sync()
         return new
+
 
 gmap = {'harpoon':HarpoonG}
 def get_generator(gen_desc):

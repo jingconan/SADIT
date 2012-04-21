@@ -44,6 +44,7 @@ def CalIPCenter(IPMat, DF):
     return IPCenter, dis
 
 
+from matplotlib.pyplot import figure, plot
 def PlotPts(IPMat, corePts, anoPts, c):
     figure()
     for pt in corePts:
@@ -54,7 +55,6 @@ def PlotPts(IPMat, corePts, anoPts, c):
 
 import settings
 import numpy as np
-import types
 def GetIPMat():
     '''load valid ip adrees from setting.IPS_FILE'''
     # IP = LoadValidIP('./ips.txt')
@@ -79,10 +79,10 @@ def P2F_RAW(flowRate, flowDuration, pktRate): # Change Prameter to FS Format for
     # pkts # Number of packets in each emitted flow
 
 
-def F2P_RAW(flowlets, bytes, interval, pkts ):
-    pktRate = bytes * pkts / interval
-    flowDuration = flowlets * interval
-    flowRate = 1.0 / flowDuration
+# def F2P_RAW(flowlets, bytes, interval, pkts ):
+#     pktRate = bytes * pkts / interval
+#     flowDuration = flowlets * interval
+#     flowRate = 1.0 / flowDuration
 
 
 

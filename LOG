@@ -19,3 +19,145 @@ simply use profile
 modulator in markove case
 
 
+
+[2012-04-20 10:36:21]
+start to do the multi server case. 
+
+time information. 
+only consider the model-free case. 
+
+the margin probability is th probability that the received flow belongs to which states
+
+the joint probability is the probability that received flow belongs to which states. 
+
+which states.
+
+what we are trying to do this to characterize the 
+
+===================================================
+as simple as possible. 
+
+different temporal information. 
+
+A node send same traffic to server. 
+but the difference is the temporal different. 
+
+for the pespective of senders, there should be a probability distribution. 
+for a given time spot. the sender need to decide
+    1. When to send the next packet
+    2. to whom it should send the packet
+    3. which type of flow it should send ---> specify the marginal distribution. 
+
+parameter of senders. 
+    1. specify the mariginal distribution
+    2. specify the relationship between the marginal distribution
+
+marginal distribution
+    1. decide which type of flow it should send
+
+joint distribution
+    1. specify to whom it should send the packet.
+
+We make the first parameter fixed to be the possion distribution. 
+
+if we change the pdf of "to whom it should send the packet", the flow rate will change. 
+    so this term is not specifed single probability distribution.
+
+[2012-04-20 13:33:14]
+the problem consits of two parts:
+    [1], is the generation part.
+    [2], detection part 
+to decide to whom the packet should be sent. 
+We need to consider the problem from the pespective of window.
+We determine the number of flows that will be sent in on window.
+Then we determine the destination of each slot repectively.
+
+We need to keep the portion for each server to be the same. However, the time will be different. 
+
+for example, in the normal case, the slots can be distributed evenly in terms of time.
+In the abnormal case, the previous parts will have a lot of flows to server 1, while in the second
+part, a lot flows will have destination to server 2
+
+
+we need have some sort of variables description
+
+for each sender X. suppose X_i is a random variable indicating the type of the flow that will be send to sever i.
+the send will maintain such as random variable
+
+
+consider the marignal
+there should be a general distribution 
+
+
+[2012-04-20 14:20:41]
+implementation.
+[Configure] part
+I need create a new class of Node.
+    class ProbNode: node send traffic with certain kind of probability
+in this class
+
+the freedom degree we have. 
+    1. we can add modulator to the server node. the modulator need to have,
+    (start time, profile, generator)
+    2. generator is a source with parameter flow_arrival_rate, flow_size_mean,
+    flow_size_var
+    3. flow_arrival is possion distributed.
+    4. one generator only target for one server.
+    5. we need select different servers, means select different types of
+    generators.
+    6. the original markov node method cannot work
+
+
+ideas:
+    1 a pool of generators. each generator represents one type of flows to one
+    specific server. 
+    2.our task is to select generators from the pool.
+    3. we need to change the way of selections so that the distribution for each
+    sever doesn't change at all.
+
+    X_1, X_2, ..., X_n, joint distribution.
+    for each time, we get a sequence of  X_1, X_2, ....  X_n
+    P(x_1, x_2, ..., x_n) is the probability distribution we want to
+    characterize
+    
+    the possible states are: 1 state for each quantized flow, and one state 
+    for sending no flows at all.
+
+    we need to maintains the marginal distribution for this set of variables
+    unchanged.
+
+    we need have a table. ---> this table specify the joint distribution probability distribution
+    for the 
+
+I need a method to keep each colomn and row unchanged, while change the term. We
+need a scale value to determine the degree of change.
+
+
+the previous analysis is only for a specific time spot. In generaal, it is a
+stochastic process.
+
+
+[2012-04-20 18:12:53]
+==========================================================
+Another important idea is that suppose the behaviour of
+users don't change, but the network condition changes. See
+what happens.
+==========================================================
+
+[2012-04-20 20:59:14]
+
+class MVBehaviour(MarkovBehaviour):
+    """The traffic is generated according to multi-variable distribution
+    if there are n servers, then the joint distribution will be n dimension
+    matrix. For each component, there are n possible values. So we need n possible
+    generators.
+
+    if we have the distribution matrix. we just generate random variable
+        according to the distribution and select generators according
+    """
+
+
+an important function is to generate a random value according to some certain 
+probability distribution.
+
+we need generate matrix with the same size of probability distribution.

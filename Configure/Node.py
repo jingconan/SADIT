@@ -1,16 +1,16 @@
-from pydot import *
-from random import sample
-import re
+# from pydot import *
+from pydot import Node
 NODE_NUM = 0
 
 import sys
 sys.path.append("..")
-import settings
-from util import *
-from mod_util import *
+# from util import *
+from util import types
+from mod_util import choose_ip_addr
+# from mod_util import *
 
-from Generator import *
-from Modulator import *
+from Generator import get_generator
+from Modulator import Modulator, MarkovModulator
 
 class NNode(Node):
     # node_seq = 0
@@ -80,7 +80,7 @@ class NNode(Node):
             attr[k] = str(v)
 
 
-    def clear_modulator():
+    def clear_modulator(self):
         self.traffic = ''
         self.obj_dict['attributes']['mod_num'] = '0'
 
@@ -146,6 +146,11 @@ class MarkovNode(NNode):
         # update generator
         for k, v in self.generator.iteritems():
             attr[k] = str(v)
+
+
+class MVNode(NNode):
+    """Node for Multi Variable Node"""
+    pass
 
 
 
