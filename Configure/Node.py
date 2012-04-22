@@ -5,12 +5,12 @@ NODE_NUM = 0
 import sys
 sys.path.append("..")
 # from util import *
-from util import types
+from util import types, Load
 from mod_util import choose_ip_addr
 # from mod_util import *
 
 from Generator import get_generator
-from Modulator import Modulator, MarkovModulator
+from Modulator import Modulator, MarkovModulator, MVModulator
 
 class NNode(Node):
     # node_seq = 0
@@ -52,6 +52,26 @@ class NNode(Node):
     def s_id(self):
         """generator source identifier"""
         return 's' + str(self.node_seq) + '_' + str(self.mod_num)
+
+    def _get_generator_list(self, dst_node, para_list):
+        """returns the default generator list"""
+        res = []
+        for state in para_list:
+            s = Load(state)
+            s['ipsrc'] = choose_ip_addr(self.ipdests)
+            s['ipdst'] = choose_ip_addr(dst_node.ipdests)
+            gen = get_generator(s)
+            res.append(gen)
+        return res
+
+    def init_traffic(self, norm_desc, dst_nodes):
+        self.norm_desc = norm_desc
+        para_list = norm_desc['node_para']['states']
+        for node in dst_nodes:
+            self.add_modulator(norm_desc['start'],
+                    norm_desc['profile'],
+                    self._get_generator_list(node, para_list))
+
 
     def add_modulator(self, start, profile, generator):
         """generator is a Generator Object"""
@@ -112,6 +132,11 @@ class MarkovNode(NNode):
             s_id_list.append(self.s_id)
 
         if not markov_desc: markov_desc = self.markov_desc
+        m = self.get_modulator(start, profile, s_id_list, markov_desc)
+
+        self.modulator[self.m_id] = m
+
+    def get_modulator(self, start, profile, s_id_list, markov_desc):
         m = MarkovModulator(
                 name='modulator',
                 start = str(start),
@@ -119,8 +144,7 @@ class MarkovNode(NNode):
                 profile=profile,
                 **markov_desc
                 )
-
-        self.modulator[self.m_id] = m
+        return m
 
     def sync(self):
         """sync to the dot property"""
@@ -150,7 +174,44 @@ class MarkovNode(NNode):
 
 class MVNode(NNode):
     """Node for Multi Variable Node"""
-    pass
+    def get_modulator(self, start, profile, s_id_list, joint_dist):
+        m = MVModulator(
+                name='modulator',
+                start = str(start),
+                generator_states = s_id_list,
+                profile=profile,
+                **joint_dist
+                )
+        return m
+
+
+    def init_traffic(self, norm_desc, dst_nodes):
+        self.norm_desc = norm_desc
+        para_list = norm_desc['node_para']['states']
+        self.generator_list = [ self._get_generator_list(node, para_list) for node in dst_nodes ]
+
+    @property
+    def joint_dist(self):
+        return self.norm_desc['joint_dist']
+
+    def add_modulator(self, start, profile, generator_list, joint_dist):
+        self.mod_num += 1
+        s_id_list = self.gen_to_id(generator_list)
+        m = self.get_modulator(start, profile, s_id_list, self.joint_dist)
+        self.modulator[self.m_id] = m
+
+    def gen_to_id(self, generator_list):
+        s_id_list = []
+        for gl in generator_list:
+            row = []
+            for g in gl:
+                self.gen_num += 1
+                self.generator[self.s_id] = g
+                row.append(self.s_id)
+            s_id_list.append(row)
+        return s_id_list
+
+
 
 
 

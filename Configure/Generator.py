@@ -48,8 +48,20 @@ class HarpoonG(Generator):
             new.sync()
         return new
 
+class MVGenerator(HarpoonG):
+    def sync(self):
+        self.gen_desc = dict(
+                ipsrc = self.para['ipsrc'],
+                ipdst = self.para['ipdst'],
+                flowsize= self.para['flow_size'],
+                flowstart='exponential(%f)' %(self.para['flow_arrival_rate']),
+                sport = 'randomchoice(22,80,443)',
+                dport='randomunifint(1025,65535)',
+                lossrate='randomchoice(0.001)',
+                )
 
-gmap = {'harpoon':HarpoonG}
+gmap = {'harpoon':HarpoonG,
+        'mv':MVGenerator}
 def get_generator(gen_desc):
     gen_class = gmap[gen_desc['TYPE']]
     return gen_class(**gen_desc)

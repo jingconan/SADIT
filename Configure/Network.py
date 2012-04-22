@@ -2,11 +2,11 @@ from Node import *
 from Edge import *
 from Generator import *
 from mod_util import GetIPAdress, FixQuoteBug
-from util import Load
 
 node_map = {
         'NNode':NNode,
-        'MarkovNode':MarkovNode
+        'MarkovNode':MarkovNode,
+        'MVNode':MVNode,
         }
 
 ####################################
@@ -31,17 +31,17 @@ class Network(Dot):
         self._topo(self.net_desc['topo'])
         self._config_traffic()
 
-    def _get_generator(self, src_node, dst_node):
-        # import pdb;pdb.set_trace()
-        para = self.norm_desc['node_para']
-        res = []
-        for state in para['states']:
-            s = Load(state)
-            s['ipsrc'] = choose_ip_addr(src_node.ipdests)
-            s['ipdst'] = choose_ip_addr(dst_node.ipdests)
-            gen = get_generator(s)
-            res.append(gen)
-        return res
+    # def _get_default_generator(self, src_node, dst_node):
+    #     """returns the default generator list"""
+    #     para = self.norm_desc['node_para']
+    #     res = []
+    #     for state in para['states']:
+    #         s = Load(state)
+    #         s['ipsrc'] = choose_ip_addr(src_node.ipdests)
+    #         s['ipdst'] = choose_ip_addr(dst_node.ipdests)
+    #         gen = get_generator(s)
+    #         res.append(gen)
+    #     return res
 
     def _config_traffic(self):
         """config the traffic of network"""
@@ -50,13 +50,16 @@ class Network(Dot):
         for i in xrange(nn):
             if i in self.net_desc['srv_list']:
                 continue
-            node = self.node_list[i]
-            for srv_node in srv_node_list:
+            self.node_list[i].init_traffic(self.norm_desc, srv_node_list)
+            # node = self.node_list[i]
+            # node.init_traffic(self.norm_desc, src_node)
+            # for srv_node in srv_node_list:
                 # self._add_modulator(node, srv_node)
-                start = self.norm_desc['start']
-                profile = self.norm_desc['profile']
-                node.add_modulator(start, profile,
-                        self._get_generator(node, srv_node))
+
+                # start = self.norm_desc['start']
+                # profile = self.norm_desc['profile']
+                # node.add_modulator(start, profile,
+                        # self._get_default_generator(node, srv_node))
 
     def _topo(self, topo):
         """initialize the topology of the network"""

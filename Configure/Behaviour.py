@@ -74,3 +74,4 @@ class MVBehaviour(MarkovBehaviour):
             freq[r] += 1
         freq /= np.sum(freq)
         print 'freq, ', freq
+
