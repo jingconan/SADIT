@@ -61,7 +61,7 @@ class TestMSGenerator(TestCase):
 #################################
 ##   topology ##
 #################################
-from numpy import zeros
+from numpy import zeros, array
 g_size = 10
 srv_node_list = [0, 1]
 topo = zeros([g_size, g_size])
@@ -81,11 +81,19 @@ gen_para_type_list = [
         {'TYPE':'mv', 'flow_size':100, 'flow_arrival_rate':1},
         {'TYPE':'mv', 'flow_size':1000, 'flow_arrival_rate':1},
         ]
+# size of joint_dist equals to m * m ... *m, there n dimensions array and len of each
+# dimension equals to m, n is the number of server nodes, m is hte possible type of flows
+joint_dist = array([[0.025, 0.025, 0.025, 0.025],
+                    [0.05, 0.05, 0.05, 0.05],
+                    [0.05, 0.05, 0.05, 0.05],
+                    [0.125, 0.125, 0.125, 0.125]])
 norm_desc = dict(
         TYPE = 'NORMAl',
         start = '0',
         node_para = {'states':gen_para_type_list},
         profile = DEFAULT_PROFILE,
+        joint_dist = joint_dist,
+        interval = 100,
         )
 
 net_desc = dict(
@@ -106,6 +114,7 @@ class TestNetwork(TestCase):
     def testNetwork(self):
         net = Network()
         net.init(net_desc, norm_desc)
+        net.write('./res.dot')
 
 if __name__ == "__main__":
     main()

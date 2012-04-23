@@ -162,6 +162,8 @@ class MarkovNode(NNode):
                 key_list.append(k+'_'+str(j))
                 mod_list.append(mod)
 
+
+        print 'self.modulator father, ', self.modulator
         # print '*' * 100
         attr['traffic'] = '"' + ' '.join(key_list) + '"'
         for k, v in zip(key_list, mod_list):
@@ -169,36 +171,56 @@ class MarkovNode(NNode):
 
         # update generator
         for k, v in self.generator.iteritems():
-            attr[k] = str(v)
+            if v: attr[k] = str(v)
 
 
-class MVNode(NNode):
+class MVNode(MarkovNode):
     """Node for Multi Variable Node"""
-    def get_modulator(self, start, profile, s_id_list, joint_dist):
-        m = MVModulator(
-                name='modulator',
-                start = str(start),
-                generator_states = s_id_list,
-                profile=profile,
-                **joint_dist
-                )
-        return m
-
-
-    def init_traffic(self, norm_desc, dst_nodes):
-        self.norm_desc = norm_desc
-        para_list = norm_desc['node_para']['states']
-        self.generator_list = [ self._get_generator_list(node, para_list) for node in dst_nodes ]
+    def __init__(self, ipdests):
+        MarkovNode.__init__(self, ipdests)
 
     @property
-    def joint_dist(self):
-        return self.norm_desc['joint_dist']
+    def joint_dist(self): return self.norm_desc['joint_dist']
+
+    @property
+    def start(self): return self.norm_desc['start']
+
+    @property
+    def profile(self): return self.norm_desc['profile']
+
+    @property
+    def para_list(self): return self.norm_desc['node_para']['states']
+
+    @property
+    def interval(self): return self.norm_desc['interval']
+
+    def init_traffic(self, norm_desc, dst_nodes):
+        print 'MVNode init_traffic'
+        self.norm_desc = norm_desc
+        self.generator_list = [ [None] + self._get_generator_list(node, self.para_list) for node in dst_nodes ]
+        self.add_modulator(self.start,
+                self.profile,
+                self.generator_list,
+                self.joint_dist,
+                )
 
     def add_modulator(self, start, profile, generator_list, joint_dist):
         self.mod_num += 1
         s_id_list = self.gen_to_id(generator_list)
         m = self.get_modulator(start, profile, s_id_list, self.joint_dist)
         self.modulator[self.m_id] = m
+        print self.modulator
+
+    def get_modulator(self, start, profile, s_id_list, joint_dist):
+        m = MVModulator(
+                name='modulator',
+                start = str(start),
+                interval = self.interval,
+                generator_states = s_id_list,
+                profile = profile,
+                joint_dist = joint_dist,
+                )
+        return m
 
     def gen_to_id(self, generator_list):
         s_id_list = []
@@ -207,13 +229,9 @@ class MVNode(NNode):
             for g in gl:
                 self.gen_num += 1
                 self.generator[self.s_id] = g
-                row.append(self.s_id)
+                if not g:
+                    row.append(None)
+                else:
+                    row.append(self.s_id)
             s_id_list.append(row)
         return s_id_list
-
-
-
-
-
-
-

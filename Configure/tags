@@ -17,10 +17,9 @@ GetIPMat	mod_util.py	/^def GetIPMat():$/;"	f
 HarpoonG	Generator.py	/^class HarpoonG(Generator):$/;"	c
 InjectAnomaly	Network.py	/^    def InjectAnomaly(self, A):$/;"	m	class:Network
 LoadValidIP	mod_util.py	/^def LoadValidIP(fileName):$/;"	f
-MSGeneratorTest	test.py	/^class MSGeneratorTest(TestCase):$/;"	c
 MVBehaveTest	test.py	/^class MVBehaveTest(MVBehaviour):$/;"	c
 MVBehaviour	Behaviour.py	/^class MVBehaviour(MarkovBehaviour):$/;"	c
-MVGenerator	Generator.py	/^class MVGenerator(Generator):$/;"	c
+MVGenerator	Generator.py	/^class MVGenerator(HarpoonG):$/;"	c
 MVModulator	Modulator.py	/^class MVModulator(Modulator, MVBehaviour):$/;"	c
 MVNode	Node.py	/^class MVNode(NNode):$/;"	c
 MarkovAnomaly	MarkovAnomaly.py	/^class MarkovAnomaly(Anomaly):$/;"	c
@@ -29,7 +28,6 @@ MarkovModulator	Modulator.py	/^class MarkovModulator(Modulator, MarkovBehaviour)
 MarkovNode	Node.py	/^class MarkovNode(NNode):$/;"	c
 MarkovNode	back_Node.py	/^class MarkovNode(NNode):$/;"	c
 Modulator	Modulator.py	/^class Modulator(object):$/;"	c
-MultiServer	test.py	/^class MultiServer(TestCase):$/;"	c
 NEdge	Edge.py	/^class NEdge(Edge):$/;"	c
 NNode	Node.py	/^class NNode(Node):$/;"	c
 NNode	back_Node.py	/^class NNode(Node):$/;"	c
@@ -39,6 +37,9 @@ ParseArg	mod_util.py	/^def ParseArg(string):$/;"	f
 PlotPts	mod_util.py	/^def PlotPts(IPMat, corePts, anoPts, c):$/;"	f
 RandDist	mod_util.py	/^def RandDist(dist):$/;"	f
 TargetOneServer	Anomaly.py	/^class TargetOneServer(Anomaly):$/;"	c
+TestMSGenerator	test.py	/^class TestMSGenerator(TestCase):$/;"	c
+TestMultiServer	test.py	/^class TestMultiServer(TestCase):$/;"	c
+TestNetwork	test.py	/^class TestNetwork(TestCase):$/;"	c
 __getitem__	Generator.py	/^    def __getitem__(self, name):$/;"	m	class:HarpoonG	file:
 __getitem__	Modulator.py	/^    def __getitem__(self, name):$/;"	m	class:Modulator	file:
 __init__	Anomaly.py	/^    def __init__(self, anoDesc):$/;"	m	class:Anomaly
@@ -48,7 +49,6 @@ __init__	Behaviour.py	/^    def __init__(self, interval, P, states):$/;"	m	class
 __init__	Behaviour.py	/^    def __init__(self, joint_dist, generator_states, interval):$/;"	m	class:MVBehaviour
 __init__	Edge.py	/^    def __init__(self, src, dst, attr):$/;"	m	class:NEdge
 __init__	Generator.py	/^    def __init__(self, **para):$/;"	m	class:HarpoonG
-__init__	Generator.py	/^    def __init__(self, type_no, ipsrc, ipdst):$/;"	m	class:MVGenerator
 __init__	Modulator.py	/^    def __init__(self, **desc):$/;"	m	class:Modulator
 __init__	Modulator.py	/^    def __init__(self, interval, P, generator_states, **desc):$/;"	m	class:MarkovModulator
 __init__	Modulator.py	/^    def __init__(self, interval, generator_states, **desc):$/;"	m	class:MVModulator
@@ -73,12 +73,13 @@ _gen_generator	Node.py	/^    def _gen_generator(self, ipdst):$/;"	m	class:Markov
 _gen_generator	back_Node.py	/^    def _gen_generator(self, ipdst):$/;"	m	class:MarkovNode
 _gen_modulator_list	Modulator.py	/^    def _gen_modulator_list(self):$/;"	m	class:MarkovModulator
 _get_ano_node	Anomaly.py	/^    def _get_ano_node(self):$/;"	m	class:AtypicalUserAnomaly
-_get_generator	Network.py	/^    def _get_generator(self, src_node, dst_node):$/;"	m	class:Network
+_get_generator_list	Node.py	/^    def _get_generator_list(self, dst_node, para_list):$/;"	m	class:NNode
 _infect_modulator	Anomaly.py	/^    def _infect_modulator(self, ano_t, m_id, mod):$/;"	m	class:Anomaly
 _infect_modulator	MarkovAnomaly.py	/^    def _infect_modulator(self, ano_t, m_id, mod):$/;"	m	class:MarkovAnomaly
 _sample_freq	Behaviour.py	/^    def _sample_freq(self):$/;"	m	class:MVBehaviour
 _topo	Network.py	/^    def _topo(self, topo):$/;"	m	class:Network
 add_modulator	Node.py	/^    def add_modulator(self, start, profile, generator):$/;"	m	class:NNode
+add_modulator	Node.py	/^    def add_modulator(self, start, profile, generator_list, joint_dist):$/;"	m	class:MVNode
 add_modulator	Node.py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
 add_modulator	back_Node.py	/^    def add_modulator(self, start, profile, generator):$/;"	m	class:NNode
 add_modulator	back_Node.py	/^    def add_modulator(self, start, profile, generator_list, markov_desc=None):$/;"	m	class:MarkovNode
@@ -91,9 +92,12 @@ cut_profile	Anomaly.py	/^    def cut_profile(profile, status):$/;"	m	class:Anoma
 dim	Behaviour.py	/^    def dim(self): return self.joint_dist.shape$/;"	m	class:MVBehaviour
 for	Anomaly.py	/^    '''basis class for anomaly. Its subclass will provide run() method'''$/;"	c	class:Anomaly
 gen_anomaly_dot	API.py	/^def gen_anomaly_dot(ano_list, netDesc, normalDesc, outputFileName):$/;"	f
+gen_to_id	Node.py	/^    def gen_to_id(self, generator_list):$/;"	m	class:MVNode
 get_generator	Generator.py	/^def get_generator(gen_desc):$/;"	f
 get_interval	Behaviour.py	/^    def get_interval(self):$/;"	m	class:MVBehaviour
 get_interval	Behaviour.py	/^    def get_interval(self):$/;"	m	class:MarkovBehaviour
+get_modulator	Node.py	/^    def get_modulator(self, start, profile, s_id_list, joint_dist):$/;"	m	class:MVNode
+get_modulator	Node.py	/^    def get_modulator(self, start, profile, s_id_list, markov_desc):$/;"	m	class:MarkovNode
 get_new_gen	Generator.py	/^    def get_new_gen(self, change_para=None):$/;"	m	class:HarpoonG
 get_new_state	Behaviour.py	/^    def get_new_state(self):$/;"	m	class:MVBehaviour
 get_new_state	Behaviour.py	/^    def get_new_state(self):$/;"	m	class:MarkovBehaviour
@@ -102,7 +106,10 @@ get_profile_with_ano	Anomaly.py	/^    def get_profile_with_ano(self, mod_start, 
 get_sample	Behaviour.py	/^    def get_sample(self):$/;"	m	class:MVBehaviour
 ined	mod_util.py	/^    *DF* is a user defined distance function'''$/;"	f	function:CalIPCenter
 init	Network.py	/^    def init(self, net_desc, norm_desc):$/;"	m	class:Network
+init_traffic	Node.py	/^    def init_traffic(self, norm_desc, dst_nodes):$/;"	m	class:MVNode
+init_traffic	Node.py	/^    def init_traffic(self, norm_desc, dst_nodes):$/;"	m	class:NNode
 insert_break_pt	Anomaly.py	/^def insert_break_pt(b, dur, num):$/;"	f
+joint_dist	Node.py	/^    def joint_dist(self):$/;"	m	class:MVNode
 m_id	Node.py	/^    def m_id(self):$/;"	m	class:NNode
 m_id	back_Node.py	/^    def m_id(self):$/;"	m	class:NNode
 run	Anomaly.py	/^    def run(self, net):$/;"	m	class:Anomaly
@@ -112,8 +119,9 @@ s_id	Node.py	/^    def s_id(self):$/;"	m	class:MarkovNode
 s_id	Node.py	/^    def s_id(self):$/;"	m	class:NNode
 s_id	back_Node.py	/^    def s_id(self):$/;"	m	class:MarkovNode
 s_id	back_Node.py	/^    def s_id(self):$/;"	m	class:NNode
-setUp	test.py	/^    def setUp(self):$/;"	m	class:MSGeneratorTest
-setUp	test.py	/^    def setUp(self):$/;"	m	class:MultiServer
+setUp	test.py	/^    def setUp(self):$/;"	m	class:TestMSGenerator
+setUp	test.py	/^    def setUp(self):$/;"	m	class:TestMultiServer
+setUp	test.py	/^    def setUp(self):$/;"	m	class:TestNetwork
 stage	Behaviour.py	/^    def stage(): abstract_method()$/;"	m	class:Behaviour
 stage	Behaviour.py	/^    def stage(self):$/;"	m	class:MarkovBehaviour
 stage	Modulator.py	/^    def stage(self):$/;"	m	class:MVModulator
@@ -126,6 +134,7 @@ sync	Node.py	/^    def sync(self):$/;"	m	class:MarkovNode
 sync	Node.py	/^    def sync(self):$/;"	m	class:NNode
 sync	back_Node.py	/^    def sync(self):$/;"	m	class:MarkovNode
 sync	back_Node.py	/^    def sync(self):$/;"	m	class:NNode
-testBehave	test.py	/^    def testBehave(self):$/;"	m	class:MultiServer
-testSync	test.py	/^    def testSync(self):$/;"	m	class:MSGeneratorTest
+testBehave	test.py	/^    def testBehave(self):$/;"	m	class:TestMultiServer
+testNetwork	test.py	/^    def testNetwork(self):$/;"	m	class:TestNetwork
+testSync	test.py	/^    def testSync(self):$/;"	m	class:TestMSGenerator
 write	Network.py	/^    def write(self, fName):$/;"	m	class:Network

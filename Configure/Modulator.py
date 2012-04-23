@@ -18,6 +18,11 @@ class Modulator(object):
     def __str__(self):
         return str( Attr(**self.desc) )
 
+    @property
+    def profile(self): return self.desc['profile']
+    @property
+    def start(self): return eval( self.desc['start'] )
+
 from Behaviour import MarkovBehaviour
 class MarkovModulator(Modulator, MarkovBehaviour):
     """
@@ -33,10 +38,13 @@ class MarkovModulator(Modulator, MarkovBehaviour):
         MarkovBehaviour.__init__(self, interval, P, generator_states)
         self.mod_list = []
         # self.generator_states = generator_states
-        self._gen_modulator_list()
+        # self._gen_modulator_list()
+        self.behave_with_profile(self.start, self.profile)
 
-    def sync(self):
-        self._gen_modulator_list()
+
+    # def sync(self):
+        # self._gen_modulator_list()
+        # self.behave_with_profile(self.start, self.profile)
 
     def __str__(self):
         return ' '.join([str(mod) for mod in self.mod_list])
@@ -54,34 +62,31 @@ class MarkovModulator(Modulator, MarkovBehaviour):
                 )
         self.mod_list.append(mod)
 
-    def _gen_modulator_list(self):
-        start = eval( self.desc['start'] ) #FIXME
-        profile = self.desc['profile']
-        for dur, num in zip(*profile):
-            end = start + dur
-            for i in xrange(num):
-                self.behave(start, end)
-            start = end
-
 from Behaviour import MVBehaviour
 class MVModulator(Modulator, MVBehaviour):
-    """implement the stage function. for each stage, add modulator
-    using corresponding generator. the profile of modulator is specfied
-    as (start_time, duration)"""
-    def __init__(self, interval, generator_states, **desc):
+    """
+    Modulator defines the behaviour of generator within a range of time.
+    implement the stage function.
+    joint_dist should be numpy array
+    """
+    def __init__(self, joint_dist, interval, generator_states, **desc):
         Modulator.__init__(self, **desc)
-        MVBehaviour.__init__(self, interval, generator_states)
+        MVBehaviour.__init__(self, joint_dist, interval, generator_states)
         self.mod_list = []
-        self._gen_modulator_list()
+        self.behave_with_profile(self.start, self.profile)
 
     def stage(self):
-        """for one markov stage"""
+        """for one stage"""
         r_start = self.run_para['r_start']
         r_end = self.run_para['r_end']
-        mod = Modulator(
-                name=self.desc['name'],
-                start=r_start,
-                profile=( (r_end-r_start,), (1,) ) ,
-                generator=self.states[self.cs],
-                )
-        self.mod_list.append(mod)
+        for i in xrange(self.srv_num): # for each destination
+            gen = self.states[i][self.cs[i]]
+            if not gen:
+                continue
+            mod = Modulator(
+                    name=self.desc['name'],
+                    start=r_start,
+                    profile=( (r_end-r_start,), (1,) ) ,
+                    generator=gen,
+                    )
+            self.mod_list.append(mod)

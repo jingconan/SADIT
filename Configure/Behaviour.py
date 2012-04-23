@@ -23,6 +23,19 @@ class MarkovBehaviour(Behaviour):
     def stage(self):
         abstract_method()
 
+    def get_new_state(self):
+        return RandDist(self.P[self.cs])
+
+    def get_interval(self):
+        return exponential(1.0 / self.interval)
+
+    def behave_with_profile(self, start, profile):
+        for dur, num in zip(*profile):
+            end = start + dur
+            for i in xrange(num):
+                self.behave(start, end)
+            start = end
+
     def behave(self, start, end):
         t = start
         while t <= end:
@@ -32,29 +45,38 @@ class MarkovBehaviour(Behaviour):
             self.stage()
             t += inter
 
-    def get_new_state(self):
-        return RandDist(self.P[self.cs])
-
-    def get_interval(self):
-        return exponential(1.0 / self.interval)
-
 import numpy as np
 class MVBehaviour(MarkovBehaviour):
-    """The traffic is generated according to multi-variable distribution
+    """
+    Description:
+        - will make choice every other t time.
+        - the generators is selected according to multi-variate distribution
+
+    Required Variables:
+        - states: states for all possible value. it is a list of list,
+            the first dimension is the id of servers, the second dimension is the possible
+            for type of generator for a specific server.
+        - joint_dist: the joint distribution for indicator variable to each server.
+
+    The traffic is generated according to multi-variable distribution
     if there are m servers, then the joint distribution will be m dimension
     matrix. For each component, there are n possible values. So we need m*n
     possible generators
     """
-    def __init__(self, joint_dist, generator_states, interval):
+    def __init__(self, joint_dist, interval, generator_states):
         self.joint_dist = joint_dist
-        self.generator_states = generator_states
+        self.states = generator_states
         self.interval = interval
         self.record = []
 
     @property
     def dim(self): return self.joint_dist.shape
 
+    @property
+    def srv_num(self): return len(self.dim)
+
     def get_sample(self):
+        """generate a sample according to joint distribution"""
         assert(np.sum(self.joint_dist) == 1 )
         x = RandDist( self.joint_dist.ravel() )
         idx = np.unravel_index(x, self.dim)

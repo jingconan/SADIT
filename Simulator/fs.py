@@ -275,6 +275,8 @@ class Simulator(object):
         emerge = moddict.get('emerge', None)
         withdraw = moddict.get('withdraw', None)
 
+        # print 'trafprofname, ', trafprofname
+        # import pdb;pdb.set_trace()
         assert (trafprofname in xdict)
 
         trafprofstr = xdict[trafprofname]
@@ -313,8 +315,8 @@ class Simulator(object):
             if self.debug:
                 print 'subtractive trafdict', srcnode, trafdict
             gen = lambda: SubtractiveGeneratorNode(self, srcnode, **trafdict)
-
         else:
+            import pdb;pdb.set_trace()
             raise InvalidTrafficSpecification(trafspecstr)
         return gen
 
