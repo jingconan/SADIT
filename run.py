@@ -7,8 +7,6 @@ from Detector import detect
 from os import chdir as cd
 from os import system as sh
 def simulate(total_t, dot_path):
-    # total_t = settings.sim_t
-    # dot_path = settings.OUTPUT_DOT_FILE
     cd('./Simulator')
     sh( './fs.py %s -t %d' %(dot_path, total_t) )
     cd('..')

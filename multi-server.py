@@ -17,7 +17,7 @@ def simulate(total_t, dot_path):
 #################################
 from numpy import zeros, array
 g_size = 10
-srv_node_list = [0, 1]
+srv_node_list = (0, 1)
 topo = zeros([g_size, g_size])
 for i in xrange(g_size):
     if i in srv_node_list:
@@ -59,10 +59,25 @@ net_desc = dict(
         node_para={},
         )
 
+ano_joint_dist = array([[0.125, 0.125, 0.125, 0.125],
+                    [0.025, 0.025, 0.025, 0.025],
+                    [0.05, 0.05, 0.05, 0.05],
+                    [0.05, 0.05, 0.05, 0.05]
+                    ])
+
+ano_desc = {'anoType':'mv_anomaly',
+        'ano_node_seq':2,
+        'T':(1200, 1400),
+        'change':{'joint_dist':ano_joint_dist},
+        }
+
+ano_list = [ano_desc]
+
+
 
 import settings
 def main():
-    gen_anomaly_dot([], net_desc, norm_desc, settings.OUTPUT_DOT_FILE)
+    gen_anomaly_dot(ano_list, net_desc, norm_desc, settings.OUTPUT_DOT_FILE)
     simulate(settings.sim_t, settings.OUTPUT_DOT_FILE)
     print 'start detection'
     detect(settings.ROOT + '/Simulator/n0_flow.txt',

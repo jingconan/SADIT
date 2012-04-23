@@ -204,7 +204,8 @@ class MVNode(MarkovNode):
                 self.joint_dist,
                 )
 
-    def add_modulator(self, start, profile, generator_list, joint_dist):
+    def add_modulator(self, start, profile, generator_list, joint_dist=None):
+        if joint_dist is None : joint_dist = self.joint_dist
         self.mod_num += 1
         s_id_list = self.gen_to_id(generator_list)
         m = self.get_modulator(start, profile, s_id_list, self.joint_dist)

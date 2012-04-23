@@ -7,22 +7,14 @@
 ##-- [2012-04-10 17:16:27] add _infect_modulator, make anomaly more general
 
 
-from Network import *
-from Edge import *
-from Node import *
-
 import numpy as np
-from matplotlib.pyplot import *
-from types import ListType
-
 import sys
 sys.path.append("..")
 import settings
-import cPickle as pickle
-from util import *
-from mod_util import *
+from util import Load
+from mod_util import choose_ip_addr
 
-from numpy import cumsum, hstack, sort, argsort, diff
+from numpy import cumsum, diff
 def get_pos(l, v):
     """index of largest element in l that is less than v"""
     for i in xrange(len(l)):
@@ -56,8 +48,8 @@ class BadConfigError(Exception):
 import copy
 class Anomaly:
     '''basis class for anomaly. Its subclass will provide run() method'''
-    def __init__(self, anoDesc):
-        self.anoDesc = anoDesc
+    def __init__(self, ano_desc):
+        self.ano_desc = ano_desc
         self.ano_node = None
 
     def get_profile_with_ano(self, mod_start, mod_profile, ano_t):
@@ -93,7 +85,7 @@ class Anomaly:
         assert(st == start)
         ano_node.add_modulator(start=str(start),
                 profile=ap,
-                generator = [ generator[s_id].get_new_gen(self.anoDesc['change']) ])
+                generator = [ generator[s_id].get_new_gen(self.ano_desc['change']) ])
 
         st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
         assert(st == end)
@@ -105,13 +97,17 @@ class Anomaly:
 
     def run(self, net):
         """inject itself into the network"""
-        self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
-        ano_t = self.anoDesc['T']
+        self.ano_node = net.node_list[self.ano_desc['ano_node_seq']]
+        ano_t = self.ano_desc['T']
 
         m_back = copy.deepcopy(self.ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator
             self._infect_modulator(ano_t, m_id, mod)
 
+
+from Edge import NEdge
+from Node import NNode
+from Generator import get_generator
 class AtypicalUserAnomaly(Anomaly):
     """anomaly of atypical user. an atypical user joins to the network during some time.
     Atypical user refer those user has large IP distance with users in the network."""
@@ -179,9 +175,9 @@ class TargetOneServer(Anomaly):
     """Only change the behaviour in one server
     ano_desc should have id **srv_id** of that sever node"""
     def run(self, net):
-        self.ano_node = net.node_list[self.anoDesc['ano_node_seq']]
-        ano_t = self.anoDesc['T']
-        srv_id = self.anoDesc['srv_id']
+        self.ano_node = net.node_list[self.ano_desc['ano_node_seq']]
+        ano_t = self.ano_desc['T']
+        srv_id = self.ano_desc['srv_id']
         srv_ip_addr = net.node_list[srv_id].ipdests
         m_back = copy.deepcopy(self.ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator

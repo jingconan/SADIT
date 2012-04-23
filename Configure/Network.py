@@ -68,5 +68,3 @@ class Network(Dot):
     def InjectAnomaly(self, A):
         '''Inject Anomaly into the network. A is the one type Anomaly'''
         A.run(self)
-
-

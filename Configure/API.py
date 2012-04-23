@@ -1,6 +1,7 @@
-from Network import *
-from Anomaly import *
-from MarkovAnomaly import *
+from Network import Network
+from Anomaly import AtypicalUserAnomaly, Anomaly, TargetOneServer
+from MarkovAnomaly import MarkovAnomaly
+from MVAnomaly import MVAnomaly
 ##################################
 ###  Interface          #######
 ##################################
@@ -12,6 +13,7 @@ ano_map = {
         'flow_size_var':Anomaly,
         'target_one_server':TargetOneServer,
         'markov_anomaly':MarkovAnomaly,
+        'mv_anomaly':MVAnomaly,
         }
 
 def gen_anomaly_dot(ano_list, netDesc, normalDesc, outputFileName):
