@@ -11,6 +11,7 @@ class MVAnomaly(MarkovAnomaly):
                 if s_id is not None: del self.ano_node.generator[s_id]
 
     def add_ano_seg(self, start, ap, generator_list):
+        # import pdb;pdb.set_trace()
         self.ano_node.add_modulator(
                 start=str(start),
                 profile=ap,

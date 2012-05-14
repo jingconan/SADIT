@@ -44,6 +44,6 @@ class MarkovAnomaly(Anomaly):
                 start=str(start),
                 profile=ap,
                 generator_list = generator_list,
-                markov_desc = self.anoDesc['ano_markov_desc'],
+                markov_desc = self.ano_desc['ano_markov_desc'],
                 )
 

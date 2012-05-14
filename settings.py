@@ -1,7 +1,8 @@
 ### ROOT is the root directory for you directory, be aware to change this before you try to run the code
 # ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-experimental'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
-ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 
 
 #################################
@@ -35,10 +36,13 @@ NORM_DESC = dict(
         )
 
 ANOMALY_TIME = (1200, 1400)
-ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
+# ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
+ANO_DESC = {'anoType':'flow_arrival_rate',
         'ano_node_seq':2,
         'T':(1200, 1400),
-        'change':{'flow_arrival_rate':6},
+        # 'change':{'flow_arrival_rate':6},
+        'change':{'flow_arrival_rate':4},
+        # 'change':{'flow_arrival_rate':2},
         # 'change':{'flow_size_mean':6},
         # 'change':{'flow_size_var':6},
         'srv_id':0,
@@ -57,7 +61,6 @@ NET_DESC = dict(
         )
 
 
-OUTPUT_DOT_FILE = ROOT + '/test/conf.dot'
 IPS_FILE = ROOT + '/Configure/ips.txt'
 
 
@@ -101,7 +104,11 @@ CLUSTER_NUMBER = 2
 
 ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 DETECTOR_DESC = dict(
+        # interval=30,
+        # interval=50,
+        # win_size = 50,
         interval=10,
+        # win_size = 10,
         win_size=150,
         win_type='time', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate

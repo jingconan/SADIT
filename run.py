@@ -21,11 +21,12 @@ def run():
     simulate(settings.sim_t,
             settings.OUTPUT_DOT_FILE)
     print 'start detection'
-    detect(settings.ROOT + '/Simulator/n0_flow.txt',
+    detector = detect(settings.ROOT + '/Simulator/n0_flow.txt',
             settings.DETECTOR_DESC['win_size'],
             settings.DETECTOR_DESC['fea_option'],
             settings.DETECTOR_DESC['detector_type'],
             )
+    detector.plot_entropy()
 
 if __name__ == "__main__":
     run()

@@ -57,7 +57,14 @@ class DataFile(object):
         return new_file
 
     def parse(self):
-        self.flow = ParseData(self.f_name)
+        import types
+        self.flow = []
+        if type(self.f_name) == types.ListType:
+            # import pdb;pdb.set_trace()
+            for f in self.f_name:
+                self.flow += ParseData(f)
+        else:
+            self.flow = ParseData(self.f_name)
         self.sort_flow('t')
 
     def gen_fea(self):
@@ -130,6 +137,14 @@ class DataFile(object):
     ### Function For Extracting Features ###
     def get_cluster(self): return self.cluster
     def get_flow_size(self): return self.get_value_list('flowSize')
+
+    def plot_flow_size(self):
+        import matplotlib.pyplot as plt
+        flow_size = self.get_flow_size()
+        print 'range of flow size %f, %f' %( min(flow_size), max(flow_size) )
+        plt.figure()
+        plt.plot(flow_size)
+        plt.show()
 
     def get_flow_rate(self):
         t = self.get_value_list('t')

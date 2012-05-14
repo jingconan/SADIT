@@ -54,7 +54,7 @@ class MVGenerator(HarpoonG):
         self.gen_desc = dict(
                 ipsrc = self.para['ipsrc'],
                 ipdst = self.para['ipdst'],
-                flowsize= 'normal(%f,0)' %(self.para['flow_size']),
+                flowsize= 'normal(%f,100)' %(self.para['flow_size']),
                 flowstart='exponential(%f)' %(self.para['flow_arrival_rate']),
                 sport = 'randomchoice(22,80,443)',
                 dport='randomunifint(1025,65535)',

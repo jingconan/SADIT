@@ -18,8 +18,7 @@ class Network(Dot):
     def __init__(self):
         Dot.__init__(self, 'SimConf', graph_type='graph')
         self.node_list = []
-        global NODE_NUM
-        NODE_NUM = 0
+        self.NODE_NUM = 0
         self.IPSrcSet, self.AnoSet, _ = GetIPAdress()
         self.mv = None
         # self.Node = node_init_handle
@@ -47,7 +46,7 @@ class Network(Dot):
         self.NodeList = []
         for i in xrange(n):
             # FIXME Add start, end to the parameter list
-            node = self.Node([self.IPSrcSet[i]], **self.net_desc['node_para'])
+            node = self.Node([self.IPSrcSet[i]], i, **self.net_desc['node_para'])
             self.node_list.append(node)
             self.add_node(node)
             # if self.mv: mv.MHarpoon(node)

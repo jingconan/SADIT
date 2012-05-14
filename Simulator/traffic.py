@@ -359,6 +359,8 @@ class HarpoonGeneratorNode(GeneratorNode):
 
         # Add By Jing Wang FIXME More complete way to abnormal flow
         # revise at [2012-04-10 00:25:05] suppor new configure
+        # p_size = float(flowsize.rsplit(',')[0].rsplit('(')[1] )
+        # print 'flowsize, ', p_size
         self.anoFlag = False
         if not settings.EXPORT_ABNORMAL_FLOW:
             return
@@ -392,6 +394,7 @@ class HarpoonGeneratorNode(GeneratorNode):
                     self.anoFlag = True
         else:
             raise ValueError('unknow anoType')
+
 
 
     def start(self):

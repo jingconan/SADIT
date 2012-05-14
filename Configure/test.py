@@ -45,7 +45,7 @@ class TestMSGenerator(TestCase):
                     states = gen_para_type_list,
                     TYPE = 'harpoon')
             mv.sync()
-            print mv
+            # print mv
 
 ########################
 ### MVNode test ###

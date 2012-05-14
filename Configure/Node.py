@@ -1,6 +1,6 @@
 # from pydot import *
 from pydot import Node
-NODE_NUM = 0
+# NODE_NUM = 0
 
 import sys
 sys.path.append("..")
@@ -14,11 +14,9 @@ from Modulator import Modulator, MarkovModulator, MVModulator
 
 class NNode(Node):
     # node_seq = 0
-    def __init__(self, ipdests, **argv):
+    def __init__(self, ipdests, node_seq, **argv):
         assert( type(ipdests)== types.TupleType or type(ipdests)== types.ListType )
-        global NODE_NUM
-        self.node_seq = NODE_NUM
-        NODE_NUM += 1
+        self.node_seq = node_seq
         # default attribute
         attr = dict(
                 autoack = '"False"',
@@ -106,9 +104,9 @@ class NNode(Node):
 
 import copy
 class MarkovNode(NNode):
-    def __init__(self, ipdests, **markov_desc):
+    def __init__(self, ipdests, node_seq, **markov_desc):
         self.markov_desc = markov_desc
-        NNode.__init__(self, ipdests)
+        NNode.__init__(self, ipdests, node_seq)
         self.gen_num = 0
 
     def _gen_generator(self, ipdst):
@@ -132,11 +130,13 @@ class MarkovNode(NNode):
             s_id_list.append(self.s_id)
 
         if not markov_desc: markov_desc = self.markov_desc
+        # import pdb;pdb.set_trace()
         m = self.get_modulator(start, profile, s_id_list, markov_desc)
 
         self.modulator[self.m_id] = m
 
     def get_modulator(self, start, profile, s_id_list, markov_desc):
+        # print 'markov_desc', markov_desc
         m = MarkovModulator(
                 name='modulator',
                 start = str(start),
@@ -163,7 +163,7 @@ class MarkovNode(NNode):
                 mod_list.append(mod)
 
 
-        print 'self.modulator father, ', self.modulator
+        # print 'self.modulator father, ', self.modulator
         # print '*' * 100
         attr['traffic'] = '"' + ' '.join(key_list) + '"'
         for k, v in zip(key_list, mod_list):
@@ -176,8 +176,8 @@ class MarkovNode(NNode):
 
 class MVNode(MarkovNode):
     """Node for Multi Variable Node"""
-    def __init__(self, ipdests):
-        MarkovNode.__init__(self, ipdests)
+    def __init__(self, ipdests, node_seq):
+        MarkovNode.__init__(self, ipdests, node_seq)
 
     @property
     def joint_dist(self): return self.norm_desc['joint_dist']
@@ -195,9 +195,11 @@ class MVNode(MarkovNode):
     def interval(self): return self.norm_desc['interval']
 
     def init_traffic(self, norm_desc, dst_nodes):
-        print 'MVNode init_traffic'
+        # print 'MVNode init_traffic'
         self.norm_desc = norm_desc
-        self.generator_list = [ [None] + self._get_generator_list(node, self.para_list) for node in dst_nodes ]
+        # FIXME why add None cause the problem?
+        # self.generator_list = [ [None] + self._get_generator_list(node, self.para_list) for node in dst_nodes ]
+        self.generator_list = [ self._get_generator_list(node, self.para_list) for node in dst_nodes ]
         self.add_modulator(self.start,
                 self.profile,
                 self.generator_list,
@@ -208,9 +210,9 @@ class MVNode(MarkovNode):
         if joint_dist is None : joint_dist = self.joint_dist
         self.mod_num += 1
         s_id_list = self.gen_to_id(generator_list)
-        m = self.get_modulator(start, profile, s_id_list, self.joint_dist)
+        m = self.get_modulator(start, profile, s_id_list, joint_dist) #FIX  A BUG here at [2012-04-25 12:02:11]
         self.modulator[self.m_id] = m
-        print self.modulator
+        # print self.modulator
 
     def get_modulator(self, start, profile, s_id_list, joint_dist):
         m = MVModulator(

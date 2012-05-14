@@ -77,7 +77,8 @@ class MVBehaviour(MarkovBehaviour):
 
     def get_sample(self):
         """generate a sample according to joint distribution"""
-        assert(np.sum(self.joint_dist) == 1 )
+        # assert(np.sum(self.joint_dist) == 1 )
+        assert( abs( np.sum(self.joint_dist) - 1) < 1e-3)
         x = RandDist( self.joint_dist.ravel() )
         idx = np.unravel_index(x, self.dim)
         return idx
@@ -89,6 +90,7 @@ class MVBehaviour(MarkovBehaviour):
 
     def get_interval(self):
         return self.interval
+        # return exponential(1.0 / self.interval)
 
     def _sample_freq(self):
         freq = np.zeros(self.dim)

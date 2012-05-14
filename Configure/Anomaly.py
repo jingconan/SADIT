@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 ### -- [2012-03-04 14:56:03] FlowRate and FlowSize anomaly parameter has be changed as
 ### -- ratio instead of absolute value
 ##-- [2012-04-08 22:31:20] Add GenAnomalyDot
@@ -83,6 +84,9 @@ class Anomaly:
         start, end = ano_t
         st = mod_start + float(np.sum(np1[0]))
         assert(st == start)
+
+        # print self.ano_desc['change']
+        # import pdb;pdb.set_trace()
         ano_node.add_modulator(start=str(start),
                 profile=ap,
                 generator = [ generator[s_id].get_new_gen(self.ano_desc['change']) ])
