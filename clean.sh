@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 rm ./Share/conf.dot
+rm ./Share/*.txt
 rm ./Simulator/*.txt
 rm *.pyc
 rm -r ./Share/sens_*

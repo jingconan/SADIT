@@ -44,16 +44,17 @@ class SensExper(AttriChangeExper):
             det_obj_shelf[str(i)] = dict(winT=det_obj.record_data['winT'],
                     entropy=det_obj.record_data['entropy'])
             # v = det_obj.record_data['entropy']
+            self.store_flow_file(str(i))
             self.clear_tmp_file()
-            self.store_abnormal_flow_file(str(i))
 
         f_obj = open(self.shelve_file, 'w')
         pickle.dump(det_obj_shelf, f_obj)
         f_obj.close()
 
-    def store_abnormal_flow_file(self, suffix):
+    def store_flow_file(self, suffix):
         import settings, shutil
-        file_name = settings.ROOT + '/Share/abnorma_flow_%s.txt'%(suffix)
+        shutil.copyfile(settings.OUTPUT_FLOW_FILE, settings.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
+        file_name = settings.ROOT + '/Share/abnormal_flow_%s.txt'%(suffix)
         shutil.copyfile(settings.EXPORT_ABNORMAL_FLOW_FILE, file_name)
 
     def clear_tmp_file(self):
@@ -92,5 +93,5 @@ class SensExper(AttriChangeExper):
 if __name__ == "__main__":
     import settings
     exper = SensExper(settings)
-    exper.run('flow_arrival_rate', [2, 4, 6])
+    exper.run('flow_arrival_rate', [1, 2, 3, 4, 5, 6])
     exper.plot_entropy()
