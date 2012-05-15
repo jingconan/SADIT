@@ -10,6 +10,14 @@ from os import system as sh
 import numpy as np
 
 class Experiment(object):
+    """
+    base class for all experiments. Three important attributes
+        - net_desc: description of the network
+        - norm_desc: description of the normal case
+        - ano_list: list of anomalies.
+    settings module is used to initialize the experiment, we need have a
+    settings.py file with attribute 1. **NET_DESC** 2. **NORM_DESC** 3. **ANO_LIST**
+    """
     def __init__(self, settings):
         self.settings = settings
     @property

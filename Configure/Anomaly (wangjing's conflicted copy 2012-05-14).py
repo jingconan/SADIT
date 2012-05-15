@@ -86,10 +86,13 @@ class Anomaly:
         st = mod_start + float(np.sum(np1[0]))
         assert(st == start)
 
-        self.new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
+        # print self.ano_desc['change']
+        # import pdb;pdb.set_trace()
+        new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
+        pickle.dump(new_generator.para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w'))
         ano_node.add_modulator(start=str(start),
                 profile=ap,
-                generator = [ self.new_generator ])
+                generator = [ new_generator ])
 
         st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
         assert(st == end)
@@ -99,10 +102,6 @@ class Anomaly:
         del ano_node.modulator[m_id]
         del ano_node.generator[s_id]
 
-    def _export_ano_flow_para(self):
-        """export para to help to export ano flows"""
-        pickle.dump(self.new_generator.para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
-
     def run(self, net):
         """inject itself into the network"""
         self.ano_node = net.node_list[self.ano_desc['ano_node_seq']]
@@ -111,8 +110,6 @@ class Anomaly:
         m_back = copy.deepcopy(self.ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator
             self._infect_modulator(ano_t, m_id, mod)
-
-        self._export_ano_flow_para()
 
 
 from Edge import NEdge
@@ -167,13 +164,9 @@ class AtypicalUserAnomaly(Anomaly):
         self._config_traffic()
 
     def _export_ip_addr(self):
-        fid = open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')
+        fid = open(settings.ATYPICAL_IP_FILE, 'w')
         fid.write( ' '.join([str(i) for i in self.ano_node.ipdests]) )
         fid.close()
-
-    def _export_ano_flow_para(self):
-        """export para to help to export ano flows"""
-        self._export_ip_addr()
 
     def run(self, net):
         '''will add a node for atypical user to the network.
@@ -183,7 +176,7 @@ class AtypicalUserAnomaly(Anomaly):
         net.add_node(self.ano_node)
         self._change_topology()
 
-        self._export_ano_flow_para()
+        self._export_ip_addr()
 
 class TargetOneServer(Anomaly):
     """Only change the behaviour in one server
@@ -199,3 +192,5 @@ class TargetOneServer(Anomaly):
             if self.ano_node.generator[s_id]['ipdst'] not in srv_ip_addr:
                 continue
             self._infect_modulator(ano_t, m_id, mod)
+
+

@@ -8,7 +8,6 @@ $.fn.autogrow.resize	doc/sphinx/build/html/_static/websupport.js	/^  $.fn.autogr
 $.fn.comment	doc/sphinx/build/html/_static/websupport.js	/^  $.fn.comment = function() {$/;"	f
 A	misc/New_Detector/test_rope.py	/^class A(self):$/;"	c
 ABNORMAL_USER_IP_FILE	misc/settings copy.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
-ABNORMAL_USER_IP_FILE	settings.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
 ABNORMAL_USER_IP_FILE	settings/multi_srv_targ_one.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
 ABNORMAL_USER_IP_FILE	settings/multi_srv_targ_one_with_fr.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
 ABNORMAL_USER_IP_FILE	settings/new_simple_anomaly.py	/^ABNORMAL_USER_IP_FILE = ROOT + '\/Share\/abnormal_user_IP.txt'$/;"	v
@@ -54,7 +53,6 @@ ANO_LIST	test/simple.py	/^ANO_LIST = [ANO_DESC]$/;"	v
 ANO_MARKOV_DESC	test/markov_p_ano.py	/^ANO_MARKOV_DESC = dict($/;"	v
 ATIP	Configure/Anomaly.py	/^    ATIP = None # Atypical IP Set. Will Select IP from this set and add a node with atypical ip$/;"	v	class:AtypicalUserAnomaly
 ATYPICAL_IP_FILE	misc/settings copy.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
-ATYPICAL_IP_FILE	settings.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
 ATYPICAL_IP_FILE	settings/multi_srv_targ_one.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
 ATYPICAL_IP_FILE	settings/multi_srv_targ_one_with_fr.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
 ATYPICAL_IP_FILE	settings/new_simple_anomaly.py	/^ATYPICAL_IP_FILE = ROOT + '\/Share\/atypical_IP.txt'$/;"	v
@@ -146,10 +144,11 @@ Dump2Txt	util/util.py	/^def Dump2Txt(var, fname, op):$/;"	f
 DumpDerivative	Detector/Derivative.py	/^def DumpDerivative():$/;"	f
 ENTROPY_FIG_FILE	settings/multi_srv_targ_one.py	/^ENTROPY_FIG_FILE = ROOT + '\/res\/entropy.eps'$/;"	v
 ENTROPY_FIG_FILE	settings/multi_srv_targ_one_with_fr.py	/^ENTROPY_FIG_FILE = ROOT + '\/res\/entropy-with-fr.eps'$/;"	v
-EXPORT_ABNORMAL_FLOW	settings.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
+EXPORT_ABNORMAL_FLOW	settings.py	/^EXPORT_ABNORMAL_FLOW = True$/;"	v
 EXPORT_ABNORMAL_FLOW	settings/multi_srv_targ_one.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
 EXPORT_ABNORMAL_FLOW	settings/multi_srv_targ_one_with_fr.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
 EXPORT_ABNORMAL_FLOW	settings/new_simple_anomaly.py	/^EXPORT_ABNORMAL_FLOW = False$/;"	v
+EXPORT_ABNORMAL_FLOW_PARA_FILE	settings.py	/^EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '\/Share\/ano_flow_para.txt'$/;"	v
 Equal	Detector/ClusterAlg.py	/^def Equal(x, y):$/;"	f
 Experiment	Experiment/Experiment.py	/^class Experiment(object):$/;"	c
 Experiment	multi-server.py	/^class Experiment(object):$/;"	c
@@ -341,7 +340,6 @@ NET_DESC	test/simple.py	/^NET_DESC = dict($/;"	v
 NEdge	Configure/Edge.py	/^class NEdge(Edge):$/;"	c
 NNode	Configure/Node.py	/^class NNode(Node):$/;"	c
 NNode	Configure/back_Node.py	/^class NNode(Node):$/;"	c
-NODE_NUM	Configure/Node.py	/^NODE_NUM = 0$/;"	v
 NODE_NUM	Configure/back_Node.py	/^NODE_NUM = 0$/;"	v
 NORM_DESC	settings.py	/^NORM_DESC = dict($/;"	v
 NORM_DESC	settings/multi_srv_targ_one.py	/^NORM_DESC = dict($/;"	v
@@ -859,9 +857,9 @@ __init__	Configure/Modulator.py	/^    def __init__(self, **desc):$/;"	m	class:Mo
 __init__	Configure/Modulator.py	/^    def __init__(self, interval, P, generator_states, **desc):$/;"	m	class:MarkovModulator
 __init__	Configure/Modulator.py	/^    def __init__(self, joint_dist, interval, generator_states, **desc):$/;"	m	class:MVModulator
 __init__	Configure/Network.py	/^    def __init__(self):$/;"	m	class:Network
-__init__	Configure/Node.py	/^    def __init__(self, ipdests):$/;"	m	class:MVNode
-__init__	Configure/Node.py	/^    def __init__(self, ipdests, **argv):$/;"	m	class:NNode
-__init__	Configure/Node.py	/^    def __init__(self, ipdests, **markov_desc):$/;"	m	class:MarkovNode
+__init__	Configure/Node.py	/^    def __init__(self, ipdests, node_seq):$/;"	m	class:MVNode
+__init__	Configure/Node.py	/^    def __init__(self, ipdests, node_seq, **argv):$/;"	m	class:NNode
+__init__	Configure/Node.py	/^    def __init__(self, ipdests, node_seq, **markov_desc):$/;"	m	class:MarkovNode
 __init__	Configure/back_Node.py	/^    def __init__(self, ipdests, **argv):$/;"	m	class:NNode
 __init__	Configure/back_Node.py	/^    def __init__(self, ipdests, **markov_desc):$/;"	m	class:MarkovNode
 __init__	Configure/mod_util.py	/^    def __init__(self, string=None, **args):$/;"	m	class:Attr
@@ -1096,6 +1094,7 @@ detect_ano_type	Detector/AnoType.py	/^    def detect_ano_type(self): abstract_me
 detect_ano_type	Detector/AnoType.py	/^    def detect_ano_type(self):$/;"	m	class:ModelBaseAnoTypeTest
 detect_ano_type	Detector/AnoType.py	/^    def detect_ano_type(self):$/;"	m	class:ModelFreeAnoTypeTest
 detector	Experiment/Experiment.py	/^    detector = exper.detect()$/;"	v
+detector	Experiment/MarkovExperiment.py	/^    detector = exper.detect()$/;"	v
 detector_type	Experiment/Experiment.py	/^    def detector_type(self): return self.settings.DETECTOR_DESC['detector_type']$/;"	m	class:Experiment
 detector_type	multi-server.py	/^    def detector_type(self): return self.settings.DETECTOR_DESC['detector_type']$/;"	m	class:Experiment
 detector_type	settings.py	/^        detector_type = 'mfmb',$/;"	v
@@ -1516,7 +1515,7 @@ router_maintenance	Simulator/fs.py	/^    def router_maintenance(self):$/;"	m	cla
 run	Configure/Anomaly.py	/^    def run(self, net):$/;"	m	class:Anomaly
 run	Configure/Anomaly.py	/^    def run(self, net):$/;"	m	class:AtypicalUserAnomaly
 run	Configure/Anomaly.py	/^    def run(self, net):$/;"	m	class:TargetOneServer
-run	Experiment/Sens.py	/^    def run(self):$/;"	m	class:SensExper
+run	Experiment/Sens.py	/^    def run(self, attr, rg):$/;"	m	class:SensExper
 run	Simulator/fs.py	/^    def run(self):$/;"	m	class:Simulator
 run	misc/main.py	/^def run():$/;"	f
 run	run.py	/^def run():$/;"	f
@@ -1535,6 +1534,7 @@ setUp	Configure/test.py	/^    def setUp(self):$/;"	m	class:TestMSGenerator
 setUp	Configure/test.py	/^    def setUp(self):$/;"	m	class:TestMultiServer
 setUp	Configure/test.py	/^    def setUp(self):$/;"	m	class:TestNetwork
 setUp	test/ConfigureTest.py	/^    def setUp(self):$/;"	m	class:AnomalyTest
+set_ano_flag	Simulator/traffic.py	/^    def set_ano_flag(self, flowsize, flowstart):$/;"	m	class:HarpoonGeneratorNode
 set_attr	Simulator/ipaddrgen/ipaddrgen.py	/^    def set_attr(self,name,value):$/;"	f	function:_swig_setattr_nondynamic_method
 set_attr	Simulator/ipaddrgen/ipaddrgen_wrap.c	/^    int       (*set_attr)(PyObject *); \/* Set the value *\/$/;"	m	struct:swig_globalvar	file:
 set_done	Simulator/traffic.py	/^    def set_done(self, tf):$/;"	m	class:GeneratorNode

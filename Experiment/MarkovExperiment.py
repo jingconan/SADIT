@@ -33,7 +33,7 @@ class MarkovExperiment(Experiment):
         self.net_desc['node_type'] = 'MarkovNode'
         self.net_desc['node_para'] = {
                 'P':Pi2P(self.normal_sta_prob),
-                'interval':100,
+                'interval':10,
                 }
 
     def get_norm_desc(self):
@@ -46,7 +46,7 @@ class MarkovExperiment(Experiment):
         ano_desc = {'anoType':'markov_anomaly',
                 'ano_node_seq':2,
                 'T':(1200, 1400),
-                'ano_markov_desc':{'P':ano_markov_prob, 'interval':100},
+                'ano_markov_desc':{'P':ano_markov_prob, 'interval':10},
                 'srv_id':0,
                 }
         self.ano_list = [ano_desc]

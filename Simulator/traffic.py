@@ -357,43 +357,55 @@ class HarpoonGeneratorNode(GeneratorNode):
         if self.tcpmodel not in ['mathis','msmo97','csa00']:
             raise InvalidFlowConfiguration('Unrecognized tcp model for harpoon:'+str(tcpmodel))
 
-        # Add By Jing Wang FIXME More complete way to abnormal flow
-        # revise at [2012-04-10 00:25:05] suppor new configure
-        # p_size = float(flowsize.rsplit(',')[0].rsplit('(')[1] )
-        # print 'flowsize, ', p_size
         self.anoFlag = False
-        if not settings.EXPORT_ABNORMAL_FLOW:
-            return
-        p_size = float(flowsize.rsplit(',')[0].rsplit('(')[1] )
-        p_interval = float(flowstart.rsplit(')')[0].rsplit('(')[1] )
-        # anoType = settings.ANOMALY_TYPE
+        if settings.EXPORT_ABNORMAL_FLOW:
+            self.set_ano_flag(flowsize, flowstart)
+
+    def set_ano_flag(self, flowsize, flowstart):
+        """set whether it is a abonormal generator or normal generator. Several things that
+        need to be highlighted
+            - the configure must be in settings.py
+            - only support *flow_size_mean*, *flow_arrival_rate*
+        """
         assert( len(settings.ANO_LIST) == 1) # only support export for single anomaly
-        anoType = settings.ANO_LIST[0]['anoType']
-        if anoType == 'ATYPICAL_USER':
-            fid = open(settings.ATYPICAL_IP_FILE)
-            tline = fid.readline()
-            if tline == ipsrc:
-                self.anoFlag = True
-        elif anoType == 'FLOW_RATE':
-            ABNORMA_FLOW_RATE = pickle.load(open(settings.ANO_CONF_PARA_FILE, 'r'))
-            if p_interval == ABNORMA_FLOW_RATE: self.anoFlag = True
-            # if p_interval == settings.FLOW_RATE:
+        p_size = float(flowsize.rsplit(',')[0].rsplit('(')[1] ) # flow size mean
+        p_interval = float(flowstart.rsplit(')')[0].rsplit('(')[1] ) # flow arrival rate
+        p_var = float(flowsize.rsplit(',')[1].rsplit(')')[0])
+        para = {'flow_size_mean':p_size,
+                'flow_size_var':p_var,
+                'flow_arrival_rate':p_interval
+                }
+        # ano_type = settings.ANO_LIST[0]['anoType']
+        # import pdb;pdb.set_trace()
+        data = pickle.load(open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'r'))
+        if all([ data.get(k) == v for k, v in para.iteritems() ]):
+            self.anoFlag = True
+        # if ano_type == 'flow_arrival_rate':
+            # if data == p_interval: self.anoFlag = True
+        # if ano_type == 'flow_size_mean':
+            # if data == p_size: self.anoFlag = True
+
+        # if anoType == 'ATYPICAL_USER':
+            # fid = open(settings.ATYPICAL_IP_FILE)
+            # tline = fid.readline()
+            # if tline == ipsrc:
                 # self.anoFlag = True
-        elif anoType == 'FLOW_SIZE':
-            ABNORMA_FLOW_SIZE_MEAN = pickle.load(open(settings.ANO_CONF_PARA_FILE, 'r'))
-            if p_size == ABNORMA_FLOW_SIZE_MEAN: self.anoFlag = True
-            # if p_size == settings.FLOW_SIZE_MEAN:
-                # self.anoFlag = True
-        elif anoType == 'MARKOV_TRAN_PROB':
-            tpStartTime, tpEndTime = settings.ANOMALY_TIME
-            tspot = self.sim.now - self.sim.simstart
-            if tspot > tpStartTime and tspot < tpEndTime:
-                fid = open(settings.ABNORMAL_USER_IP_FILE)
-                tline = fid.readline()
-                if tline == ipsrc:
-                    self.anoFlag = True
-        else:
-            raise ValueError('unknow anoType')
+        # elif anoType == 'FLOW_RATE':
+            # ABNORMA_FLOW_RATE = pickle.load(open(settings.ANO_CONF_PARA_FILE, 'r'))
+            # if p_interval == ABNORMA_FLOW_RATE: self.anoFlag = True
+        # elif anoType == 'FLOW_SIZE':
+            # ABNORMA_FLOW_SIZE_MEAN = pickle.load(open(settings.ANO_CONF_PARA_FILE, 'r'))
+            # if p_size == ABNORMA_FLOW_SIZE_MEAN: self.anoFlag = True
+        # elif anoType == 'MARKOV_TRAN_PROB':
+            # tpStartTime, tpEndTime = settings.ANOMALY_TIME
+            # tspot = self.sim.now - self.sim.simstart
+            # if tspot > tpStartTime and tspot < tpEndTime:
+                # fid = open(settings.ABNORMAL_USER_IP_FILE)
+                # tline = fid.readline()
+                # if tline == ipsrc:
+                    # self.anoFlag = True
+        # else:
+            # raise ValueError('unknow anoType')
 
 
 
