@@ -27,6 +27,7 @@ DEFAULT_PROFILE = ((sim_t,),(1,))
 
 
 gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'}
+# gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'2'}
 NORM_DESC = dict(
         TYPE = 'NORMAl',
         start = '0',

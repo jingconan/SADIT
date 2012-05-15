@@ -101,7 +101,9 @@ class Anomaly:
 
     def _export_ano_flow_para(self):
         """export para to help to export ano flows"""
-        pickle.dump(self.new_generator.para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
+        ano_flow_para = copy.deepcopy(self.new_generator.para)
+        ano_flow_para['ano_type'] = self.ano_desc['anoType']
+        pickle.dump(ano_flow_para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
 
     def run(self, net):
         """inject itself into the network"""

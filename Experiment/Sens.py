@@ -3,7 +3,7 @@
 import sys
 sys.path.append("..")
 from Experiment import AttriChangeExper, gen_anomaly_dot
-from matplotlib.pyplot import figure, plot, show, subplot, title, legend
+from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefig
 import cPickle as pickle
 import copy
 
@@ -23,7 +23,8 @@ class SensExper(AttriChangeExper):
     def __init__(self, settings):
         AttriChangeExper.__init__(self, settings)
         self.sens_ano = settings.ANO_LIST[0]
-        self.shelve_file = '/home/jing/det_obj.out'
+        # self.shelve_file = '/home/jing/det_obj.out'
+        self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
 
     def run(self, attr, rg):
         """attr is the name of attribute that will be changed. possible
@@ -86,6 +87,7 @@ class SensExper(AttriChangeExper):
         title('model based')
         legend(det_obj_shelf.keys())
         show()
+        savefig(self.settings.ROOT + '/Share/res.eps')
 
     def configure(self):
         gen_anomaly_dot([self.sens_ano], self.net_desc, self.norm_desc, self.dot_file)
@@ -93,5 +95,10 @@ class SensExper(AttriChangeExper):
 if __name__ == "__main__":
     import settings
     exper = SensExper(settings)
-    exper.run('flow_arrival_rate', [1, 2, 3, 4, 5, 6])
+    # exper.run('flow_arrival_rate', [1, 2, 3, 4, 5, 6])
+    # exper.run('flow_arrival_rate', [0.1, 0.3, 0.4, 0.6, 0.8])
+    # exper.run('flow_arrival_rate', [0.2, 0.4, 0.6])
+    # exper.run('flow_size_mean', [2, 3, 4, 5])
+    # exper.run('flow_size_mean', [0.2, 0.4, 0.6])
+    # exper.run('flow_size_var', [2, 3, 4, 5])
     exper.plot_entropy()

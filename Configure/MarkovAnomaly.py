@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from Anomaly import Anomaly
 import numpy as np
+import cPickle as pickle
 
 class MarkovAnomaly(Anomaly):
     def _infect_modulator(self, ano_t, m_id, mod):
@@ -46,4 +47,9 @@ class MarkovAnomaly(Anomaly):
                 generator_list = generator_list,
                 markov_desc = self.ano_desc['ano_markov_desc'],
                 )
+
+    def _export_ano_flow_para(self):
+        import settings
+        pickle.dump(self.ano_desc, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
+
 

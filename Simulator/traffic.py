@@ -375,11 +375,12 @@ class HarpoonGeneratorNode(GeneratorNode):
                 'flow_size_var':p_var,
                 'flow_arrival_rate':p_interval
                 }
-        # ano_type = settings.ANO_LIST[0]['anoType']
-        # import pdb;pdb.set_trace()
         data = pickle.load(open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'r'))
-        if all([ data.get(k) == v for k, v in para.iteritems() ]):
-            self.anoFlag = True
+        if data.get('anoType') == 'markov_anomaly':
+            import pdb;pdb.set_trace()
+        else:
+            if all([ data.get(k) == v for k, v in para.iteritems() ]):
+                self.anoFlag = True
         # if ano_type == 'flow_arrival_rate':
             # if data == p_interval: self.anoFlag = True
         # if ano_type == 'flow_size_mean':

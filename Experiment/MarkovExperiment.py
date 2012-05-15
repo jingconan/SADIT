@@ -61,4 +61,3 @@ if __name__ == "__main__":
     exper.simulate()
     detector = exper.detect()
     detector.plot_entropy()
-
