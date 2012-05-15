@@ -37,14 +37,14 @@ NORM_DESC = dict(
 ANOMALY_TIME = (1200, 1400)
 # ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
 ANO_DESC = {
-        # 'anoType':'flow_arrival_rate',
-        'anoType':'flow_size_mean',
+        'anoType':'flow_arrival_rate',
+        # 'anoType':'flow_size_mean',
         'ano_node_seq':2,
         'T':(1200, 1400),
-        # 'change':{'flow_arrival_rate':6},
+        'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
-        'change':{'flow_size_mean':6},
+        # 'change':{'flow_size_mean':6},
         # 'change':{'flow_size_var':6},
         'srv_id':0,
         }
@@ -65,8 +65,8 @@ NET_DESC = dict(
 IPS_FILE = ROOT + '/Configure/ips.txt'
 
 
-# EXPORT_ABNORMAL_FLOW = True
-EXPORT_ABNORMAL_FLOW = False
+EXPORT_ABNORMAL_FLOW = True
+# EXPORT_ABNORMAL_FLOW = False
 EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
 EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_flow.txt'
 

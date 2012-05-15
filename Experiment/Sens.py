@@ -35,6 +35,7 @@ class SensExper(AttriChangeExper):
         """
         det_obj_shelf = dict()
         self.sens_ano['ano_type'] = attr
+        self.sens_ano['change'] = {}
         for i in rg:
             self.sens_ano['change'][attr] = i;
             self.configure()

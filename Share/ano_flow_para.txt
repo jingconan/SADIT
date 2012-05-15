@@ -19,5 +19,5 @@ S'harpoon'
 p9
 sS'flow_size_mean'
 p10
-F2400000
+F400000
 s.
