@@ -8,9 +8,11 @@ ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 ##   topology ##
 #################################
 from numpy import zeros
-g_size = 10
-srv_node_list = [0, 1]
-# srv_node_list = [0]
+g_size = 8
+# g_size = 4
+# g_size = 10
+# srv_node_list = [0, 1]
+srv_node_list = [0]
 topo = zeros([g_size, g_size])
 for i in xrange(g_size):
     if i in srv_node_list:
@@ -87,16 +89,17 @@ DETECTOR_DESC = dict(
         # interval=30,
         # interval=50,
         # win_size = 50,
-        interval=10,
+        interval=20,
         # win_size = 10,
-        win_size=150,
+        win_size=300,
         win_type='time', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate
         false_alarm_rate = 0.001,
         unified_nominal_pdf = False, # used in sensitivities analysis
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
-        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
         detector_type = 'mfmb',
         )

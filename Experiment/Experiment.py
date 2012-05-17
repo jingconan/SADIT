@@ -68,7 +68,7 @@ class Experiment(object):
         cd(self.settings.ROOT)
 
     def detect(self):
-        return detect(self.flow_file, self.win_size, self.fea_option, self.detector_type)
+        return detect(self.flow_file, self.win_size, self.fea_option, self.detector_type, self.settings.DETECTOR_DESC)
 
 class AttriChangeExper(Experiment):
     def __init__(self, settings):

@@ -7,51 +7,9 @@ from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefi
 import cPickle as pickle
 import copy
 
-class SensExper(AttriChangeExper):
-    """SensExper is experiment to get the sensitivity result.
-    it will change parameters and run the simulation for several times
-    and plot the both model based and model free entropy
-    ex:
-    .. code-block:: python
 
-        import settings
-        exper = SensExper(settings)
-        exper.run('flow_arrival_rate', [2, 4, 6])
-        exper.plot_entropy()
-
-    """
-    def __init__(self, settings):
-        AttriChangeExper.__init__(self, settings)
-        self.sens_ano = settings.ANO_LIST[0]
-        # self.shelve_file = '/home/jing/det_obj.out'
-        self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
-
-    def run(self, attr, rg):
-        """attr is the name of attribute that will be changed. possible
-        attrs are :
-            - flow_arrival_rate
-            - flow_size_mean
-            - flow_size_var
-        rg is the list of possible values for *attr*.
-        """
-        det_obj_shelf = dict()
-        self.sens_ano['ano_type'] = attr
-        self.sens_ano['change'] = {}
-        for i in rg:
-            self.sens_ano['change'][attr] = i;
-            self.configure()
-            self.simulate()
-            det_obj = copy.deepcopy( self.detect() )
-            det_obj_shelf[str(i)] = dict(winT=det_obj.record_data['winT'],
-                    entropy=det_obj.record_data['entropy'])
-            # v = det_obj.record_data['entropy']
-            self.store_flow_file(str(i))
-            self.clear_tmp_file()
-
-        f_obj = open(self.shelve_file, 'w')
-        pickle.dump(det_obj_shelf, f_obj)
-        f_obj.close()
-
+class Sens(object):
+    """base class for the sensitivity analysis"""
     def store_flow_file(self, suffix):
         import settings, shutil
         shutil.copyfile(settings.OUTPUT_FLOW_FILE, settings.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
@@ -86,15 +44,64 @@ class SensExper(AttriChangeExper):
 
         title('model based')
         legend(det_obj_shelf.keys())
-        show()
         savefig(self.settings.ROOT + '/Share/res.eps')
+        show()
 
     def configure(self):
         gen_anomaly_dot([self.sens_ano], self.net_desc, self.norm_desc, self.dot_file)
 
+
+class AttriSensExper(AttriChangeExper, Sens):
+    """SensExper is experiment to get the sensitivity result.
+    it will change parameters and run the simulation for several times
+    and plot the both model based and model free entropy
+    ex:
+    .. code-block:: python
+
+        import settings
+        exper = SensExper(settings)
+        exper.run('flow_arrival_rate', [2, 4, 6])
+        exper.plot_entropy()
+
+    """
+    def __init__(self, settings):
+        AttriChangeExper.__init__(self, settings)
+        Sens.__init__(self)
+        self.sens_ano = settings.ANO_LIST[0]
+        # self.shelve_file = '/home/jing/det_obj.out'
+        self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
+
+    def run(self, attr, rg):
+        """attr is the name of attribute that will be changed. possible
+        attrs are :
+            - flow_arrival_rate
+            - flow_size_mean
+            - flow_size_var
+        rg is the list of possible values for *attr*.
+        """
+        det_obj_shelf = dict()
+        self.sens_ano['ano_type'] = attr
+        self.sens_ano['change'] = {}
+        for i in rg:
+            self.sens_ano['change'][attr] = i;
+            self.configure()
+            self.simulate()
+            det_obj = copy.deepcopy( self.detect() )
+            det_obj_shelf[str(i)] = dict(winT=det_obj.record_data['winT'],
+                    entropy=det_obj.record_data['entropy'])
+            # v = det_obj.record_data['entropy']
+            self.store_flow_file(str(i))
+            self.clear_tmp_file()
+
+        f_obj = open(self.shelve_file, 'w')
+        pickle.dump(det_obj_shelf, f_obj)
+        f_obj.close()
+
+
 if __name__ == "__main__":
     import settings
-    exper = SensExper(settings)
+    exper = AttriSensExper(settings)
+    exper.run('flow_arrival_rate', [2, 4, 6])
     # exper.run('flow_arrival_rate', [1, 2, 3, 4, 5, 6])
     # exper.run('flow_arrival_rate', [0.1, 0.3, 0.4, 0.6, 0.8])
     # exper.run('flow_arrival_rate', [0.2, 0.4, 0.6])

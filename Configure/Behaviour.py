@@ -24,10 +24,12 @@ class MarkovBehaviour(Behaviour):
         abstract_method()
 
     def get_new_state(self):
-        return RandDist(self.P[self.cs])
+        # return RandDist(self.P[self.cs])
+        return RandDist(self.P) # FIXME use stationary prob
 
     def get_interval(self):
-        return exponential(1.0 / self.interval)
+        # return exponential(1.0 / self.interval)
+        return self.interval
 
     def behave_with_profile(self, start, profile):
         for dur, num in zip(*profile):

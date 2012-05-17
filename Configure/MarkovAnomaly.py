@@ -5,7 +5,6 @@ import cPickle as pickle
 
 class MarkovAnomaly(Anomaly):
     def _infect_modulator(self, ano_t, m_id, mod):
-
         mod_start = eval(mod['start'])
         mod_profile = mod['profile']
         np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
@@ -50,6 +49,7 @@ class MarkovAnomaly(Anomaly):
 
     def _export_ano_flow_para(self):
         import settings
-        pickle.dump(self.ano_desc, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
-
-
+        import copy
+        self.ano_flow_para = copy.deepcopy(self.ano_desc)
+        self.ano_flow_para['ano_node_ipdests'] = self.ano_node.ipdests
+        pickle.dump(self.ano_flow_para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows

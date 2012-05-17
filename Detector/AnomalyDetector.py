@@ -100,23 +100,16 @@ class FBAnoDetector(AnoDetector):
         title('model based')
         show()
 
-def detect(f_name, win_size, fea_option, detector_type):
+def detect(f_name, win_size, fea_option, detector_type, detector_desc):
     detector_map = {
             'mf':ModelFreeAnoDetector,
             'mb':ModelBaseAnoDetector,
             'mfmb':FBAnoDetector,
             }
-    # data_file = Detector.DataFile.DataFile(f_name,
-                # settings.DETECTOR_DESC['win_size'],
-                # settings.DETECTOR_DESC['fea_list'])
     data_file = DataFile(f_name, win_size, fea_option)
-    # data_file.plot_flow_size()
-    # detect = ModelFreeAnoDetector(settings.DETECTOR_DESC)
-    detector = detector_map[detector_type](settings.DETECTOR_DESC)
+    detector = detector_map[detector_type](detector_desc)
     detector(data_file)
     return detector
-    # detector.plot_entropy()
-
     # type_detector = ModelFreeAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
     # type_detector.detect_ano_type()
 

@@ -359,9 +359,9 @@ class HarpoonGeneratorNode(GeneratorNode):
 
         self.anoFlag = False
         if settings.EXPORT_ABNORMAL_FLOW:
-            self.set_ano_flag(flowsize, flowstart)
+            self.set_ano_flag(flowsize, flowstart, ipsrc)
 
-    def set_ano_flag(self, flowsize, flowstart):
+    def set_ano_flag(self, flowsize, flowstart, ipsrc):
         """set whether it is a abonormal generator or normal generator. Several things that
         need to be highlighted
             - the configure must be in settings.py
@@ -377,38 +377,15 @@ class HarpoonGeneratorNode(GeneratorNode):
                 }
         data = pickle.load(open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'r'))
         if data.get('anoType') == 'markov_anomaly':
-            import pdb;pdb.set_trace()
+            tspot = self.sim.now - self.sim.simstart
+            if tspot > data['T'][0] and tspot < data['T'][1] and (ipsrc in data['ano_node_ipdests']):
+                self.anoFlag = True
+        if data.get('anoType') == 'atypical_user':
+            if ipsrc in data['ano_node_ipdests'] :
+                self.anoFlag = True
         else:
             if all([ data.get(k) == v for k, v in para.iteritems() ]):
                 self.anoFlag = True
-        # if ano_type == 'flow_arrival_rate':
-            # if data == p_interval: self.anoFlag = True
-        # if ano_type == 'flow_size_mean':
-            # if data == p_size: self.anoFlag = True
-
-        # if anoType == 'ATYPICAL_USER':
-            # fid = open(settings.ATYPICAL_IP_FILE)
-            # tline = fid.readline()
-            # if tline == ipsrc:
-                # self.anoFlag = True
-        # elif anoType == 'FLOW_RATE':
-            # ABNORMA_FLOW_RATE = pickle.load(open(settings.ANO_CONF_PARA_FILE, 'r'))
-            # if p_interval == ABNORMA_FLOW_RATE: self.anoFlag = True
-        # elif anoType == 'FLOW_SIZE':
-            # ABNORMA_FLOW_SIZE_MEAN = pickle.load(open(settings.ANO_CONF_PARA_FILE, 'r'))
-            # if p_size == ABNORMA_FLOW_SIZE_MEAN: self.anoFlag = True
-        # elif anoType == 'MARKOV_TRAN_PROB':
-            # tpStartTime, tpEndTime = settings.ANOMALY_TIME
-            # tspot = self.sim.now - self.sim.simstart
-            # if tspot > tpStartTime and tspot < tpEndTime:
-                # fid = open(settings.ABNORMAL_USER_IP_FILE)
-                # tline = fid.readline()
-                # if tline == ipsrc:
-                    # self.anoFlag = True
-        # else:
-            # raise ValueError('unknow anoType')
-
-
 
     def start(self):
         startt = next(self.flowstartrv)

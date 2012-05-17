@@ -1,10 +1,34 @@
 Detector Package
 ================
 
-:mod:`AnomalyAna` Module
-------------------------
+:mod:`Detector` Package
+-----------------------
 
-.. automodule:: Detector.AnomalyAna
+.. automodule:: Detector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`API` Module
+-----------------
+
+.. automodule:: Detector.API
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`AnoType` Module
+---------------------
+
+.. automodule:: Detector.AnoType
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`AnomalyDetector` Module
+-----------------------------
+
+.. automodule:: Detector.AnomalyDetector
     :members:
     :undoc-members:
     :show-inheritance:
@@ -13,6 +37,14 @@ Detector Package
 ------------------------
 
 .. automodule:: Detector.ClusterAlg
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DataFile` Module
+----------------------
+
+.. automodule:: Detector.DataFile
     :members:
     :undoc-members:
     :show-inheritance:
@@ -33,42 +65,18 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`Detector (wangjing's conflicted copy 2012-03-01)` Module
---------------------------------------------------------------
-
-.. automodule:: Detector.Detector (wangjing's conflicted copy 2012-03-01)
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`Detector` Module
-----------------------
-
-.. automodule:: Detector.Detector
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`DurationDetector` Module
-------------------------------
-
-.. automodule:: Detector.DurationDetector
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`OldDetector` Module
+:mod:`DetectorLib` Module
 -------------------------
 
-.. automodule:: Detector.OldDetector
+.. automodule:: Detector.DetectorLib
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`Prof` Module
-------------------
+:mod:`MSDetector` Module
+------------------------
 
-.. automodule:: Detector.Prof
+.. automodule:: Detector.MSDetector
     :members:
     :undoc-members:
     :show-inheritance:

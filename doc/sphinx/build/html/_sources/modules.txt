@@ -4,13 +4,10 @@
 .. toctree::
    :maxdepth: 4
 
-   API
    BlindTest
    Configure
    Detector
-   Sensitivity
-   allinone
+   run
    settings
-   settings_template
    test
    util

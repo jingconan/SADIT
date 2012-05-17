@@ -47,5 +47,5 @@ The figure is the structure of **SADIT**.
 **detecotor**
     this module will read the network flow file generate by **simulator** and
     try to detect anomaly accordingly. In current version, the detector is based
-    on one of our `paper <http://people.bu.edu/wangjing/html/AnomalyDetection.html>`_. Look at our `poster <http://people.bu.edu/wangjing/pdf/data_e    xfiltration-back.pdf>`_ for more information of our work
+    on one of our `paper <http://people.bu.edu/wangjing/html/AnomalyDetection.html>`_. Look at our `poster <http://people.bu.edu/wangjing/pdf/data_e    xfiltration-back.pdf>`_ for more information of our work.
 
