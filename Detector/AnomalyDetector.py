@@ -1,15 +1,23 @@
 #!/usr/bin/env python
+"""
+This file contains all the detection techniques
+"""
+__author__ = "Jing Conan Wang"
+__email__ = "wangjing@bu.edu"
+__status__ = "Development"
+
 import sys
 sys.path.append("..")
-import settings
+# import settings
 from DetectorLib import I1, I2
-from util import DataEndException
+from util import DataEndException, abstract_method
 from matplotlib.pyplot import figure, plot, show, subplot, title
 import cPickle as pickle
 # from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
 from Detector.DataFile import DataFile
 
 class AnoDetector (object):
+    """It is an Abstract Base Class for the anomaly detector."""
     def __init__(self, desc):
         self.desc = desc
         # self.record_data = dict(IF=[], IB=[], winT=[], threshold=[], em=[])
@@ -17,6 +25,18 @@ class AnoDetector (object):
 
     def __call__(self, *args, **kwargs):
         return self.detect(*args, **kwargs)
+
+    def get_em(self, rg, rg_type):
+        """abstract method. Get empirical measure,
+        rg is a list specify the start and the end point of the data
+            that will be used
+        rg_type is the type of the rg, can be ['flow'|'time']"""
+        abstract_method()
+
+    def I(self, em1, em2):
+        """abstract method to calculate the difference of two
+        empirical measure"""
+        abstract_method()
 
     def record(self, **kwargs):
         for k, v in kwargs.iteritems():
@@ -27,6 +47,8 @@ class AnoDetector (object):
             self.record_data[k] = []
 
     def detect(self, data_file):
+        """main function to detect. it will slide the window, get the emperical
+        measure and get the indicator"""
         self.data_file = data_file
         self.norm_em = self.get_em(rg=[0, 1000], rg_type='time')
 
@@ -72,7 +94,6 @@ class ModelBaseAnoDetector(AnoDetector):
         return I2(d_Pmb, d_mpmb, Pmb, mpmb)
 
     def get_em(self, rg, rg_type):
-        """get empirical measure"""
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return Pmb, mpmb
 
@@ -101,6 +122,12 @@ class FBAnoDetector(AnoDetector):
         show()
 
 def detect(f_name, win_size, fea_option, detector_type, detector_desc):
+    """An function for convenience
+    - *f_name* the name or a list of name for the flow file.
+    - *win_size* the window size
+    - *fea_option*
+
+    """
     detector_map = {
             'mf':ModelFreeAnoDetector,
             'mb':ModelBaseAnoDetector,

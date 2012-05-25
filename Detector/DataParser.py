@@ -1,20 +1,10 @@
 #!/usr/bin/env python
-# Copyright (C)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
+"""A library of utility function that can parse the data from a specify
+type of flow data. If new type of flow format need to be supported, you
+can write a new parse function, which is in this file
+"""
+__author__  = "Jing Conan Wang"
+__email__ = "wangjing@bu.edu"
 
 ##
 # @file DataParser.py
@@ -55,6 +45,10 @@ def numToDottedQuad(n):
     return '.'.join(q)
 
 def ParseData(fileName):
+    """
+    the input is the filename of the flow file that needs to be parsed.
+    the ouput is list of dictionary contains the information for each flow in the data.
+    """
     flow = []
     FORMAT = dict(t=3, IP_Port=5, protocol=6, flowSize=10, endT=4) # Defines the FORMAT of the data file
     fid = open(fileName, 'r')

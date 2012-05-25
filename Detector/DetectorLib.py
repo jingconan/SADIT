@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""A library of utility function that will be used by detectors
+"""
 ### -- Created at [2012-03-01 14:55:21]
 ### -- [2012-03-01 17:13:27] support multi feature
 ### -- [2012-03-01 22:05:29] get_flow_rate, test with flowSize, dur, flowRate

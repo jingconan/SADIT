@@ -1,3 +1,6 @@
+"""
+This file provides some utility function to detect the type of the anomaly
+"""
 import numpy as np
 from util import abstract_method
 from Derivative import ModelFreeDerivative, ModelBaseDerivative

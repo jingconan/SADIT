@@ -1,4 +1,7 @@
 """Class about parsing data files"""
+__author__ = "Jing Conan Wang"
+__email__ = "wangjing@bu.edu"
+
 import sys
 sys.path.append("..")
 import copy
@@ -57,6 +60,8 @@ class DataFile(object):
         return new_file
 
     def parse(self):
+        """a functioin to load the data file and store them in **self.flow**
+        """
         import types
         self.flow = []
         if type(self.f_name) == types.ListType:
@@ -68,6 +73,14 @@ class DataFile(object):
         self.sort_flow('t')
 
     def gen_fea(self):
+        """suppose the number of feature used is N
+        this function will set
+        - self.quan_flag: a Nx1 indicating whether each feature
+            need to be quantized or not
+        - self.fea_QN: a Nx1 indicating the quanzied level for each
+            feature.
+        - self.fea_vec: a list of list contains the features for each flow.
+        """
         self.fea = dict()
         for fk in self.fea_list:
             self.fea[fk] = self.fea_handler_map[fk][0]()
@@ -78,14 +91,17 @@ class DataFile(object):
         self.fea_vec = self.fea.values()
 
     def gen_rel_time_spot(self):
+        """get the time stamp, normalize it, making it starts from zero"""
         self.t = self.get_value_list('t')
         mint = min(self.t)
         self.t = [ t - mint for t in self.t ]
 
     def sort_flow(self, key='time'):
+        """sort flows according to a attribute, which is 'key', the default 'key' is time"""
         self.flow = sorted( self.flow, key=itemgetter(key) )
 
     def argsort_flow(self, key='time'):
+        """indexes that can sort the flow"""
         return sorted( range(len(self.flow)), key=itemgetter(key) )
 
     def get_value_list(self, key): return [ f.get(key) for f in self.flow ]
@@ -96,6 +112,10 @@ class DataFile(object):
         self.unique_src_cluster, self.center_pt = KMeans(self.unique_src_IP_vec_set, self.cluster_num, DF)
 
     def get_fea_slice(self, rg, rg_type):
+        """this function is to get a chunk of feature vector.
+        The feature belongs flows within the range specified by **rg**
+        **rg_type** can be ['flow' | 'time' ].
+        """
         if not rg: return self.fea_vec
         if rg_type == 'flow':
             # return self.fea_vec[rg, :]
@@ -112,6 +132,7 @@ class DataFile(object):
             raise ValueError('unknow window type')
 
     def get_fea_range(self):
+        """get the range of the feature vector. """
         self.fea_range = dict()
         for k, v in self.fea.iteritems():
             self.fea_range[k] = [min(v), max(v)]
@@ -121,6 +142,7 @@ class DataFile(object):
         return self.get_fea_range().values()
 
     def quantize_fea(self, rg=None, rg_type='time'):
+        """get quantized features for part of the flows"""
         fea_vec = self.get_fea_slice(rg, rg_type)
         fea_range = self.get_fea_range_vec()
         # q_fea_vec = vector_quantize_states(list(fea_vec.T), self.fea_QN, list(fea_range.T), self.quan_flag)
