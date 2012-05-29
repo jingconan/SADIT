@@ -1,16 +1,16 @@
 ### ROOT is the root directory for you directory, be aware to change this before you try to run the code
 # ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-experimental'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
-# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
-ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 
 #################################
 ##   topology ##
 #################################
 from numpy import zeros
-g_size = 8
+# g_size = 8
 # g_size = 4
-# g_size = 10
+g_size = 10
 # srv_node_list = [0, 1]
 srv_node_list = [0]
 topo = zeros([g_size, g_size])
@@ -28,8 +28,8 @@ start = 0
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
 
-gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'}
-# gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'2'}
+# gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'}
+gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'1'}
 NORM_DESC = dict(
         TYPE = 'NORMAl',
         start = '0',
@@ -71,7 +71,8 @@ IPS_FILE = ROOT + '/Configure/ips.txt'
 EXPORT_ABNORMAL_FLOW = True
 # EXPORT_ABNORMAL_FLOW = False
 EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
-EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_flow.txt'
+# EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_flow.txt'
+EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_n0_flow.txt'
 
 
 # The path for output of configure
@@ -91,15 +92,15 @@ DETECTOR_DESC = dict(
         # win_size = 50,
         interval=20,
         # win_size = 10,
-        win_size=300,
+        win_size=200,
         win_type='time', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate
         false_alarm_rate = 0.001,
         unified_nominal_pdf = False, # used in sensitivities analysis
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
-        # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
-        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
+        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
         detector_type = 'mfmb',
         )

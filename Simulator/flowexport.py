@@ -28,13 +28,19 @@ class TextExporter(FlowExporter):
     def __init__(self, rname):
         FlowExporter.__init__(self, rname)
         outname = self.routername + '_flow.txt'
-        self.outfile = open(outname, 'wb')
+        # self.outfile = open(outname, 'wb')
+        self.outfile = open(outname, 'w')
+        self.outfile.close()
+        self.outfile = open(outname, 'w+', 0)
 
     def shutdown(self):
         self.outfile.close()
 
     def exportflow(self, ts, flet):
-        print >>self.outfile,'textexport %s %0.06f %s' % (self.routername, ts, str(flet))
+        # print >>self.outfile,'textexport %s %0.06f %s' % (self.routername, ts, str(flet))
+        self.outfile.write('textexport %s %0.06f %s\n' % (self.routername, ts, str(flet)))
+        self.outfile.flush()
+
 
 
 class CflowdExporter(FlowExporter):
@@ -44,11 +50,14 @@ class CflowdExporter(FlowExporter):
         self.outfile = open(outname, 'wb')
 
     def shutdown(self):
+        print 'shutdown'
+        import pdb;pdb.set_trace()
         self.outfile.close()
 
     def exportflow(self, ts, flet):
         flowrec = cflow.packrecord(srcaddr=int(ipaddr.IPAddress(flet.srcaddr)), dstaddr=int(ipaddr.IPAddress(flet.dstaddr)), pkts=flet.pkts, bytes=flet.size, start=int(flet.flowstart), end=int(flet.flowend), srcport=flet.srcport, dstport=flet.dstport, tcpflags=flet.tcpflags, ipproto=flet.ipproto, iptos=flet.iptos)
         self.outfile.write(flowrec)
+        self.outfile.flush()
 
 
 def null_export_factory(rname):

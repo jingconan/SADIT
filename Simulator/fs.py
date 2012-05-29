@@ -466,6 +466,8 @@ class Simulator(object):
 
         if self.debug:
             print >>sys.stderr,'Reached simulation end time:',self.now,self.endtime
+
+        print >>sys.stderr,'Reached simulation end time:',self.now,self.endtime
         for rname,r in self.routers.iteritems():
             r.shutdown()
 
@@ -513,6 +515,8 @@ class Link(object):
         self.sim.after(wait, 'link-flowarrival-'+str(self.egress_node.name), self.egress_node.flowlet_arrival, flowlet, prevnode, destnode)
 
 
+# exported_flow_num = 0
+
 class Router(object):
     __slots__ = ['name','sim','flow_table','link_table','maintenance_cycle','autoack','longflowtmo','flowinactivetmo','debug','logger','__flowsampling','__pktsampling','exporter','counters','snmpexportinterval','snmpexportfile','snmpexportfh','anoExporter']
 
@@ -548,7 +552,7 @@ class Router(object):
                 snmpoutfile = str(self.name) + '_' + self.snmpexportfile + '.txt'
                 self.snmpexportfh = open(snmpoutfile, 'w')
 
-        self.anoExporter = exportfn('abnormal')
+        self.anoExporter = exportfn('abnormal_' + self.name)
 
     def start(self):
         # start router maintenance loop at random within first 10 seconds
@@ -627,17 +631,21 @@ class Router(object):
         stored_flowlet = self.flow_table[flowlet.key]
         if stored_flowlet.flowend < 0:
             stored_flowlet.flowend = self.sim.now
-        del self.flow_table[flowlet.key]
 
         # Add By Jing Wang
         # print '_remove_flowlet'
         if stored_flowlet.anoFlag:
             # print 'Export Abnormal Flow'
+            # print 'textexport %s %0.06f %s\n' % ('abnormal', self.sim.now, str(stored_flowlet))
+            # global exported_flow_num
+            # exported_flow_num += 1
+            # print 'exported_flow_num, ', exported_flow_num
             self.anoExporter.exportflow(self.sim.now, stored_flowlet)
         # End Add By Jing Wang
 
         self.exporter.exportflow(self.sim.now, stored_flowlet)
 
+        del self.flow_table[flowlet.key]
 
     def flowlet_arrival(self, flowlet, prevnode, destnode):
         if flowlet.xtype == 'subtractive':
@@ -739,16 +747,20 @@ class Router(object):
             ft.append(v)
             killlist.append(k)
         idx = argsort(t)
+
         for i in idx:
             self.exporter.exportflow(self.sim.now, ft[i])
             if ft[i].anoFlag:
                  # print >>self.anoOutfile,'textexport %s %0.06f %s' % (self.name, self.sim.now, str(ft[i]))
+                 import pdb;pdb.set_trace()
                  self.anoExporter.exportflow(self.sim.now, ft[i])
 
 
         for k in killlist:
             del self.flow_table[k]
         self.exporter.shutdown()
+        self.anoExporter.shutdown()
+
         if self.snmpexportfh and self.snmpexportfile != 'stdout':
             self.snmpexportfh.close()
 
@@ -777,7 +789,9 @@ class Router(object):
                     print 'flow inactive tmo',self.name,(self.sim.now-v.flowend),str(v)
 
                 print '12'
+
                 if v.anoFlag:
+                    import pdb;pdb.set_trace()
                     self.anoExporter.exportflow(self.sim.now, v)
                 self.exporter.exportflow(self.sim.now, v)
                 killlist.append(k)
@@ -785,7 +799,9 @@ class Router(object):
             if self.longflowtmo > 0 and ((self.sim.now - v.flowstart) >= self.longflowtmo) and v.flowend > 0:
                 if self.debug:
                     print 'long flow tmo',self.name,(self.sim.now-v.flowstart),str(v)
+
                 print 'AB'
+                import pdb;pdb.set_trace()
 
                 if v.anoFlag:
                     self.anoExporter.exportflow(self.sim.now, v)
