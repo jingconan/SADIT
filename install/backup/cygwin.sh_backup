@@ -1,0 +1,38 @@
+svn --force export http://apt-cyg.googlecode.com/svn/trunk/ /bin/
+chmod +x /bin/apt-cyg
+
+apt-cyg install gcc
+ln -s /usr/bin/gcc-3.exe /usr/bin/gcc
+apt-cyg install gcc-g++
+ln -s /usr/bin/g++-3.exe /usr/bin/g++
+
+apt-cyg install mercurial
+apt-cyg install python-numpy
+
+
+apt-cyg install python-gtk2.0-devel
+apt-cyg install python-tkinter
+apt-cyg install libpng14-devel
+apt-cyg install libfreetype-devel
+apt-cyg install libfreetype6
+
+apt-cyg install gtk+-devel
+apt-cyg install libgtk2.0-devel
+
+# install dvipng
+apt-cyg install make
+apt-cyg install libgd-devel
+apt-cyg install libkpathsea-devel
+wget http://downloads.sourceforge.net/project/dvipng/dvipng/1.14/dvipng-1.14.tar.gz
+tar -xzvf dvipng-1.14.tar.gz
+cd dvipng-1.14
+./configure
+make
+make install
+
+wget http://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-1.1.0/matplotlib-1.1.0.tar.gz
+
+
+cd /bin
+ash
+PATH=. rebaseall -v

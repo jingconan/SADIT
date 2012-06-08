@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+apt-cyg install python-gtk2.0-devel python-tkinter libpng14-devel libfreetype-devel libfreetype6 gtk+-devel libgtk2.0-devel
+
+# install dvipng
+apt-cyg install make
+apt-cyg install libgd-devel
+apt-cyg install libkpathsea-devel
+wget http://downloads.sourceforge.net/project/dvipng/dvipng/1.14/dvipng-1.14.tar.gz
+tar -xzvf dvipng-1.14.tar.gz
+cd dvipng-1.14
+./configure
+make
+make install
+
+wget http://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-1.1.0/matplotlib-1.1.0.tar.gz
+
+apt-cyg install xinit wget screen
+startxwin -- -nolock # FAT32 workaround
