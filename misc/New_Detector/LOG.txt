@@ -1,0 +1,26 @@
+[2012-04-16 23:14:38]
+Design of Detector
+
+The reason why I want to refactor Detector
+1 the detector is funcation based. There are some functions
+with too long parameter list
+
+The existing structure is not suitable for exploring. 
+the relationship between 
+1. Detector
+2. OldDetector
+3. MSDetector
+is very weid.
+
+I should use Class to replace is this relationship. 
+
+Base Class for Detector
+
+class Detector():
+    def detect_one_window():
+        pass
+    def generator_norminal_PDF():
+        pass
+    def 
+    
+

@@ -1,0 +1,83 @@
+Detector Package
+================
+
+:mod:`Detector` Package
+-----------------------
+
+.. automodule:: Detector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`API` Module
+-----------------
+
+.. automodule:: Detector.API
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`AnoType` Module
+---------------------
+
+.. automodule:: Detector.AnoType
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`AnomalyDetector` Module
+-----------------------------
+
+.. automodule:: Detector.AnomalyDetector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`ClusterAlg` Module
+------------------------
+
+.. automodule:: Detector.ClusterAlg
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DataFile` Module
+----------------------
+
+.. automodule:: Detector.DataFile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DataParser` Module
+------------------------
+
+.. automodule:: Detector.DataParser
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`Derivative` Module
+------------------------
+
+.. automodule:: Detector.Derivative
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DetectorLib` Module
+-------------------------
+
+.. automodule:: Detector.DetectorLib
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`MSDetector` Module
+------------------------
+
+.. automodule:: Detector.MSDetector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

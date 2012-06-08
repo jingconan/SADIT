@@ -1,0 +1,13 @@
+..
+==
+
+.. toctree::
+   :maxdepth: 4
+
+   BlindTest
+   Configure
+   Detector
+   run
+   settings
+   test
+   util
