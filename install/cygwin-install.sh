@@ -14,9 +14,19 @@ ln -s /usr/bin/g++-3.exe /usr/bin/g++
 
 # install basic module
 apt-cyg install mercurial
+apt-cyg install liblapack-devel
 apt-cyg install python-numpy
+
+# install setup-tools
+wget http://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz
+tar zxvf setuptools-0.6c11.tar.gz
+cd setuptools-0.6c11
+python setup.py build
+python setup.py install
+cd ..
+
 python setup-dep.py
 
 #./cygwin-graph.sh
-
+./clean.sh
 
