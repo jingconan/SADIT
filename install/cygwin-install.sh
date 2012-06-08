@@ -6,6 +6,9 @@
 cd /usr/local/bin && wget -c http://apt-cyg.googlecode.com/svn/trunk/apt-cyg && chmod a+rx apt-cyg
 cd $OLDPWD
 
+wget http://peak.telecommunity.com/dist/ez_setup.py
+python ez_setup.py
+
 # install gcc, g++
 apt-cyg install gcc
 ln -s /usr/bin/gcc-3.exe /usr/bin/gcc
