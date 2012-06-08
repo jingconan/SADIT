@@ -13,7 +13,11 @@ import cPickle as pickle
 
 VB = False
 
-import matplotlib.pyplot as plt
+try:
+   import matplotlib.pyplot as plt
+except:
+   print 'no matplotlib'
+
 ModelBaseSmallest = []
 ModelBaseLargest = []
 ModelFreeSmallest = []

@@ -16,7 +16,11 @@ from DataParser import ParseData
 from ClusterAlg import *
 from Derivative import *
 
-from matplotlib.pyplot import *
+try:
+   from matplotlib.pyplot import *
+except:
+   print 'no matplotlib'
+   VIS = False
 
 import operator
 import Detector.AnomalyDetector

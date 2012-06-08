@@ -1,8 +1,9 @@
 ### ROOT is the root directory for you directory, be aware to change this before you try to run the code
 # ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-experimental'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
-ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 # ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+ROOT = '/home/Administrator/sadit-experimental'
 
 #################################
 ##   topology ##

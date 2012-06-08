@@ -9,9 +9,15 @@ __status__ = "Development"
 import sys
 sys.path.append("..")
 # import settings
+try:
+    from matplotlib.pyplot import figure, plot, show, subplot, title
+except:
+    print 'no matplotlib'
+    VIS = False
+
 from DetectorLib import I1, I2
 from util import DataEndException, abstract_method
-from matplotlib.pyplot import figure, plot, show, subplot, title
+
 import cPickle as pickle
 # from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
 from Detector.DataFile import DataFile
@@ -70,6 +76,7 @@ class AnoDetector (object):
         return self.record_data
 
     def plot_entropy(self):
+        if not VIS: return
         rt = self.record_data['winT']
         figure()
         plot(rt, self.record_data['entropy'])

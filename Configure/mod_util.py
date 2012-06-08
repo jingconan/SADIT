@@ -44,7 +44,11 @@ def CalIPCenter(IPMat, DF):
     return IPCenter, dis
 
 
-from matplotlib.pyplot import figure, plot
+try:
+    from matplotlib.pyplot import figure, plot
+except:
+    print 'no matplotlib'	
+
 def PlotPts(IPMat, corePts, anoPts, c):
     figure()
     for pt in corePts:

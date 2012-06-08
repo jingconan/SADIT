@@ -32,7 +32,11 @@ def eq_cons(x, A, epsilon):
     r3 = H(P, A) - epsilon
     return vstack([r1, r2, r3.reshape(-1, 1)]).reshape(-1,)
 
-from scipy.optimize import fmin_slsqp
+try:
+   from scipy.optimize import fmin_slsqp
+except:
+   print 'no scipy'
+
 def get_diff_jpdf_with_ini(A, P0, epsilon):
     """Get joint distribution with same marginal distribution with A
     and cross entropy with A is epsilon."""
