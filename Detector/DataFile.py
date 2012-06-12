@@ -45,9 +45,9 @@ class DataFile(object):
         self._cluster_src_ip()
         self.cluster = [ self._get_flow_src_cluster(f) for f in self.flow ]
 
-    def _add_quan_num(self, fea_list):
+    def _add_quan_num(self, fea_option):
         for k in self.fea_handler_map.iterkeys():
-            self.fea_handler_map[k].append( fea_list.get(k) )
+            self.fea_handler_map[k].append( fea_option.get(k) )
 
     def __add__(self, other):
         """addition of two data files. use for multi files. """

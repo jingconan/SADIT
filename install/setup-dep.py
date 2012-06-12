@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
-packages=['ipaddr-2.1.1', 'networkx-1.0', 'pydot-1.0.2', 
-	'pyparsing1.5.2', 'pyradix', 'argparse-1.2.1', 
+packages=['ipaddr-2.1.1', 'networkx-1.0', 'pydot-1.0.2',
+	'pyparsing1.5.2', 'pyradix', 'argparse-1.2.1',
 	#'numpy-1.6.2',
 	]
 packages_urls = [
@@ -28,7 +28,7 @@ for i in xrange(len(packages)):
 	print('cd %s && python setup.py install'%(folder_name))
 	os.system('cd %s && python setup.py install'%(folder_name))
 
-	
 
 
-	
+
+

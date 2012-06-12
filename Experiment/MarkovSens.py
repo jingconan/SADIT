@@ -34,9 +34,9 @@ class MarkovSens(MarkovExperiment, Sens):
 if __name__ == "__main__":
     import settings
     exper = MarkovSens(settings)
-    # exper.run( [[0.9, 0.1],
-                # [0.7, 0.3],
-                # [0.5, 0.5],
-                # [0.8, 0.2]
-                # ])
+    exper.run( [[0.9, 0.1],
+                [0.7, 0.3],
+                [0.5, 0.5],
+                [0.8, 0.2]
+                ])
     exper.plot_entropy()
