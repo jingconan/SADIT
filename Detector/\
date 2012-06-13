@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Class about parsing data files"""
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
@@ -17,41 +16,42 @@ class Data(object):
     def __init__(self, spec):
         self.spec = spec
     def get_fea_slice(self, rg=None, rg_type=None): abstract_method()
-    def get_max(self, fea, rg=None, rg_type=None): abstract_method()
-    def get_min(self, fea, rg=None, rg_time=None): abstract_method()
+    def get_max(self, rg=None, rg_type=None): abstract_method()
+    def get_min(self, rg=None, rg_time=None, fea=None): abstract_method()
 
 from DataParser import RawParseData
 class PreloadHardDiskFile(Data):
-    def __init__(self, f_name):
+    def __init__(self, f_name, fr_win_size, fea_option):
         """ data_order can be flow_first | feature_first
         """
         self.f_name = f_name
-        Data.__init__(self, f_name)
+        self.data_order = data_order
+        Data.__init__(self, f_name, fr_win_size, fea_option)
         self._init()
 
-    def _init(self):
+    def _init():
         self.fea_vec, self.fea_name = RawParseData(self.f_name)
-        self.zip_fea_vec = None
-        self.t = [ float(t) for t in self._get_value_list('start_time')]
+        self.t = self._get_value_list('t')
         self.min_time = min(self.t)
         self.max_time = max(self.t)
         self.flow_num = len(self.t)
 
     def _get_value_list(self, key):
         fidx = self.fea_name.index(key)
-        self.zip_fea_vec = self.zip_fea_vec if self.zip_fea_vec else zip(*self.fea_vec)
+        self.zip_fea_vec = zip(*self.fea_vec) if not self.zip_fea_vec else pass
         return self.zip_fea_vec[fidx]
+        # if self.data_order == 'flow_first':
+        # elif self.data_order == 'feature_first':
+            # return [v[fidx] for v in self.fea_vec]
 
     def _get_where(self, rg=None, rg_type=None):
-        if not rg: return 0, self.flow_num
         if rg_type == 'flow':
             if sp >= self.flow_num: raise DataEndException()
             sp, ep = rg
         elif rg_type == 'time':
-            sp = Find(self.t, rg[0]+self.min_time)
-            ep = Find(self.t, rg[1]+self.min_time)
+            sp = Find(self.t, rg[0])
+            ep = Find(self.t, rg[1])
             assert(sp != -1 and ep != -1)
-            # import pdb;pdb.set_trace()
             if (sp == len(self.t)-1 or ep == len(self.t)-1):
                 raise DataEndException()
         else:
@@ -72,26 +72,26 @@ class PreloadHardDiskFile(Data):
             # return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]] ]
             fea_idx = [self.fea_name.index(f) for f in fea]
             if data_order == 'flow_first':
-                return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]]
-            elif data_order == 'feature_first':
+                return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]] ]
+            elif: data_order = 'feature_first':
                 return [self._get_value_list(f)[sp:ep] for f in fea]
 
         if data_order == 'flow_first':
             return self.fea_vec[sp:ep]
-        elif data_order == 'feature_first':
+        elif: data_order = 'feature_first':
             return [fv[sp:ep] for fv in self.zip_fea_vec]
 
 
     def get_max(self, fea, rg=None, rg_type=None):
         sp, ep = self._get_where(rg, rg_type)
-        fea = fea if fea else self.fea_name
-        return [max(self._get_value_list(f)[sp:ep]) for f in fea]
+        if fea:
+            fea_idx = [self.fea_name.index(f) for f in fea]
+            return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]] ]
 
-    def get_min(self, fea, rg=None, rg_type=None):
-        sp, ep = self._get_where(rg, rg_type)
-        fea = fea if fea else self.fea_name
-        return [min(self._get_value_list(f)[sp:ep]) for f in fea]
+        return self.fea_vec[sp:ep]
 
+    def get_min(self, fea, rg=None, rg_time=None, fea=None):
+        abstract_method()
 
 class DataFile(object):
     """from file to feature"""
@@ -262,4 +262,40 @@ class DataFile(object):
 
     def get_dist_to_center(self):
         return get_dist_to_center(self.src_IP_vec_set, self.cluster, self.center_pt, DF)
+
+# def DataFileLOL(DataFile):
+#     """The original DataFile use list of dictionary to store flow(each flow is represented by a dictionary).
+#     which is low efficient, this data file use list of list to store all the flows, save a lot of memory"""
+#     def parse(self):
+#         """a functioin to load the data file and store them in **self.flow**
+#         """
+#         import types
+#         self.flow = []
+#         if type(self.f_name) == types.ListType:
+#             for f in self.f_name:
+#                 self.flow += ParseData(f)
+#         else:
+#             self.flow = ParseData(self.f_name)
+#         self.sort_flow('t')
+
+#     def _init_cluster(self):
+#         """self.cluster is a vector which specify cluster of src ip for each flow"""
+#         self._cluster_src_ip()
+#         self.cluster = [ self._get_flow_src_cluster(f) for f in self.flow ]
+
+#     def sort_flow(self, key='time'):
+#         """sort flows according to a attribute, which is 'key', the default 'key' is time"""
+#         self.flow = sorted( self.flow, key=itemgetter(key) )
+
+#     def argsort_flow(self, key='time'):
+#         """indexes that can sort the flow"""
+#         return sorted( range(len(self.flow)), key=itemgetter(key) )
+
+#     def get_value_list(self, key): return [ f.get(key) for f in self.flow ]
+
+#     def _cluster_src_ip(self):
+#         self.src_IP_vec_set = self.get_value_list('srcIPVec')
+#         self.unique_src_IP_vec_set = list( set( self.src_IP_vec_set ) )
+#         self.unique_src_cluster, self.center_pt = KMeans(self.unique_src_IP_vec_set, self.cluster_num, DF)
+
 

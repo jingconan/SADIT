@@ -21,18 +21,18 @@ def long_to_dotted(ip):
 
 get_sec_msec = lambda x: [int(x), int( (x-int(x)) * 1e3)]
 
-class File(object):
+class Data(object):
     def __init__(self, spec):
         self.spec = spec
-    def get_fea_slice(self, rg=None, rg_type=None): abstract_method()
-    def get_range(self, rg=None, rg_type=None): abstract_method()
-    def get_min(self, rg=None, rg_time=None, fea=None): abstract_method()
+    def get_fea_slice(self, fea, rg=None, rg_type=None): abstract_method()
+    def get_max(self, fea, rg=None, rg_type=None): abstract_method()
+    def get_min(self, fea, rg=None, rg_time=None): abstract_method()
 
 # from types import ListType
-class SQLFile_SperottoIPOM2009(File):
+class SQLFile_SperottoIPOM2009(Data):
     # flow_table_name = 'flows'
     def __init__(self, spec):
-        File.__init__(self, spec)
+        Data.__init__(self, spec)
         self.db = _mysql.connect(**spec)
         self._init()
 
@@ -119,7 +119,7 @@ class SQLDataFileHandler_SperottoIPOM2009(object):
     http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
     for more information"""
     def __init__(self, db_info, fr_win_size, fea_option):
-        self.data = SQLFile_SperottoIPOM2009(db_info)
+        self._init_data(db_info)
         self.fr_win_size = fr_win_size
         self.fea_option  = fea_option
         self._cluster_src_ip(fea_option['cluster'])
@@ -127,13 +127,17 @@ class SQLDataFileHandler_SperottoIPOM2009(object):
         self.fea_QN = fea_option.values()
 
         # self.quan_flag[ fea_option.keys().index('cluster')] = NOT_QUAN
+    def _init_data(self, db_info):
+        self.data = SQLFile_SperottoIPOM2009(db_info)
+
+    def _to_dotted(self, ip): return long_to_dotted(int(ip))
 
     def _cluster_src_ip(self, cluster_num):
         src_ip_int_vec_tmp = self.data.get_fea_slice(['src_ip']) #FIXME, need to only use the training data
         src_ip_int_vec = [x[0] for x in src_ip_int_vec_tmp]
         print 'finish get ip address'
         unique_src_IP_int_vec_set = list( set( src_ip_int_vec ) )
-        unique_src_IP_vec_set = [long_to_dotted(int(ip)) for ip in unique_src_IP_int_vec_set]
+        unique_src_IP_vec_set = [self._to_dotted(ip) for ip in unique_src_IP_int_vec_set]
         print 'start kmeans...'
         unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
         print 'center_pt', center_pt
@@ -178,12 +182,18 @@ class SQLDataFileHandler_SperottoIPOM2009(object):
 
     def _quantize_fea(self, rg=None, rg_type='time'):
         """get quantized features for part of the flows"""
-        print '_quantize_fea'
         fea_vec, fea_range = self.get_fea_slice(rg, rg_type)
         # import pdb;pdb.set_trace()
         q_fea_vec = vector_quantize_states(zip(*fea_vec), self.fea_QN, zip(*fea_range), self.quan_flag)
         return q_fea_vec
 
+
+from DataFile import PreloadHardDiskFile
+class DataFileHandler(SQLDataFileHandler_SperottoIPOM2009):
+    def _init_data(self, f_name):
+        self.data = PreloadHardDiskFile(f_name)
+
+    def _to_dotted(self, ip): return [int(v) for v in ip.rsplit('.')]
 
 class SQLDataFileWrapper(DataFile):
     """Wrapper the DataFile for real file to SQL server,
