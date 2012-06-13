@@ -202,6 +202,11 @@ def TO_CLS(*val_list):
 class DataEndException(Exception):
     pass
 
+class FetchNoDataException(Exception):
+    pass
+
+
+
 QUAN = 1
 NOT_QUAN = 0
 

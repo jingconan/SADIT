@@ -16,7 +16,7 @@ except:
     VIS = False
 
 from DetectorLib import I1, I2
-from util import DataEndException, abstract_method
+from util import DataEndException, FetchNoDataException,  abstract_method
 
 import cPickle as pickle
 # from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
@@ -72,10 +72,14 @@ class AnoDetector (object):
                 em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
                 entropy = self.I(em, self.norm_em)
                 self.record( entropy=entropy, winT = time, threshold = 0, em=em )
-                time += interval
+            except FetchNoDataException:
+                print 'there is no data to detect in this window'
             except DataEndException:
                 print 'reach data end, break'
                 break
+
+            time += interval
+
         return self.record_data
 
     def plot_entropy(self):

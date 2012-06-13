@@ -28,7 +28,7 @@ def detect(db_info, detector_type, detector_desc):
             detector_desc['win_size'],
             detector_desc['fea_option'])
     detector = detector_map[detector_type](detector_desc)
-    detector(data_file,
+    detector.detect(data_file,
             detector_desc['norminal_rg'],
             detector_desc['win_type'],
             detector_desc['max_detect_num'])
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             # win_size = 50,
             interval=20,
             # win_size = 10,
-            win_size=200,
+            win_size=400,
             win_type='time', # 'time'|'flow'
             fr_win_size=100, # window size for estimation of flow rate
             false_alarm_rate = 0.001,
@@ -61,10 +61,10 @@ if __name__ == "__main__":
             # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
             ano_ana_data_file = ANO_ANA_DATA_FILE,
             detector_type = 'mfmb',
-            max_detect_num = 100,
-            norminal_rg = [0, 1000],
+            max_detect_num = 400,
+            norminal_rg = [0, 8000],
             )
     detector = detect(db_info, 'mfmb', detector_desc)
+    detector.plot_entropy()
     import pdb;pdb.set_trace()
     # import pdb;pdb.set_trace()
-    detector.plot_entropy()

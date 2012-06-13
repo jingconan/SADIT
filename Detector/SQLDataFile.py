@@ -3,6 +3,11 @@
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 
+import sys
+sys.path.append("..")
+
+from util import FetchNoDataException, abstract_method
+
 import _mysql
 from DataFile import DataFile
 
@@ -19,9 +24,9 @@ get_sec_msec = lambda x: [int(x), int( (x-int(x)) * 1e3)]
 class File(object):
     def __init__(self, spec):
         self.spec = spec
-    def get_fea_slice(self, rg=None, rg_type=None): raise Exception('Need to be Implemented')
-    def get_range(self, rg=None, rg_type=None): raise Exception('Need to be Implemented')
-    def get_min(self, rg=None, rg_time=None, fea=None): raise Exception('Need to be Implemented')
+    def get_fea_slice(self, rg=None, rg_type=None): abstract_method()
+    def get_range(self, rg=None, rg_type=None): abstract_method()
+    def get_min(self, rg=None, rg_time=None, fea=None): abstract_method()
 
 # from types import ListType
 class SQLFile_SperottoIPOM2009(File):
@@ -38,15 +43,39 @@ class SQLFile_SperottoIPOM2009(File):
         self.min_time_tuple = r.fetch_row()[0]
         self.min_time = float("%s.%s"%self.min_time_tuple)
 
+        self.db.query("""SELECT MAX(id) FROM flows;""")
+        r = self.db.store_result()
+        self.flow_num = int(r.fetch_row()[0][0])
+        # print 'self.flow_num', self.flow_num
+
+        self.db.query("""SELECT end_time, end_msec FROM flows WHERE (id = %d);"""%(self.flow_num))
+        r = self.db.store_result()
+
+        # print r.fetch_row(0)
+        self.max_time_tuple = r.fetch_row()[0]
+        self.max_time = float("%s.%s"%self.max_time_tuple)
+        # print 'self.max_time', self.max_time
+
+
     def _get_sql_where(self, rg=None, rg_type=None):
         if rg:
             if rg_type == 'flow':
                 SQL_SEN_WHERE = """ WHERE ( (id >= %f) AND (id < %f) )""" %tuple(rg)
+                if rg[0] > self.flow_num:
+                    raise DataEndException("reach data end")
+
             elif rg_type == 'time':
                 st = get_sec_msec (rg[0] + self.min_time)
                 ed = get_sec_msec (rg[1] + self.min_time)
                 SQL_SEN_WHERE = """ WHERE ( (start_time > %d) OR ( (start_time = %d) AND (start_msec >= %d)) ) AND
                              ( (end_time < %d) OR ( (end_time = %d) and (end_msec < %d) ) )""" %(st[0], st[0], st[1], ed[0], ed[0], ed[1])
+
+                print 'rg[0]', rg[0]
+                print 'self.min_time', self.min_time
+                print 'current time, ', rg[0] + self.min_time
+                print 'self.maxtime', self.max_time
+                if rg[0] + self.min_time > self.max_time:
+                    raise DataEndException("reach data end")
             else:
                 print 'rg_type', rg_type
                 raise ValueError('unknow window type')
@@ -84,6 +113,7 @@ class SQLFile_SperottoIPOM2009(File):
 from util import DF, NOT_QUAN, QUAN, DataEndException
 from Detector.ClusterAlg import KMeans
 
+
 class SQLDataFileHandler_SperottoIPOM2009(object):
     """"Data File wrapper for SperottoIPOM2009 format. it is store in mysql server, visit
     http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
@@ -118,7 +148,8 @@ class SQLDataFileHandler_SperottoIPOM2009(object):
         # get direct feature from sql server
         direct_fea_vec = self.data.get_fea_slice(self.direct_fea_list, rg, rg_type)
         if not direct_fea_vec:
-            raise DataEndException('Reach Data End')
+            raise FetchNoDataException("Didn't find any data in this range")
+
         # calculate indirect feature
         src_ip_tmp = self.data.get_fea_slice(['src_ip'], rg, rg_type)
         src_ip = [x[0] for x in src_ip_tmp]
