@@ -181,3 +181,40 @@ class DataFile(object):
 
     def get_dist_to_center(self):
         return get_dist_to_center(self.src_IP_vec_set, self.cluster, self.center_pt, DF)
+
+# def DataFileLOL(DataFile):
+#     """The original DataFile use list of dictionary to store flow(each flow is represented by a dictionary).
+#     which is low efficient, this data file use list of list to store all the flows, save a lot of memory"""
+#     def parse(self):
+#         """a functioin to load the data file and store them in **self.flow**
+#         """
+#         import types
+#         self.flow = []
+#         if type(self.f_name) == types.ListType:
+#             for f in self.f_name:
+#                 self.flow += ParseData(f)
+#         else:
+#             self.flow = ParseData(self.f_name)
+#         self.sort_flow('t')
+
+#     def _init_cluster(self):
+#         """self.cluster is a vector which specify cluster of src ip for each flow"""
+#         self._cluster_src_ip()
+#         self.cluster = [ self._get_flow_src_cluster(f) for f in self.flow ]
+
+#     def sort_flow(self, key='time'):
+#         """sort flows according to a attribute, which is 'key', the default 'key' is time"""
+#         self.flow = sorted( self.flow, key=itemgetter(key) )
+
+#     def argsort_flow(self, key='time'):
+#         """indexes that can sort the flow"""
+#         return sorted( range(len(self.flow)), key=itemgetter(key) )
+
+#     def get_value_list(self, key): return [ f.get(key) for f in self.flow ]
+
+#     def _cluster_src_ip(self):
+#         self.src_IP_vec_set = self.get_value_list('srcIPVec')
+#         self.unique_src_IP_vec_set = list( set( self.src_IP_vec_set ) )
+#         self.unique_src_cluster, self.center_pt = KMeans(self.unique_src_IP_vec_set, self.cluster_num, DF)
+
+

@@ -52,21 +52,24 @@ class AnoDetector (object):
         for k, v in self.record_data.iteritems():
             self.record_data[k] = []
 
-    def detect(self, data_file):
+    def detect(self, data_file, nominal_rg = [0, 1000], rg_type='time',  max_detect_num=None):
         """main function to detect. it will slide the window, get the emperical
         measure and get the indicator"""
         self.data_file = data_file
-        self.norm_em = self.get_em(rg=[0, 1000], rg_type='time')
+        self.norm_em = self.get_em(rg=nominal_rg, rg_type=rg_type)
 
         win_size = self.desc['win_size']
         interval = self.desc['interval']
         time = self.desc['fr_win_size']
-
+        i = 0
         while True:
+            i += 1
+            if max_detect_num and i > max_detect_num:
+                break
             print 'time: %f' %(time)
             try:
                 # d_pmf, d_Pmb, d_mpmb = self.data_file.get_em(rg=[time, time+win_size], rg_type='time')
-                em = self.get_em(rg=[time, time+win_size], rg_type='time')
+                em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
                 entropy = self.I(em, self.norm_em)
                 self.record( entropy=entropy, winT = time, threshold = 0, em=em )
                 time += interval

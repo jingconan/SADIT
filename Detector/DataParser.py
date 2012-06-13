@@ -92,6 +92,36 @@ def ParseData(fileName):
 
     return flow
 
+
+def data_to_lol(file_name):
+    """parse the data to list of list format"""
+    FORMAT = dict(t=3, IP_Port=5, protocol=6, flowSize=10, endT=4) # Defines the FORMAT of the data file
+    fid = open(file_name, 'r')
+
+    while True:
+        line = fid.readline()
+        if not line or line[0:10] != 'textexport':
+            break
+        if line == '\n': # Ignore Blank Line
+            continue
+        item = line.rsplit(' ')
+        f = dict()
+        # print FORMAT
+
+        for k, v in FORMAT.iteritems():
+
+            pass
+
+        # print f
+        flow.append(f)
+
+    fid.close()
+
+
+
+    pass
+
+
 if __name__ == "__main__":
     ParseData('./data/data3a.txt')
 

@@ -56,6 +56,10 @@ def I1(nu, mu):
 
 def quantize_state(x, nx, rg):
     minVal, maxVal = rg
+    if minVal == maxVal:
+        print '[warning] range size 0, rg: ', rg
+        return x, [0]*len(x)
+
     stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
     res = []
     g = []
