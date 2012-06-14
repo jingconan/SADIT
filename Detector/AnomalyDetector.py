@@ -20,7 +20,7 @@ from util import DataEndException, FetchNoDataException,  abstract_method
 
 import cPickle as pickle
 # from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
-from Detector.DataFile import DataFile
+from Detector.DataFile import DataFile, HardDiskFileHandler
 
 class AnoDetector (object):
     """It is an Abstract Base Class for the anomaly detector."""
@@ -147,7 +147,8 @@ def detect(f_name, win_size, fea_option, detector_type, detector_desc):
             'mb':ModelBaseAnoDetector,
             'mfmb':FBAnoDetector,
             }
-    data_file = DataFile(f_name, win_size, fea_option)
+    # data_file = DataFile(f_name, win_size, fea_option)
+    data_file = HardDiskFileHandler(f_name, win_size, fea_option)
     detector = detector_map[detector_type](detector_desc)
     detector(data_file)
     return detector

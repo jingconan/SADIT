@@ -12,7 +12,7 @@ import sys
 sys.path.append("..")
 from AnomalyDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from SQLDataFile import SQLDataFileHandler_SperottoIPOM2009
-def detect(db_info, detector_type, detector_desc):
+def detect_sql(db_info, detector_type, detector_desc):
     """An function for convenience
     - *db_info* information of database
     - *win_size* the window size
@@ -64,7 +64,7 @@ if __name__ == "__main__":
             max_detect_num = 400,
             norminal_rg = [0, 8000],
             )
-    detector = detect(db_info, 'mfmb', detector_desc)
+    detector = detect_sql(db_info, 'mfmb', detector_desc)
     detector.plot_entropy()
     import pdb;pdb.set_trace()
     # import pdb;pdb.set_trace()

@@ -5,34 +5,26 @@ __email__ = "wangjing@bu.edu"
 
 import sys
 sys.path.append("..")
-
-from util import FetchNoDataException, abstract_method
-
-import _mysql
-from DataFile import DataFile
-
-from Detector.DetectorLib import vector_quantize_states, model_based, model_free
-
+try:
+    import _mysql
+    _SQL = True
+except:
+    _SQL = False
 from socket import inet_ntoa
 from struct import pack
+from util import DataEndException
+from DataFile import Data, HardDiskFileHandler
+
 def long_to_dotted(ip):
     ip_addr = inet_ntoa(pack('!L', ip))
     return [int(val) for val in ip_addr.rsplit('.')]
 
 get_sec_msec = lambda x: [int(x), int( (x-int(x)) * 1e3)]
 
-class Data(object):
-    def __init__(self, spec):
-        self.spec = spec
-    def get_fea_slice(self, fea, rg=None, rg_type=None): abstract_method()
-    def get_max(self, fea, rg=None, rg_type=None): abstract_method()
-    def get_min(self, fea, rg=None, rg_time=None): abstract_method()
-
 # from types import ListType
 class SQLFile_SperottoIPOM2009(Data):
-    # flow_table_name = 'flows'
+    """SQL Data with format specified in SperottoIPOM2009 paper"""
     def __init__(self, spec):
-        Data.__init__(self, spec)
         self.db = _mysql.connect(**spec)
         self._init()
 
@@ -46,16 +38,12 @@ class SQLFile_SperottoIPOM2009(Data):
         self.db.query("""SELECT MAX(id) FROM flows;""")
         r = self.db.store_result()
         self.flow_num = int(r.fetch_row()[0][0])
-        # print 'self.flow_num', self.flow_num
 
         self.db.query("""SELECT end_time, end_msec FROM flows WHERE (id = %d);"""%(self.flow_num))
         r = self.db.store_result()
 
-        # print r.fetch_row(0)
         self.max_time_tuple = r.fetch_row()[0]
         self.max_time = float("%s.%s"%self.max_time_tuple)
-        # print 'self.max_time', self.max_time
-
 
     def _get_sql_where(self, rg=None, rg_type=None):
         if rg:
@@ -70,10 +58,10 @@ class SQLFile_SperottoIPOM2009(Data):
                 SQL_SEN_WHERE = """ WHERE ( (start_time > %d) OR ( (start_time = %d) AND (start_msec >= %d)) ) AND
                              ( (end_time < %d) OR ( (end_time = %d) and (end_msec < %d) ) )""" %(st[0], st[0], st[1], ed[0], ed[0], ed[1])
 
-                print 'rg[0]', rg[0]
-                print 'self.min_time', self.min_time
-                print 'current time, ', rg[0] + self.min_time
-                print 'self.maxtime', self.max_time
+                # print 'rg[0]', rg[0]
+                # print 'self.min_time', self.min_time
+                # print 'current time, ', rg[0] + self.min_time
+                # print 'self.maxtime', self.max_time
                 if rg[0] + self.min_time > self.max_time:
                     raise DataEndException("reach data end")
             else:
@@ -109,130 +97,16 @@ class SQLFile_SperottoIPOM2009(Data):
         # return [line[0] for line in result] if len(fea) == 1 else result
         return result
 
-
-from util import DF, NOT_QUAN, QUAN, DataEndException
-from Detector.ClusterAlg import KMeans
-
-
-class SQLDataFileHandler_SperottoIPOM2009(object):
+class SQLDataFileHandler_SperottoIPOM2009(HardDiskFileHandler):
     """"Data File wrapper for SperottoIPOM2009 format. it is store in mysql server, visit
     http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
     for more information"""
-    def __init__(self, db_info, fr_win_size, fea_option):
-        self._init_data(db_info)
-        self.fr_win_size = fr_win_size
-        self.fea_option  = fea_option
-        self._cluster_src_ip(fea_option['cluster'])
-        self.direct_fea_list = [ k for k in fea_option.keys() if k not in ['cluster', 'dist_to_center']]
-        self.fea_QN = fea_option.values()
-
         # self.quan_flag[ fea_option.keys().index('cluster')] = NOT_QUAN
     def _init_data(self, db_info):
         self.data = SQLFile_SperottoIPOM2009(db_info)
 
     def _to_dotted(self, ip): return long_to_dotted(int(ip))
 
-    def _cluster_src_ip(self, cluster_num):
-        src_ip_int_vec_tmp = self.data.get_fea_slice(['src_ip']) #FIXME, need to only use the training data
-        src_ip_int_vec = [x[0] for x in src_ip_int_vec_tmp]
-        print 'finish get ip address'
-        unique_src_IP_int_vec_set = list( set( src_ip_int_vec ) )
-        unique_src_IP_vec_set = [self._to_dotted(ip) for ip in unique_src_IP_int_vec_set]
-        print 'start kmeans...'
-        unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
-        print 'center_pt', center_pt
-        # print  'unique_src_cluster', unique_src_cluster
-        self.cluster_map = dict(zip(unique_src_IP_int_vec_set, unique_src_cluster))
-        # self.center_map = dict(zip(unique_src_IP_vec_set, center_pt))
-        dist_to_center = [DF(unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
-        self.dist_to_center_map = dict(zip(unique_src_IP_int_vec_set, dist_to_center))
-
-    def get_fea_slice(self, rg, rg_type):
-        print 'get_fea_slice'
-        # get direct feature from sql server
-        direct_fea_vec = self.data.get_fea_slice(self.direct_fea_list, rg, rg_type)
-        if not direct_fea_vec:
-            raise FetchNoDataException("Didn't find any data in this range")
-
-        # calculate indirect feature
-        src_ip_tmp = self.data.get_fea_slice(['src_ip'], rg, rg_type)
-        src_ip = [x[0] for x in src_ip_tmp]
-        fea_vec = []
-        for i in xrange(len(src_ip)):
-            ip = src_ip[i]
-            fea_vec.append([float(x) for x in direct_fea_vec[i]] + [self.dist_to_center_map[ip], self.cluster_map[ip]])
-        min_vec = self.data.get_min(self.direct_fea_list, rg, rg_type)
-        max_vec = self.data.get_max(self.direct_fea_list, rg, rg_type)
-
-        dist_to_center_vec = [self.dist_to_center_map[ip] for ip in src_ip]
-        min_dist_to_center = min(dist_to_center_vec)
-        max_dist_to_center = max(dist_to_center_vec)
-
-        fea_range = [[float(x) for x in min_vec] + [min_dist_to_center, 0], [float(x) for x in max_vec] + [max_dist_to_center, self.fea_option['cluster']]]
-        self.quan_flag = [QUAN] * len(self.fea_option.keys())
-        self.quan_flag[-1] = NOT_QUAN
-        return fea_vec, fea_range
-
-    def get_em(self, rg=None, rg_type='time'):
-        """get empirical measure"""
-        q_fea_vec = self._quantize_fea(rg, rg_type )
-        pmf = model_free( q_fea_vec, self.fea_QN )
-        Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
-        return pmf, Pmb, mpmb
-
-    def _quantize_fea(self, rg=None, rg_type='time'):
-        """get quantized features for part of the flows"""
-        fea_vec, fea_range = self.get_fea_slice(rg, rg_type)
-        # import pdb;pdb.set_trace()
-        q_fea_vec = vector_quantize_states(zip(*fea_vec), self.fea_QN, zip(*fea_range), self.quan_flag)
-        return q_fea_vec
-
-
-from DataFile import PreloadHardDiskFile
-class DataFileHandler(SQLDataFileHandler_SperottoIPOM2009):
-    def _init_data(self, f_name):
-        self.data = PreloadHardDiskFile(f_name)
-
-    def _to_dotted(self, ip): return [int(v) for v in ip.rsplit('.')]
-
-class SQLDataFileWrapper(DataFile):
-    """Wrapper the DataFile for real file to SQL server,
-    It preloads all the data thus requires large memory"""
-
-    label = ["id", "src_ip", "dst_ip", "packets", "octets", "start_time", "start_msec", "end_time", "end_msec", "src_port", "dst_port", "tcp_flags", "prot"]
-
-    def __init__(self, db_info, fr_win_size, fea_option):
-        print 'db_info', db_info
-        self.db_info = db_info
-        self.db = _mysql.connect(**db_info)
-        DataFile.__init__(self, '', fr_win_size, fea_option)
-
-    def _sql_to_flow(self, line):
-        f = dict()
-        for i in xrange(len(self.label)):
-            if self.label[i] in ['src_ip', 'dst_ip']:
-                try:
-                    f[self.label[i]] = long_to_dotted(int(line[i]))
-                except:
-                    import pdb;pdb.set_trace()
-            else:
-                f[self.label[i]] = int(line[i])
-        return f
-
-
-    def parse(self):
-        """a functioin to load the data file and store them in **self.flow**
-        """
-        self.db.query("""SELECT * FROM flows;""")
-        r = self.db.store_result()
-        self.flow = []
-
-        while True:
-            result = r.fetch_row(1)
-            self.flow.append(self._sql_to_flow(result[0]))
-
-        print 'result, ', result
-        import pdb;pdb.set_trace()
 
 if __name__ ==  "__main__":
     db_info = dict(

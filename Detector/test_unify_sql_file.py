@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from SQLDataFile import DataFileHandler
+from DataFile import HardDiskFileHandler
 if __name__ == "__main__":
     from AnomalyDetector import FBAnoDetector
     ANO_ANA_DATA_FILE = '~/Share/AnoAna.txt'
@@ -26,7 +26,7 @@ if __name__ == "__main__":
             )
 
     f_name = '../Simulator/n0_flow.txt'
-    data_file = DataFileHandler(f_name,
+    data_file = HardDiskFileHandler(f_name,
             detector_desc['win_size'],
             detector_desc['fea_option'])
 

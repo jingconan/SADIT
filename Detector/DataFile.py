@@ -11,14 +11,18 @@ from Detector.ClusterAlg import KMeans
 from Detector.DataParser import ParseData
 from Detector.DetectorLib import get_dist_to_center, vector_quantize_states, model_based, model_free, SL
 from util import Find, DataEndException, DF, NOT_QUAN, QUAN
-from util import abstract_method
+from util import abstract_method, FetchNoDataException
 
 class Data(object):
-    def __init__(self, spec):
-        self.spec = spec
+    """virtual base class for data"""
     def get_fea_slice(self, rg=None, rg_type=None): abstract_method()
     def get_max(self, fea, rg=None, rg_type=None): abstract_method()
     def get_min(self, fea, rg=None, rg_time=None): abstract_method()
+
+class DataHandler(object):
+    """virtual base class for Data Hanlder"""
+    def get_em(self, rg=None, rg_type='time'): abstract_method()
+
 
 from DataParser import RawParseData
 class PreloadHardDiskFile(Data):
@@ -26,7 +30,6 @@ class PreloadHardDiskFile(Data):
         """ data_order can be flow_first | feature_first
         """
         self.f_name = f_name
-        Data.__init__(self, f_name)
         self._init()
 
     def _init(self):
@@ -45,8 +48,8 @@ class PreloadHardDiskFile(Data):
     def _get_where(self, rg=None, rg_type=None):
         if not rg: return 0, self.flow_num
         if rg_type == 'flow':
-            if sp >= self.flow_num: raise DataEndException()
             sp, ep = rg
+            if sp >= self.flow_num: raise DataEndException()
         elif rg_type == 'time':
             sp = Find(self.t, rg[0]+self.min_time)
             ep = Find(self.t, rg[1]+self.min_time)
@@ -65,7 +68,6 @@ class PreloadHardDiskFile(Data):
         **rg_type** can be ['flow' | 'time' ].
         data_order can be flow_first | feature_first
         """
-        if not rg: return self.fea_vec
         sp, ep = self._get_where(rg, rg_type)
         if fea:
             # fea_idx = [self.fea_name.index(f) for f in fea]
@@ -92,9 +94,79 @@ class PreloadHardDiskFile(Data):
         fea = fea if fea else self.fea_name
         return [min(self._get_value_list(f)[sp:ep]) for f in fea]
 
+class HardDiskFileHandler(object):
+    """Data is stored as Hard Disk File"""
+    def __init__(self, db_info, fr_win_size, fea_option):
+        self._init_data(db_info)
+        self.fr_win_size = fr_win_size
+        self.fea_option  = fea_option
+        self._cluster_src_ip(fea_option['cluster'])
+        self.direct_fea_list = [ k for k in fea_option.keys() if k not in ['cluster', 'dist_to_center']]
+        self.fea_QN = fea_option.values()
+
+    def _init_data(self, f_name):
+        self.data = PreloadHardDiskFile(f_name)
+
+    def _to_dotted(self, ip): return [int(v) for v in ip.rsplit('.')]
+
+    def _cluster_src_ip(self, cluster_num):
+        src_ip_int_vec_tmp = self.data.get_fea_slice(['src_ip']) #FIXME, need to only use the training data
+        src_ip_int_vec = [x[0] for x in src_ip_int_vec_tmp]
+        print 'finish get ip address'
+        unique_src_IP_int_vec_set = list( set( src_ip_int_vec ) )
+        unique_src_IP_vec_set = [self._to_dotted(ip) for ip in unique_src_IP_int_vec_set]
+        print 'start kmeans...'
+        unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
+        print 'center_pt', center_pt
+        # print  'unique_src_cluster', unique_src_cluster
+        self.cluster_map = dict(zip(unique_src_IP_int_vec_set, unique_src_cluster))
+        # self.center_map = dict(zip(unique_src_IP_vec_set, center_pt))
+        dist_to_center = [DF(unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
+        self.dist_to_center_map = dict(zip(unique_src_IP_int_vec_set, dist_to_center))
+
+    def get_fea_slice(self, rg, rg_type):
+        # get direct feature from sql server
+        direct_fea_vec = self.data.get_fea_slice(self.direct_fea_list, rg, rg_type)
+        if not direct_fea_vec:
+            raise FetchNoDataException("Didn't find any data in this range")
+
+        # calculate indirect feature
+        src_ip_tmp = self.data.get_fea_slice(['src_ip'], rg, rg_type)
+        src_ip = [x[0] for x in src_ip_tmp]
+        fea_vec = []
+        for i in xrange(len(src_ip)):
+            ip = src_ip[i]
+            fea_vec.append([float(x) for x in direct_fea_vec[i]] + [self.dist_to_center_map[ip], self.cluster_map[ip]])
+        min_vec = self.data.get_min(self.direct_fea_list, rg, rg_type)
+        max_vec = self.data.get_max(self.direct_fea_list, rg, rg_type)
+
+        dist_to_center_vec = [self.dist_to_center_map[ip] for ip in src_ip]
+        min_dist_to_center = min(dist_to_center_vec)
+        max_dist_to_center = max(dist_to_center_vec)
+
+        fea_range = [[float(x) for x in min_vec] + [min_dist_to_center, 0], [float(x) for x in max_vec] + [max_dist_to_center, self.fea_option['cluster']]]
+        self.quan_flag = [QUAN] * len(self.fea_option.keys())
+        self.quan_flag[-1] = NOT_QUAN
+        return fea_vec, fea_range
+
+    def get_em(self, rg=None, rg_type='time'):
+        """get empirical measure"""
+        q_fea_vec = self._quantize_fea(rg, rg_type )
+        pmf = model_free( q_fea_vec, self.fea_QN )
+        Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        return pmf, Pmb, mpmb
+
+    def _quantize_fea(self, rg=None, rg_type='time'):
+        """get quantized features for part of the flows"""
+        fea_vec, fea_range = self.get_fea_slice(rg, rg_type)
+        # import pdb;pdb.set_trace()
+        q_fea_vec = vector_quantize_states(zip(*fea_vec), self.fea_QN, zip(*fea_range), self.quan_flag)
+        return q_fea_vec
+
+
 
 class DataFile(object):
-    """from file to feature"""
+    """from file to feature, this class is *depreciated*"""
     __slots__ = ['f_name', 'flow', 'cluster', 'center_pt', 'fea', 'fea_range','fea_vec',
             'unique_src_IP_vec_set', 'src_IP_vec_set', 'cluster_num', 'fr_win_size', 'unique_src_cluster',
             'fea_list', 'fea_handler_map', 'quan_flag', 'fea_QN', 't']

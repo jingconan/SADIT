@@ -100,8 +100,6 @@ def RawParseData(fileName):
     to tranform them by themselves
     """
     flow = []
-    # FORMAT = dict(t=3, IP_Port=5, protocol=6, flowSize=10, endT=4) # Defines the FORMAT of the data file
-    # FORMAT = dict(start_time='3', src_ip='5:1', src_port='5:2', protocol='6', octets='10', endT='4') # Defines the FORMAT of the data file
     FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, octets=13, ) # Defines the FORMAT of the data file
     fid = open(fileName, 'r')
     while True:
@@ -110,37 +108,11 @@ def RawParseData(fileName):
             break
         if line == '\n': # Ignore Blank Line
             continue
-        item = re.split('[ :>]', line)
+        item = re.split('[ :>]', line) #FIXME need to be changed if want to use port information
         f = [item[v] for k,v in FORMAT.iteritems()]
         flow.append(f)
     fid.close()
     return flow, FORMAT.keys()
-
-
-# def data_to_lol(file_name):
-#     """parse the data to list of list format"""
-#     FORMAT = dict(t=3, IP_Port=5, protocol=6, flowSize=10, endT=4) # Defines the FORMAT of the data file
-#     fid = open(file_name, 'r')
-
-#     while True:
-#         line = fid.readline()
-#         if not line or line[0:10] != 'textexport':
-#             break
-#         if line == '\n': # Ignore Blank Line
-#             continue
-#         item = line.rsplit(' ')
-#         f = dict()
-
-#         for k, v in FORMAT.iteritems():
-
-#             pass
-
-#         flow.append(f)
-
-#     fid.close()
-
-#     pass
-
 
 if __name__ == "__main__":
     ParseData('./data/data3a.txt')
