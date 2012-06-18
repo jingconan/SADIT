@@ -100,7 +100,8 @@ def RawParseData(fileName):
     to tranform them by themselves
     """
     flow = []
-    FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, octets=13, ) # Defines the FORMAT of the data file
+    # FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, octets=13, ) # Defines the FORMAT of the data file
+    FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, flow_size=13, ) # Defines the FORMAT of the data file
     fid = open(fileName, 'r')
     while True:
         line = fid.readline()

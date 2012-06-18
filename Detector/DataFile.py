@@ -36,6 +36,7 @@ class PreloadHardDiskFile(Data):
         self.fea_vec, self.fea_name = RawParseData(self.f_name)
         self.zip_fea_vec = None
         self.t = [ float(t) for t in self._get_value_list('start_time')]
+        # import pdb;pdb.set_trace()
         self.min_time = min(self.t)
         self.max_time = max(self.t)
         self.flow_num = len(self.t)
@@ -46,7 +47,7 @@ class PreloadHardDiskFile(Data):
         return self.zip_fea_vec[fidx]
 
     def _get_where(self, rg=None, rg_type=None):
-        if not rg: return 0, self.flow_num
+        if not rg: return 0, self.flow_num-1
         if rg_type == 'flow':
             sp, ep = rg
             if sp >= self.flow_num: raise DataEndException()
@@ -70,9 +71,6 @@ class PreloadHardDiskFile(Data):
         """
         sp, ep = self._get_where(rg, rg_type)
         if fea:
-            # fea_idx = [self.fea_name.index(f) for f in fea]
-            # return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]] ]
-            # print 'self.fea_name', self.fea_name
             fea_idx = [self.fea_name.index(f) for f in fea]
             if data_order == 'flow_first':
                 return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]]
@@ -103,12 +101,13 @@ class HardDiskFileHandler(object):
         self.fea_option  = fea_option
         self._cluster_src_ip(fea_option['cluster'])
         self.direct_fea_list = [ k for k in fea_option.keys() if k not in ['cluster', 'dist_to_center']]
-        self.fea_QN = fea_option.values()
+        # self.fea_QN = fea_option.values()
+        self.fea_QN = [fea_option['cluster'], fea_option['dist_to_center']] + [fea_option[k] for k in self.direct_fea_list]
 
     def _init_data(self, f_name):
         self.data = PreloadHardDiskFile(f_name)
 
-    def _to_dotted(self, ip): return [int(v) for v in ip.rsplit('.')]
+    def _to_dotted(self, ip): return tuple( [int(v) for v in ip.rsplit('.')] )
 
     def _cluster_src_ip(self, cluster_num):
         src_ip_int_vec_tmp = self.data.get_fea_slice(['src_ip']) #FIXME, need to only use the training data
@@ -119,15 +118,16 @@ class HardDiskFileHandler(object):
         print 'start kmeans...'
         unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
         print 'center_pt', center_pt
-        # print  'unique_src_cluster', unique_src_cluster
+        print  'unique_src_cluster', unique_src_cluster
         self.cluster_map = dict(zip(unique_src_IP_int_vec_set, unique_src_cluster))
         # self.center_map = dict(zip(unique_src_IP_vec_set, center_pt))
-        dist_to_center = [DF(unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
+        dist_to_center = [DF( unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
         self.dist_to_center_map = dict(zip(unique_src_IP_int_vec_set, dist_to_center))
 
     def get_fea_slice(self, rg, rg_type):
         # get direct feature from sql server
         direct_fea_vec = self.data.get_fea_slice(self.direct_fea_list, rg, rg_type)
+        # import pdb;pdb.set_trace()
         if not direct_fea_vec:
             raise FetchNoDataException("Didn't find any data in this range")
 
@@ -137,7 +137,9 @@ class HardDiskFileHandler(object):
         fea_vec = []
         for i in xrange(len(src_ip)):
             ip = src_ip[i]
-            fea_vec.append([float(x) for x in direct_fea_vec[i]] + [self.dist_to_center_map[ip], self.cluster_map[ip]])
+            fea_vec.append( [self.cluster_map[ip], self.dist_to_center_map[ip]] + [float(x) for x in direct_fea_vec[i]])
+        # import pdb;pdb.set_trace()
+
         min_vec = self.data.get_min(self.direct_fea_list, rg, rg_type)
         max_vec = self.data.get_max(self.direct_fea_list, rg, rg_type)
 
@@ -145,9 +147,13 @@ class HardDiskFileHandler(object):
         min_dist_to_center = min(dist_to_center_vec)
         max_dist_to_center = max(dist_to_center_vec)
 
-        fea_range = [[float(x) for x in min_vec] + [min_dist_to_center, 0], [float(x) for x in max_vec] + [max_dist_to_center, self.fea_option['cluster']]]
+        fea_range = [
+                [0, min_dist_to_center] + [float(x) for x in min_vec],
+                [self.fea_option['cluster']-1, max_dist_to_center] + [float(x) for x in max_vec],
+                ]
+
         self.quan_flag = [QUAN] * len(self.fea_option.keys())
-        self.quan_flag[-1] = NOT_QUAN
+        self.quan_flag[0] = NOT_QUAN
         return fea_vec, fea_range
 
     def get_em(self, rg=None, rg_type='time'):
@@ -155,6 +161,7 @@ class HardDiskFileHandler(object):
         q_fea_vec = self._quantize_fea(rg, rg_type )
         pmf = model_free( q_fea_vec, self.fea_QN )
         Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        # print 'pmf, ', pmf
         return pmf, Pmb, mpmb
 
     def _quantize_fea(self, rg=None, rg_type='time'):
@@ -264,6 +271,7 @@ class DataFile(object):
     def _cluster_src_ip(self):
         self.src_IP_vec_set = self.get_value_list('srcIPVec')
         self.unique_src_IP_vec_set = list( set( self.src_IP_vec_set ) )
+        # import pdb;pdb.set_trace()
         self.unique_src_cluster, self.center_pt = KMeans(self.unique_src_IP_vec_set, self.cluster_num, DF)
 
     def get_fea_slice(self, rg, rg_type):
@@ -279,6 +287,7 @@ class DataFile(object):
             sp = Find(self.t, rg[0])
             ep = Find(self.t, rg[1])
             assert(sp != -1 and ep != -1)
+            # print 'sp, ', sp, 'ep, ', ep
             if (sp == len(self.t)-1 or ep == len(self.t)-1):
                 raise DataEndException()
             # return self.fea_vec[sp:ep, :]
@@ -300,6 +309,7 @@ class DataFile(object):
         """get quantized features for part of the flows"""
         fea_vec = self.get_fea_slice(rg, rg_type)
         fea_range = self.get_fea_range_vec()
+        # import pdb;pdb.set_trace()
         # q_fea_vec = vector_quantize_states(list(fea_vec.T), self.fea_QN, list(fea_range.T), self.quan_flag)
         q_fea_vec = vector_quantize_states(fea_vec, self.fea_QN, fea_range, self.quan_flag)
         return q_fea_vec
@@ -309,6 +319,7 @@ class DataFile(object):
         q_fea_vec = self.quantize_fea(rg, rg_type )
         pmf = model_free( q_fea_vec, self.fea_QN )
         Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        # print 'pmf, ', pmf
         return pmf, Pmb, mpmb
 
     ### Function For Extracting Features ###

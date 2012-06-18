@@ -1,2 +1,6 @@
 from AnomalyDetector import detect
-from SQLDetector import detect_sql
+try:
+    from SQLDetector import detect_sql
+except ImportError:
+    print '--> cannot import sql related function'
+

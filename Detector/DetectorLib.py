@@ -23,7 +23,6 @@ except:
    VIS = False
 
 import operator
-import Detector.AnomalyDetector
 
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
@@ -300,4 +299,5 @@ def get_range(data):
     return [ (min(x), max(x)) for x in data ]
 
 if __name__ == "__main__":
+    import Detector.AnomalyDetector
     Detector.AnomalyDetector.compare(sys.argv[1])
