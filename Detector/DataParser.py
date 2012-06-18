@@ -115,7 +115,9 @@ def RawParseData(fileName):
     fid.close()
     return flow, FORMAT.keys()
 
+
 if __name__ == "__main__":
     ParseData('./data/data3a.txt')
+
 
 

@@ -3,13 +3,11 @@
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 
-import sys
-sys.path.append("..")
 import copy
 from operator import itemgetter
-from Detector.ClusterAlg import KMeans
-from Detector.DataParser import ParseData
-from Detector.DetectorLib import get_dist_to_center, vector_quantize_states, model_based, model_free, SL
+from ClusterAlg import KMeans
+from DataParser import ParseData
+from DetectorLib import get_dist_to_center, vector_quantize_states, model_based, model_free, SL
 from util import Find, DataEndException, DF, NOT_QUAN, QUAN
 from util import abstract_method, FetchNoDataException
 
@@ -86,12 +84,15 @@ class PreloadHardDiskFile(Data):
     def get_max(self, fea, rg=None, rg_type=None):
         sp, ep = self._get_where(rg, rg_type)
         fea = fea if fea else self.fea_name
-        return [max(self._get_value_list(f)[sp:ep]) for f in fea]
+        # return [max(self._get_value_list(f)[sp:ep]) for f in fea]
+        return [max(float(val) for val in self._get_value_list(f)[sp:ep]) for f in fea]
 
     def get_min(self, fea, rg=None, rg_type=None):
         sp, ep = self._get_where(rg, rg_type)
         fea = fea if fea else self.fea_name
-        return [min(self._get_value_list(f)[sp:ep]) for f in fea]
+        # import pdb;pdb.set_trace()
+        # return [min(self._get_value_list(f)[sp:ep]) for f in fea]
+        return [min(float(val) for val in self._get_value_list(f)[sp:ep]) for f in fea]
 
 class HardDiskFileHandler(object):
     """Data is stored as Hard Disk File"""
@@ -156,7 +157,7 @@ class HardDiskFileHandler(object):
         self.quan_flag[0] = NOT_QUAN
         return fea_vec, fea_range
 
-    def get_em(self, rg=None, rg_type='time'):
+    def get_em(self, rg=None, rg_type=None):
         """get empirical measure"""
         q_fea_vec = self._quantize_fea(rg, rg_type )
         pmf = model_free( q_fea_vec, self.fea_QN )
@@ -164,7 +165,7 @@ class HardDiskFileHandler(object):
         # print 'pmf, ', pmf
         return pmf, Pmb, mpmb
 
-    def _quantize_fea(self, rg=None, rg_type='time'):
+    def _quantize_fea(self, rg=None, rg_type=None):
         """get quantized features for part of the flows"""
         fea_vec, fea_range = self.get_fea_slice(rg, rg_type)
         # import pdb;pdb.set_trace()
