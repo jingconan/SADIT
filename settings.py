@@ -4,7 +4,8 @@
 # ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 # ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 # ROOT = '/home/Administrator/sadit-experimental'
-ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
 
 #################################
 ##   topology ##
@@ -102,6 +103,7 @@ DETECTOR_DESC = dict(
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
         fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
         detector_type = 'mfmb',

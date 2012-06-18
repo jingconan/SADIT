@@ -5,11 +5,7 @@ __email__ = "wangjing@bu.edu"
 
 import sys
 sys.path.append("..")
-try:
-    import _mysql
-    _SQL = True
-except:
-    _SQL = False
+import _mysql
 from socket import inet_ntoa
 from struct import pack
 from util import DataEndException
@@ -21,9 +17,9 @@ def long_to_dotted(ip):
 
 get_sec_msec = lambda x: [int(x), int( (x-int(x)) * 1e3)]
 
+
 # from types import ListType
 class SQLFile_SperottoIPOM2009(Data):
-    """SQL Data with format specified in SperottoIPOM2009 paper"""
     def __init__(self, spec):
         self.db = _mysql.connect(**spec)
         self._init()

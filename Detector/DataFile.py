@@ -72,6 +72,7 @@ class PreloadHardDiskFile(Data):
         if fea:
             # fea_idx = [self.fea_name.index(f) for f in fea]
             # return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]] ]
+            # print 'self.fea_name', self.fea_name
             fea_idx = [self.fea_name.index(f) for f in fea]
             if data_order == 'flow_first':
                 return [[ v[i] for i in fea_idx] for v in self.fea_vec[sp:ep]]
@@ -175,6 +176,7 @@ class DataFile(object):
             'flow_rate':[ self.get_flow_rate, QUAN ],
             'dist_to_center':[ self.get_dist_to_center, QUAN ],
             'flow_size':[ self.get_flow_size, QUAN ],
+            # 'octets':[ self.get_flow_size, QUAN ],
             'cluster':[ self.get_cluster, NOT_QUAN ],
             }
         self.f_name = f_name

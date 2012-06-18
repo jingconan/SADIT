@@ -147,8 +147,8 @@ def detect(f_name, win_size, fea_option, detector_type, detector_desc):
             'mb':ModelBaseAnoDetector,
             'mfmb':FBAnoDetector,
             }
-    # data_file = DataFile(f_name, win_size, fea_option)
-    data_file = HardDiskFileHandler(f_name, win_size, fea_option)
+    data_file = DataFile(f_name, win_size, fea_option)
+    # data_file = HardDiskFileHandler(f_name, win_size, fea_option)
     detector = detector_map[detector_type](detector_desc)
     detector(data_file)
     return detector
@@ -162,9 +162,8 @@ def detect(f_name, win_size, fea_option, detector_type, detector_desc):
     # detect.plot_entropy()
 
 if __name__ == "__main__":
-    import sys
-    print 'sys.argv, ', sys.argv
-    # compare(sys.argv[1])
-
-    # import pdb;pdb.set_trace()
-    # detect.plot_entropy()
+    import settings
+    desc = settings.DETECTOR_DESC
+    detector = detect('../Simulator/n0_flow.txt', desc['win_size'],
+            desc['fea_option'], 'mfmb', desc)
+    detector.plot_entropy()
