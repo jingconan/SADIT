@@ -10,7 +10,7 @@ import sys
 sys.path.append("..")
 # import settings
 try:
-    from matplotlib.pyplot import figure, plot, show, subplot, title
+    from matplotlib.pyplot import figure, plot, show, subplot, title, savefig
 except:
     print 'no matplotlib'
     VIS = False
@@ -56,7 +56,7 @@ class AnoDetector (object):
     def detect(self, data_file):
         """main function to detect. it will slide the window, get the emperical
         measure and get the indicator"""
-        nominal_rg = self.desc['norminal_rg']
+        nominal_rg = self.desc['normal_rg']
         rg_type = self.desc['win_type']
         max_detect_num = self.desc['max_detect_num']
 
@@ -90,12 +90,14 @@ class AnoDetector (object):
 
         return self.record_data
 
-    def plot_entropy(self):
+    def plot_entropy(self, pic_show=True, pic_name=None):
         if not VIS: return
         rt = self.record_data['winT']
         figure()
         plot(rt, self.record_data['entropy'])
-        show()
+
+        if pic_name: savefig(pic_name)
+        if pic_show: show()
 
     def dump(self, data_name):
         pickle.dump( self.record_data, open(data_name, 'w') )
@@ -131,7 +133,7 @@ class FBAnoDetector(AnoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return pmf, Pmb, mpmb
 
-    def plot_entropy(self):
+    def plot_entropy(self, pic_show=True, pic_name=None):
         rt = self.record_data['winT']
         figure()
         subplot(211)
@@ -141,7 +143,9 @@ class FBAnoDetector(AnoDetector):
         subplot(212)
         plot(rt, mb)
         title('model based')
-        show()
+
+        if pic_name: savefig(pic_name)
+        if pic_show: show()
 
 def detect(f_name, win_size, fea_option, detector_type, detector_desc):
     """An function for convenience

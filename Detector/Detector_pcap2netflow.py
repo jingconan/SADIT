@@ -35,6 +35,9 @@ def ParseData_pcap2netflow(fileName):
 
         flow.append(f.values())
     fid.close()
+
+    if not flow: raise Exception('Not even a flow is found. Are you specifying the right filename?')
+
     return flow, f.keys()
 
 from DataFile import PreloadHardDiskFile
@@ -68,48 +71,3 @@ def detect_pcap2netflow(f_name, win_size, fea_option, detector_type, detector_de
     detector = detector_map[detector_type](detector_desc)
     detector(data_file)
     return detector
-
-def test_pcap2netflow():
-    ANO_ANA_DATA_FILE = './test_AnoAna.txt'
-    DETECTOR_DESC = dict(
-            # interval=30,
-            interval=500,
-            # win_size = 50,
-            # interval=4,
-            # win_size = 10,
-            win_size=4000,
-            win_type='flow', # 'time'|'flow'
-            fr_win_size=100, # window size for estimation of flow rate
-            false_alarm_rate = 0.001,
-            unified_nominal_pdf = False, # used in sensitivities analysis
-            # discrete_level = DISCRETE_LEVEL,
-            # cluster_number = CLUSTER_NUMBER,
-            fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
-            # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
-            # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
-            ano_ana_data_file = ANO_ANA_DATA_FILE,
-            detector_type = 'mfmb',
-            norminal_rg = None,
-            max_detect_num = None,
-            )
-    desc = DETECTOR_DESC
-    # detector = detect_pcap2netflow('./toolsmith.flow', desc['win_size'],
-            # desc['fea_option'], 'mfmb', desc)
-
-    # detector = detect_pcap2netflow('../../CyberData/simple_pkt/loc1-20020523-1835.flow', desc['win_size'],
-            # desc['fea_option'], 'mfmb', desc)
-
-    detector = detect_pcap2netflow('../../CyberData/simple_pkt/l06t01.flow', desc['win_size'],
-            desc['fea_option'], 'mfmb', desc)
-    detector.plot_entropy()
-
-
-
-if __name__ == "__main__":
-    # flow, fea_name = ParseData_pcap2netflow('./toolsmith.flow')
-    # print 'flow, ', flow
-    # print 'fea_name', fea_name
-    test_pcap2netflow()
-
-    import pdb;pdb.set_trace()
-

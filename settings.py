@@ -106,7 +106,9 @@ DETECTOR_DESC = dict(
         # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
+        normal_rg = [0, 1000],
         detector_type = 'mfmb',
+        max_detect_num = None,
         )
 FLOW_RATE_ESTIMATE_WINDOW = 100 #only for test
 

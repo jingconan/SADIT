@@ -1,7 +1,16 @@
 #!/usr/bin/env python
-from DataFile import HardDiskFileHandler
-if __name__ == "__main__":
-    from AnomalyDetector import FBAnoDetector
+import sys
+sys.path.append("..")
+sys.path.append("../..")
+
+from Detector import *
+def test_SQL():
+    db_info = dict(
+            host = "localhost",
+            db = "labeled",
+            read_default_file = "~/.my.cnf",
+            )
+
     ANO_ANA_DATA_FILE = '~/Share/AnoAna.txt'
     detector_desc = dict(
             # interval=30,
@@ -9,7 +18,7 @@ if __name__ == "__main__":
             # win_size = 50,
             interval=20,
             # win_size = 10,
-            win_size=200,
+            win_size=400,
             win_type='time', # 'time'|'flow'
             fr_win_size=100, # window size for estimation of flow rate
             false_alarm_rate = 0.001,
@@ -22,17 +31,11 @@ if __name__ == "__main__":
             ano_ana_data_file = ANO_ANA_DATA_FILE,
             detector_type = 'mfmb',
             max_detect_num = 400,
-            norminal_rg = [0, 1000],
+            normal_rg = [0, 8000],
             )
+    detector = detect_sql(db_info, 'mfmb', detector_desc)
+    detector.plot_entropy(pic_show=False, pic_name="./test_SQL.eps")
+    # import pdb;pdb.set_trace()
 
-    f_name = '../Simulator/n0_flow.txt'
-    data_file = HardDiskFileHandler(f_name,
-            detector_desc['win_size'],
-            detector_desc['fea_option'])
-
-    detector = FBAnoDetector(detector_desc)
-    detector.detect(data_file,
-            detector_desc['norminal_rg'],
-            detector_desc['win_type'],
-            detector_desc['max_detect_num'])
-    detector.plot_entropy()
+if __name__ == "__main__":
+    test_SQL()
