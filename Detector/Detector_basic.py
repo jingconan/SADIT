@@ -199,6 +199,12 @@ def test_detect():
             desc['fea_option'], 'mfmb', desc)
     detector.plot_entropy()
 
+def standalone_detect(file_name):
+    from settings import DETECTOR_DESC as desc
+    detector = detect(file_name, desc['win_size'],
+            desc['fea_option'], 'mfmb', desc)
+
+    detector.plot_entropy()
 
 if __name__ == "__main__":
     test_detect()

@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from Detector_basic import detect
+from Detector_basic import detect, standalone_detect
 from Detector_pcap2netflow import detect_pcap2netflow
 try:
     from Detector_SQL import detect_sql
