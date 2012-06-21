@@ -166,9 +166,9 @@ if __name__ == "__main__":
     start_t = time.clock()
     # test_pcap2netflow_loc1()
     # test_pcap2netflow_loc2()
-    # test_pcap2netflow_loc3()
+    test_pcap2netflow_loc3()
     # test_pcap2netflow_loc4()
-    test_pcap2netflow_loc5()
+    # test_pcap2netflow_loc5()
     end_t = time.clock()
     print 'total running time is: %f'%(end_t - start_t)
 
