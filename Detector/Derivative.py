@@ -4,7 +4,6 @@
 ### -- [2012-02-27 19:21:25] Add DumpDerivative() --
 
 import copy
-import numpy as np
 import sys
 sys.path.append("..")
 import util
@@ -13,6 +12,10 @@ import cPickle as pickle
 
 VB = False
 
+try:
+    import numpy as np
+except ImportError:
+    print 'no numpy in derivative'
 try:
    import matplotlib.pyplot as plt
 except:

@@ -8,6 +8,9 @@ parser.add_argument('-e', '--experiment', default='None',
         )
 parser.add_argument('-d', '--detect', default=None,
         help='--detect [filename] will simply detect the flow file, simulator will not run in this case')
+
+parser.add_argument('-i', '--interpreter', default='python',
+        help='--specify the interperter you want to use, now support [cpython], and [pypy]')
 args = parser.parse_args()
 
 if args.detect:
@@ -25,5 +28,5 @@ except:
 os.chdir('./Experiment/')
 # print os.getcwd()
 # execfile(args.experiment + '.py')
-os.system('python ' + args.experiment + '.py' )
+os.system(args.interpreter + ' ' + args.experiment + '.py' )
 os.chdir('..')

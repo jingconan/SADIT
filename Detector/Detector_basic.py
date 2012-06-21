@@ -11,6 +11,7 @@ sys.path.append("..")
 # import settings
 try:
     from matplotlib.pyplot import figure, plot, show, subplot, title, savefig
+    VIS = True
 except:
     print 'no matplotlib'
     VIS = False
@@ -133,7 +134,18 @@ class FBAnoDetector(AnoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return pmf, Pmb, mpmb
 
+    def _save_gnuplot_file(self):
+        res_f_name = './res.dat'
+        fid = open(res_f_name, 'w')
+        rt = self.record_data['winT']
+        mf, mb = zip(*self.record_data['entropy'])
+        for i in xrange(len(rt)):
+            fid.write("%f %f %f\n"%(rt[i], mf[i], mb[i]))
+        fid.close()
+
     def plot_entropy(self, pic_show=True, pic_name=None):
+        if not VIS: self._save_gnuplot_file(); return;
+
         rt = self.record_data['winT']
         figure()
         subplot(211)

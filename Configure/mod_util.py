@@ -47,7 +47,7 @@ def CalIPCenter(IPMat, DF):
 try:
     from matplotlib.pyplot import figure, plot
 except:
-    print 'no matplotlib'	
+    print 'no matplotlib'
 
 def PlotPts(IPMat, corePts, anoPts, c):
     figure()
@@ -61,7 +61,6 @@ import settings
 import numpy as np
 def GetIPMat():
     '''load valid ip adrees from setting.IPS_FILE'''
-    # IP = LoadValidIP('./ips.txt')
     IP = LoadValidIP(settings.IPS_FILE)
     IPNum = len(IP)
     IPMat = np.zeros( (IPNum, 4) )
@@ -72,6 +71,13 @@ def GetIPMat():
         ipInt = [int(x) for x in val]
         IPMat[i, :] = ipInt
     return IPMat
+
+# def GetIPMat():
+#     '''load valid ip adrees from setting.IPS_FILE'''
+#     IP = LoadValidIP(settings.IPS_FILE)
+#     return [ [int(x) for x in ip.split('.')] for ip in IP]
+
+
 
 
 def P2F_RAW(flowRate, flowDuration, pktRate): # Change Prameter to FS Format for rawflow

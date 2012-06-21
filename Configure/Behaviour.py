@@ -47,7 +47,11 @@ class MarkovBehaviour(Behaviour):
             self.stage()
             t += inter
 
-import numpy as np
+try:
+    import numpy as np
+except:
+    print '[Warning] MultiServer Detector requires numpy'
+
 class MVBehaviour(MarkovBehaviour):
     """
     Description:

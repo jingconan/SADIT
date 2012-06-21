@@ -83,7 +83,8 @@ class Anomaly:
         ano_node.add_modulator(start=str(mod_start), profile=np1, generator = [generator[s_id]])
 
         start, end = ano_t
-        st = mod_start + float(np.sum(np1[0]))
+        # st = mod_start + float(np.sum(np1[0]))
+        st = mod_start + float(sum(np1[0]))
         assert(st == start)
 
         self.new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
@@ -91,7 +92,8 @@ class Anomaly:
                 profile=ap,
                 generator = [ self.new_generator ])
 
-        st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
+        # st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
+        st = mod_start + float(sum(np1[0])) + float(sum(ap[0]))
         assert(st == end)
         ano_node.add_modulator(start=str(end), profile=np2, generator=[ generator[s_id] ])
 

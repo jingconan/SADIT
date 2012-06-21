@@ -41,8 +41,9 @@ class Network(Dot):
 
     def _topo(self, topo):
         """initialize the topology of the network"""
-        n, _ = topo.shape
-        assert(n == _)
+        # n, _ = topo.shape
+        n = len(topo)
+        assert(n == len(topo[0]) )
         self.NodeList = []
         for i in xrange(n):
             # FIXME Add start, end to the parameter list
@@ -53,7 +54,8 @@ class Network(Dot):
 
         for i in xrange(n):
             for j in xrange(n):
-                if topo[i, j]:
+                # if topo[i, j]:
+                if topo[i][j]:
                     edge = NEdge(self.node_list[i], self.node_list[j], self.net_desc['link_attr'])
                     self.add_edge(edge)
 

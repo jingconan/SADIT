@@ -28,25 +28,32 @@ import operator
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
 
 def I2(P1, mp1, P2, mp2):
-    assert( abs(np.sum(mp1)  - 1.0 ) < 1e-3 and abs(np.sum(mp2) - 1.0 ) < 1e-3)
-    a, b = np.shape(P1)
+    # assert( abs(np.sum(mp1)  - 1.0 ) < 1e-3 and abs(np.sum(mp2) - 1.0 ) < 1e-3)
+    # a, b = np.shape(P1)
+    a = len(P1)
+    b = len(P1[0])
     P1Con = copy.deepcopy(P1)
     P2Con = copy.deepcopy(P2)
     for i in range(a):
         for j in range(b):
             if mp1[i] != 0:
-                P1Con[i, j] /= mp1[i]
+                # P1Con[i, j] /= mp1[i]
+                P1Con[i][j] /= mp1[i]
             if mp2[i] != 0:
-                P2Con[i, j] /= mp2[i]
+                P2Con[i][j] /= mp2[i]
     # Compute Expectation of Each Relative Entropy
     y = 0
     for i in range(a):
-        y += mp1[i] * I1(P1Con[i, :], P2Con[i, :])
+        # y += mp1[i] * I1(P1Con[i, :], P2Con[i, :])
+        y += mp1[i] * I1(P1Con[i], P2Con[i])
     return y
 
+from math import log
 def I1(nu, mu):
-    a, = np.shape(nu)
-    F = lambda x, y:x * np.log( x * 1.0 / y )
+    # a, = np.shape(nu)
+    a = len(nu)
+    # F = lambda x, y:x * np.log( x * 1.0 / y )
+    F = lambda x, y:x * log( x * 1.0 / y )
     non_zero_idx_set = [i for i in xrange(a) if mu[i] !=0 and nu[i]!=0]
 
     # FIXME find better to make sure e is nonnegative
@@ -130,6 +137,7 @@ def get_feature_hash_list(F, Q):
     Get the hash value correspondingly'''
     return [ f_hash(f, Q) for f in zip(*F) ]
 
+from util import zeros
 def model_based(q_fea_vec, fea_QN):
     '''estimate the transition probability. It has same input parameter with model_free.
 
@@ -139,18 +147,23 @@ def model_based(q_fea_vec, fea_QN):
     - fea_QN : this is a list storing the quantized number for each feature.
     '''
     QLevelNum = reduce(operator.mul, fea_QN)
-    P = np.zeros( (QLevelNum, QLevelNum) )
+    # P = np.zeros( (QLevelNum, QLevelNum) )
+    P = zeros( (QLevelNum, QLevelNum) )
     fl = len(q_fea_vec[0])
-    mp = np.zeros((QLevelNum, ))
+    mp = zeros((QLevelNum, ))
     m_list = get_feature_hash_list(q_fea_vec, fea_QN)
 
     for i in xrange(fl-1):
-        mp[m_list[i]] += 1
-        P[m_list[i], m_list[i+1]] += 1
-    mp[m_list[fl-1]] += 1
+        mp[ int(m_list[i]) ] += 1
+        P[ int(m_list[i]) ][ int(m_list[i+1]) ] += 1
+    mp[ int(m_list[fl-1]) ] += 1
 
-    P = P * 1.0 / (fl-1)
-    mp = mp / fl
+    # P = P * 1.0 / (fl-1)
+    for i in xrange(len(P)):
+        for j in xrange(len(P[0])):
+            P[i][j] = P[i][j] * 1.0 / (fl -1)
+    # mp = mp / fl
+    mp = [v*1.0/fl for v in mp]
     return P, mp
 
 def model_free(q_fea_vec, fea_QN):
@@ -162,18 +175,22 @@ def model_free(q_fea_vec, fea_QN):
     - fea_QN : this is a list storing the quantized number for each feature.
     '''
     QLevelNum = reduce(operator.mul, fea_QN)
-    P = np.zeros( (QLevelNum, ) )
+    # P = np.zeros( (QLevelNum, ) )
+    P = [0] * QLevelNum
     fl = len(q_fea_vec[0])
     m_list = get_feature_hash_list(q_fea_vec, fea_QN)
 
     for i in range(fl):
-        idx = m_list[i]
+        idx = int(m_list[i])
         try:
             P[idx] += 1
-        except:
+        except Exception as e:
+            print e
             import pdb; pdb.set_trace()
-    P = P * 1.0 / fl
-    assert(abs( np.sum(np.sum(P, 0)) - 1.0) < 0.01)
+    # P = P * 1.0 / fl
+    P = [v*1.0/fl for v in P]
+    assert(abs( sum(P) - 1.0) < 0.01)
+    # assert(abs( np.sum(np.sum(P, 0)) - 1.0) < 0.01)
     return P
 
 

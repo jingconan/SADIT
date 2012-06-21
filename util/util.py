@@ -122,13 +122,17 @@ def CreateSettings(templateFilePath, settingsFilePath, **kwargs):
 import types
 imports = 'types', 'sys', 'PrintVar', 'os', 'settings'
 
+try:
+    import numpy as np
+except ImportError:
+    print 'no numpy'
+
 def PrintVar(namespace, outputFile = ''):
     '''Print all variances in the namespace into .py file'''
     fid = -1
     if outputFile != '':
         fid = open(outputFile, 'w')
     import inspect
-    import numpy as np
     for k, v in namespace.iteritems():
         if k.startswith("__")==0 and k not in imports:
             # print 'type(v), ', type(v)
@@ -165,7 +169,6 @@ def PrintVar(namespace, outputFile = ''):
         fid.close()
 
 
-import numpy as np
 def PrintModelFree(mfIndi, mbIndi):
     '''Print the ModelFree Derivative which is not nan value'''
     # mfIndi = ModelFreeDetectAnoType()
@@ -212,3 +215,12 @@ NOT_QUAN = 0
 
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
+
+def zeros(s):
+    if len(s) == 1:
+        return [0] * s[0]
+    elif len(s) == 2:
+        return [[0 for i in xrange(s[1])] for j in xrange(s[0])]
+    else:
+        raise Exception('unknown size in zeros')
+

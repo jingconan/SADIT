@@ -12,9 +12,12 @@ def joint_prob_trans(A, d):
     # P_star = max_entropy(A)
     # return d * P_star + (1-d) * A
 
-from numpy import array, ones, dot, vstack
-from numpy.ma import log
-import numpy as np
+try:
+    from numpy import array, ones, dot, vstack
+    from numpy.ma import log
+    import numpy as np
+except ImportError:
+    print 'numpy cannot be imported'
 
 def H(x, y):
     """Cross Entropy Function"""

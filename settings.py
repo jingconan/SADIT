@@ -10,7 +10,9 @@ ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
 #################################
 ##   topology ##
 #################################
-from numpy import zeros
+zeros = lambda s:[[0 for i in xrange(s[1])] for j in xrange(s[0])]
+# from numpy import zeros
+
 # g_size = 8
 # g_size = 4
 g_size = 10
@@ -20,7 +22,9 @@ topo = zeros([g_size, g_size])
 for i in xrange(g_size):
     if i in srv_node_list:
         continue
-    topo[i, srv_node_list] = 1
+    # topo[i, srv_node_list] = 1
+    for srv_node in srv_node_list:
+        topo[i][srv_node] = 1
 link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
 
 #################################
@@ -60,7 +64,8 @@ ANO_LIST = [ANO_DESC]
 
 NET_DESC = dict(
         topo=topo,
-        size=topo.shape[0],
+        # size=topo.shape[0],
+        size=len(topo),
         srv_list=srv_node_list,
         link_attr=link_attr,
         node_type='NNode',
