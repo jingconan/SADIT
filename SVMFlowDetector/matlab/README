@@ -1,0 +1,34 @@
+This original matlab code written by R Taylor Lockle. <rtl@bu.edu>
+for those who are familar with MATLAB.
+email from Taylor illustrating these code:
+
+Example Matlab code is attached. It requires libsvm to run (http://www.csie.ntu.edu.tw/~cjlin/libsvm/). The code is for the large flow size anomaly cases you sent to me. readtraintest.m reads the fs flows, trains the one-class SVM, and tests it. 
+
+The features for this case are sort of special. The first n elements of the feature vector are the number of occurances of each IP address within a time window, the second n elements are the number of large sized flows. 
+
+The flow-by-flow detector would be very similar, but instead of tabulating flows that occur within a window, you would just make the single flow features described in the draft of the paper.
+
+
+*****************************************************
+to run the test:
+1. copy the *flow.txt and corresponding abnormal*.flow.txt file into this folder
+open matlab
+run 
+>ip2int
+
+run readtraintest with right parameter, the meaning of parameter is listed as
+follows:
+
+function readtraintest(ext,iplist,deltat,gamma,flowfn)
+% Read in a scenario, train a one class SVM, and test its
+% performance.
+%
+% ext - String of file name extension. e.g., ext = '2'
+% iplist - List of IPs, as found by getiplist.m.
+% deltat - Length of evaluation window, in seconds.
+% gamma - Radial basis function parameter, for SVM kernel.
+% flowfn - Optional. Name of .mat file containing flows contained
+%          in the files referenced by ext, if they've already been read.
+%
+% R Taylor Locke
+% 6/11/12
