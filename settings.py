@@ -96,7 +96,7 @@ IPS_FILE = ROOT + '/Configure/ips.txt'
 #############################
 ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 DETECTOR_DESC = dict(
-        file_type = 'SQL',
+        # file_type = 'SQL',
         # interval=30,
         # interval=50,
         # win_size = 50,
@@ -119,6 +119,8 @@ DETECTOR_DESC = dict(
         # data_handler = 'fs',
         data_handler = 'fs_deprec',
         )
+# when using different data_hanlder, you will have different set of avaliable options for fea_option.
+
 FLOW_RATE_ESTIMATE_WINDOW = 100 #only for test
 
 FALSE_ALARM_RATE = 0.001 # false alarm rate

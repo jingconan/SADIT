@@ -57,11 +57,11 @@ def test_detect():
     detector = detect('../Simulator/n0_flow.txt', desc)
     detector.plot_entropy()
 
-def standalone_detect(file_name):
-    from settings import DETECTOR_DESC as desc
-    detector = detect(file_name, desc)
+# def standalone_detect(file_name):
+#     from settings import DETECTOR_DESC as desc
+#     detector = detect(file_name, desc)
 
-    detector.plot_entropy()
+#     detector.plot_entropy()
 
 if __name__ == "__main__":
     test_detect()

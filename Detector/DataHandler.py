@@ -47,13 +47,16 @@ class PreloadHardDiskFile(Data):
         self.fea_vec, self.fea_name = RawParseData(self.f_name)
         self.zip_fea_vec = None
         self.t = [ float(t) for t in self._get_value_list('start_time')]
-        # import pdb;pdb.set_trace()
         self.min_time = min(self.t)
         self.max_time = max(self.t)
         self.flow_num = len(self.t)
 
+    def _get_fea_idx(self, key):
+        return self.fea_name.index(key)
+
     def _get_value_list(self, key):
-        fidx = self.fea_name.index(key)
+        # fidx = self.fea_name.index(key)
+        fidx = self._get_fea_idx(key)
         self.zip_fea_vec = self.zip_fea_vec if self.zip_fea_vec else zip(*self.fea_vec)
         return self.zip_fea_vec[fidx]
 
@@ -65,6 +68,9 @@ class PreloadHardDiskFile(Data):
         elif rg_type == 'time':
             sp = Find(self.t, rg[0]+self.min_time)
             ep = Find(self.t, rg[1]+self.min_time)
+            # print 'sp, ', sp
+            # print 'en, ', ep
+            # import pdb;pdb.set_trace()
             assert(sp != -1 and ep != -1)
             # import pdb;pdb.set_trace()
             if (sp == len(self.t)-1 or ep == len(self.t)-1):
@@ -125,6 +131,7 @@ class HardDiskFileHandler(object):
 
     def _cluster_src_ip(self, cluster_num):
         src_ip_int_vec_tmp = self.data.get_fea_slice(['src_ip']) #FIXME, need to only use the training data
+        # import pdb;pdb.set_trace()
         src_ip_int_vec = [x[0] for x in src_ip_int_vec_tmp]
         print 'finish get ip address'
         unique_src_IP_int_vec_set = list( set( src_ip_int_vec ) )
