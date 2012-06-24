@@ -21,7 +21,7 @@ from util import DataEndException, FetchNoDataException,  abstract_method
 
 import cPickle as pickle
 # from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
-from DataFile import DataFile, HardDiskFileHandler
+# from DataFile import DataFile, HardDiskFileHandler
 
 class AnoDetector (object):
     """It is an Abstract Base Class for the anomaly detector."""
@@ -158,65 +158,3 @@ class FBAnoDetector(AnoDetector):
 
         if pic_name: savefig(pic_name)
         if pic_show: show()
-
-def detect(f_name, win_size, fea_option, detector_type, detector_desc):
-    """An function for convenience
-    - *f_name* the name or a list of name for the flow file.
-    - *win_size* the window size
-    - *fea_option*
-
-    """
-    detector_map = {
-            'mf':ModelFreeAnoDetector,
-            'mb':ModelBaseAnoDetector,
-            'mfmb':FBAnoDetector,
-            }
-    # data_file = DataFile(f_name, win_size, fea_option)
-    data_file = HardDiskFileHandler(f_name, win_size, fea_option)
-    detector = detector_map[detector_type](detector_desc)
-    detector(data_file)
-    return detector
-# type_detector = ModelFreeAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
-    # type_detector.detect_ano_type()
-
-    # type_detector = ModelBaseAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
-    # type_detector.detect_ano_type()
-
-    # import pdb;pdb.set_trace()
-    # detect.plot_entropy()
-
-def test_detect():
-    ANO_ANA_DATA_FILE = './test_AnoAna.txt'
-    DETECTOR_DESC = dict(
-            # interval=30,
-            # interval=50,
-            # win_size = 50,
-            interval=20,
-            # win_size = 10,
-            win_size=400,
-            win_type='time', # 'time'|'flow'
-            fr_win_size=100, # window size for estimation of flow rate
-            false_alarm_rate = 0.001,
-            unified_nominal_pdf = False, # used in sensitivities analysis
-            # discrete_level = DISCRETE_LEVEL,
-            # cluster_number = CLUSTER_NUMBER,
-            fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
-            # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
-            # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
-            ano_ana_data_file = ANO_ANA_DATA_FILE,
-            detector_type = 'mfmb',
-            )
-    desc = DETECTOR_DESC
-    detector = detect('../Simulator/n0_flow.txt', desc['win_size'],
-            desc['fea_option'], 'mfmb', desc)
-    detector.plot_entropy()
-
-def standalone_detect(file_name):
-    from settings import DETECTOR_DESC as desc
-    detector = detect(file_name, desc['win_size'],
-            desc['fea_option'], 'mfmb', desc)
-
-    detector.plot_entropy()
-
-if __name__ == "__main__":
-    test_detect()

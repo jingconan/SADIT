@@ -1,0 +1,1 @@
+from AnomalyDetector import detect

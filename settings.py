@@ -5,7 +5,8 @@
 # ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 # ROOT = '/home/Administrator/sadit-experimental'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
-ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
+# ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
+ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/ARL/sadit-experimental'
 
 #################################
 ##   topology ##
@@ -95,6 +96,7 @@ IPS_FILE = ROOT + '/Configure/ips.txt'
 #############################
 ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 DETECTOR_DESC = dict(
+        file_type = 'SQL',
         # interval=30,
         # interval=50,
         # win_size = 50,
@@ -114,6 +116,8 @@ DETECTOR_DESC = dict(
         normal_rg = [0, 1000],
         detector_type = 'mfmb',
         max_detect_num = None,
+        # data_handler = 'fs',
+        data_handler = 'fs_deprec',
         )
 FLOW_RATE_ESTIMATE_WINDOW = 100 #only for test
 

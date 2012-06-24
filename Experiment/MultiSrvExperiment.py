@@ -112,7 +112,8 @@ class MultiSrvExperiment(Experiment):
                 self.settings.ROOT + '/Simulator/n1_flow.txt']
         # print 'win_size, ', self.win_size
         # self.win_size = 10;
-        detect(flow_file, self.win_size, self.fea_option, self.detector_type)
+        # detect(flow_file, self.win_size, self.fea_option, self.detector_type)
+        detect(flow_file, settings.DETECTOR_DESC)
         # detect(flow_file, 30, self.fea_option, self.detector_type)
 
 if __name__ == "__main__":
