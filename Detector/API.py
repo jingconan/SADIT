@@ -1,17 +1,19 @@
 from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 detector_map = {
-        'mf':ModelFreeAnoDetector,
-        'mb':ModelBaseAnoDetector,
-        'mfmb':FBAnoDetector,
+        'mf': ModelFreeAnoDetector,
+        'mb': ModelBaseAnoDetector,
+        'mfmb': FBAnoDetector,
         }
 
 
 from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
+from DataHandler_xflow import HardDiskFileHandler_xflow
 data_handler_handle_map = {
-        'fs':HardDiskFileHandler,
-        'fs_deprec':DataFile,
-        'pcap2netflow':HardDiskFileHandler_pcap2netflow,
-        'SperottoIPOM2009':SQLDataFileHandler_SperottoIPOM2009,
+        'fs': HardDiskFileHandler,
+        'fs_deprec': DataFile,
+        'pcap2netflow': HardDiskFileHandler_pcap2netflow,
+        'SperottoIPOM2009': SQLDataFileHandler_SperottoIPOM2009,
+        'xflow': HardDiskFileHandler_xflow,
         }
 
 # def detect(f_name, win_size, fea_option, detector_type, detector_desc):
