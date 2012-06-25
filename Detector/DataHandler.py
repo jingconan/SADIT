@@ -68,11 +68,12 @@ class PreloadHardDiskFile(Data):
         elif rg_type == 'time':
             sp = Find(self.t, rg[0]+self.min_time)
             ep = Find(self.t, rg[1]+self.min_time)
+            if rg[1] + self.min_time > self.max_time :
+                raise Exception('Probably you set wrong range for normal flows? Go to check DETECTOR_DESC')
             # print 'sp, ', sp
             # print 'en, ', ep
             # import pdb;pdb.set_trace()
             assert(sp != -1 and ep != -1)
-            # import pdb;pdb.set_trace()
             if (sp == len(self.t)-1 or ep == len(self.t)-1):
                 raise DataEndException()
         else:
@@ -138,8 +139,8 @@ class HardDiskFileHandler(object):
         unique_src_IP_vec_set = [self._to_dotted(ip) for ip in unique_src_IP_int_vec_set]
         print 'start kmeans...'
         unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
-        print 'center_pt', center_pt
-        print  'unique_src_cluster', unique_src_cluster
+        # print 'center_pt', center_pt
+        # print  'unique_src_cluster', unique_src_cluster
         self.cluster_map = dict(zip(unique_src_IP_int_vec_set, unique_src_cluster))
         # self.center_map = dict(zip(unique_src_IP_vec_set, center_pt))
         dist_to_center = [DF( unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
