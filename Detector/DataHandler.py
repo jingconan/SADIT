@@ -68,8 +68,11 @@ class PreloadHardDiskFile(Data):
         elif rg_type == 'time':
             sp = Find(self.t, rg[0]+self.min_time)
             ep = Find(self.t, rg[1]+self.min_time)
-            if rg[1] + self.min_time > self.max_time :
-                raise Exception('Probably you set wrong range for normal flows? Go to check DETECTOR_DESC')
+            # if rg[1] + self.min_time > self.max_time :
+                # import pdb;pdb.set_trace()
+                # raise Exception('Probably you set wrong range for normal flows? Go to check DETECTOR_DESC')
+            # if rg[1] + self.min_time > self.max_time :
+                # ep
             # print 'sp, ', sp
             # print 'en, ', ep
             # import pdb;pdb.set_trace()

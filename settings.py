@@ -6,7 +6,8 @@
 # ROOT = '/home/Administrator/sadit-experimental'
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 # ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
-ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/ARL/sadit-experimental'
+# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/ARL/sadit-experimental'
+ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
 
 #################################
 ##   topology ##

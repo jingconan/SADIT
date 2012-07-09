@@ -158,3 +158,18 @@ class FBAnoDetector(AnoDetector):
 
         if pic_name: savefig(pic_name)
         if pic_show: show()
+
+    def find_abnormal_windows():
+        """find abnormal windows"""
+        pass
+
+    def export_abnormal_flow(self, fname, portion=0.1):
+        """
+        export the abnormal flows for abnormal windows
+        """
+        mf, mb = zip(*self.record_data['entropy'])
+        # select portion of the window to be abnormal
+        win_num = len(mf)
+        sel_num = int( win_num * portion )
+
+        pass
