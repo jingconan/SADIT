@@ -149,6 +149,9 @@ class HardDiskFileHandler(object):
         dist_to_center = [DF( unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
         self.dist_to_center_map = dict(zip(unique_src_IP_int_vec_set, dist_to_center))
 
+    def get_fea_list(self):
+        return ['cluster', 'dist_to_center'] + self.direct_fea_list
+
     def get_fea_slice(self, rg, rg_type):
         # get direct feature from sql server
         direct_fea_vec = self.data.get_fea_slice(self.direct_fea_list, rg, rg_type)

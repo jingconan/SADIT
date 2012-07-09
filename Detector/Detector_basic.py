@@ -193,11 +193,11 @@ class FBAnoDetector(AnoDetector):
             st = self.record_data['winT'][idx] if rg_type == 'time' else (interval * idx)
             data, _ = self.data_file.get_fea_slice([st, st+win_size], rg_type)
             sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
-            fid.write('Seq # [%i] for abnormal window: [%i], entropy: [%f], start time [%f]'%(seq, idx, entropy[idx], st))
+            fid.write('Seq # [%i] for abnormal window: [%i], entropy: [%f], start time [%f]\n'%(seq, idx, entropy[idx], st))
             i = sp-1
             for l in data:
                 i += 1
-                data_str = '\t'.join( ['%s - %f'%tuple(v) for v in zip(self.desc['fea_option'].keys(), l)] )
+                data_str = '\t'.join( ['%s - %f'%tuple(v) for v in zip(self.data_file.get_fea_list(), l)] )
                 fid.write('Sample # %i\t%s\n'%(i, data_str))
 
         fid.close()
