@@ -6,12 +6,13 @@ exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/') if f_name.low
 parser.add_argument('-e', '--experiment', default='None',
         help='specify the experiment name you want to execute. Experiments availiable are: %s. An integrated experiment will run fs-simulator first and use detector to detect the result.'%(exper_ops)
         )
-parser.add_argument('-d', '--detect', default=None,
-        help='--detect [filename] will simply detect the flow file, simulator will not run in this case, \
-                detector will still use the configuration in the settings.py')
 
 parser.add_argument('-i', '--interpreter', default='python',
         help='--specify the interperter you want to use, now support [cpython], and [pypy](only for detector)')
+
+parser.add_argument('-d', '--detect', default=None,
+        help='--detect [filename] will simply detect the flow file, simulator will not run in this case, \
+                detector will still use the configuration in the settings.py')
 
 parser.add_argument('-dh', '--data_handler', default=None,
         help="""--specify the data handler you want to use, the availiable
@@ -27,8 +28,16 @@ parser.add_argument('-fo', '--feature_option', default=None,
         describing the quantization level for each feature. You need at least
         specify 'cluster' and 'dist_to_center'. Note that, the value of 'cluster' is the cluster number. The avaliability of other features depend on the data handler.
         """)
+
+parser.add_argument('-ef', '--export_flows', default=None,
+        help = """ specify the file name of exported abnormal flows. Default is not export
+        """)
+parser.add_argument('-et', '--entropy_threshold', default=None,
+        help = """ the threshold for entropy,
+        """)
 args = parser.parse_args()
 
+# Enter Simple Detect Model
 if args.detect:
     from Detector import detect
     import settings
@@ -37,8 +46,15 @@ if args.detect:
     if args.feature_option: desc['fea_option'] = eval(args.feature_option)
     detector = detect(os.path.abspath(args.detect), desc)
     detector.plot_entropy()
+    if args.export_flows:
+        detector.export_abnormal_flow(args.export_flows,
+                entropy_threshold = desc['entropy_threshold'],
+                ab_win_portion = desc['ab_win_portion'],
+                ab_win_num = desc['ab_win_num'],
+                )
     exit()
 
+# Exectue Experiments
 try:
     if args.experiment not in exper_ops:
         raise Exception('invalid experiment')

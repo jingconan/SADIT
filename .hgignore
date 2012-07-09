@@ -3,3 +3,4 @@ syntax: glob
 *.dot
 *flow.txt
 *.eps
+res/**

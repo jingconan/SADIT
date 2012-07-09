@@ -9,6 +9,7 @@ __status__ = "Development"
 import sys
 sys.path.append("..")
 # import settings
+import os
 try:
     from matplotlib.pyplot import figure, plot, show, subplot, title, savefig
     VIS = True
@@ -159,17 +160,60 @@ class FBAnoDetector(AnoDetector):
         if pic_name: savefig(pic_name)
         if pic_show: show()
 
-    def find_abnormal_windows():
-        """find abnormal windows"""
-        pass
+    @staticmethod
+    def find_abnormal_windows(entropy, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
+        """find abnormal windows. There are three standards to select abnormal windows:
+            1. when the entropy >= entropy_threshold
+            2. when it is winthin the top *portion* of entropy, 0 <= *portion* <= 1
+            3. when it is the top *sel_num* of entropy
+        the priority of 1 > 2 > 3.
+        """
+        num = len(entropy)
+        abnormal_window_index = []
+        if not entropy_threshold:
+            if ab_win_portion:
+                ab_win_num = int( num * ab_win_portion )
+            sorted_entropy = sorted(entropy)
+            entropy_threshold = sorted_entropy[-1*ab_win_num]
+        return [ i for i in xrange(num) if entropy[i] >= entropy_threshold ]
 
-    def export_abnormal_flow(self, fname, portion=0.1):
+
+    def _export_abnorma_flow_entropy(self, entropy, fname,
+            entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
+
+        ab_idx = self.find_abnormal_windows(entropy, entropy_threshold, ab_win_portion, ab_win_num)
+        rg_type = self.desc['win_type']
+        win_size = self.desc['win_size']
+        interval = self.desc['interval']
+        st = 0
+        fid = open(fname, 'w')
+        seq = -1
+        for idx in ab_idx:
+            seq += 1
+            st = self.record_data['winT'][idx] if rg_type == 'time' else (interval * idx)
+            data, _ = self.data_file.get_fea_slice([st, st+win_size], rg_type)
+            sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
+            fid.write('Seq # [%i] for abnormal window: [%i], entropy: [%f], start time [%f]'%(seq, idx, entropy[idx], st))
+            i = sp-1
+            for l in data:
+                i += 1
+                data_str = '\t'.join( ['%s - %f'%tuple(v) for v in zip(self.desc['fea_option'].keys(), l)] )
+                fid.write('Sample # %i\t%s\n'%(i, data_str))
+
+        fid.close()
+
+    def export_abnormal_flow(self, fname, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """
         export the abnormal flows for abnormal windows
         """
         mf, mb = zip(*self.record_data['entropy'])
         # select portion of the window to be abnormal
-        win_num = len(mf)
-        sel_num = int( win_num * portion )
+        dirname = os.path.dirname(fname)
+        basename = os.path.basename(fname)
 
-        pass
+        # for model free entropy
+        self._export_abnorma_flow_entropy(mf, dirname + '/mf-' + basename, entropy_threshold, ab_win_portion, ab_win_num)
+
+        # for model based entropy
+        self._export_abnorma_flow_entropy(mb, dirname + '/mb-' + basename, entropy_threshold, ab_win_portion, ab_win_num)
+

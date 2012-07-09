@@ -50,6 +50,7 @@ def change_attr_list(attr_dict, k, v):
 
 import itertools
 import operator
+import time
 class DetectArgSearch(object):
     """
     Run Detect with different parameters in a batch mode.
@@ -65,8 +66,15 @@ class DetectArgSearch(object):
     def run(self):
         RES_DIR = '../res/'
         if not self.change_opt:
-            detector = detect(self.desc_opt['flow_file'], self.desc_opt)
+            template = copy.deepcopy(self.desc_opt)
+            detector = detect(template['flow_file'], template)
             detector.plot_entropy(False, RES_DIR +'res.eps')
+            detector.export_abnormal_flow(
+                    RES_DIR+'res.txt',
+                    entropy_threshold = template['entropy_threshold'],
+                    ab_win_portion = template['ab_win_portion'],
+                    ab_win_num = template['ab_win_num'],
+                    )
             return
 
         print 'total number of combination is %i'%(self.comb_num)
@@ -75,6 +83,7 @@ class DetectArgSearch(object):
             print '-' * 20
             for tup in zip(self.comb_name, cb): print '%s: %s'%tup
             print '-' * 20
+            start_time = time.clock()
             template = copy.deepcopy(self.desc_opt)
             for i in xrange(len(cb)):
                 res = change_attr_list(template, self.comb_name[i], cb[i])
@@ -83,6 +92,16 @@ class DetectArgSearch(object):
             detector = detect(template['flow_file'], template)
             name = '-'.join([n+'_'+str(v) for n, v in zip(self.comb_name, cb)])
             detector.plot_entropy(False, RES_DIR+name+'.eps')
+            detector.export_abnormal_flow(
+                    RES_DIR+name+'.txt',
+                    entropy_threshold = template['entropy_threshold'],
+                    ab_win_portion = template['ab_win_portion'],
+                    ab_win_num = template['ab_win_num'],
+                    )
+
+            end_time = time.clock()
+            sim_dur = end_time - start_time
+            print 'simulation of this combination use [%f]s, total comb num [%i], total time will be[%f]s'%(sim_dur, self.comb_num, sim_dur*self.comb_num )
 
 if __name__ == "__main__":
     import search_arg_settings
