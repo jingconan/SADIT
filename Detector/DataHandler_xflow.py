@@ -114,7 +114,10 @@ class PreloadHardDiskFile_xflow(PreloadHardDiskFile):
             line = fid.readline()
             if not line: break
             item = re.split(' ', line)
-            f = [handler[k](item[v]) for k,v in FORMAT[len(item)].iteritems()]
+            try:
+                f = [handler[k](item[v]) for k,v in FORMAT[len(item)].iteritems()]
+            except KeyError:
+                raise Exception('Unexpected Flow Data Format')
             t.append(f[fea_name.index('start_time')])
             flow.append(f)
         fid.close()

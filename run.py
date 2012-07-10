@@ -35,7 +35,7 @@ parser.add_argument('-ef', '--export_flows', default=None,
 parser.add_argument('-et', '--entropy_threshold', default=None,
         help = """ the threshold for entropy,
         """)
-args = parser.parse_args()
+args, res_args = parser.parse_known_args()
 
 # Enter Simple Detect Model
 if args.detect:
@@ -56,6 +56,7 @@ if args.detect:
 
 # Exectue Experiments
 try:
+    print 'args.experiment', args.experiment
     if args.experiment not in exper_ops:
         raise Exception('invalid experiment')
 except:
@@ -65,5 +66,7 @@ except:
 os.chdir('./Experiment/')
 # print os.getcwd()
 # execfile(args.experiment + '.py')
-os.system(args.interpreter + ' ' + args.experiment + '.py' )
+cmd = args.interpreter + ' ' + args.experiment + '.py ' + ' '.join(res_args)
+print '--> ', cmd
+os.system(cmd)
 os.chdir('..')

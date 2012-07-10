@@ -14,7 +14,7 @@ from util import *
 
 from DataParser import ParseData
 from ClusterAlg import *
-from Derivative import *
+# from Derivative import *
 
 try:
    from matplotlib.pyplot import *
@@ -26,7 +26,7 @@ import operator
 
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
-
+import copy
 def I2(P1, mp1, P2, mp2):
     # assert( abs(np.sum(mp1)  - 1.0 ) < 1e-3 and abs(np.sum(mp2) - 1.0 ) < 1e-3)
     # a, b = np.shape(P1)

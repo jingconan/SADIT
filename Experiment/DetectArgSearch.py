@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys
+import sys, os
 sys.path.append("..")
 from Detector import detect
 
@@ -51,6 +51,7 @@ def change_attr_list(attr_dict, k, v):
 import itertools
 import operator
 import time
+import linecache
 class DetectArgSearch(object):
     """
     Run Detect with different parameters in a batch mode.
@@ -63,18 +64,49 @@ class DetectArgSearch(object):
             self.comb = itertools.product(*self.change_opt.values())
             self.comb_name = list(self.change_opt.keys())
 
+    def _export_ab_flow_by_idx(self, flow_file, output_file, ab_flow_idx):
+        fid = open(output_file, 'w')
+        for idx in ab_flow_idx:
+            line = linecache.getline(flow_file, idx)
+            fid.write(line)
+        fid.close()
+
+    def export_ab_flow_raw(self, flow_file, output_file, *args, **kwargs):
+        dirname = os.path.dirname(output_file)
+        basename = os.path.basename(output_file)
+
+        ab_flow_seq = self.detector.get_ab_flow_seq_mf(*args, **kwargs)
+        self._export_ab_flow_by_idx(flow_file, dirname + '/mf-' + basename, ab_flow_seq)
+
+        ab_flow_seq = self.detector.get_ab_flow_seq_mb(*args, **kwargs)
+        self._export_ab_flow_by_idx(flow_file, dirname + '/mb-' + basename, ab_flow_seq)
+
+    def export_ab_flow_short_cut(self, fname, desc):
+        self.export_ab_flow_raw(
+                flow_file = desc['flow_file'],
+                output_file = fname,
+                entropy_threshold = desc['entropy_threshold'],
+                ab_win_portion = desc['ab_win_portion'],
+                ab_win_num = desc['ab_win_num'],
+                )
+
+    def export_ab_flow_formated(self, fname, desc):
+        self.detector.export_abnormal_flow(
+                fname,
+                entropy_threshold = desc['entropy_threshold'],
+                ab_win_portion = desc['ab_win_portion'],
+                ab_win_num = desc['ab_win_num'],
+                )
+
     def run(self):
         RES_DIR = '../res/'
         if not self.change_opt:
             template = copy.deepcopy(self.desc_opt)
-            detector = detect(template['flow_file'], template)
-            detector.plot_entropy(False, RES_DIR +'res.eps')
-            detector.export_abnormal_flow(
-                    RES_DIR+'res.txt',
-                    entropy_threshold = template['entropy_threshold'],
-                    ab_win_portion = template['ab_win_portion'],
-                    ab_win_num = template['ab_win_num'],
-                    )
+            self.detector = detect(template['flow_file'], template)
+            name = 'res'
+            self.detector.plot_entropy(False, RES_DIR+name+'.eps')
+            self.export_ab_flow_short_cut(RES_DIR + name + '-raw.txt', template)
+            self.export_ab_flow_formated(RES_DIR + name + '-formated.txt', template)
             return
 
         print 'total number of combination is %i'%(self.comb_num)
@@ -89,15 +121,11 @@ class DetectArgSearch(object):
                 res = change_attr_list(template, self.comb_name[i], cb[i])
                 if not res: raise Exception('Unkown feature name')
 
-            detector = detect(template['flow_file'], template)
+            self.detector = detect(template['flow_file'], template)
             name = '-'.join([n+'_'+str(v) for n, v in zip(self.comb_name, cb)])
-            detector.plot_entropy(False, RES_DIR+name+'.eps')
-            detector.export_abnormal_flow(
-                    RES_DIR+name+'.txt',
-                    entropy_threshold = template['entropy_threshold'],
-                    ab_win_portion = template['ab_win_portion'],
-                    ab_win_num = template['ab_win_num'],
-                    )
+            self.detector.plot_entropy(False, RES_DIR+name+'.eps')
+            self.export_ab_flow_short_cut(RES_DIR + name+'-raw.txt', template)
+            self.export_ab_flow_formated(RES_DIR + name+'-formated.txt', template)
 
             end_time = time.clock()
             sim_dur = end_time - start_time
@@ -105,5 +133,13 @@ class DetectArgSearch(object):
 
 if __name__ == "__main__":
     import search_arg_settings
+    import argparse
+    parser = argparse.ArgumentParser(description='DetectArgSearch')
+    parser.add_argument('--file', dest='flow_file', default=None,
+            help = """the flow file used by experiment, if this option
+            is set, it will override the settings in setting file""")
+    args = parser.parse_args()
+    if args.flow_file:
+        search_arg_settings.desc['flow_file'] = args.flow_file
     cls = DetectArgSearch(search_arg_settings.desc)
     cls.run()

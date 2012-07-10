@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 compare the result of sadit detector and other detectors
 for example, Dan's algorithm
@@ -29,7 +30,9 @@ def read_sadit_data(fname):
     return read_data(fname, FORMAT)
 
 if __name__ == "__main__":
-    res_sadit, fea_list_sadit = read_sadit_data('/home/wangjing/LocalResearch/CyberData/res-2003/mb-cluster_6.txt')
+    # res_sadit, fea_list_sadit = read_sadit_data('/home/wangjing/LocalResearch/CyberData/res-2003/mb-cluster_6.txt')
+    # res_sadit, fea_list_sadit = read_sadit_data('../res/mb-cluster_6.txt')
+    res_sadit, fea_list_sadit = read_sadit_data('../../CyberData/sadit_res/res/mb-cluster_4.txt')
     res_dan, fea_list_dan = read_dan_data('../../CyberData/Dan/anomolies20030902_07.txt')
     zip_res_sadit = zip(*res_sadit)
     zip_res_dan = zip(*res_dan)
@@ -38,6 +41,7 @@ if __name__ == "__main__":
     ins = set.intersection(set(seq_anomaly_sadit), set(seq_anomaly_dan))
     uns = set.union(set(seq_anomaly_sadit), seq_anomaly_dan)
 
+    print 'ration is: %f'%(len(ins) * 1.0 / len(uns))
     for i in ins:
         idx_sadit = seq_anomaly_sadit.index(i)
         idx_dan = seq_anomaly_dan.index(i)
@@ -51,7 +55,6 @@ if __name__ == "__main__":
         print 'flow_size_danp1', flow_size_danp1
         print 'flow_size_danm1', flow_size_danm1
         assert( flow_size_sadit == flow_size_dan )
-    print 'ration is: %f'%(len(ins) * 1.0 / len(uns))
 
 
 

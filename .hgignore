@@ -4,3 +4,4 @@ syntax: glob
 *flow.txt
 *.eps
 res/**
+nohup.out
