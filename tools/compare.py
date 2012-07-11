@@ -24,6 +24,7 @@ def read_data(fname, FORMAT):
 
 
 class CompareResult(object):
+    """Compare detection result of Jing's SADIT with Dan's Approach"""
     def __init__(self):
         self.jing_data = dict()
         self.dan_data = dict()
@@ -67,6 +68,10 @@ class CompareResult(object):
         print 'intersection ratio for attribute %s is: %f'%(attr, r)
         print 'len of attr %s jing: %i'%(attr, len(jing_sets))
         print 'len of attr %s dan: %i' %(attr, len(dan_sets))
+        print 'the number of intersection set is: %i'%(len(self.ins))
+        print 'the number of union set is: %i'%(len(self.uns))
+        print 'len of ins over jing %f'%(len(self.ins) * 1.0 / len(jing_sets))
+        print 'len of ins over dan %f'%(len(self.ins) * 1.0 / len(dan_sets))
 
 
     def compare(self):
@@ -87,7 +92,7 @@ def back_main():
     # res_sadit, fea_list_sadit = read_sadit_data('/home/wangjing/LocalResearch/CyberData/res-2003/mb-cluster_6.txt')
     # res_sadit, fea_list_sadit = read_sadit_data('../res/mb-cluster_6.txt')
     # res_sadit, fea_list_sadit = read_sadit_data('../../CyberData/sadit_res/res/mb-cluster_4.txt')
-    res_sadit, fea_list_sadit = read_sadit_data('../res/mb-cluster_4-formated.txt')
+    # res_sadit, fea_list_sadit = read_sadit_data('../res/mb-cluster_4-formated.txt')
     # res_dan, fea_list_dan = read_dan_data('../../CyberData/Dan/anomolies20030902_07.txt')
     # res_dan, fea_list_dan = read_dan_data('../../CyberData/Dan/anomolies20030902_07.txt')
     res_dan, fea_list_dan = read_dan_data('../../CyberData/Dan/anomolies20030902_07.txt')
@@ -118,7 +123,9 @@ def back_main():
 if __name__ == "__main__":
     com = CompareResult()
     # com.load_jing_data('../res/mb-cluster_6-raw.txt')
-    com.load_dan_data('../../CyberData/Dan2/anomolies2003.txt')
+    # com.load_dan_data('../../CyberData/Dan2/anomolies2003.txt')
+    com.load_dan_data('../../CyberData/Dan2/anomolies2003_2.txt')
+    # com.load_dan_data('../../CyberData/Dan2/anomolies2007.txt')
     jing_path = '../res/'
     dir_list = os.listdir(jing_path)
     file_list = [f for f in dir_list if f.endswith('raw.txt')]

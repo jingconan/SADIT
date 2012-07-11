@@ -75,10 +75,10 @@ class DetectArgSearch(object):
         dirname = os.path.dirname(output_file)
         basename = os.path.basename(output_file)
 
-        ab_flow_seq = self.detector.get_ab_flow_seq_mf(*args, **kwargs)
+        ab_flow_seq = self.detector.get_ab_flow_seq('mf', *args, **kwargs)
         self._export_ab_flow_by_idx(flow_file, dirname + '/mf-' + basename, ab_flow_seq)
 
-        ab_flow_seq = self.detector.get_ab_flow_seq_mb(*args, **kwargs)
+        ab_flow_seq = self.detector.get_ab_flow_seq('mb', *args, **kwargs)
         self._export_ab_flow_by_idx(flow_file, dirname + '/mb-' + basename, ab_flow_seq)
 
     def export_ab_flow_short_cut(self, fname, desc):
@@ -98,15 +98,40 @@ class DetectArgSearch(object):
                 ab_win_num = desc['ab_win_num'],
                 )
 
+    def export_ident_flow(self, fname, entropy_type, desc):
+        """instead of exportoing all flows in the suspicious window,
+        **export_ident_flow** will export flows only when flows are in anomalous state"""
+        flow_state = self.detector.ident(entropy_type=entropy_type,
+                entropy_threshold = desc['entropy_threshold'],
+                ab_win_portion = desc['ab_win_portion'],
+                ab_win_num = desc['ab_win_num'],
+                **desc['ident'][entropy_type]
+                )
+        ab_flow_seq = self.detector.get_ab_flow_seq(entropy_type, ab_flow_info=flow_state,
+                entropy_threshold = desc['entropy_threshold'],
+                ab_win_portion = desc['ab_win_portion'],
+                ab_win_num = desc['ab_win_num'],
+                )
+        dirname = os.path.dirname(fname)
+        basename = os.path.basename(fname)
+        self._export_ab_flow_by_idx(desc['flow_file'], dirname + '/%s-'%(entropy_type) + basename, ab_flow_seq)
+
+
+    def export(self, prefix, desc):
+        """export outputs"""
+        self.detector.plot_entropy(False, prefix+'.eps')
+        self.export_ab_flow_short_cut(prefix+'-raw.txt', desc)
+        self.export_ab_flow_formated(prefix+'-formated.txt', desc)
+        self.export_ident_flow(prefix+'-ident.txt', 'mf', desc)
+        self.export_ident_flow(prefix+'-ident.txt', 'mb', desc)
+
     def run(self):
         RES_DIR = '../res/'
         if not self.change_opt:
             template = copy.deepcopy(self.desc_opt)
             self.detector = detect(template['flow_file'], template)
             name = 'res'
-            self.detector.plot_entropy(False, RES_DIR+name+'.eps')
-            self.export_ab_flow_short_cut(RES_DIR + name + '-raw.txt', template)
-            self.export_ab_flow_formated(RES_DIR + name + '-formated.txt', template)
+            self.export(RES_DIR+name, template)
             return
 
         print 'total number of combination is %i'%(self.comb_num)
@@ -123,9 +148,7 @@ class DetectArgSearch(object):
 
             self.detector = detect(template['flow_file'], template)
             name = '-'.join([n+'_'+str(v) for n, v in zip(self.comb_name, cb)])
-            self.detector.plot_entropy(False, RES_DIR+name+'.eps')
-            self.export_ab_flow_short_cut(RES_DIR + name+'-raw.txt', template)
-            self.export_ab_flow_formated(RES_DIR + name+'-formated.txt', template)
+            self.export(RES_DIR+name, template)
 
             end_time = time.clock()
             sim_dur = end_time - start_time

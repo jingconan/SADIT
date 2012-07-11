@@ -1,4 +1,4 @@
-"""Flow State Anomalous Identification"""
+"""Anomalous Flow State or Flow Transition Pair Identification"""
 from math import log
 # from util import abstract_method
 def abstract_method(): raise Exception("abstract_method")
@@ -23,7 +23,7 @@ class FlowStateIdent(object):
     """
     def __init__(self, nu_set, mu):
         """P1, P2 are two lists contain the probability distribution """
-        assert(isinstance(mu, list))
+        assert(isinstance(mu, list) or isinstance(mu, tuple))
         self.nu_set = nu_set
         self.mu = mu
         self._init()
@@ -113,13 +113,13 @@ class FlowPairIdent(FlowStateIdent):
         self.state_info = zip(*self.info)
 
     def filter_states(self, ano_idx_set, portion=None, num=None):
-        state_idx = super(FlowStateIdent, self).filter_states(ano_idx_set, portion, num)
+        state_idx = super(FlowPairIdent, self).filter_states(ano_idx_set, portion, num)
         return [self.idx2sub(idx) for idx in state_idx]
 
 class ComponentFlowPairIdent(FlowPairIdent):
     @staticmethod
     def info_cal(a, ma, b, mb):
-        return a * log( (a*1.0/ma) / (b*1.0/mb))
+        return 0 if (a == 0 or ma ==0 or b == 0 or mb == 0) else a * log( (a*1.0/ma) / (b*1.0/mb))
 
 class DerivativeFlowPairIdent(FlowPairIdent):
     @staticmethod

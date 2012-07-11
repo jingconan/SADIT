@@ -185,6 +185,9 @@ class ModelBaseAnoDetector(AnoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return Pmb, mpmb
 
+
+from Ident import *
+
 class FBAnoDetector(AnoDetector):
     """model free and model based together"""
     def I(self, em, norm_em):
@@ -237,25 +240,82 @@ class FBAnoDetector(AnoDetector):
         # for model based entropy
         self._export_ab_flow_entropy(mb, dirname + '/mb-' + basename, entropy_threshold, ab_win_portion, ab_win_num)
 
-    def get_ab_flow_seq_mf(self, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
+    def get_ab_flow_seq(self, entropy_type, entropy_threshold=None, ab_win_portion=None, ab_win_num=None,
+            ab_flow_info = None):
+            # ab_flow_state=None, ab_flow_tran=None):
+        """get abnormal flow sequence number. the input is citerions which window will be abnormal window"""
+        # assert( (ab_flow_state and not ab_flow_tran) or (not ab_flow_state and ab_flow_tran) )
+        # if ab_flow_tran: # set the flow_state be the set of all
+            # ab_flow_state = set.union(set([tran[0] for tran in ab_flow_tran]), [tran[1] for tran in ab_flow_tran])
+
         mf, mb = zip(*self.record_data['entropy'])
-        ab_idx = self.find_abnormal_windows(mf, entropy_threshold, ab_win_portion, ab_win_num)
+        ab_idx = self.find_abnormal_windows(locals()[entropy_type], entropy_threshold, ab_win_portion, ab_win_num)
+        # ab_idx = self.find_abnormal_windows(mf, entropy_threshold, ab_win_portion, ab_win_num)
         ano_flow_seq = []
         for idx in ab_idx:
             st, ed = self._get_flow_seq(idx)
-            ano_flow_seq += range(st, ed)
+            # only select those flows belongs to
+            # abnormal flow stat or abnormal flow trainsition
+            rg_type = self.desc['win_type']
+            # quan_level = self.data_file._quantize_fea([st, ed], rg_type='flow')
+            quan_level = self.data_file.hash_quantized_fea([st, ed], rg_type='flow') # TODO, st, ed is alread flow idx, so use 'flow' as rg_type
+            # if ab_flow_state:
+            if not ab_flow_info:
+                ano_flow_seq += range(st, ed)
+                continue
+
+            if entropy_type == 'mf':
+                win_ab_flow_seq = [i+st for i in range(0, ed-st) if quan_level[i] in ab_flow_info]
+            else:
+                ano_tran_set = [(i+st, i+st+1) for i in range(0, ed-st-1) if (quan_level[i], quan_level[i+1]) in ab_flow_info]
+                win_ab_flow_seq = set.union(*[set(flow_states) for flow_states in zip(*ano_tran_set)])
+
+            ano_flow_seq += win_ab_flow_seq
 
         return ano_flow_seq
 
-    def get_ab_flow_seq_mb(self, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
+    def ident(self, ident_type, entropy_type, portion=None, num=None,
+            entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
+        """ Identificate the anomalous flow state or flow transition pair
+        - **ident_type** can be any Identification Class in Ident.py
+        - **entropy_type** can be ['mf'|'mb']. 'mf' will identify the flow state, and 'mb' will identify the flow
+                transition pair.
+        - **portion** is the portion of flow state that will be selected as anomalous.
+        - **num** is the number of flow states that will be selected as anomalous. **portion** has higher priority
+            than **num**
+        """
+        em_record_set = self.record_data['em']
+        def tran_to_joint(tp, mar):
+            """input is transition probability, margin probability,
+            out put is the joint probability distribution"""
+            res = []
+            for tp, m in zip(tp,mar):
+                res.append([m*p for p in tp])
+            return res
+
+        def get_nu_set(em_record_set, entropy_type):
+            if entropy_type == 'mf':
+                return [em[0] for em in em_record_set]
+            elif entropy_type == 'mb':
+                return [tran_to_joint(em[1], em[2]) for em in em_record_set]
+
+        nu_set = get_nu_set(em_record_set, entropy_type)
+        mu = get_nu_set([self.norm_em], entropy_type)[0]
+        ident = globals()[ident_type](nu_set, mu)
         mf, mb = zip(*self.record_data['entropy'])
-        ab_idx = self.find_abnormal_windows(mb, entropy_threshold, ab_win_portion, ab_win_num)
-        ano_flow_seq = []
-        for idx in ab_idx:
-            st, ed = self._get_flow_seq(idx)
-            ano_flow_seq += range(st, ed)
+        ab_idx = self.find_abnormal_windows(locals()[entropy_type], entropy_threshold, ab_win_portion, ab_win_num)
+        ident.set_detect_result([(1 if i in ab_idx else 0) for i in xrange(len(nu_set))])
+        return ident.filter_states(ab_idx, portion, num)
 
-        return ano_flow_seq
+    # def get_ab_flow_seq_mb(self, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
+        # mf, mb = zip(*self.record_data['entropy'])
+        # ab_idx = self.find_abnormal_windows(mb, entropy_threshold, ab_win_portion, ab_win_num)
+        # ano_flow_seq = []
+        # for idx in ab_idx:
+            # st, ed = self._get_flow_seq(idx)
+            # ano_flow_seq += range(st, ed)
+
+        # return ano_flow_seq
 
     # def get_ab_flow_seq(self, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
     #     mf, mb = zip(*self.record_data['entropy'])

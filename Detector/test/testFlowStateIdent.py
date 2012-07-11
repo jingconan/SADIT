@@ -1,7 +1,7 @@
 import unittest
 import sys
 sys.path.insert(0, "..")
-from FlowStateIdent import *
+from Ident import *
 class FlowStateIdentTestCase(unittest.TestCase):
     def setUp(self):
         pass

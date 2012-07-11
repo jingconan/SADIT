@@ -117,6 +117,7 @@ class PreloadHardDiskFile(Data):
         # return [min(self._get_value_list(f)[sp:ep]) for f in fea]
         return [min(float(val) for val in self._get_value_list(f)[sp:ep]) for f in fea]
 
+from DetectorLib import get_feature_hash_list
 class HardDiskFileHandler(object):
     """Data is stored as Hard Disk File"""
     def __init__(self, db_info, fr_win_size, fea_option):
@@ -198,6 +199,10 @@ class HardDiskFileHandler(object):
         # import pdb;pdb.set_trace()
         q_fea_vec = vector_quantize_states(zip(*fea_vec), self.fea_QN, zip(*fea_range), self.quan_flag)
         return q_fea_vec
+
+    def hash_quantized_fea(self, rg, rg_type):
+        q_fea_vec = self._quantize_fea(rg, rg_type)
+        return get_feature_hash_list(q_fea_vec, self.fea_QN)
 
 
 ##############################################################
