@@ -25,6 +25,7 @@ def switch_C_S(attr_list):
 
     return attr_list
 
+import copy
 def flow_direction_adaptor(fname, out_fname):
     fid = open(fname, 'r')
     fid_out = open(out_fname, 'w')
@@ -49,10 +50,13 @@ def flow_direction_adaptor(fname, out_fname):
             markIdx = [i for i in xrange(n) if attr_list[i] == '<>' or attr_list[i] == '<-']
             attr_list[markIdx[0]] = '->'
             # fid_out.write(' '.join(attr_list) + '\n')
-            fid_out.write(' '.join(attr_list))
+            back_attr_list = copy.deepcopy(attr_list)
+            # fid_out.write(' '.join(attr_list))
             attr_list = switch_C_S(attr_list)
             # fid_out.write(' '.join(attr_list) + '\n')
             fid_out.write(' '.join(attr_list))
+
+            fid_out.write(' '.join(back_attr_list))
         else:
             raise Exception('Unknown Format Error')
     fid.close()
