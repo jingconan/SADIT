@@ -123,12 +123,13 @@ def back_main():
 if __name__ == "__main__":
     com = CompareResult()
     # com.load_jing_data('../res/mb-cluster_6-raw.txt')
-    # com.load_dan_data('../../CyberData/Dan2/anomolies2003.txt')
-    com.load_dan_data('../../CyberData/Dan2/anomolies2003_2.txt')
+    com.load_dan_data('../../CyberData/Dan2/anomolies2003.txt')
+    # com.load_dan_data('../../CyberData/Dan2/anomolies2003_2.txt')
     # com.load_dan_data('../../CyberData/Dan2/anomolies2007.txt')
     jing_path = '../res/'
     dir_list = os.listdir(jing_path)
-    file_list = [f for f in dir_list if f.endswith('raw.txt')]
+    # file_list = [f for f in dir_list if f.endswith('raw.txt')]
+    file_list = [f for f in dir_list if f.endswith('ident.txt')]
     for f in file_list:
         print '-' * 40
         print "result for jing's ", f

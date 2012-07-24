@@ -7,3 +7,4 @@ rm ez_setup.py
 rm -r setuptools*
 rm -r matplotlib*
 rm -r distribute-0.6.27*
+rm distribute_setup.py.*

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from Anomaly import Anomaly
-import numpy as np
+# import numpy as np
 import cPickle as pickle
 
 class MarkovAnomaly(Anomaly):
@@ -17,11 +17,13 @@ class MarkovAnomaly(Anomaly):
                 )
 
         start, end = ano_t
-        st = mod_start + float(np.sum(np1[0]))
+        # st = mod_start + float(np.sum(np1[0]))
+        st = mod_start + float(sum(np1[0]))
         assert(st == start)
         self.add_ano_seg(start, ap, generator_list)
 
-        st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
+        # st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
+        st = mod_start + float(sum(np1[0])) + float(sum(ap[0]))
         assert(st == end)
         self.ano_node.add_modulator(
                 start=str(end),

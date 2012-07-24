@@ -58,7 +58,10 @@ def PlotPts(IPMat, corePts, anoPts, c):
     plot(c[0], c[1], 'go')
 
 import settings
-import numpy as np
+try:
+    import numpy as np
+except:
+    print "numpy hasn't been installed"
 def GetIPMat():
     '''load valid ip adrees from setting.IPS_FILE'''
     IP = LoadValidIP(settings.IPS_FILE)

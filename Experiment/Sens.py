@@ -101,12 +101,12 @@ class AttriSensExper(AttriChangeExper, Sens):
 if __name__ == "__main__":
     import settings
     exper = AttriSensExper(settings)
-    # exper.run('flow_arrival_rate', [2, 4, 6])
+    exper.run('flow_arrival_rate', [2, 4, 6])
     # exper.run('flow_arrival_rate', [6])
     # exper.run('flow_arrival_rate', [2, 3, 4, 5, 6])
     # exper.run('flow_arrival_rate', [0.1, 0.3, 0.4, 0.6, 0.8])
     # exper.run('flow_arrival_rate', [0.2, 0.4, 0.6])
     # exper.run('flow_size_mean', [2, 3, 4, 5])
-    exper.run('flow_size_mean', [0.2, 0.4, 0.6])
+    # exper.run('flow_size_mean', [0.2, 0.4, 0.6])
     # exper.run('flow_size_var', [2, 3, 4, 5])
     exper.plot_entropy()

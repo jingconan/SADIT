@@ -8,7 +8,7 @@
 ##-- [2012-04-10 17:16:27] add _infect_modulator, make anomaly more general
 
 
-import numpy as np
+# import numpy as np
 import sys
 sys.path.append("..")
 import settings
@@ -16,7 +16,20 @@ from util import Load
 from mod_util import choose_ip_addr
 import cPickle as pickle
 
-from numpy import cumsum, diff
+# from numpy import cumsum, diff
+def cumsum(it):
+    total = 0
+    for x in it:
+        total += x
+        yield total
+
+def diff(x):
+    res = []
+    for i in xrange(len(x)-1):
+        res.append(x[i+1]-x[i])
+    return res
+
+
 def get_pos(l, v):
     """index of largest element in l that is less than v"""
     for i in xrange(len(l)):

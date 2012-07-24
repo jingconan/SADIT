@@ -7,7 +7,7 @@ from Detector import detect
 
 from os import chdir as cd
 from os import system as sh
-import numpy as np
+# import numpy as np
 
 class Experiment(object):
     """
@@ -50,26 +50,27 @@ class Experiment(object):
         for k, v in argv.iteritems():
             exec 'self.settings.%s = v' %(k)
 
-    def get_star_topo(self):
-        g_size = self.g_size
-        topo = np.zeros([g_size, g_size])
-        for i in xrange(g_size):
-            if i in self.srv_node_list:
-                continue
-            topo[i, self.srv_node_list] = 1
-        return topo
+    # def get_star_topo(self):
+    #     g_size = self.g_size
+    #     topo = np.zeros([g_size, g_size])
+    #     for i in xrange(g_size):
+    #         if i in self.srv_node_list:
+    #             continue
+    #         topo[i, self.srv_node_list] = 1
+    #     return topo
 
     def configure(self):
         gen_anomaly_dot(self.ano_list, self.net_desc, self.norm_desc, self.dot_file)
 
     def simulate(self):
         cd(self.settings.ROOT + '/Simulator')
-        sh('./fs.py %s -t %d' %(self.settings.OUTPUT_DOT_FILE, self.settings.sim_t) )
+        sh('python fs.py %s -t %d' %(self.settings.OUTPUT_DOT_FILE, self.settings.sim_t) )
         cd(self.settings.ROOT)
 
     def detect(self):
         # return detect(self.flow_file, self.win_size, self.fea_option, self.detector_type, self.settings.DETECTOR_DESC)
-        return detect(self.flow_file, self.settings.DETECTOR_DESC)
+        self.detector = detect(self.flow_file, self.settings.DETECTOR_DESC)
+        return self.detector
 
 class AttriChangeExper(Experiment):
     def __init__(self, settings):
@@ -78,8 +79,9 @@ class AttriChangeExper(Experiment):
 if __name__ == "__main__":
     import settings
     exper = AttriChangeExper(settings)
-    exper.configure()
-    exper.simulate()
+    # exper.configure()
+    # exper.simulate()
     detector = exper.detect()
-    detector.plot_entropy()
+    # detector.plot_entropy()
+    detector.plot_entropy(hoeffding_false_alarm_rate = 0.01)
 

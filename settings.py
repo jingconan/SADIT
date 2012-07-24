@@ -8,6 +8,7 @@
 # ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
 # ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/ARL/sadit-experimental'
 ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
+# ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 
 #################################
 ##   topology ##
@@ -121,8 +122,8 @@ DETECTOR_DESC = dict(
         detector_type = 'mfmb',
         # max_detect_num = None,
         max_detect_num = 100,
-        # data_handler = 'fs',
-        data_handler = 'fs_deprec',
+        data_handler = 'fs',
+        # data_handler = 'fs_deprec',
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.
 

@@ -124,4 +124,4 @@ class ComponentFlowPairIdent(FlowPairIdent):
 class DerivativeFlowPairIdent(FlowPairIdent):
     @staticmethod
     def info_cal(a, ma, b, mb):
-        return log( (a*1.0/ma) / (b*1.0/mb))
+        return  0 if (a == 0 or ma ==0 or b == 0 or mb == 0) else log( (a*1.0/ma) / (b*1.0/mb))

@@ -1,0 +1,5 @@
+For mac user, just type
+>> sudo python setup-dep.py
+most of the dependencies will be installed
+you need install numpy by youself if you want to use 
+config and simulator part. 

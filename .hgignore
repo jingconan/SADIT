@@ -4,4 +4,7 @@ syntax: glob
 *flow.txt
 *.eps
 res/**
+Share/**
+*tags
+*.pk
 nohup.out
