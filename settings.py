@@ -47,17 +47,22 @@ NORM_DESC = dict(
         profile = DEFAULT_PROFILE,
         )
 
-ANOMALY_TIME = (1200, 1400)
+# ANOMALY_TIME = (1200, 1400)
 # ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
 ANO_DESC = {
-        'anoType':'flow_arrival_rate',
-        # 'anoType':'flow_size_mean',
+        # 'anoType':'flow_arrival_rate',
+        'anoType':'flow_size_mean',
+        # 'anoType':'atypical_user',
+        # 'ATIP':['8.8.8.8'],
+        # 'anoType':'flow_size_mean_arrival_rate',
         'ano_node_seq':2,
-        'T':(1200, 1400),
-        'change':{'flow_arrival_rate':6},
+        'T':(1000, 1400),
+        # 'T':(1200, 1400),
+        # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
         # 'change':{'flow_size_mean':6},
+        'change':{'flow_size_mean':0.5, 'flow_arrival_rate':2},
         # 'change':{'flow_size_var':6},
         'srv_id':0,
         }
@@ -104,7 +109,8 @@ DETECTOR_DESC = dict(
         # win_size = 50,
         interval=20,
         # win_size = 10,
-        win_size=200,
+        win_size=100,
+        # win_size=200,
         win_type='time', # 'time'|'flow'
         # win_type='flow', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate

@@ -180,7 +180,9 @@ class AtypicalUserAnomaly(Anomaly):
     def _get_ano_node(self):
         ipdest = [ self.ATIP[self.idx] ]
         self.idx += 1
-        self.ano_node = NNode(ipdest)
+
+        nn = len(self.net.node_list) # Add by J.W
+        self.ano_node = NNode(ipdest, nn)
         self._config_traffic()
 
     def _export_ip_addr(self):

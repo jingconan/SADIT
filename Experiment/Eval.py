@@ -9,108 +9,79 @@ from Detector.DataParser import RawParseData
 
 import matplotlib.pyplot as plt
 import cPickle as pickle
+import itertools
 
 class Eval(AttriChangeExper):
     """plot ROC curve for the hypothesis test"""
     OUT_STRING = """tp: %f\t fn: %f\t tn: %f\t fp: %f
 sensitivity: %f\tspecificity: %f
 """
-
     def __init__(self, settings):
         AttriChangeExper.__init__(self, settings)
+        self.real_ab_flow_seq = None
 
     def get_ab_flow_seq(self):
-        normal_flow_file_name = settings.ROOT + '/Simulator/n0_flow.txt'
+        """get the sequence of all abnormal flows"""
+        normal_flow_file_name = self.settings.ROOT + '/Simulator/n0_flow.txt'
         self.normal_flow, self.fea_name = RawParseData(normal_flow_file_name)
 
-        ab_flow_file_name = settings.ROOT + '/Simulator/abnormal_n0_flow.txt'
+        ab_flow_file_name = self.settings.ROOT + '/Simulator/abnormal_n0_flow.txt'
         self.flow, self.fea_name =  RawParseData(ab_flow_file_name)
 
         return [self.normal_flow.index(f) for f in self.flow]
 
-    def eval_mutiple(self):
-        for ab_win_num in xrange(1, 20, 2):
-            # for num in [1, 2, 3, 4, 5, 6]:
-            for ab_states_num in [2, 4]:
+    # def eval_mutiple(self):
+    #     for ab_win_num in xrange(1, 20, 2):
+    #         for ab_states_num in [2, 4]:
+    #             print 'ab_win_num, ', ab_win_num
+    #             res = self.eval(ident_type='ComponentFlowStateIdent',
+    #                     entropy_type='mf',
+    #                     ab_states_num=ab_states_num,
+    #                     ab_win_num=ab_win_num)
+    #             print self.OUT_STRING%res
+
+    def eval_diff_ab_win_num(self):
+        """eval the results under difference abnormal window number"""
+        entropy_type_vec = ['mf', 'mb']
+        rec = dict()
+        for entropy_type in entropy_type_vec:
+            rec[entropy_type] = []
+            for ab_win_num in xrange(1, 100, 2):
                 print 'ab_win_num, ', ab_win_num
-                res = self.eval(ident_type='ComponentFlowStateIdent',
-                        entropy_type='mf',
-                        ab_states_num=ab_states_num,
-                        ab_win_num=ab_win_num)
+                res = self.eval(ab_win_num=ab_win_num, entropy_type=entropy_type)
                 print self.OUT_STRING%res
+                rec[entropy_type].append(res)
 
-    def eval_diff_ab_state_num(self):
+        pickle.dump(rec, open(self.settings.ROOT+'/res/diff_ab_win_num.pk', 'w'))
+
+    def compare_ident_method(self):
+        """compare different identification method.calculate the statistical measure
+        to show the performance"""
         ab_win_num = 3
-        # ident_type_set = ['ComponentFlowStateIdent', 'DerivativeFlowStateIdent',
-                # 'ComponentFlowPairIdent', 'DerivativeFlowPairIdent']
-
-        ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent']
-        rec = dict(ComponentFlowPairIdent=[],
-                DerivativeFlowPairIdent=[])
-        for ident_type in ident_type_set:
-            for ab_states_num in xrange(64):
+        idents= {
+                'ComponentFlowStateIdent':'mf',
+                'DerivativeFlowStateIdent':'mf',
+                'ComponentFlowPairIdent':'mb',
+                'DerivativeFlowPairIdent':'mb',
+                }
+        max_ab_state_num = dict(mf=8, mb=64)
+        rec = dict(zip(idents.keys(), [list() for i in xrange(len(idents))]))
+        for ident_type, entropy_type in idents.iteritems():
+            print 'ident_type, ', ident_type
+            for ab_states_num in xrange(max_ab_state_num[entropy_type]):
+                print 'ab_states_num, ', ab_states_num
                 res = self.eval(ident_type=ident_type,
-                        entropy_type='mb',
+                        entropy_type=entropy_type,
                         ab_states_num=ab_states_num,
                         ab_win_num=ab_win_num)
 
                 print self.OUT_STRING%res
                 rec[ident_type].append(res)
 
-        pickle.dump(rec, open('./difference_ab_state_num.pk', 'w'))
-        self._vis_eval_diff_ab_state_num()
+        pickle.dump(rec, open(self.settings.ROOT + '/res/compare_ident.pk', 'w'))
 
-    def _vis(self, data_name, ident_type_set, fea_handler, title, xlabel, ylabel, pic_name):
-        import itertools
-        rec = pickle.load(open(data_name, 'r'))
-        legend_txt = []
-        f = plt.figure(1); f.clf()
-        ax = f.add_subplot(111)
-        i = -1
-        for ident_type in ident_type_set:
-            i += 1
-            data = zip(*rec[ident_type])
-            for fea, handler in fea_handler.iteritems():
-                ax.plot(handler(data))
-                legend_txt.append('%ith %s'%(i,fea))
 
-        plt.legend(legend_txt, loc=4)
-        for l, ms, ls in zip(ax.lines, itertools.cycle('>^+*'), itertools.cycle(['--', '-.', '-'])):
-            l.set_marker(ms)
-            l.set_linestyle(ls)
-        plt.title(title)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-
-        plt.savefig(pic_name)
-        plt.show()
-
-    def _vis_eval_diff_ab_state_num(self):
-        self._vis(
-                data_name = './difference_ab_state_num.pk',
-                ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
-                fea_handler = dict(
-                    sensitivity = lambda x: x[-1],
-                    specificity = lambda x: x[-2],
-                    ),
-                title = 'sensitivity and specificity vs no. of abnormal flow transition pair',
-                xlabel = 'no. of abnormal flow transition pair',
-                ylabel = 'sensitivity and specificity',
-                pic_name = './difference_ab_tran_pair_num_sens_spec.eps'
-                )
-
-        self._vis(
-                data_name = './difference_ab_state_num.pk',
-                ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
-                fea_handler = dict(
-                    fnr = lambda x: [1-v for v in x[-1]],
-                    fpr = lambda x: [1-v for v in x[-2]],
-                    ),
-                title = 'fnr and fpr vs no. of abnormal flow transition pair',
-                xlabel = 'no. of abnormal flow transition pair',
-                ylabel = 'fnr and fpr',
-                pic_name = './difference_ab_tran_pair_num_fnr_fpr.eps'
-                )
+        # self._vis_eval_diff_ab_state_num()
 
     def eval_hoeffding(self):
         """evaluate the performance of detector under the hoeffding optimal rule"""
@@ -122,7 +93,7 @@ sensitivity: %f\tspecificity: %f
                 ab_states_num=2)
         print self.OUT_STRING%res
 
-    def eval(self, ident_type, entropy_type=None, portion=None, ab_states_num=None,
+    def eval(self, ident_type=None, entropy_type=None, portion=None, ab_states_num=None,
             entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """
         calculate the true positive, false negative, true negative, false positive, sensitivity and
@@ -130,10 +101,14 @@ sensitivity: %f\tspecificity: %f
         **sensitivity** is the probability of a alarm given that the this flow is anormalous
         **specificity** is the probability of there isn't alarm given that the flow is normal
         """
-        self.real_ab_flow_seq = self.get_ab_flow_seq()
-        ab_states = self.detector.ident(ident_type,
-                entropy_type, portion, ab_states_num,
-                entropy_threshold, ab_win_portion, ab_win_num)
+        if not self.real_ab_flow_seq:
+            self.real_ab_flow_seq = self.get_ab_flow_seq()
+        ab_states = None
+        if ident_type is not None:
+            ab_states = self.detector.ident(ident_type,
+                    entropy_type, portion, ab_states_num,
+                    entropy_threshold, ab_win_portion, ab_win_num)
+
         print 'ab_states, ', ab_states
         self.ab_seq = self.detector.get_ab_flow_seq(entropy_type,
                 entropy_threshold, ab_win_portion, ab_win_num,
@@ -149,7 +124,9 @@ sensitivity: %f\tspecificity: %f
         return (tp, fn, tn, fp, sensitivity, specificity)
 
     def get_quantitative(self, A, B, W):
-        """**A** is the referece, and **B** is the detected result, **W** is the whole set"""
+        """**A** is the referece, and **B** is the detected result, **W** is the whole set
+        calculate the true positive, false negative, true negative and false positive
+        """
         A = set(A)
         B = set(B)
         W = set(W)
@@ -166,16 +143,148 @@ sensitivity: %f\tspecificity: %f
 
         return tp, fn, tn, fp
 
-        # get sensitivity
-        # get specificity
-        print 'ab_seq, ', self.ab_seq
-        ir = self.get_intersection_ratio(self.real_ab_flow_seq, self.ab_seq)
-        print 'the intersection ratio is, ', ir
-
-    def get_intersection_ratio(self, A, B):
+    def _get_intersection_ratio(self, A, B):
         self.ins = set.intersection(set(A), set(B))
         self.uns = set.union(set(A), B)
         return len(self.ins) * 1.0 / len(self.uns)
+
+
+   #############################################################################
+   ##         Visualization Part                                           #####
+   #############################################################################
+    def _vis(self, data_name, ident_type_set, fea_handler, title, xlabel=None, ylabel=None,
+            pic_name=None, pic_show=False, ylim=None, xlim=None,
+            markers='>^+*', line_styles=('-', '-.', '--'),
+            subplot=None):
+        """visualize the attribute"""
+        rec = pickle.load(open(data_name, 'r'))
+        if subplot is None:
+            f = plt.figure(1); f.clf()
+            ax = f.add_subplot(111)
+        else:
+            if isinstance(subplot, int):
+                ax = plt.gcf().add_subplot(subplot)
+            else:
+                f = subplot[0]
+                ax = f.add_subplot(subplot[1])
+        i = -1
+        legend_txt = []
+        for ident_type in ident_type_set:
+            i += 1
+            data = zip(*rec[ident_type])
+            for fea, handler in fea_handler.iteritems():
+                vis_data = handler(data)
+                if isinstance(vis_data[0], list) or isinstance(vis_data[0], tuple):
+                    ax.plot(*vis_data)
+                elif isinstance(vis_data[0], int) or isinstance(vis_data[0], float):
+                    ax.plot(vis_data)
+                else:
+                    raise Exception('Unknown visualization data, check your feature handler please')
+                # legend_txt.append('%ith %s'%(i,fea))
+                legend_txt.append('%s %s'%(ident_type,fea))
+
+        # plt.legend(legend_txt, loc=4, numpoints=1)
+        plt.legend(legend_txt, 'best', numpoints=1)
+        for l, ms, ls in zip(ax.lines, itertools.cycle(markers), itertools.cycle(line_styles)):
+            l.set_marker(ms)
+            l.set_linestyle(ls)
+        plt.title(title)
+        if xlabel: plt.xlabel(xlabel)
+        if ylabel: plt.ylabel(ylabel)
+        if ylim: plt.ylim(ylim)
+        if xlim: plt.xlim(ylim)
+
+        if pic_name: plt.savefig(pic_name)
+        if pic_show: plt.show()
+
+    def _vis_roc(self, markers=' ', *args, **kwargs):
+        """plot the ROC curve given the data"""
+        def roc(data):
+            tpv, fnv, tnv, fpv, _, _ = data
+            tpr = [ tp * 1.0 / (tp + fn) for tp, fn in zip(tpv, fnv)]
+            # calculate the false positive rate
+            fpr = [ fp * 1.0 / (fp + tn) for fp, tn in zip(fpv, tnv)]
+            print 'fpr, ', fpr
+            print 'tpr, ', tpr
+            return fpr, tpr
+
+        fea_handler = dict(ROC=roc)
+        self._vis(fea_handler=fea_handler, xlim=[0, 1], ylim=[0, 1.1], markers=markers, *args, **kwargs)
+
+    def plot_roc_curve_ident(self):
+        """plot ROC Curve for detection with flow state(transition pair) identification"""
+        self._vis_roc(
+                # data_name = './difference_ab_state_num.pk',
+                data_name = self.settings.ROOT+'/res/compare_ident.pk',
+                # ident_type_set = ['ComponentFlowStateIdent', 'DerivativeFlowStateIdent'],
+                ident_type_set = ['ComponentFlowStateIdent', 'ComponentFlowPairIdent'],
+                title = 'ROC curve of detector with component flow identification',
+                # xlabel = 'false positive rate',
+                ylabel = 'true positive rate',
+                # pic_name = './flow_ident_roc.eps',
+                pic_name = None,
+                # subplot= [None, 211],
+                subplot= 211,
+                )
+
+        self._vis_roc(
+                # data_name = './difference_ab_state_num.pk',
+                data_name = self.settings.ROOT+'/res/compare_ident.pk',
+                # ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
+                # ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
+                ident_type_set = ['DerivativeFlowStateIdent', 'DerivativeFlowPairIdent'],
+                title = 'ROC curve of detector with derivative flow identification',
+                xlabel = 'false positive rate',
+                ylabel = 'true positive rate',
+                pic_name = self.settings.ROOT+'/res/flow_ident_roc.eps',
+                # subplot = [None, 211],
+                subplot = 212,
+                # pic_show = True
+                )
+    def plot_roc_curve(self):
+        self._vis_roc(
+                data_name = self.settings.ROOT+'/res/diff_ab_win_num.pk',
+                ident_type_set = ['mf', 'mb'],
+                title = 'ROC curve of stochastic anomaly detector',
+                xlabel = 'false positive rate',
+                ylabel = 'true positive rate',
+                pic_name = self.settings.ROOT+'/res/flow_roc.eps',
+                # pic_show = True
+                markers='o+'
+                )
+
+
+    def _vis_eval_diff_ab_state_num(self):
+        self._vis(
+                data_name = self.settings.ROOT+'/res/compare_ident.pk',
+                ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
+                fea_handler = dict(
+                    sensitivity = lambda x: x[-1],
+                    specificity = lambda x: x[-2],
+                    ),
+                title = 'sensitivity and specificity vs no. of abnormal flow transition pair',
+                xlabel = 'no. of abnormal flow transition pair',
+                ylabel = 'sensitivity and specificity',
+                pic_name = self.settings.ROOT+'/res/difference_ab_tran_pair_num_sens_spec.eps',
+                # pic_show = True
+                )
+
+
+
+        self._vis(
+                data_name = self.settings.ROOT+'/res/compare_ident.pk',
+                ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
+                fea_handler = dict(
+                    fnr = lambda x: [1-v for v in x[-1]],
+                    fpr = lambda x: [1-v for v in x[-2]],
+                    ),
+                title = 'fnr and fpr vs no. of abnormal flow transition pair',
+                xlabel = 'no. of abnormal flow transition pair',
+                ylabel = 'fnr and fpr',
+                pic_name = self.settings.ROOT+'/res/difference_ab_tran_pair_num_fnr_fpr.eps'
+                )
+
+
 
 
 if __name__ == "__main__":
@@ -183,9 +292,15 @@ if __name__ == "__main__":
     exper = Eval(settings)
     # exper.configure()
     # exper.simulate()
-    # exper.detect()
-    # exper.eval_diff_ab_state_num()
+    exper.detect()
+
+    exper.compare_ident_method()
+    exper.plot_roc_curve_ident()
     exper._vis_eval_diff_ab_state_num()
+
+    exper.eval_diff_ab_win_num()
+    exper.plot_roc_curve()
+
     # exper.eval_mutiple()
     # exper.eval_hoeffding()
     # detector.plot_entropy()
