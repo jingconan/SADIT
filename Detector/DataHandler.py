@@ -211,7 +211,7 @@ class HardDiskFileHandler(object):
     def get_fea_list(self):
         return ['cluster', 'dist_to_center'] + self.direct_fea_list
 
-    def get_fea_slice(self, rg, rg_type):
+    def get_fea_slice(self, rg=None, rg_type=None):
         """get a slice of feature. it does some post-processing after get feature
         slice from Data. First it get *direct_fea_vec* from data, which is defined
         in **self.direct_fea_list**. then it cluster

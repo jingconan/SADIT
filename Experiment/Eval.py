@@ -21,7 +21,7 @@ sensitivity: %f\tspecificity: %f
         self.real_ab_flow_seq = None
 
     def get_ab_flow_seq(self):
-        """get the sequence of all abnormal flows"""
+        """get the sequence of all abnormal flows, get the reference ground truth"""
         normal_flow_file_name = self.settings.ROOT + '/Simulator/n0_flow.txt'
         self.normal_flow, self.fea_name = RawParseData(normal_flow_file_name)
 
@@ -290,8 +290,8 @@ sensitivity: %f\tspecificity: %f
 if __name__ == "__main__":
     import settings
     exper = Eval(settings)
-    # exper.configure()
-    # exper.simulate()
+    exper.configure()
+    exper.simulate()
     exper.detect()
 
     exper.compare_ident_method()

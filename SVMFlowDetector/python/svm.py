@@ -41,7 +41,8 @@ def write_svm_data_file(label, fea, f_name):
 
 from ClusterAlg import KMeans
 from subprocess import call
-SVM_FOLDER = '/home/wangjing/LocalResearch/CyberSecurity/taylor/svm_detector/libsvm-3.12/'
+# SVM_FOLDER = '/home/wangjing/LocalResearch/CyberSecurity/taylor/svm_detector/libsvm-3.12/'
+SVM_FOLDER = '../libsvm-3.12/'
 def flow_by_flow_svm(normal_file, abnormal_file, cluster_num, gamma):
     f_all, fea_name = RawParseData(normal_file)
 

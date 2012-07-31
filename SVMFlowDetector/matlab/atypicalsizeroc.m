@@ -5,6 +5,8 @@
 % 1/12/12
 clear
 
+settings = loadsettings();
+
 load atypicalsizetest
 load atypicalsizetrain
 
@@ -24,10 +26,23 @@ xtest(ineg,2) = mdt + sdt*randn(nd,1);
 
 % Scale the training data and train the detector.
 writeinfile(ytrain,xtrain,'atypicalsize_train.dat');
-system(['~/libsvm-3.1/svm-scale -s atypicalsize.sf atypicalsize_train.dat ' ...
+% system(['~/libsvm-3.1/svm-scale -s atypicalsize.sf atypicalsize_train.dat ' ...
+%         '> atypicalsize_train.scaled'])
+% system(['~/libsvm-3.1/svm-train -s 2 -h 0 -n 0.001 ' ...
+%         'atypicalsize_train.scaled atypicalsize.model'])
+
+disp('start to run svn-scale')
+disp([settings.SVM_FOLDER, '/svm-scale -s atypicalsize.sf atypicalsize_train.dat ' ...
+        '> atypicalsize_train.scaled'] )
+system([settings.SVM_FOLDER, '/svm-scale -s atypicalsize.sf atypicalsize_train.dat ' ...
         '> atypicalsize_train.scaled'])
-system(['~/libsvm-3.1/svm-train -s 2 -h 0 -n 0.001 ' ...
+
+disp([settings.SVM_FOLDER, '/svm-train -s 2 -h 0 -n 0.001 ' ...
+        'atypicalsize_train.scaled atypicalsize.model'] )
+system([settings.SVM_FOLDER, '/svm-train -s 2 -h 0 -n 0.001 ' ...
         'atypicalsize_train.scaled atypicalsize.model'])
+
+
 
 % Scale the test data and evalute the detector's perforance when a
 % varying download size is insertd in to the data.
@@ -51,10 +66,16 @@ for i = 1:nvals
     x(ineg,2) = x(ineg,3)./rates(ineg);
 
     writeinfile(ytest,x,'atypicalsize_test.dat');
-    system(['~/libsvm-3.1/svm-scale -r atypicalsize.sf ' ...
+    % system(['~/libsvm-3.1/svm-scale -r atypicalsize.sf ' ...
+            % 'atypicalsize_test.dat > atypicalsize_test.scaled'])
+    % system(['~/libsvm-3.1/svm-predict atypicalsize_test.scaled ' ...
+            % 'atypicalsize.model atypicalsize_test.pred'])
+
+    system([settings.SVM_FOLDER, '/svm-scale -r atypicalsize.sf ' ...
             'atypicalsize_test.dat > atypicalsize_test.scaled'])
-    system(['~/libsvm-3.1/svm-predict atypicalsize_test.scaled ' ...
+    system([settings.SVM_FOLDER, '/svm-predict atypicalsize_test.scaled ' ...
             'atypicalsize.model atypicalsize_test.pred'])
+ 
     ypred = dlmread('atypicalsize_test.pred');
     inegpred = ypred < 0;
     pdi = sum(inegpred & ineg)/nd

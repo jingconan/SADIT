@@ -51,7 +51,8 @@ NORM_DESC = dict(
 # ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
 ANO_DESC = {
         # 'anoType':'flow_arrival_rate',
-        'anoType':'flow_size_mean',
+        # 'anoType':'flow_size_mean',
+        'anoType':'anomaly',
         # 'anoType':'atypical_user',
         # 'ATIP':['8.8.8.8'],
         # 'anoType':'flow_size_mean_arrival_rate',
@@ -62,7 +63,7 @@ ANO_DESC = {
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
         # 'change':{'flow_size_mean':6},
-        'change':{'flow_size_mean':0.5, 'flow_arrival_rate':2},
+        'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
         # 'change':{'flow_size_var':6},
         'srv_id':0,
         }
@@ -109,7 +110,8 @@ DETECTOR_DESC = dict(
         # win_size = 50,
         interval=20,
         # win_size = 10,
-        win_size=100,
+        # win_size=100,
+        win_size=50,
         # win_size=200,
         win_type='time', # 'time'|'flow'
         # win_type='flow', # 'time'|'flow'
@@ -126,8 +128,8 @@ DETECTOR_DESC = dict(
         # normal_rg = [0, 1000],
         normal_rg = None,
         detector_type = 'mfmb',
-        # max_detect_num = None,
-        max_detect_num = 100,
+        max_detect_num = None,
+        # max_detect_num = 100,
         data_handler = 'fs',
         # data_handler = 'fs_deprec',
         )

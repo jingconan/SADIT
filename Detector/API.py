@@ -1,10 +1,16 @@
-from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
+"""
+This file defines useful API for other modules or program to use
+"""
+# from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
+from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
+from SVMDetector import SVMDetector
+
 detector_map = {
         'mf': ModelFreeAnoDetector,
         'mb': ModelBaseAnoDetector,
         'mfmb': FBAnoDetector,
+        'svm': SVMDetector,
         }
-
 
 from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
 from DataHandler_xflow import HardDiskFileHandler_xflow
@@ -16,7 +22,6 @@ data_handler_handle_map = {
         'xflow': HardDiskFileHandler_xflow,
         }
 
-# def detect(f_name, win_size, fea_option, detector_type, detector_desc):
 def detect(f_name, desc):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.
@@ -30,14 +35,6 @@ def detect(f_name, desc):
     detector = detector_map[ desc['detector_type'] ](desc)
     detector.detect(data_file)
     return detector
-# type_detector = ModelFreeAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
-    # type_detector.detect_ano_type()
-
-    # type_detector = ModelBaseAnoTypeTest(detect, 3000, settings.ANO_DESC['T'])
-    # type_detector.detect_ano_type()
-
-    # import pdb;pdb.set_trace()
-    # detect.plot_entropy()
 
 def test_detect():
     ANO_ANA_DATA_FILE = './test_AnoAna.txt'
@@ -56,12 +53,6 @@ def test_detect():
     desc = DETECTOR_DESC
     detector = detect('../Simulator/n0_flow.txt', desc)
     detector.plot_entropy()
-
-# def standalone_detect(file_name):
-#     from settings import DETECTOR_DESC as desc
-#     detector = detect(file_name, desc)
-
-#     detector.plot_entropy()
 
 if __name__ == "__main__":
     test_detect()

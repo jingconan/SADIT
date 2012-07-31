@@ -171,7 +171,8 @@ function readtraintest(ext,iplist,deltat,gamma,flowfn)
     testfn = ['test_' ext '.dat'];
     writeinfile(y,x,testfn);
     
-    SVM_FOLDER = '/home/wangjing/LocalResearch/CyberSecurity/taylor/svm_detector/libsvm-3.12/'
+    settings = loadsetings()
+    SVM_FOLDER = settings.SVM_FOLDER
     % Train the SVM.
     system([SVM_FOLDER, 'svm-train -s 2 -n 0.001 -g ' num2str(gamma) ' train_' ext '.dat ' ...
             'train_' ext '.model'])

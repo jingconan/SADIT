@@ -8,6 +8,7 @@ from MVAnomaly import MVAnomaly
 ano_map = {
         # 'ATYPICAL_USER':AtypicalUser,
         'atypical_user':AtypicalUserAnomaly,
+        'anomaly':Anomaly,
         'flow_arrival_rate':Anomaly,
         'flow_size_mean':Anomaly,
         'flow_size_var':Anomaly,

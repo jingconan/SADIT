@@ -79,8 +79,8 @@ class AttriChangeExper(Experiment):
 if __name__ == "__main__":
     import settings
     exper = AttriChangeExper(settings)
-    # exper.configure()
-    # exper.simulate()
+    exper.configure()
+    exper.simulate()
     detector = exper.detect()
     # detector.plot_entropy()
     detector.plot_entropy(hoeffding_false_alarm_rate = 0.01)

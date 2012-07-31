@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-This file contains all the detection techniques
+This file contains all the stochastic detection techniques
 """
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
@@ -287,6 +287,8 @@ class FBAnoDetector(AnoDetector):
             # ab_flow_state=None, ab_flow_tran=None):
         """get abnormal flow sequence number. the input is citerions which window will be abnormal window
         see **AnoDetector.export_abnormal_flow** for the meaning of the citerion parameters.
+        **ab_flow_info** represents either abnormal flow state(for model free approach) and abnormal flow trantision
+        pair(for model based approach).
         """
         # assert( (ab_flow_state and not ab_flow_tran) or (not ab_flow_state and ab_flow_tran) )
         # if ab_flow_tran: # set the flow_state be the set of all
