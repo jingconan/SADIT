@@ -62,8 +62,8 @@ ANO_DESC = {
         # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
-        # 'change':{'flow_size_mean':6},
-        'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
+        'change':{'flow_size_mean':6},
+        # 'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
         # 'change':{'flow_size_var':6},
         'srv_id':0,
         }

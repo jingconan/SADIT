@@ -166,8 +166,8 @@ class PreloadHardDiskFile(Data):
 from DetectorLib import get_feature_hash_list
 class HardDiskFileHandler(object):
     """Data is stored as Hard Disk File"""
-    def __init__(self, db_info, fr_win_size, fea_option):
-        self._init_data(db_info)
+    def __init__(self, fname, fr_win_size=None, fea_option=None):
+        self._init_data(fname)
         self.fr_win_size = fr_win_size
         self.fea_option  = fea_option
         self.direct_fea_list = [ k for k in fea_option.keys() if k not in ['cluster', 'dist_to_center']]

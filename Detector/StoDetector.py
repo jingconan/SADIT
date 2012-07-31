@@ -8,7 +8,6 @@ __status__ = "Development"
 
 import sys
 sys.path.append("..")
-# import settings
 import os
 try:
     from matplotlib.pyplot import figure, plot, show, subplot, title, savefig
@@ -21,15 +20,12 @@ from DetectorLib import I1, I2
 from util import DataEndException, FetchNoDataException,  abstract_method
 
 import cPickle as pickle
-# from AnoType import ModelFreeAnoTypeTest, ModelBaseAnoTypeTest
-# from DataFile import DataFile, HardDiskFileHandler
 from math import log
 
 class AnoDetector (object):
     """It is an Abstract Base Class for the anomaly detector."""
     def __init__(self, desc):
         self.desc = desc
-        # self.record_data = dict(IF=[], IB=[], winT=[], threshold=[], em=[])
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
 
     def __call__(self, *args, **kwargs):
