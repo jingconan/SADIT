@@ -57,7 +57,7 @@ ANO_DESC = {
         # 'ATIP':['8.8.8.8'],
         # 'anoType':'flow_size_mean_arrival_rate',
         'ano_node_seq':2,
-        'T':(1000, 1400),
+        'T':(1000, 1100),
         # 'T':(1200, 1400),
         # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
