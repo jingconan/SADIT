@@ -108,10 +108,12 @@ DETECTOR_DESC = dict(
         # interval=30,
         # interval=50,
         # win_size = 50,
-        interval=20,
+        # interval=20,
+        interval=2000,
         # win_size = 10,
         # win_size=100,
-        win_size=50,
+        # win_size=50,
+        win_size=2000,
         # win_size=200,
         win_type='time', # 'time'|'flow'
         # win_type='flow', # 'time'|'flow'
@@ -132,6 +134,9 @@ DETECTOR_DESC = dict(
         # max_detect_num = 100,
         data_handler = 'fs',
         # data_handler = 'fs_deprec',
+
+        #### only for SVM approach #####
+        gamma = 0.1,
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.
 

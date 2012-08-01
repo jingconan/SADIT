@@ -224,3 +224,13 @@ def zeros(s):
     else:
         raise Exception('unknown size in zeros')
 
+
+import inspect
+def get_help_docs(dic):
+    docs = []
+    for k, v in dic.iteritems():
+        doc  = inspect.getdoc(v)
+        comp_doc = "%s %s"%(v.__name__, doc) if doc else v.__name__
+        docs.append("'%s': %s"%(k, comp_doc))
+
+    return docs

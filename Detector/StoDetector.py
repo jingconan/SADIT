@@ -104,6 +104,8 @@ class AnoDetector (object):
         if pic_name: savefig(pic_name)
         if pic_show: show()
 
+    def plot(self, *args, **kwargs): self.plot_entropy(*args, **kwargs)
+
     def dump(self, data_name):
         pickle.dump( self.record_data, open(data_name, 'w') )
 

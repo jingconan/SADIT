@@ -3,13 +3,14 @@ This file defines useful API for other modules or program to use
 """
 # from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
-from SVMDetector import SVMDetector
+from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
 
 detector_map = {
         'mf': ModelFreeAnoDetector,
         'mb': ModelBaseAnoDetector,
         'mfmb': FBAnoDetector,
-        'svm': SVMDetector,
+        'svm_fbf': SVMFlowByFlowDetector,
+        'svm_temp': SVMTemporalDetector,
         }
 
 from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile

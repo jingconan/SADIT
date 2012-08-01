@@ -26,6 +26,9 @@ class SVMDetector(object):
         self._defaults()
         self.__dict__.update(desc)
 
+    @property
+    def rg_type(self): return self.win_type
+
     def _defaults(self):
         """default value for SVM detector parameters"""
         self.svm_dat_file= settings.ROOT + '/Share/test.dat'
@@ -78,6 +81,8 @@ class SVMDetector(object):
         self.ano_val = 1 if pred_num[1] < pred_num[-1] else -1
         print 'total flows', len(self.pred), 'alarm num, ', pred_num[self.ano_val]
 
+    def plot(self, *args, **kwargs): self.plot_pred(*args, **kwargs)
+
 
 class SVMFlowByFlowDetector(SVMDetector):
     """SVM Flow By Flow Anomaly Detector Method"""
@@ -124,8 +129,8 @@ class SVMTemporalHandler(object):
             'flow_size': lambda x: [float(v[0]) for v in x],
             }
 
-    def __init__(self, fname):
-        self._init_data(fname)
+    def __init__(self, fname=None, existing_data_handler=None):
+        self._init_data(fname, existing_data_handler)
         self.update_unique_src_ip()
         self.large_flow_thres = 5e5
 
@@ -133,8 +138,15 @@ class SVMTemporalHandler(object):
         """be carefule to update unique src ip when using a new file"""
         self.unique_src_ip = list(set(self.get('src_ip')))
 
-    def _init_data(self, f_name):
-        self.data = PreloadHardDiskFile(f_name)
+    def _init_data(self, f_name, existing_data_handler):
+        """the SVM data Handler is a little bit special, it can
+        take other data_handler's data and play the role of that data_handler.
+        I know it is not clean design, but that's what I have to do
+        to deal with legacy code"""
+        if existing_data_handler:
+            self.data = existing_data_handler.data
+        else:
+            self.data = PreloadHardDiskFile(f_name)
 
     def get(self, fea, rg=None, rg_type=None):
         """receive feature name as input"""
@@ -194,8 +206,8 @@ class SVMTemporalDetector(SVMDetector):
         write_svm_data_file(label, fea_list, self.svm_dat_file)
 
     def detect(self, data_handler):
+        data_handler = SVMTemporalHandler(existing_data_handler = data_handler)
         self.write_dat(data_handler)
-        self.train()
         self.scale()
         self.train()
         self.predict()
