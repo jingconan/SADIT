@@ -54,17 +54,24 @@ sensitivity: %f\tspecificity: %f
 
         pickle.dump(rec, open(self.settings.ROOT+'/res/diff_ab_win_num.pk', 'w'))
 
-    def compare_ident_method(self):
+    def compare_ident_method(self, ab_win_num = 40):
         """compare different identification method.calculate the statistical measure
-        to show the performance"""
-        ab_win_num = 3
+        to show the performance
+        refer the return value of self.eval for the metric calculated for different
+        identification method.
+
+        **ab_win_num** specify the number of windows that selected as abnormal window. So
+        it influence the performance of the original stochasticl detecotring before applying
+        the flow state identification techiniques. More specifically, it influence the largest
+        true positive rate the stotchastic detector can achieve.
+        """
         idents= {
                 'ComponentFlowStateIdent':'mf',
                 'DerivativeFlowStateIdent':'mf',
                 'ComponentFlowPairIdent':'mb',
                 'DerivativeFlowPairIdent':'mb',
                 }
-        max_ab_state_num = dict(mf=8, mb=64)
+        max_ab_state_num = dict(mf=12, mb=144) # it influence the max ab_state_num it will search
         rec = dict(zip(idents.keys(), [list() for i in xrange(len(idents))]))
         for ident_type, entropy_type in idents.iteritems():
             print 'ident_type, ', ident_type
@@ -218,6 +225,7 @@ sensitivity: %f\tspecificity: %f
                 data_name = self.settings.ROOT+'/res/compare_ident.pk',
                 # ident_type_set = ['ComponentFlowStateIdent', 'DerivativeFlowStateIdent'],
                 ident_type_set = ['ComponentFlowStateIdent', 'ComponentFlowPairIdent'],
+                # ident_type_set = ['ComponentFlowPairIdent'],
                 title = 'ROC curve of detector with component flow identification',
                 # xlabel = 'false positive rate',
                 ylabel = 'true positive rate',
@@ -230,9 +238,8 @@ sensitivity: %f\tspecificity: %f
         self._vis_roc(
                 # data_name = './difference_ab_state_num.pk',
                 data_name = self.settings.ROOT+'/res/compare_ident.pk',
-                # ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
-                # ident_type_set = ['ComponentFlowPairIdent', 'DerivativeFlowPairIdent'],
                 ident_type_set = ['DerivativeFlowStateIdent', 'DerivativeFlowPairIdent'],
+                # ident_type_set = ['DerivativeFlowPairIdent'],
                 title = 'ROC curve of detector with derivative flow identification',
                 xlabel = 'false positive rate',
                 ylabel = 'true positive rate',
@@ -252,6 +259,32 @@ sensitivity: %f\tspecificity: %f
                 # pic_show = True
                 markers='o+'
                 )
+
+    def plot_roc_curve_seperate(self):
+        self._vis_roc(
+                data_name = self.settings.ROOT+'/res/diff_ab_win_num.pk',
+                ident_type_set = ['mf'],
+                title = 'ROC curve of stochastic anomaly detector',
+                xlabel = 'false positive rate',
+                ylabel = 'true positive rate',
+                pic_name = self.settings.ROOT+'/res/flow_roc.eps',
+                # pic_show = True
+                markers='o+',
+                subplot = 211,
+                )
+
+        self._vis_roc(
+                data_name = self.settings.ROOT+'/res/diff_ab_win_num.pk',
+                ident_type_set = ['mb'],
+                title = 'ROC curve of stochastic anomaly detector',
+                xlabel = 'false positive rate',
+                ylabel = 'true positive rate',
+                pic_name = self.settings.ROOT+'/res/flow_roc.eps',
+                # pic_show = True
+                markers='o+',
+                subplot = 212,
+                )
+        pass
 
 
     def _vis_eval_diff_ab_state_num(self):
@@ -290,16 +323,17 @@ sensitivity: %f\tspecificity: %f
 if __name__ == "__main__":
     import settings
     exper = Eval(settings)
-    exper.configure()
-    exper.simulate()
-    exper.detect()
+    # exper.configure()
+    # exper.simulate()
+    # exper.detect()
 
-    exper.compare_ident_method()
+    # exper.compare_ident_method()
     exper.plot_roc_curve_ident()
-    exper._vis_eval_diff_ab_state_num()
+    # exper._vis_eval_diff_ab_state_num()
 
-    exper.eval_diff_ab_win_num()
-    exper.plot_roc_curve()
+    # exper.eval_diff_ab_win_num()
+    # exper.plot_roc_curve()
+    # exper.plot_roc_curve_seperate()
 
     # exper.eval_mutiple()
     # exper.eval_hoeffding()

@@ -43,6 +43,10 @@ class AnoDetector (object):
         empirical measure"""
         abstract_method()
 
+    def get_flow_num(self, rg, rg_type):
+        sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
+        return ep - sp
+
     def record(self, **kwargs):
         for k, v in kwargs.iteritems():
             self.record_data[k].append(v)
@@ -78,7 +82,8 @@ class AnoDetector (object):
                 # d_pmf, d_Pmb, d_mpmb = self.data_file.get_em(rg=[time, time+win_size], rg_type='time')
                 em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
                 entropy = self.I(em, self.norm_em)
-                self.record( entropy=entropy, winT = time, threshold = 0, em=em )
+                # flow_num = self.get_flow_num(rg=[time, time+win_size], rg_type=rg_type)
+                self.record( entropy=entropy, winT = time, threshold = 0, em=em)
             except FetchNoDataException:
                 print 'there is no data to detect in this window'
             except DataEndException:

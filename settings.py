@@ -7,8 +7,8 @@
 # ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
 # ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
 # ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/ARL/sadit-experimental'
-ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
-# ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
+ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 
 #################################
 ##   topology ##
@@ -33,13 +33,13 @@ link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attrib
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 3000
+sim_t = 8000
 start = 0
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
 
 # gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'}
-gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'1'}
+gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e3', 'flow_size_var':'100', 'flow_arrival_rate':'1'}
 NORM_DESC = dict(
         TYPE = 'NORMAl',
         start = '0',
@@ -57,7 +57,7 @@ ANO_DESC = {
         # 'ATIP':['8.8.8.8'],
         # 'anoType':'flow_size_mean_arrival_rate',
         'ano_node_seq':2,
-        'T':(1000, 1100),
+        'T':(2000, 3000),
         # 'T':(1200, 1400),
         # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
@@ -108,13 +108,15 @@ DETECTOR_DESC = dict(
         # interval=30,
         # interval=50,
         # win_size = 50,
-        # interval=20,
-        interval=2000,
+        interval=20,
+        # interval=5,
+        # interval=2000,
         # win_size = 10,
         # win_size=100,
         # win_size=50,
-        win_size=2000,
-        # win_size=200,
+        # win_size=20,
+        # win_size=2000,
+        win_size=200,
         win_type='time', # 'time'|'flow'
         # win_type='flow', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate
@@ -122,7 +124,7 @@ DETECTOR_DESC = dict(
         unified_nominal_pdf = False, # used in sensitivities analysis
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
-        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
         # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
@@ -136,7 +138,7 @@ DETECTOR_DESC = dict(
         # data_handler = 'fs_deprec',
 
         #### only for SVM approach #####
-        gamma = 0.1,
+        # gamma = 0.01,
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.
 

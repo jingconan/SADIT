@@ -36,6 +36,8 @@ class SVMDetector(object):
         self.svm_pred_file= settings.ROOT + '/Share/test.pred'
 
         self.scale_para_file = settings.ROOT + '/Share/scale.sf'
+        self.nu = 0.01
+        self.gamma = 0.01
 
     def scale(self):
         print 'start to scale ...'
@@ -52,7 +54,7 @@ class SVMDetector(object):
         print 'start to train...'
         subprocess.check_call([SVM_FOLDER + '/svm-train',
             '-s', '2',
-            '-n', '0.001',
+            '-n', str(self.nu),
             '-g', str(self.gamma),
             self.svm_dat_file,
             self.svm_model_file])
@@ -204,6 +206,15 @@ class SVMTemporalDetector(SVMDetector):
 
         label = [0] * len(fea_list)
         write_svm_data_file(label, fea_list, self.svm_dat_file)
+
+    def train(self):
+        print 'start to train...'
+        subprocess.check_call([SVM_FOLDER + '/svm-train',
+            '-s', '2',
+            '-n', '0.001',
+            '-g', str(self.gamma),
+            self.svm_dat_file,
+            self.svm_model_file])
 
     def detect(self, data_handler):
         data_handler = SVMTemporalHandler(existing_data_handler = data_handler)

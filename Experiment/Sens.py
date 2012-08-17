@@ -3,9 +3,14 @@
 import sys
 sys.path.append("..")
 from Experiment import AttriChangeExper, gen_anomaly_dot
-from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefig
+from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefig, xlabel, ylabel
 import cPickle as pickle
 import copy
+
+def argsort(seq):
+    #http://stackoverflow.com/questions/3382352/equivalent-of-numpy-argsort-in-basic-python/3382369#3382369
+    #by ubuntu
+    return sorted(range(len(seq)), key=seq.__getitem__)
 
 
 class Sens(object):
@@ -27,23 +32,44 @@ class Sens(object):
         f_obj.close()
         figure()
         subplot(211)
-        for k, v in det_obj_shelf.iteritems():
+
+        # plot the curve in order
+        sort_dict = sorted(det_obj_shelf.iteritems())
+        keys = sorted(det_obj_shelf.iterkeys() )
+        legend_txt = [k + ' x' for k in keys]
+
+        for k, v in sort_dict:
             print 'k, ', k
             rt = v['winT']
             mf, mb = zip(*v['entropy'])
             plot(rt, mf)
 
+        # plot the first threshold
+        for k, v in sort_dict:
+            if v['threshold']:
+                plot(v['winT'], v['threshold'], '--')
+                break
+
         title('model free')
-        legend(det_obj_shelf.keys())
+        legend(legend_txt)
+        ylabel('$I_1$')
 
         subplot(212)
-        for k, v in det_obj_shelf.iteritems():
+        for k, v in sort_dict:
             rt = v['winT']
             mf, mb = zip(*v['entropy'])
             plot(rt, mb)
 
+        # plot the first threshold
+        for k, v in sort_dict:
+            if v['threshold']:
+                plot(v['winT'], v['threshold'], '--')
+                break
+
         title('model based')
-        legend(det_obj_shelf.keys())
+        legend(legend_txt)
+        xlabel('time (s)')
+        ylabel('$I_2$')
         savefig(self.settings.ROOT + '/Share/res.eps')
         show()
 
@@ -51,7 +77,7 @@ class Sens(object):
         gen_anomaly_dot([self.sens_ano], self.net_desc, self.norm_desc, self.dot_file)
 
 
-class AttriSensExper(AttriChangeExper, Sens):
+class AttriSensExper(Sens, AttriChangeExper):
     """SensExper is experiment to get the sensitivity result.
     it will change parameters and run the simulation for several times
     and plot the both model based and model free entropy
@@ -71,7 +97,10 @@ class AttriSensExper(AttriChangeExper, Sens):
         # self.shelve_file = '/home/jing/det_obj.out'
         self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
 
-    def run(self, attr, rg):
+    def configure(self):
+        Sens.configure(self)
+
+    def run(self, attr, rg, far=None):
         """attr is the name of attribute that will be changed. possible
         attrs are :
             - flow_arrival_rate
@@ -86,9 +115,11 @@ class AttriSensExper(AttriChangeExper, Sens):
             self.sens_ano['change'][attr] = i;
             self.configure()
             self.simulate()
-            det_obj = copy.deepcopy( self.detect() )
+            detector = self.detect()
+            det_obj = copy.deepcopy(detector)
+            threshold = detector.get_hoeffding_threshold(far) if far else None
             det_obj_shelf[str(i)] = dict(winT=det_obj.record_data['winT'],
-                    entropy=det_obj.record_data['entropy'])
+                    entropy=det_obj.record_data['entropy'], threshold=threshold)
             # v = det_obj.record_data['entropy']
             self.store_flow_file(str(i))
             self.clear_tmp_file()
@@ -101,12 +132,15 @@ class AttriSensExper(AttriChangeExper, Sens):
 if __name__ == "__main__":
     import settings
     exper = AttriSensExper(settings)
-    exper.run('flow_arrival_rate', [2, 4, 6])
+    # exper.run('flow_arrival_rate', [2, 4, 6])
     # exper.run('flow_arrival_rate', [6])
     # exper.run('flow_arrival_rate', [2, 3, 4, 5, 6])
     # exper.run('flow_arrival_rate', [0.1, 0.3, 0.4, 0.6, 0.8])
     # exper.run('flow_arrival_rate', [0.2, 0.4, 0.6])
-    # exper.run('flow_size_mean', [2, 3, 4, 5])
+    # exper.run('flow_size_mean', [2, 3, 4, 5], 0.1)
+    # exper.run('flow_size_mean', [2, 3, 4, 1], 0.1)
+    # exper.run('flow_arrival_rate', [2, 3, 4, 5], 0.1)
+    # exper.run('flow_size_mean', [2], 0.1)
     # exper.run('flow_size_mean', [0.2, 0.4, 0.6])
     # exper.run('flow_size_var', [2, 3, 4, 5])
     exper.plot_entropy()
