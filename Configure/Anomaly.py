@@ -172,7 +172,7 @@ class AtypicalUserAnomaly(Anomaly):
         for srv_node in srv_node_list:
             gen_desc = Load(self.ano_desc['gen_desc'])
             gen_desc['ipsrc'] = choose_ip_addr(self.ano_node.ipdests)
-            gen_desc['ipdst'] = choose_ip_addr(srv_node.ipdests)
+            gen_desc['ipdst'] = choose_ip_addr(srv_node.ipdests).rsplit('/')[0]
             self.ano_node.add_modulator(start=str(start),
                     profile='((%d,),(1,))' %(end-start),
                     generator=get_generator(gen_desc) )

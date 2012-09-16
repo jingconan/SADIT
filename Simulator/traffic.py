@@ -406,8 +406,13 @@ class HarpoonGeneratorNode(GeneratorNode):
         destnode = 'test'
         owd = random.random()*0.05
         if not test:
-            destnode = self.sim.destnode(self.srcnode, flet.dstaddr)
-            owd = self.sim.owd(self.srcnode, destnode)
+            try:
+                destnode = self.sim.destnode(self.srcnode, flet.dstaddr)
+                owd = self.sim.owd(self.srcnode, destnode)
+            except Exception as e:
+                print 'e, ', e
+                import pdb;pdb.set_trace()
+                pass
 
         # owd may be None if routing is temporarily broken because of
         # a link being down and no reachability

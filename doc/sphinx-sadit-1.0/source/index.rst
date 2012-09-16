@@ -29,8 +29,6 @@ In the current developing stage, we focus on simulation. **SADIT** uses fs(flow-
 nework simulator, an efficient & light-weight network simulator developed by UW Madison, to simulate 
 the network flow traffic.
 
-
-
 Table of Content
 -----------------------------------
 

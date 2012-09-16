@@ -51,13 +51,18 @@ class NNode(Node):
         """generator source identifier"""
         return 's' + str(self.node_seq) + '_' + str(self.mod_num)
 
+    def add_interface_addr(self, addr):
+        """addr should be the CIDR format. e.g. 10.0.7.0/24
+        """
+        self.ipdests.append(addr)
+
     def _get_generator_list(self, dst_node, para_list):
         """returns the default generator list"""
         res = []
         for state in para_list:
             s = Load(state)
             s['ipsrc'] = choose_ip_addr(self.ipdests)
-            s['ipdst'] = choose_ip_addr(dst_node.ipdests)
+            s['ipdst'] = choose_ip_addr(dst_node.ipdests).rsplit('/')[0]
             gen = get_generator(s)
             res.append(gen)
         return res

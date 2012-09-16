@@ -3,6 +3,8 @@ from Edge import *
 from Generator import *
 from mod_util import GetIPAdress, FixQuoteBug
 
+from Address import Ipv4AddressHelper
+
 node_map = {
         'NNode':NNode,
         'MarkovNode':MarkovNode,
@@ -22,6 +24,11 @@ class Network(Dot):
         self.IPSrcSet, self.AnoSet, _ = GetIPAdress()
         self.mv = None
         # self.Node = node_init_handle
+
+        network = '10.0.7.0'
+        mask = '255.255.255.0'
+        base = '0.0.0.4'
+        self.addr_helper = Ipv4AddressHelper(network, mask, base)
 
     def init(self, net_desc, norm_desc):
         self.net_desc = net_desc
@@ -47,7 +54,8 @@ class Network(Dot):
         self.NodeList = []
         for i in xrange(n):
             # FIXME Add start, end to the parameter list
-            node = self.Node([self.IPSrcSet[i]], i, **self.net_desc['node_para'])
+            # node = self.Node([self.IPSrcSet[i]], i, **self.net_desc['node_para'])
+            node = self.Node([], i, **self.net_desc['node_para'])
             self.node_list.append(node)
             self.add_node(node)
             # if self.mv: mv.MHarpoon(node)
@@ -57,7 +65,13 @@ class Network(Dot):
                 # if topo[i, j]:
                 if topo[i][j]:
                     edge = NEdge(self.node_list[i], self.node_list[j], self.net_desc['link_attr'])
+                    self.assign_link_interface_ip(i, j)
                     self.add_edge(edge)
+
+    def assign_link_interface_ip(self, i, j):
+        node_container = [self.node_list[i], self.node_list[j]]
+        self.addr_helper.Assign(node_container)
+        self.addr_helper.NewNetwork()
 
     def write(self, fName):
         '''write the DOT file to *fName*'''

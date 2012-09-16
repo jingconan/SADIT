@@ -63,7 +63,8 @@ class TestMSGenerator(TestCase):
 #################################
 from numpy import zeros, array
 g_size = 10
-srv_node_list = [0, 1]
+srv_node_list = [0]
+# srv_node_list = [0, 1]
 topo = zeros([g_size, g_size])
 for i in xrange(g_size):
     if i in srv_node_list:
@@ -81,6 +82,9 @@ gen_para_type_list = [
         {'TYPE':'mv', 'flow_size':100, 'flow_arrival_rate':1},
         {'TYPE':'mv', 'flow_size':1000, 'flow_arrival_rate':1},
         ]
+
+gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e3', 'flow_size_var':'100', 'flow_arrival_rate':'1'}
+gen_para_type_list =[gen_desc]
 # size of joint_dist equals to m * m ... *m, there n dimensions array and len of each
 # dimension equals to m, n is the number of server nodes, m is hte possible type of flows
 joint_dist = array([[0.025, 0.025, 0.025, 0.025],
@@ -98,10 +102,12 @@ norm_desc = dict(
 
 net_desc = dict(
         topo=topo,
-        size=topo.shape[0],
+        # size=topo.shape[0],
+        size = len(topo),
         srv_list=srv_node_list,
         link_attr=link_attr,
-        node_type='MVNode',
+        # node_type='MVNode',
+        node_type = 'NNode',
         node_para={},
         )
 

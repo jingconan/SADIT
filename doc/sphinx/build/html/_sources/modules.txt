@@ -8,6 +8,7 @@
    Configure
    Detector
    run
+   search_arg_settings
    settings
    test
    util

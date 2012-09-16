@@ -24,8 +24,6 @@ parser.add_argument('-dh', '--data_handler', default=None,
         help="""--specify the data handler you want to use, the availiable
         option are: [%s] """ %(' | '.join(get_help_docs(data_handler_handle_map)))
         )
-
-
 # parser.add_argument('-dh', '--data_handler', default=None,
 #         help="""--specify the data handler you want to use, the availiable
 #         option is:
@@ -35,7 +33,6 @@ parser.add_argument('-dh', '--data_handler', default=None,
 #         -'SperottoIPOM2009': process the labeled data set provided by simpleweb.org
 #         -'xflow': process the text export file of ARL xflow tool.
 #         """)
-
 parser.add_argument('-fo', '--feature_option', default=None,
         help = """ specify the feature option. feature option is a dictionary
         describing the quantization level for each feature. You need at least
@@ -67,7 +64,7 @@ if args.detect:
                 ab_win_portion = desc['ab_win_portion'],
                 ab_win_num = desc['ab_win_num'],
                 )
-    exit()
+        exit()
 
 # Exectue Experiments
 try:
@@ -75,8 +72,8 @@ try:
     if args.experiment not in exper_ops:
         raise Exception('invalid experiment')
 except:
-        parser.print_help()
-        exit()
+    parser.print_help()
+    exit()
 
 os.chdir('./Experiment/')
 # print os.getcwd()

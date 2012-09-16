@@ -1,6 +1,6 @@
 Customization
 ==========================
-you can customize **SADIT** through changing settings_template.py or **settings.py** file. 
+you can customize **SADIT** through changing **settings.py** file.
 **settings.py** is a file contains all the global parameters. it is a typical python
 script, so you can use any non-trival python sentence in the **settings.py**. 
 sometimes you many want to change global parameter during the running time. For

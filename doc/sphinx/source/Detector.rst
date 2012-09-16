@@ -25,14 +25,6 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`AnomalyDetector` Module
------------------------------
-
-.. automodule:: Detector.AnomalyDetector
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`ClusterAlg` Module
 ------------------------
 
@@ -41,10 +33,26 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`DataFile` Module
-----------------------
+:mod:`DataHandler` Module
+-------------------------
 
-.. automodule:: Detector.DataFile
+.. automodule:: Detector.DataHandler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DataHandler_deprec` Module
+--------------------------------
+
+.. automodule:: Detector.DataHandler_deprec
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DataHandler_xflow` Module
+-------------------------------
+
+.. automodule:: Detector.DataHandler_xflow
     :members:
     :undoc-members:
     :show-inheritance:
@@ -57,14 +65,6 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`Derivative` Module
-------------------------
-
-.. automodule:: Detector.Derivative
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`DetectorLib` Module
 -------------------------
 
@@ -73,10 +73,42 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`Ident` Module
+-------------------
+
+.. automodule:: Detector.Ident
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`MSDetector` Module
 ------------------------
 
 .. automodule:: Detector.MSDetector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`SQLDataFile` Module
+-------------------------
+
+.. automodule:: Detector.SQLDataFile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`SVMDetector` Module
+-------------------------
+
+.. automodule:: Detector.SVMDetector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`StoDetector` Module
+-------------------------
+
+.. automodule:: Detector.StoDetector
     :members:
     :undoc-members:
     :show-inheritance:

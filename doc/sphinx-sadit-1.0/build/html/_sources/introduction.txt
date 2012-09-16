@@ -42,8 +42,7 @@ duration. And **Behaviour** describes the action of users take each time.
 
 **Generator** and **Modulator** is used in *fs*-simulator.
 In the current version, two types of modulator are supported: **Normal** and
-**Markov**. For the normal modulator,  it is descrbibed by
-
-.. code-block:: python
-
-    x = 1
+**Markov**. For the normal modulator,  it is descrbibed by *start*, *generator*,
+*profile*. 
+For the markov modulator, every *t* second it will the use will choose from two
+*states*.
