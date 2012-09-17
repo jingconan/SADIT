@@ -86,7 +86,6 @@ class Network(Dot):
             def convert_unit(val):
                 """convert unit of delay and capacity to second and bps, respectively
                 """
-                print 'val, ', val
                 val = val.lower()
                 for k,v in check_table.iteritems():
                     if k in val:

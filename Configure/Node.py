@@ -61,7 +61,7 @@ class NNode(Node):
         res = []
         for state in para_list:
             s = Load(state)
-            s['ipsrc'] = choose_ip_addr(self.ipdests)
+            s['ipsrc'] = choose_ip_addr(self.ipdests).rsplit('/')[0]
             s['ipdst'] = choose_ip_addr(dst_node.ipdests).rsplit('/')[0]
             gen = get_generator(s)
             res.append(gen)
@@ -116,8 +116,8 @@ class MarkovNode(NNode):
 
     def _gen_generator(self, ipdst):
         self.gen_desc = copy.deepcopy( self.states[self.cs] )
-        self.gen_desc['ipsrc'] = choose_ip_addr(self.ipdests)
-        self.gen_desc['ipdst'] = self.ipdst
+        self.gen_desc['ipsrc'] = choose_ip_addr(self.ipdests).rsplit('/')[0]
+        self.gen_desc['ipdst'] = self.ipdst.rsplit('/')[0]
         return get_generator(self.gen_desc)
 
     @property
