@@ -1,18 +1,17 @@
-"""
-This is a sample setting file for ARO(Army Research Office) demo.
-The topology is proposed by Dan and try to simulation the typical
-traffic condition of the ARO Network.
-"""
-#################################################################
-### ROOT is the root directory for you directory, be aware to ###
-### change this before you try to run the code                ###
-#################################################################
+### ROOT is the root directory for you directory, be aware to change this before you try to run the code
+# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-experimental'
+# ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit'
+# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/home/jing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/home/Administrator/sadit-experimental'
+# ROOT = '/home/wangjing/Dropbox/Research/CyberSecurity/code/sadit-multi-server'
+# ROOT = '/home/wangjing/LocalResearch/sadit-experimental/'
+# ROOT = '/Users/wangjing/Dropbox/Research/CyberSecurity/ARL/sadit-experimental'
 ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 
-
 #################################
-##   Network Topology ##
+##   topology ##
 #################################
 zeros = lambda s:[[0 for i in xrange(s[1])] for j in xrange(s[0])]
 # from numpy import zeros
@@ -29,7 +28,7 @@ for i in xrange(g_size):
     # topo[i, srv_node_list] = 1
     for srv_node in srv_node_list:
         topo[i][srv_node] = 1
-
+link_attr = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
 
 #################################
 ##   Parameter For Normal Case ##
@@ -72,13 +71,12 @@ ANO_LIST = [ANO_DESC]
 # ANO_LIST = []
 
 
-link_attr_default = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
 NET_DESC = dict(
         topo=topo,
         # size=topo.shape[0],
         size=len(topo),
         srv_list=srv_node_list,
-        link_attr_default=link_attr_default,
+        link_attr=link_attr,
         node_type='NNode',
         node_para={},
         )

@@ -99,17 +99,31 @@ def P2F_RAW(flowRate, flowDuration, pktRate): # Change Prameter to FS Format for
 
 
 
-import re
-def FixQuoteBug(fileName, delay=0.001):
-    """ There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote to value
-    which is not desirable. This function try to fix that problem """
+# import re
+def FixQuoteBug(fileName):
+    """ There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote
+    to value which is not desirable. This function try to fix that problem. delete
+    all the quotes in the link attribute"""
+    # fid = open(fileName, 'r')
+    # content = fid.read()
+    # content = re.sub('delay="[\d.]*"', 'delay='+str(delay), content)
+    # fid.close()
+    # fid = open(fileName, 'w')
+    # fid.write(content)
+    # fid.close()
     fid = open(fileName, 'r')
-    content = fid.read()
-    content = re.sub('delay="[\d.]*"', 'delay='+str(delay), content)
+    lines = fid.readlines()
     fid.close()
+    for i in xrange(len(lines)):
+        line = lines[i]
+        if '--' in line: # if it is link attribute line
+            newline = ''.join([c for c in line if c is not '"'])
+            lines[i] = newline
     fid = open(fileName, 'w')
-    fid.write(content)
+    fid.write(''.join(lines))
     fid.close()
+
+
 
 
 def ParseArg(string):

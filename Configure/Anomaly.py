@@ -45,7 +45,10 @@ def insert_break_pt(b, dur, num):
     nt = copy.deepcopy(t)
     new_num = list(copy.deepcopy(num))
     i = get_pos(t, b)
-    if i == -1 or i == len(t) - 1:
+
+    if i is None:
+        raise Exception('[insert_break_pt], maybe you have insert an anomaly in an unsuitable time? ')
+    elif i == -1 or i == len(t) - 1:
         return dur, num, i+1;
     else:
         nt.insert(i+1, b)
@@ -81,8 +84,8 @@ class Anomaly:
         normal_profile_2 = ( tuple(d[i2:]), tuple(n[i2:]) )
         return normal_profile_1, abnormal_profile, normal_profile_2
 
-    def cut_profile(profile, status):
-        """cut into three pieces"""
+    # def cut_profile(profile, status):
+        # """cut into three pieces"""
 
     def _infect_modulator(self, ano_t, m_id, mod):
         ano_node = self.ano_node
@@ -105,6 +108,9 @@ class Anomaly:
                 profile=ap,
                 generator = [ self.new_generator ])
 
+        # export para to help to export ano flo
+        self._export_ano_flow_para(self.new_generator)
+
         # st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
         st = mod_start + float(sum(np1[0])) + float(sum(ap[0]))
         assert(st == end)
@@ -114,9 +120,9 @@ class Anomaly:
         del ano_node.modulator[m_id]
         del ano_node.generator[s_id]
 
-    def _export_ano_flow_para(self):
+    def _export_ano_flow_para(self, new_generator):
         """export para to help to export ano flows"""
-        ano_flow_para = copy.deepcopy(self.new_generator.para)
+        ano_flow_para = copy.deepcopy(new_generator.para)
         ano_flow_para['ano_type'] = self.ano_desc['anoType']
         pickle.dump(ano_flow_para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
 
@@ -128,8 +134,6 @@ class Anomaly:
         m_back = copy.deepcopy(self.ano_node.modulator)
         for m_id, mod in m_back.iteritems(): # For each modulator
             self._infect_modulator(ano_t, m_id, mod)
-
-        self._export_ano_flow_para()
 
 
 from Edge import NEdge
