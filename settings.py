@@ -45,6 +45,9 @@ NORM_DESC = dict(
         start = '0',
         node_para = {'states':[gen_desc]},
         profile = DEFAULT_PROFILE,
+        # start topology
+        src_nodes = range(g_size),
+        dst_nodes = srv_node_list,
         )
 
 # ANOMALY_TIME = (1200, 1400)
@@ -59,10 +62,10 @@ ANO_DESC = {
         'ano_node_seq':2,
         'T':(2000, 3000),
         # 'T':(1200, 1400),
-        # 'change':{'flow_arrival_rate':6},
+        'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
-        'change':{'flow_size_mean':6},
+        # 'change':{'flow_size_mean':6},
         # 'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
         # 'change':{'flow_size_var':6},
         'srv_id':0,

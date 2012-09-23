@@ -7,35 +7,335 @@
 Welcome to SADIT's documentation! 
 =================================
 
-Goal
-----------------------------------
-A challenging problem in the research of anomaly detection is that there 
-is little real traffic data with labelled malicious behavior. So most researchers resort simulation to test the algorithm
-, thus a good simulation of malicious attack becomes relevant.
-The second problem is that different researchers
-use different benchmarks, which makes comparison very hard. The thrid problem is
-that most of the test codes are throwed after paper is published. At the same
-time, programmers in industry need start from scratch when implementing a
-product using those algorithms.
-To address those problems, we developed **SADIT**, which is acronym for **S**\ tatistical **A**\ nomaly **D**\ etector of **I**\ nternet **T**\ raffic.
-**SADIT** aims to :
+Introduction
+==================================
+SADIT is a byproduct of research project **A Coordinated Approach to
+Cyber-Situation Awarness Based on Traffic Anomaly Detection**.  It is the
+acronym of **S**\ ystematic **A**\ nomaly **D**\ etection of **I**\ nternet
+**T**\ raffic.  The motivation of SADIT is to make the comparison and the
+validation of internet anomaly deteciton algorithmes super easy.  It provides
+a collection of Internet Anomaly Detection algorithms proposed by several
+researchers. Now it contains:
 
-    1. provide research community an easy-to-use tool to validate and test
-       statistical anomaly detecting method in simulated environment.
-    2. provide a set of benchmarks for comparison. 
-    3. make the transition from test code to production code effortless.
+    1. Stochastic Anomaly Detector using Large Deviation Theory
+    2. Deterministic Temporal Anomaly Detector using Support Vector Machine
+    3. Deterministic Flow by Flow Detector using Support Vector Machine
+    4. Anomaly Detection Techniques using ART theory
 
-In the current developing stage, we focus on simulation. **SADIT** uses fs(flow-max)
-nework simulator, an efficient & light-weight network simulator developed by UW Madison, to simulate 
-the network flow traffic.
+SADIT is not limited to the four algorithms listed above, its utimate goal is to
+become a standard collection of a variety of internet anomaly detection
+algorithms.
 
-Table of Content
------------------------------------
+It also provides an easy-to-use tool to generate labeled flow records, which are
+helpful in validatation and comparison of methods.
+
+If you are a researcher interested in Internet Anomaly Detection, we strongly
+encourage you to implement your algorithms following the APIs and data format of
+SADIT so that you can easily compare your methods with exisiting algorithms in
+SADIT. Your help will be highly appreciated if you can contribute your own
+algorithm to the algorithm libray of SADIT. Feel free to contact me if you have
+any question.
+
+What's New
+==================================
+the version 1.0 is a result of big refactor of version 0.0. The refactor makes the code more
+scalable and less buggy.
+    - **Paradigm of Object-oriented programming**: The **Configure** module and **Detector** module have been rewritten under
+      object-oriented paradigm. In version 0.0, all modules depends on the global
+      settings file setting.py, which make the code more vulunerable to bugs. In this verison only 
+      few scripts depend on settings.py. Classes are widely used to reduce the need to
+      pass parameters around. In case that parameters passing is required, well-defined structures are used.
+    - **Experiment**: A new folder ROOT/Experiment appears to contain different
+      experiments. You can write your own scripts of Experiment and put them in
+      this folder.
+    - **Better Sensitivity Anaysis**: In the version 0.0, sensitivity anaysis is 
+      done by change the global settings.py file and rerun the simulation. Since 
+      settings.py is a typical python module,changing it during the run is really not 
+      a good idea. In this version, special Experiment is designed to support
+      sensitivity analysis.
+
+Structure
+================================
+**SADIT** consists of  two parts. The first part is a collection of anomalies
+detection algorithms. The second part is labeled flow record generator. The
+follow sections will describe the two parts accordingly.
+
+.. It also implement one algorithm proposed by `Jing Conan Wang <http://people.bu.edu/wangjing/>`_, Ronald Lockle Taylor and `Yannis Paschalidis <http://ionia.bu.edu/>`_ .Look at our `poster <http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf>`_ for more information of our work
+
+.. **configure**
+    configure the simulator based on the description of anomaly in settings.py.
+    In current version, it is **DOT file** needed by *fs*-simulator.
+.. **simulator**
+    Generate the traffic through simulation. In current version, it is a revised
+    version of `fs-simulator <http://cs.colgate.edu/~jsommers/#code>`_. It will read
+    the **DOT file** generated by **configure** and generate a network flow
+    file with Cisco Netflow version 5 binary format.
+.. **detector**
+..
+    this module will read the network flow file generate by **simulator** and
+    try to detect anomaly accordingly. In current version, the detector is based
+    on one of our `paper <http://people.bu.edu/wangjing/html/AnomalyDetection.html>`_. Look at our `poster <http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf>`_ for more information of our work.
+
+
+Collection of Anomaly Detection Algorithm
+------------------------------------
+All the detection algorithms locates in the *ROOT/Detector* folder:
+
+    - **SVMDetector.py** contains two SVM based anomaly detection algorithmes 
+      1. SVM Temporal Detector and 2. SVM Flow by Flow Detector.
+    - **StoDetector.py** contains two anomaly detection algorithms based on
+      Large Deviation Theory.
+
+Labeled Flow Records Generator 
+------------------------------------
+Labeled Flow Records Generator consists of a *Configurer* and a *Simulator*.
+The *Simulator* part is essentially a revised FS Simulator developed by
+researchers at UW Madison. *Configurer* first generate a flow specification (DOT
+format) file with certain types of anomalies, then the *Simulator* will generate
+flow records and corresponding labels.
+
+Configurer
+++++++++++++++++++++++++++++++++++++
+*Configurer* generate the corresponding DOT file according to description of user
+behaviour. The important concepts in *Configurer* are as follows:
+
+    - **Generator**: description of a certain type of flow traffic. For
+      examples, *Harpoon* generator represents `harpoon flows
+      <http://cs.colgate.edu/~jsommers/harpoon/>`_.  
+    - **Behaviour**: description of temporal pattern. There are three types
+      behaviour:
+          - **Normal** behaviour is described by start time and duration.
+          - **I.I.D** behaviour has a list of possible states, but one state
+                       will be selected as current state every *t* seconds
+                       according to certain probability distribution.
+          - **Markov** the state in different time is not independtly and
+                       identically distributed,  but is a Markov process
+
+    - **Modulator**: combine *Behaviour* and *Generator*, basicially description
+      of generator behaviour. There are three types of modulators, corresponding
+      to three behaviours described above.
+      
+..    Two types of
+      modulator are supported: **Normal** and **Markov**. The normal modulator
+      is bascially the same with modulator in `fs simulator
+      <http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf>`_,
+      which is described by *(start, generator, profile)*.  We also implement a
+      markov modulator which has markov behaviour.
+
+
+    - **Node**: host in the network, has *modulator_list* attributes
+    - **Edge**: connecting two network nodes, has *delay*, *capacity* attributes
+    - **Network**: a collection of network nodes and edges
+    - **Anomaly**: description of the anomaly. When an anomaly is injected into
+      the network, some attributes in the network (*Node*, *Edge*) will be
+      changed.
+
+..
+    **Generator**, **Modulator** and **Behaviour** can completely decribe the
+    traffic of users. **Generator** describe the type of traffic. **Modulator**
+    describe the duration. And **Behaviour** describes the action of users take each
+    time.
+
+..  **Generator** and **Modulator** are concepts in `fs simulator.
+..  <http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf>`_. 
+..  every *t* second it will the use will choose from two *states*.
+
+Simulator
+++++++++++++++++++++++++++++++++++++
+Simulator is basically a revised version of fs simulator. We have added
+support to export anoumalous flows(add label information).
+
+
+..  Labeled Flow Record Generator
+..  ==================================
+
+Usage
+=====================================
+To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
+**settings.py** to the absolute path of the source directory. Then type ::
+    $ ./run.py
+
+in the command line. The help document will come out
+
+usage: run.py [-h] [-e EXPERIMENT] [-i INTERPRETER] [-d DETECT] [-m METHOD]
+              [--data_handler DATA_HANDLER] [--feature_option FEATURE_OPTION]
+              [--export_flows EXPORT_FLOWS]
+              [--entropy_threshold ENTROPY_THRESHOLD] [--pic_name PIC_NAME]
+
+sadit
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -e EXPERIMENT, --experiment EXPERIMENT
+                        specify the experiment name you want to execute.
+                        Experiments availiable are: ['Eval', 'Experiment',
+                        'test', 'Sens', 'DetectArgSearch', 'MarkovSens',
+                        'MultiSrvExperiment', 'ImalseSettings',
+                        'MarkovExperiment']. An integrated experiment will run
+                        fs-simulator first and use detector to detect the
+                        result.
+  -i INTERPRETER, --interpreter INTERPRETER
+                        --specify the interperter you want to use, now support
+                        [cpython], and [pypy](only for detector)
+  -d DETECT, --detect DETECT
+                        --detect [filename] will simply detect the flow file,
+                        simulator will not run in this case, detector will
+                        still use the configuration in the settings.py
+  -m METHOD, --method METHOD
+                        --method [method] will specify the method to use.
+                        Avaliable options are: ['svm_fbf':
+                        SVMFlowByFlowDetector SVM Flow By Flow Anomaly
+                        Detector Method | 'mf': ModelFreeAnoDetector | 'mfmb':
+                        FBAnoDetector model free and model based together |
+                        'svm_temp': SVMTemporalDetector SVM Temporal
+                        Difference Detector. Proposed by R.L Taylor.
+                        Implemented by J. C. Wang <wangjing@bu.ed> | 'mb':
+                        ModelBaseAnoDetector]
+  --data_handler DATA_HANDLER
+                        --specify the data handler you want to use, the
+                        availiable option are: ['fs_deprec': DataFile from fs
+                        output flow file to feature, this class is
+                        *depreciated* | 'fs': HardDiskFileHandler Data is
+                        stored as Hard Disk File | 'xflow':
+                        HardDiskFileHandler_xflow | 'SperottoIPOM2009':
+                        SQLDataFileHandler_SperottoIPOM2009 "Data File wrapper
+                        for SperottoIPOM2009 format. it is store in mysql
+                        server, visit http://traces.simpleweb.org/traces/netfl
+                        ow/netflow2/dataset_description.txt for more
+                        information | 'pcap2netflow':
+                        HardDiskFileHandler_pcap2netflow]
+  --feature_option FEATURE_OPTION
+                        specify the feature option. feature option is a
+                        dictionary describing the quantization level for each
+                        feature. You need at least specify 'cluster' and
+                        'dist_to_center'. Note that, the value of 'cluster' is
+                        the cluster number. The avaliability of other features
+                        depend on the data handler.
+  --export_flows EXPORT_FLOWS
+                        specify the file name of exported abnormal flows.
+                        Default is not export
+  --entropy_threshold ENTROPY_THRESHOLD
+                        the threshold for entropy,
+  --pic_name PIC_NAME   picture name for the detection result
+
+The help document is quite clear, the only parameter I want clarify is
+*--experiment*. It specify the experiment you want to execute. An **experiment**
+is actually a executable python script in Experiment folder. 
+..  I will take
+..  *Experiment.py* as an example to describle experiment.
+Avaliable experiments as follows:
+    - **Experiment.py**: basic experiment which includes configuration,
+      simulation and detection, which corresponds to generating the
+      configuration files, generating the labeled flow records and detectng the
+      anomalies in the records, respectively.
+    - **Sens.py**: Do sensistive analysis by change the degree of of anomalies,
+      run the detection algorithm accordingly and show results in the same
+      figure.
+    - **MarkovExperiment.py**: Similar with Experiment, but for Markov type of
+      anomalies
+    - **MarkovSens.py**: Sensitivity analysis of MarkovExperiment
+    - **Eval.py**: Evaluation of the detection algorithmm calculate fpr, fnr and
+      plot the ROC curve
+    - **DetectArgSearch.py**: runs detection algortihms with all combinations of
+      parameters and outputs the results to a folder, helps to select the
+      optimal parameters.
+
+In addition to the parameters in the command line, SADIT has some more tunable
+parameters in **ROOT/settings.py**
+Parameters for Labeled Flow Generator
+-------------------------------------
+
+
+Parameters for Stochastic Approaches
+-------------------------------------
+
+
+Parameters for Stochastic Approaches
+-------------------------------------
+
+
+
+Want to implement your algorithm?
+=====================================
+
+Use the labeled flow records generator in fs simulator
+-------------------------------------
+The generated flows will be the *ROOT/Simulator* folder. The flows end with
+*_flow.txt*, for example, n0_flow.txt is the network flows trough node 0. File
+start with *abnormal_* is the exported abnormal flows correspondingly.
+
+**A typical line is**
+    textexport n0 1348412129.925416 1348412129.925416 1348412130.070733 10.0.7.4:80->10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA
+
+**line format**
+    prefix nodename time flow_start_time flow_end_time src_ip:src_port->dst_ip:dst_port protocol payload destname unknown flowsize unknown
+
+Use Other flow records
+-------------------------------------
+SADIT does not only support the text output format of fs simulator, but also
+several other types of flow data. The handler classes locate in the
+*DataHandler.py* and *DataHandler_xflow.py*
+**DataFile**
+    - **PreloadHardDistFile** hard disk flow file generated by fs-simulator. It
+      will preload all the flow file into memory, so it cannot deal with flow
+      file larger than your memery
+    - **PreloadHardDistFile_pcap2netflow** hard disk flow file generated by
+      `pcap2netflow <https://bitbucket.org/hbhzwj/pcap2netflow/src>`_ tool(the
+      format of `flowd-reader <http://www.mindrot.org/projects/softflowd/>`_)
+    - **PreloadHardDistFile_xflow**, hard disk flow file generated by xflow tool
+    - **SQLFile_SperottoIPOM2009**, labeled data stored in mysql server provided
+      by `simpleweb.org <http://traces.simpleweb.org/traces/netflow/netflow2/>`_
+
+
+The following class is the abstract base class for all data files
+
+.. code-block:: python
+
+    class Data(object):
+        """virtual base class for data. Data class deals with any implementation
+        details of the data. it can be a file, a sql data base, and so on, as long
+        as it support the pure virtual methods defined here.
+        """
+        def get_fea_slice(self, rg=None, rg_type=None):
+            """ get a slice of feature
+            - **rg** is the range for the slice
+            - **rg_type** is the type for range, it can be ['flow'|'time']
+            """
+            abstract_method()
+
+        def get_max(self, fea, rg=None, rg_type=None):
+            """ get the max value of feature during a range
+            - **fea** is a list of feature name
+            - **rg** is the range
+            - **rg_type** is the range type
+            the output is the a list of element which contains the max
+            value of the feature in **fea**
+            """
+            abstract_method()
+        def get_min(self, fea, rg=None, rg_time=None):
+            """ get min value of feature within a range. see **get_max** for
+            the meaning of the parameters
+            """
+            abstract_method()
+
+It defines the operation we can do with data files. The four
+algorithmes we implemented requires **get_fea_slice**, **get_max** and
+**get_min** operations. You can implement more operations, but at least
+implement these three operations.
+
+
+..  **DataFileHandler**
+   [HardDiskFileHandler]: 
+   [HardDiskFileHandler_pcap2netflow]: h    
+     [HardDiskFileHandler_xflow]: 
+   [SQLDataFileHandler_SperottoIPOM2009]: 
+..  you want to work with new data format, here are some tips:
 
 .. toctree::
     :maxdepth: 2
     :numbered:
 
+..
     new
     introduction
     download

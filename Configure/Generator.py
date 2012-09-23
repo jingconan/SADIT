@@ -42,10 +42,24 @@ class HarpoonG(Generator):
 
     def get_new_gen(self, change_para=None):
         new = copy.deepcopy(self)
-        if change_para:
-            for attr, ratio in change_para.iteritems():
+        if change_para is None:
+            return new
+
+        # change the parameters
+        for attr, ratio in change_para.iteritems():
+            if isinstance(ratio, str):
+                if change_para[0] is '=':
+                    new.para[attr.lower()] = ratio
+                elif change_para[0] is '+':
+                    new.para[attr.lower()] += ratio
+                elif change_para[0] is 'x':
+                    new.para[attr.lower()] *= ratio
+                else:
+                    raise Exception('unknown change parameter')
+            # for backward compatibility
+            elif isinstance(ratio, float) or isinstance(ratio, int):
                 new.para[attr.lower()] *= ratio
-            new.sync()
+        new.sync()
         return new
 
 class MVGenerator(HarpoonG):

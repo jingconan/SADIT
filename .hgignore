@@ -5,6 +5,7 @@ syntax: glob
 *.eps
 res/**
 Share/**
+doc/sphinx-sadit-1.0/build/**
 *tags
 *.pk
 nohup.out

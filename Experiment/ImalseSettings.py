@@ -98,8 +98,7 @@ class ImalseSettings(object):
         net_settings['topo'] = topo
         net_settings['node_type'] = 'NNode'
         net_settings['node_para'] = {}
-        net_settings['srv_list'] = net_settings['server_id_set']
-        # import pdb;pdb.set_trace()
+        # net_settings['srv_list'] = net_settings['server_id_set']
         return net_settings
 
     def configure(self):
@@ -127,6 +126,7 @@ class ImalseSettings(object):
 
     def detect(self):
         self.flow_file = settings.ROOT + '/Simulator/n0_flow.txt'
+        # self.flow_file = settings.ROOT + '/Simulator/n1_flow.txt'
         self.detector = detect(self.flow_file, settings.DETECTOR_DESC)
         return self.detector
 

@@ -20,7 +20,7 @@ parser.add_argument('-m', '--method', default=None,
         help="""--method [method] will specify the method to use. Avaliable options are:
         [%s]""" %(' | '.join(get_help_docs(detector_map)))
         )
-parser.add_argument('-dh', '--data_handler', default=None,
+parser.add_argument('--data_handler', default=None,
         help="""--specify the data handler you want to use, the availiable
         option are: [%s] """ %(' | '.join(get_help_docs(data_handler_handle_map)))
         )
@@ -33,21 +33,27 @@ parser.add_argument('-dh', '--data_handler', default=None,
 #         -'SperottoIPOM2009': process the labeled data set provided by simpleweb.org
 #         -'xflow': process the text export file of ARL xflow tool.
 #         """)
-parser.add_argument('-fo', '--feature_option', default=None,
+parser.add_argument('--feature_option', default=None,
         help = """ specify the feature option. feature option is a dictionary
         describing the quantization level for each feature. You need at least
         specify 'cluster' and 'dist_to_center'. Note that, the value of 'cluster' is the cluster number. The avaliability of other features depend on the data handler.
         """)
 
-parser.add_argument('-ef', '--export_flows', default=None,
+parser.add_argument('--export_flows', default=None,
         help = """ specify the file name of exported abnormal flows. Default is not export
         """)
-parser.add_argument('-et', '--entropy_threshold', default=None,
+parser.add_argument('--entropy_threshold', default=None,
         help = """ the threshold for entropy,
         """)
+
+parser.add_argument('--pic_name', default=None,
+        help = """picture name for the detection result""")
+
 args, res_args = parser.parse_known_args()
 
-# Enter Simple Detect Model
+##################################
+##   Enter Simple Detect Model  ##
+##################################
 if args.detect:
     from Detector import detect
     import settings
@@ -56,17 +62,24 @@ if args.detect:
     if args.feature_option: desc['fea_option'] = eval(args.feature_option)
     if args.method: desc['detector_type'] = args.method
     detector = detect(os.path.abspath(args.detect), desc)
-    print 'type, ', type(detector)
-    detector.plot()
+    print 'detector type, ', type(detector)
+
+    if args.pic_name:
+        detector.plot(pic_show=False, pic_name=args.pic_name)
+    else:
+        detector.plot()
+
     if args.export_flows:
         detector.export_abnormal_flow(args.export_flows,
                 entropy_threshold = desc['entropy_threshold'],
                 ab_win_portion = desc['ab_win_portion'],
                 ab_win_num = desc['ab_win_num'],
                 )
-        exit()
+    exit()
 
-# Exectue Experiments
+#######################################
+##   Execture Integrated Experiments ##
+#######################################
 try:
     print 'args.experiment', args.experiment
     if args.experiment not in exper_ops:

@@ -47,14 +47,23 @@ class Network(Dot):
         self._config_traffic()
 
 
+    # def _config_traffic(self):
+    #     """config the traffic of network"""
+    #     nn = len(self.node_list)
+    #     srv_node_list = [self.node_list[i] for i in xrange(nn) if i in self.net_desc['srv_list'] ]
+    #     for i in xrange(nn):
+    #         if i in self.net_desc['srv_list']:
+    #             continue
+    #         self.node_list[i].init_traffic(self.norm_desc, srv_node_list)
+
     def _config_traffic(self):
-        """config the traffic of network"""
-        nn = len(self.node_list)
-        srv_node_list = [self.node_list[i] for i in xrange(nn) if i in self.net_desc['srv_list'] ]
-        for i in xrange(nn):
-            if i in self.net_desc['srv_list']:
-                continue
-            self.node_list[i].init_traffic(self.norm_desc, srv_node_list)
+        """config the traffic of network, there will be
+        traffic for any combination of self.norm_desc['src_nodes']
+        and self.norm_desc['dst_Nodes']
+        """
+        dst_node_list = [self.node_list[i] for i in self.norm_desc['dst_nodes']]
+        for i in self.norm_desc['src_nodes']:
+            self.node_list[i].init_traffic(self.norm_desc, dst_node_list)
 
     def _topo(self, topo):
         """initialize the topology of the network"""

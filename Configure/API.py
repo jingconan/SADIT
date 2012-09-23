@@ -1,5 +1,5 @@
 from Network import Network
-from Anomaly import AtypicalUserAnomaly, Anomaly, TargetOneServer
+from Anomaly import AtypicalUserAnomaly, Anomaly, TargetOneServer, AddModulatorAnomaly
 from MarkovAnomaly import MarkovAnomaly
 from MVAnomaly import MVAnomaly
 ##################################
@@ -8,6 +8,7 @@ from MVAnomaly import MVAnomaly
 ano_map = {
         # 'ATYPICAL_USER':AtypicalUser,
         'atypical_user':AtypicalUserAnomaly,
+        'add_mod':AddModulatorAnomaly,
         'anomaly':Anomaly,
         'flow_arrival_rate':Anomaly,
         'flow_size_mean':Anomaly,

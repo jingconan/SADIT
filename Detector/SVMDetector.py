@@ -85,18 +85,38 @@ class SVMDetector(object):
 
     def plot(self, *args, **kwargs): self.plot_pred(*args, **kwargs)
 
+    def get_start_time(self):
+        return self.data_file.data.get_fea_slice(fea=['start_time'])
 
 class SVMFlowByFlowDetector(SVMDetector):
     """SVM Flow By Flow Anomaly Detector Method"""
+    # MAX_FLOW_ONE_TIME = 1e4 # max number of flow it will compare each time
+    SAMPLE_RATIO = 0.1 # sample the flows to reduce computation cost, sample ratio
+
+    @staticmethod
+    def sample(fea, ratio):
+        flow_num = len(fea)
+        sample_num = int(ratio * flow_num)
+        interval = int(flow_num / sample_num)
+        sample_fea = [fea[i] for i in xrange(0, flow_num, interval)]
+        return sample_fea
+
+    def get_start_time(self):
+        start_time = self.data_file.data.get_fea_slice(fea=['start_time'])
+        return self.sample(start_time, self.SAMPLE_RATIO)
 
     def write_dat(self, data):
         fea = data.get_fea_slice()
         # fea_str = data.data.get_fea_slice(['flow_size'])
         # fea = [[float(s[0])] for s in fea_str]
         # import pdb;pdb.set_trace()
-        label = [0] * len(fea)
-        write_svm_data_file(label, fea, self.svm_dat_file)
+        # label = [0] * len(fea)
+        # write_svm_data_file(label, fea, self.svm_dat_file)
 
+        #### SAMPLE FEATURE TO REDUCE COMPUTATION TIME ####
+        sample_fea = self.sample(fea, self.SAMPLE_RATIO)
+        label = [0] * len(sample_fea)
+        write_svm_data_file(label, sample_fea, self.svm_dat_file)
 
     def detect(self, data):
         self.data_file = data
@@ -109,7 +129,7 @@ class SVMFlowByFlowDetector(SVMDetector):
     def plot_pred(self, pic_show=True, pic_name=None):
         import matplotlib.pyplot as plt
         self.stat()
-        fea_slice = self.data_file.data.get_fea_slice(fea=['start_time'])
+        fea_slice = self.get_start_time()
         min_t = float(fea_slice[0][0])
         start_time = [float(v[0])-min_t for v in fea_slice]
         x = [start_time[i] for i in xrange(len(start_time)) if self.pred[i] == self.ano_val]
