@@ -154,7 +154,7 @@ class SVMTemporalHandler(object):
     def __init__(self, fname=None, existing_data_handler=None):
         self._init_data(fname, existing_data_handler)
         self.update_unique_src_ip()
-        self.large_flow_thres = 5e5
+        self.large_flow_thres = 5e1
 
     def update_unique_src_ip(self):
         """be carefule to update unique src ip when using a new file"""
@@ -192,6 +192,8 @@ class SVMTemporalHandler(object):
         lf_src_ip = [src_ip[i] for i in xrange(n) if flow_size[i] > self.large_flow_thres]
         ct = Counter(lf_src_ip)
         fea_large_flow = [ct[ip] for ip in self.unique_src_ip]
+        # print 'fea_large_flow, ', fea_large_flow
+        # print 'fea_total_flow, ', fea_total_flow
         return fea_total_flow + fea_large_flow
 
 class SVMTemporalDetector(SVMDetector):

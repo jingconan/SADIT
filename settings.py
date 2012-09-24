@@ -7,7 +7,8 @@ traffic condition of the ARO Network.
 ### ROOT is the root directory for you directory, be aware to ###
 ### change this before you try to run the code                ###
 #################################################################
-ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
+ROOT = '/home/wangjing/Dropbox/Research/sadit'
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 
 

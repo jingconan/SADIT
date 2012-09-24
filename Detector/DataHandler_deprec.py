@@ -1,7 +1,7 @@
 from util import Find, DataEndException, DF, NOT_QUAN, QUAN
 from DataParser import ParseData
 from operator import itemgetter
-from ClusterAlg import KMeans
+from ClusterAlg import KMeans, KMedians
 from DetectorLib import get_dist_to_center, vector_quantize_states, model_based, model_free, SL
 import copy
 
@@ -108,7 +108,8 @@ class DataFile(object):
         self.src_IP_vec_set = self.get_value_list('srcIPVec')
         self.unique_src_IP_vec_set = list( set( self.src_IP_vec_set ) )
         # import pdb;pdb.set_trace()
-        self.unique_src_cluster, self.center_pt = KMeans(self.unique_src_IP_vec_set, self.cluster_num, DF)
+        # self.unique_src_cluster, self.center_pt = KMeans(self.unique_src_IP_vec_set, self.cluster_num, DF)
+        self.unique_src_cluster, self.center_pt = KMedians(self.unique_src_IP_vec_set, self.cluster_num, DF)
 
     def get_fea_slice(self, rg, rg_type):
         """this function is to get a chunk of feature vector.

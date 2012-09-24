@@ -9,7 +9,7 @@ __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 
 # import sys; sys.path.append("..")
-from ClusterAlg import KMeans
+from ClusterAlg import KMeans, KMedians
 from DetectorLib import vector_quantize_states, model_based, model_free
 from util import Find, DataEndException, DF, NOT_QUAN, QUAN
 from util import abstract_method, FetchNoDataException
@@ -187,8 +187,9 @@ class HardDiskFileHandler(object):
         print 'finish get ip address'
         unique_src_IP_str_vec_set = list( set( src_ip_str_vec ) )
         unique_src_IP_vec_set = [self._to_dotted(ip) for ip in unique_src_IP_str_vec_set]
-        print 'start kmeans...'
-        unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
+        # print 'start kmeans...'
+        # unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
+        unique_src_cluster, center_pt = KMedians(unique_src_IP_vec_set, cluster_num, DF)
         self.cluster_map = dict(zip(unique_src_IP_str_vec_set, unique_src_cluster))
         # self.center_map = dict(zip(unique_src_IP_vec_set, center_pt))
         dist_to_center = [DF( unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
