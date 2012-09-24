@@ -93,6 +93,7 @@ def ParseData(fileName):
     return flow
 
 import re
+from util import argsort
 def RawParseData(fileName):
     """
     the input is the filename of the flow file that needs to be parsed.
@@ -103,6 +104,7 @@ def RawParseData(fileName):
     # FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, octets=13, ) # Defines the FORMAT of the data file
     FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, flow_size=13, ) # Defines the FORMAT of the data file
     fid = open(fileName, 'r')
+    t = []
     while True:
         line = fid.readline()
         if not line or line[0:10] != 'textexport':
@@ -112,8 +114,13 @@ def RawParseData(fileName):
         item = re.split('[ :>]', line) #FIXME need to be changed if want to use port information
         f = [item[v] for k,v in FORMAT.iteritems()]
         flow.append(f)
+        t.append(item[FORMAT['start_time']])
+
     fid.close()
-    return flow, FORMAT.keys()
+
+    arg_t = argsort(t)
+    sort_flow = [flow[i] for i in arg_t ]
+    return sort_flow, FORMAT.keys()
 
 
 if __name__ == "__main__":

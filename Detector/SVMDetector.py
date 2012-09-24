@@ -14,8 +14,10 @@ def write_svm_data_file(label, fea, f_name):
         line = ['%s:%s'%(j+1, fea_v[j]) for j in xrange(len(fea_v)) ]
         fid.write(str(label[i]) + ' ' + ' '.join(line) + '\n')
 
-from Detector.DataHandler import HardDiskFileHandler
-class SVMDataHandler(HardDiskFileHandler):
+# from Detector.DataHandler import HardDiskFileHandler
+from Detector.DataHandler import QuantizeDataHandler
+# class SVMDataHandler(HardDiskFileHandler):
+class SVMDataHandler(QuantizeDataHandler):
     """Data Hanlder for SVM approach. It use a set of features
     which will be defined here"""
     pass
@@ -141,7 +143,6 @@ class SVMFlowByFlowDetector(SVMDetector):
 
 from collections import Counter
 from util import DataEndException, FetchNoDataException
-from DataHandler import PreloadHardDiskFile
 class SVMTemporalHandler(object):
     """Data Hanlder for SVM Temporal Detector approach. It use a set of features
     which will be defined here"""
@@ -151,8 +152,8 @@ class SVMTemporalHandler(object):
             'flow_size': lambda x: [float(v[0]) for v in x],
             }
 
-    def __init__(self, fname=None, existing_data_handler=None):
-        self._init_data(fname, existing_data_handler)
+    def __init__(self, data=None, existing_data_handler=None):
+        self._init_data(data, existing_data_handler)
         self.update_unique_src_ip()
         self.large_flow_thres = 5e1
 
@@ -160,15 +161,8 @@ class SVMTemporalHandler(object):
         """be carefule to update unique src ip when using a new file"""
         self.unique_src_ip = list(set(self.get('src_ip')))
 
-    def _init_data(self, f_name, existing_data_handler):
-        """the SVM data Handler is a little bit special, it can
-        take other data_handler's data and play the role of that data_handler.
-        I know it is not clean design, but that's what I have to do
-        to deal with legacy code"""
-        if existing_data_handler:
-            self.data = existing_data_handler.data
-        else:
-            self.data = PreloadHardDiskFile(f_name)
+    def _init_data(self, data):
+        self.data = data
 
     def get(self, fea, rg=None, rg_type=None):
         """receive feature name as input"""

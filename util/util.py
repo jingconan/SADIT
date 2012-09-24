@@ -234,3 +234,7 @@ def get_help_docs(dic):
         docs.append("'%s': %s"%(k, comp_doc))
 
     return docs
+
+def argsort(seq):
+    # http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
+    return sorted(range(len(seq)), key=seq.__getitem__)

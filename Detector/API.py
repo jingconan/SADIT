@@ -13,16 +13,22 @@ detector_map = {
         'svm_temp': SVMTemporalDetector,
         }
 
-from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
-from DataHandler_xflow import HardDiskFileHandler_xflow
+# from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
+from DataHandler import QuantizeDataHandler, DataFile
 data_handler_handle_map = {
-        'fs': HardDiskFileHandler,
-        'fs_deprec': DataFile,
-        'pcap2netflow': HardDiskFileHandler_pcap2netflow,
-        'SperottoIPOM2009': SQLDataFileHandler_SperottoIPOM2009,
-        'xflow': HardDiskFileHandler_xflow,
+        'svm_temp': QuantizeDataHandler,
+        'mf': QuantizeDataHandler,
+        'mb': QuantizeDataHandler,
+        'mfmb': QuantizeDataHandler,
         }
 
+from Data import *
+data_map = {
+        'fs': PreloadHardDiskFile,
+        'pcap2netflow': PreloadHardDiskFile_pcap2netflow,
+        'xflow': PreloadHardDiskFile_xflow,
+        'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
+        }
 def detect(f_name, desc):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.
@@ -32,9 +38,12 @@ def detect(f_name, desc):
     """
     win_size = desc['win_size']
     fea_option = desc['fea_option']
-    data_file = data_handler_handle_map[ desc['data_handler'] ](f_name, win_size, fea_option)
+    # data_file = data_handler_handle_map[ desc['data_handler'] ](f_name, win_size, fea_option)
+    data_file = data_map[ desc['data_type'] ](f_name)
+    data_handler = data_handler_handle_map[desc['detector_type']](data_file, win_size, fea_option)
     detector = detector_map[ desc['detector_type'] ](desc)
-    detector.detect(data_file)
+    # detector.detect(data_file)
+    detector.detect(data_handler)
     return detector
 
 def test_detect():

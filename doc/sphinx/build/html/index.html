@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to SADIT’s documentation! &mdash; SADIT 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.0.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">SADIT 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-sadit-s-documentation">
+<h1>Welcome to SADIT&#8217;s documentation!<a class="headerlink" href="#welcome-to-sadit-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h3>
+<p>A challenging problem in the research of anomaly detection is that there is
+little real traffic data with labelled malicious behavior. So most researchers
+resort simulation to test the algorithm , thus a good simulation of malicious
+attack becomes relevant.  The second problem is that different researchers use
+different benchmarks, which makes comparison very hard. The thrid problem is
+that most of the test codes are throwed after paper is published. At the same
+time, programmers in industry need to start from scratch when implementing a
+product using those algorithms.</p>
+<p>To address those problems, we developed <strong>SADIT</strong>, which is acronym for <strong>S</strong>tatistical <strong>A</strong>nomaly <strong>D</strong>etection <strong>I</strong>ntegrated <strong>T</strong>ools.</p>
+<p><strong>SADIT</strong> aims to :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>provide research community an easy-to-use tool to validate and test
+statistical anomaly detecting method in simulated environment.</li>
+<li>provide a set of benchmarks for comparison.</li>
+<li>make the transition from test code to production code effortless.</li>
+</ol>
+</div></blockquote>
+<p>In the current developing stage, we focus on simulation. <strong>SADIT</strong> uses
+fs(flow-max) nework simulator, an efficient &amp; light-weight network simulator
+developed by UW Madison, to simulate the network flow traffic.</p>
+<p>SADIT is a byproduct of research project <strong>A Coordinated Approach to
+Cyber-Situation Awarness Based on Traffic Anomaly Detection</strong>.</p>
+<p>Cyber espionage poses a substantial threat to both corporate and government
+entities. Attacks can be precise and targeted efforts, such as extracting
+credit card transaction records from a central data server. Attacks can also
+be seemingly benign, such as randomly crawling through a server’s contents. It
+is thought that these attacks are trials to see if access to critical
+information can be gained. Data exfiltration varies over a broad spectrum. On
+one end is the case of a user, granted server access through legitimate means,
+exporting sensitive information to an external entity. On the other end is the
+case of an external user, through access inadvertently granted by a typical
+user, downloading random pieces of information.</p>
+<p>Some techniques to detect attacks are based on analyzing the information has
+been accessed. However, it is not effective in many cases. One case is that
+the attackers are authenticated users themselves or authoenticated users
+controlled by attackers. Another case is that, the web server owner resort
+third party software to detect anomaly and don&#8217;t want to disclose the
+information to third-party software.</p>
+<p>For some cases, a better approach would be to use statistical models to
+analyze the patterns of traffic to the webserver. The advatage is that this
+method is more general and have the ability to detect unknown anomalies.</p>
+<p><strong>SADIT</strong> provides a framework to generate the traffic data with known
+anomalies through simulation. It also implement one algorithm proposed by
+<a class="reference external" href="http://people.bu.edu/wangjing/">Jing Conan Wang</a>, Ronald Lockle Taylor and
+<a class="reference external" href="http://ionia.bu.edu/">Yannis Paschalidis</a> .Look at our <a class="reference external" href="http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf">poster</a> for more
+information of our work</p>
+</div>
+<div class="section" id="structure">
+<h3>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h3>
+<p>The figure is the structure of <strong>SADIT</strong>.</p>
+<dl class="docutils">
+<dt><strong>settings.py</strong></dt>
+<dd>General setting file.</dd>
+<dt><strong>Configure</strong></dt>
+<dd>configure the simulator based on the description of anomaly in
+settings.py.  In current version, it will generate aa <strong>DOT file</strong> for
+<em>fs</em>-simulator.</dd>
+<dt><strong>Simulator</strong></dt>
+<dd>Generate the traffic through simulation. In current version, it is a
+revised version of <a class="reference external" href="http://cs.colgate.edu/~jsommers/#code">fs-simulator</a>. It will read the <strong>DOT file</strong>
+generated by <strong>configure</strong> and generate a network flow file with Cisco
+Netflow version 5 binary format.</dd>
+<dt><strong>Detector</strong></dt>
+<dd>this module will read the network flow file generate by <strong>simulator</strong> and
+try to detect anomaly accordingly. In current version, the detector is
+based on one of our <a class="reference external" href="http://people.bu.edu/wangjing/html/AnomalyDetection.html">paper</a>. Look at our
+<a class="reference external" href="http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf">poster</a>
+for more information of our work.</dd>
+</dl>
+</div>
+<div class="section" id="use-case">
+<h3>Use Case<a class="headerlink" href="#use-case" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>SADIT can run on two modes:</dt>
+<dd><ol class="first last arabic">
+<li><dl class="first docutils">
+<dt><strong>Detect Mode</strong>: In this mode, it will read some flow data and try to</dt>
+<dd><p class="first last">detect whether there is anomaly or not. Now SADIT detector support
+1. fs</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Integrated Mode</strong>: In this mode, SADIT will generate labeled anomaous data</dt>
+<dd><p class="first last">data.according to description in setting.py. And detector will be
+used to check the data.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+<p>type</p>
+<div class="highlight-python"><pre>./run.py</pre>
+</div>
+<p>then you can get</p>
+<div class="highlight-python"><pre>usage: run.py [-h] [-e EXPERIMENT] [-i INTERPRETER] [-d DETECT] [-m METHOD]
+          [-dh DATA_HANDLER] [-fo FEATURE_OPTION] [-ef EXPORT_FLOWS]
+          [-et ENTROPY_THRESHOLD]
+
+sadit
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -e EXPERIMENT, --experiment EXPERIMENT
+                        specify the experiment name you want to execute.
+                        Experiments availiable are: ['ROC', 'DetectArgSearch',
+                        'MultiSrvExperiment', 'Experiment', 'MarkovSens',
+                        'Eval', 'Sens', 'MarkovExperiment', 'test']. An
+                        integrated experiment will run fs-simulator first and
+                        use detector to detect the result.
+  -i INTERPRETER, --interpreter INTERPRETER
+                        --specify the interperter you want to use, now support
+                        [cpython], and [pypy](only for detector)
+  -d DETECT, --detect DETECT
+                        --detect [filename] will simply detect the flow file,
+                        simulator will not run in this case, detector will
+                        still use the configuration in the settings.py
+  -m METHOD, --method METHOD
+                        --method [method] will specify the method to use.
+                        Avaliable options are: ['svm_fbf':
+                        SVMFlowByFlowDetector SVM Flow By Flow Anomaly
+                        Detector Method | 'mf': ModelFreeAnoDetector | 'mfmb':
+                        FBAnoDetector model free and model based together |
+                        'svm_temp': SVMTemporalDetector SVM Temporal
+                        Difference Detector. Proposed by R.L Taylor.
+                        Implemented by J. C. Wang &lt;wangjing@bu.ed&gt; | 'mb':
+                        ModelBaseAnoDetector]
+  -dh DATA_HANDLER, --data_handler DATA_HANDLER
+                        --specify the data handler you want to use, the
+                        availiable option are: ['fs_deprec': DataFile from fs
+                        output flow file to feature, this class is
+                        *depreciated* | 'fs': HardDiskFileHandler Data is
+                        stored as Hard Disk File | 'xflow':
+                        HardDiskFileHandler_xflow | 'SperottoIPOM2009':
+                        SQLDataFileHandler_SperottoIPOM2009 "Data File wrapper
+                        for SperottoIPOM2009 format. it is store in mysql
+                        server, visit http://traces.simpleweb.org/traces/netfl
+                        ow/netflow2/dataset_description.txt for more
+                        information | 'pcap2netflow':
+                        HardDiskFileHandler_pcap2netflow]
+  -fo FEATURE_OPTION, --feature_option FEATURE_OPTION
+                        specify the feature option. feature option is a
+                        dictionary describing the quantization level for each
+                        feature. You need at least specify 'cluster' and
+                        'dist_to_center'. Note that, the value of 'cluster' is
+                        the cluster number. The avaliability of other features
+                        depend on the data handler.
+  -ef EXPORT_FLOWS, --export_flows EXPORT_FLOWS
+                        specify the file name of exported abnormal flows.
+                        Default is not export
+  -et ENTROPY_THRESHOLD, --entropy_threshold ENTROPY_THRESHOLD
+                        the threshold for entropy,</pre>
+</div>
+</div>
+<div class="section" id="configure">
+<h3>Configure<a class="headerlink" href="#configure" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="simulator">
+<h3>Simulator<a class="headerlink" href="#simulator" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="detector">
+<h3>Detector<a class="headerlink" href="#detector" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p>You can download sadit from <a class="reference external" href="https://bitbucket.org/hbhzwj/sadit/get/2182e36f40d5.zip">here</a>.
+or you can user mercurial to get a complete copy with revision history</p>
+<div class="highlight-python"><pre>hg clone https://bitbucket.org/hbhzwj/sadit</pre>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>SADIT can be installed in Linux, Mac OS X and Windows(through cygwin).</p>
+<div class="section" id="debain-ubuntu-mint-etc">
+<h3>Debain (Ubuntu, Mint, etc)<a class="headerlink" href="#debain-ubuntu-mint-etc" title="Permalink to this headline">¶</a></h3>
+<p>If you are using debain based system like Ubuntu, Mint, you are lucky. There
+is an installation script prepared for debain based system, just type</p>
+<div class="highlight-python"><pre>sh debain.sh</pre>
+</div>
+</div>
+<div class="section" id="mac-os-x">
+<h3>Mac OS X<a class="headerlink" href="#mac-os-x" title="Permalink to this headline">¶</a></h3>
+<p>For mac user, just type</p>
+<div class="highlight-python"><pre>sudo python setup-dep.py</pre>
+</div>
+<p>the <strong>ipaddr</strong>, <strong>networkx</strong>, <strong>pydot</strong>, <strong>pyparsing</strong> and <strong>py-radix</strong> will
+be automatically downloaded and installed.  If you just want to use the
+<strong>Detector</strong> part, that is already enough If you want to use <strong>Configure</strong> and
+<strong>Simulator</strong> part, then you also need to install numpy and matplotlib. Please
+go to <a class="reference external" href="http://www.scipy.org/NumPy">http://www.scipy.org/NumPy</a> and
+<a class="reference external" href="http://matplotlib.sourceforge.net/faq/installing_faq.html">http://matplotlib.sourceforge.net/faq/installing_faq.html</a> for installation
+instruction.</p>
+</div>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>SADIT can be installed on windows machine with the help of cgywin. There is a
+detailed step by step installation tutorial, click
+<a class="reference external" href="https://docs.google.com/open?id=0B0EiFkYoJWwbaloybWV5V1BuQVk">https://docs.google.com/open?id=0B0EiFkYoJWwbaloybWV5V1BuQVk</a></p>
+</div>
+<div class="section" id="manually">
+<h3>Manually<a class="headerlink" href="#manually" title="Permalink to this headline">¶</a></h3>
+<p>If the automatical methods fail, you can try to install manually.  <strong>SADIT</strong>
+has been tested on python2.7.2.  SADIT depends on all softwares that
+fs-simulate depends on:</p>
+<blockquote>
+<div><ul class="simple">
+<li>ipaddr (2.1.1)  <a class="reference external" href="http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz">Get</a></li>
+<li>networkx (1.0) <a class="reference external" href="http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz">Get</a></li>
+<li>pydot (1.0.2) <a class="reference external" href="http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz">Get</a></li>
+<li>pyparsing (1.5.2) <a class="reference external" href="http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyparsing%2Ffiles%2Fpyparsing%2Fpyparsing-1.5.2%2F&amp;ts=1332828745&amp;use_mirror=softlayer">Get</a></li>
+<li>py-radix (0.5) <a class="reference external" href="http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz">Get</a></li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>besides: it requires:</dt>
+<dd><ul class="first last simple">
+<li>numpy <a class="reference external" href="http://numpy.scipy.org/">Get</a></li>
+<li>matplotlib <a class="reference external" href="http://matplotlib.sourceforge.net/">Get</a></li>
+<li>profilehooks <a class="reference external" href="http://mg.pov.lt/profilehooks/">Get</a></li>
+</ul>
+</dd>
+</dl>
+<p>if you are in debain based system. you can simple use</p>
+<div class="highlight-python"><pre>sudo apt-get install python-dev
+sudo apt-get install python-numpy
+sudo apt-get install python-matplotlib</pre>
+</div>
+<p>in other system, refer to corresponding website for installation
+of <strong>numpy</strong> and <strong>matplotlib</strong></p>
+</div>
+<div class="section" id="table-of-content">
+<h3>Table of Content<a class="headerlink" href="#table-of-content" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li><a class="reference external" href="http://docs.python.org/glossary.html#glossary" title="(in Python v2.7)"><em>Glossary</em></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to SADIT&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+<li><a class="reference internal" href="#use-case">Use Case</a></li>
+<li><a class="reference internal" href="#configure">Configure</a></li>
+<li><a class="reference internal" href="#simulator">Simulator</a></li>
+<li><a class="reference internal" href="#detector">Detector</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#debain-ubuntu-mint-etc">Debain (Ubuntu, Mint, etc)</a></li>
+<li><a class="reference internal" href="#mac-os-x">Mac OS X</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#manually">Manually</a></li>
+<li><a class="reference internal" href="#table-of-content">Table of Content</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">SADIT 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

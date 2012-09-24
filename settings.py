@@ -140,7 +140,8 @@ DETECTOR_DESC = dict(
         detector_type = 'mfmb',
         max_detect_num = None,
         # max_detect_num = 100,
-        data_handler = 'fs',
+        # data_handler = 'fs',
+        data_type = 'fs',
         # data_handler = 'fs_deprec',
 
         #### only for SVM approach #####

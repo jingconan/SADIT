@@ -325,9 +325,9 @@ if __name__ == "__main__":
     exper = Eval(settings)
     # exper.configure()
     # exper.simulate()
-    # exper.detect()
+    exper.detect()
 
-    # exper.compare_ident_method()
+    exper.compare_ident_method()
     exper.plot_roc_curve_ident()
     # exper._vis_eval_diff_ab_state_num()
 

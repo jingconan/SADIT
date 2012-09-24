@@ -14,16 +14,21 @@ parser.add_argument('-d', '--detect', default=None,
         help='--detect [filename] will simply detect the flow file, simulator will not run in this case, \
                 detector will still use the configuration in the settings.py')
 
-from Detector.API import detector_map, data_handler_handle_map
+from Detector.API import detector_map, data_handler_handle_map, data_map
 from util import get_help_docs
 parser.add_argument('-m', '--method', default=None,
         help="""--method [method] will specify the method to use. Avaliable options are:
         [%s]""" %(' | '.join(get_help_docs(detector_map)))
         )
-parser.add_argument('--data_handler', default=None,
-        help="""--specify the data handler you want to use, the availiable
-        option are: [%s] """ %(' | '.join(get_help_docs(data_handler_handle_map)))
+# parser.add_argument('--data_handler', default=None,
+#         help="""--specify the data handler you want to use, the availiable
+#         option are: [%s] """ %(' | '.join(get_help_docs(data_handler_handle_map)))
+#         )
+parser.add_argument('--data_type', default='fs',
+        help="""--specify the type of the data you use, the availiable
+        option are: [%s] """ %(' | '.join(get_help_docs(data_map)))
         )
+
 parser.add_argument('--feature_option', default=None,
         help = """ specify the feature option. feature option is a dictionary
         describing the quantization level for each feature. You need at least
@@ -48,7 +53,8 @@ if args.detect:
     from Detector import detect
     import settings
     desc = settings.DETECTOR_DESC
-    if args.data_handler: desc['data_handler'] = args.data_handler
+    # if args.data_handler: desc['data_handler'] = args.data_handler
+    if args.data_type: desc['data_type'] = args.data_type
     if args.feature_option: desc['fea_option'] = eval(args.feature_option)
     if args.method: desc['detector_type'] = args.method
     detector = detect(os.path.abspath(args.detect), desc)
