@@ -44,12 +44,15 @@ parser.add_argument('--entropy_threshold', default=None,
 parser.add_argument('--pic_name', default=None,
         help = """picture name for the detection result""")
 
+parser.add_argument('--profile', default=None,
+        help= """profile the program """)
+
 args, res_args = parser.parse_known_args()
 
 ##################################
 ##   Enter Simple Detect Model  ##
 ##################################
-if args.detect:
+def pure_detect(args):
     from Detector import detect
     import settings
     desc = settings.DETECTOR_DESC
@@ -71,21 +74,35 @@ if args.detect:
                 ab_win_portion = desc['ab_win_portion'],
                 ab_win_num = desc['ab_win_num'],
                 )
-    exit()
 
 #######################################
 ##   Execture Integrated Experiments ##
 #######################################
-try:
-    print 'args.experiment', args.experiment
-    if args.experiment not in exper_ops:
-        raise Exception('invalid experiment')
-except:
-    parser.print_help()
-    exit()
+def exec_exper(args, res_args):
+    os.chdir('./Experiment/')
+    cmd = args.interpreter + ' ' + args.experiment + '.py ' + ' '.join(res_args)
+    print '--> ', cmd
+    os.system(cmd)
+    os.chdir('..')
 
-os.chdir('./Experiment/')
-cmd = args.interpreter + ' ' + args.experiment + '.py ' + ' '.join(res_args)
-print '--> ', cmd
-os.system(cmd)
-os.chdir('..')
+
+def main(args, res_args):
+    try:
+        if args.detect:
+            pure_detect(args)
+        else:
+            if args.experiment not in exper_ops:
+                raise Exception('invalid experiment')
+            exec_exper(args, res_args)
+
+    except Exception as e:
+        print '--> [Exception]: ', e
+        parser.print_help()
+        exit()
+
+if args.profile:
+    import cProfile
+    command = """main(args, res_args)"""
+    cProfile.runctx( command, globals(), locals(), filename=args.profile)
+else:
+    main(args, res_args)

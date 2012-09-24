@@ -36,6 +36,7 @@ def long_to_dotted(ip):
     return [int(val) for val in ip_addr.rsplit('.')]
 
 from DetectorLib import get_feature_hash_list
+from itertools import izip
 class QuantizeDataHandler(object):
     """Quantize the feature in the Data"""
     def __init__(self, data, fr_win_size=None, fea_option=None):
@@ -104,9 +105,12 @@ class QuantizeDataHandler(object):
         src_ip_tmp = self.data.get_fea_slice(['src_ip'], rg, rg_type)
         src_ip = [x[0] for x in src_ip_tmp]
         fea_vec = []
-        for i in xrange(len(src_ip)):
-            ip = src_ip[i]
-            fea_vec.append( [self.cluster_map[ip], self.dist_to_center_map[ip]] + [float(x) for x in direct_fea_vec[i]])
+        for ip, direct_fea in izip(src_ip, direct_fea_vec):
+            fea_vec.append( [self.cluster_map[ip], self.dist_to_center_map[ip]] + [float(x) for x in direct_fea])
+
+        # for i in xrange(len(src_ip)):
+            # ip = src_ip[i]
+            # fea_vec.append( [self.cluster_map[ip], self.dist_to_center_map[ip]] + [float(x) for x in direct_fea_vec[i]])
 
         # min_vec = self.data.get_min(self.direct_fea_list, rg, rg_type)
         # max_vec = self.data.get_max(self.direct_fea_list, rg, rg_type)
@@ -137,9 +141,72 @@ class QuantizeDataHandler(object):
         """get quantized features for part of the flows"""
         # fea_vec, fea_range = self.get_fea_slice(rg, rg_type)
         fea_vec = self.get_fea_slice(rg, rg_type)
-        q_fea_vec = vector_quantize_states(zip(*fea_vec), self.fea_QN, zip(*self.global_fea_range), self.quan_flag)
+        q_fea_vec = vector_quantize_states(izip(*fea_vec), self.fea_QN, izip(*self.global_fea_range), self.quan_flag)
         return q_fea_vec
 
     def hash_quantized_fea(self, rg, rg_type):
         q_fea_vec = self.quantize_fea(rg, rg_type)
         return get_feature_hash_list(q_fea_vec, self.fea_QN)
+
+#######################################
+## SVM Temporal Method Handler   ######
+#######################################
+from collections import Counter
+import operator
+class SVMTemporalHandler(QuantizeDataHandler):
+    """Data Hanlder for SVM Temporal Detector approach. It use a set of features
+    which will be defined here"""
+    handler = {
+            'src_ip': lambda x:[v[0] for v in x],
+            'start_time': lambda x: [float(v[0]) for v in x],
+            'flow_size': lambda x: [float(v[0]) for v in x],
+            }
+
+    def __init__(self, data, fr_win_size=None, fea_option=None):
+        QuantizeDataHandler.__init__(self, data, fr_win_size, fea_option)
+        # self._init_data(data)
+        self.update_unique_src_ip()
+        self.large_flow_thres = 5e1
+
+    def update_unique_src_ip(self):
+        """be carefule to update unique src ip when using a new file"""
+        self.unique_src_ip = list(set(self.get('src_ip')))
+
+    def _init_data(self, data):
+        self.data = data
+
+    def get(self, fea, rg=None, rg_type=None):
+        """receive feature name as input"""
+        raw = self.data.get_fea_slice([fea], rg, rg_type)
+        return self.handler[fea](raw)
+
+    def get_svm_fea_deprec(self, rg=None, rg_type=None):
+        """ suppose m is the number of unique source ip address in this data.
+        the feature is 2mx1,
+        - the first m feature is the frequency of flows with
+        each source ip address,
+        - the second m feature is the frequence of larges
+        flows whose size is > self.large_flow_thres with each source ip address"""
+        src_ip = self.get('src_ip', rg, rg_type)
+        flow_size = self.get('flow_size', rg, rg_type)
+        n = len(src_ip)
+        ct = Counter(src_ip)
+        fea_total_flow = [ct[ip] for ip in self.unique_src_ip]
+
+        # import pdb;pdb.set_trace()
+        lf_src_ip = [src_ip[i] for i in xrange(n) if flow_size[i] > self.large_flow_thres]
+        ct = Counter(lf_src_ip)
+        fea_large_flow = [ct[ip] for ip in self.unique_src_ip]
+        # print 'fea_large_flow, ', fea_large_flow
+        # print 'fea_total_flow, ', fea_total_flow
+        return fea_total_flow + fea_large_flow
+
+    def get_svm_fea(self, rg=None, rg_type=None):
+        hash_quan_fea = self.hash_quantized_fea(rg, rg_type)
+        ct = Counter(hash_quan_fea)
+        q_level_num = reduce(operator.mul, self.fea_QN)
+        svm_fea = [0] * q_level_num
+        for k, v in ct.iteritems():
+            svm_fea[int(k)] = v
+        print 'svm_fea, ', svm_fea
+        return svm_fea

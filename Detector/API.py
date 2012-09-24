@@ -14,9 +14,10 @@ detector_map = {
         }
 
 # from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
-from DataHandler import QuantizeDataHandler, DataFile
+# from DataHandler import QuantizeDataHandler, DataFile
+from DataHandler import *
 data_handler_handle_map = {
-        'svm_temp': QuantizeDataHandler,
+        'svm_temp': SVMTemporalHandler,
         'mf': QuantizeDataHandler,
         'mb': QuantizeDataHandler,
         'mfmb': QuantizeDataHandler,

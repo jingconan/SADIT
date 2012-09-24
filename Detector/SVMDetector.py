@@ -141,55 +141,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         if pic_show: plt.show()
         if pic_name: plt.savefig(pic_name)
 
-from collections import Counter
 from util import DataEndException, FetchNoDataException
-class SVMTemporalHandler(object):
-    """Data Hanlder for SVM Temporal Detector approach. It use a set of features
-    which will be defined here"""
-    handler = {
-            'src_ip': lambda x:[v[0] for v in x],
-            'start_time': lambda x: [float(v[0]) for v in x],
-            'flow_size': lambda x: [float(v[0]) for v in x],
-            }
-
-    def __init__(self, data=None, existing_data_handler=None):
-        self._init_data(data, existing_data_handler)
-        self.update_unique_src_ip()
-        self.large_flow_thres = 5e1
-
-    def update_unique_src_ip(self):
-        """be carefule to update unique src ip when using a new file"""
-        self.unique_src_ip = list(set(self.get('src_ip')))
-
-    def _init_data(self, data):
-        self.data = data
-
-    def get(self, fea, rg=None, rg_type=None):
-        """receive feature name as input"""
-        raw = self.data.get_fea_slice([fea], rg, rg_type)
-        return self.handler[fea](raw)
-
-    def get_svm_feature(self, rg=None, rg_type=None):
-        """ suppose m is the number of unique source ip address in this data.
-        the feature is 2mx1,
-        - the first m feature is the frequency of flows with
-        each source ip address,
-        - the second m feature is the frequence of larges
-        flows whose size is > self.large_flow_thres with each source ip address"""
-        src_ip = self.get('src_ip', rg, rg_type)
-        flow_size = self.get('flow_size', rg, rg_type)
-        n = len(src_ip)
-        ct = Counter(src_ip)
-        fea_total_flow = [ct[ip] for ip in self.unique_src_ip]
-
-        # import pdb;pdb.set_trace()
-        lf_src_ip = [src_ip[i] for i in xrange(n) if flow_size[i] > self.large_flow_thres]
-        ct = Counter(lf_src_ip)
-        fea_large_flow = [ct[ip] for ip in self.unique_src_ip]
-        # print 'fea_large_flow, ', fea_large_flow
-        # print 'fea_total_flow, ', fea_total_flow
-        return fea_total_flow + fea_large_flow
-
 class SVMTemporalDetector(SVMDetector):
     """SVM Temporal Difference Detector. Proposed by R.L Taylor. Implemented by
     J. C. Wang <wangjing@bu.ed> """
@@ -208,7 +160,8 @@ class SVMTemporalDetector(SVMDetector):
             else: print 'flow: %s' %(time)
 
             try:
-                fea = data_handler.get_svm_feature(rg=[time, time+self.win_size], rg_type=self.rg_type)
+                # fea = data_handler.get_svm_feature(rg=[time, time+self.win_size], rg_type=self.rg_type)
+                fea = data_handler.get_svm_fea(rg=[time, time+self.win_size], rg_type=self.rg_type)
                 fea_list.append(fea)
             except FetchNoDataException:
                 print 'there is no data to detect in this window'
@@ -233,7 +186,6 @@ class SVMTemporalDetector(SVMDetector):
             self.svm_model_file])
 
     def detect(self, data_handler):
-        data_handler = SVMTemporalHandler(existing_data_handler = data_handler)
         self.write_dat(data_handler)
         self.scale()
         self.train()

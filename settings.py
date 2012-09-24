@@ -139,6 +139,7 @@ DETECTOR_DESC = dict(
         normal_rg = None,
         detector_type = 'mfmb',
         max_detect_num = None,
+        # max_detect_num = 20,
         # max_detect_num = 100,
         # data_handler = 'fs',
         data_type = 'fs',

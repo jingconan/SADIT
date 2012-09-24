@@ -71,7 +71,8 @@ def quantize_state(x, nx, rg):
     g = []
     # print 'stepSize: ' + str(stepSize)
     for ele in x:
-        seq = round( (ele - minVal ) / stepSize )
+        # seq = round( (ele - minVal ) / stepSize )
+        seq = int( (ele - minVal ) / stepSize + 0.5)
         if seq >= nx:
             # import pdb; pdb.set_trace()
             seq = nx
@@ -126,11 +127,13 @@ def f_hash(digit, level):
     '''This is just a hash function. to map a sequence to a unique number.
     The implemetation is: return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0] ...
     '''
-    # return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0]
-    value = digit[0]
-    for i in xrange(len(digit)-1):
-        value += digit[i+1] * reduce(operator.mul, level[0:i+1])
-    return value
+    if len(digit) == 3: # just try to make it faster for special case
+        return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0]
+    else:
+        value = digit[0]
+        for i in xrange(len(digit)-1):
+            value += digit[i+1] * reduce(operator.mul, level[0:i+1])
+        return value
 
 def get_feature_hash_list(F, Q):
     '''For each list of feature and corresponding quantized level.
@@ -138,7 +141,7 @@ def get_feature_hash_list(F, Q):
     return [ f_hash(f, Q) for f in zip(*F) ]
 
 from util import zeros
-def model_based(q_fea_vec, fea_QN):
+def model_based_deprec(q_fea_vec, fea_QN):
     '''estimate the transition probability. It has same input parameter with model_free.
 
     - q_fea_vec :q_fea_vec is a list of list containing all the quantized feature in a window. len(q_fea_vec)
@@ -166,7 +169,34 @@ def model_based(q_fea_vec, fea_QN):
     mp = [v*1.0/fl for v in mp]
     return P, mp
 
-def model_free(q_fea_vec, fea_QN):
+from collections import Counter
+import itertools
+def model_based(q_fea_vec, fea_QN):
+    '''estimate the transition probability. It has same input parameter with model_free.
+
+    - q_fea_vec :q_fea_vec is a list of list containing all the quantized feature in a window. len(q_fea_vec)
+               equals to the number of feature types. len(q_fea_vec[0]) equals to the number of flows in this
+               window.
+    - fea_QN : this is a list storing the quantized number for each feature.
+    '''
+    QLevelNum = reduce(operator.mul, fea_QN)
+    m_list = get_feature_hash_list(q_fea_vec, fea_QN)
+    mp = zeros((QLevelNum, ))
+    ct = Counter(m_list)
+    total = len(m_list)
+    for k, v in ct.iteritems():
+        mp[int(k)] = v * 1.0 / total
+
+    P = zeros( (QLevelNum, QLevelNum) )
+    tran_pairs = itertools.izip(m_list[:-1], m_list[1:])
+    tran_ct = Counter(tran_pairs)
+    total_tran = total - 1
+    for (i, j), freq in tran_ct.iteritems():
+        P[int(i)][int(j)] = freq * 1.0 / total_tran
+
+    return P, mp
+
+def model_free_deprec(q_fea_vec, fea_QN):
     '''estimate the probability distribution for model free case. It has same input parameters with model_based
 
     - q_fea_vec :q_fea_vec is a list of list containing all the quantized feature in a window. len(q_fea_vec)
@@ -193,6 +223,25 @@ def model_free(q_fea_vec, fea_QN):
     # assert(abs( np.sum(np.sum(P, 0)) - 1.0) < 0.01)
     return P
 
+def model_free(q_fea_vec, fea_QN):
+    '''estimate the probability distribution for model free case. It has same input parameters with model_based
+
+    - q_fea_vec :q_fea_vec is a list of list containing all the quantized feature in a window. len(q_fea_vec)
+               equals to the number of feature types. len(q_fea_vec[0]) equals to the number of flows in this
+               window.
+    - fea_QN : this is a list storing the quantized number for each feature.
+    '''
+    QLevelNum = reduce(operator.mul, fea_QN)
+    P = [0] * QLevelNum
+    fl = len(q_fea_vec[0])
+    m_list = get_feature_hash_list(q_fea_vec, fea_QN)
+
+    ct = Counter(m_list)
+    total = sum(ct.values())
+    for k, v in ct.iteritems():
+        P[int(k)] = v * 1.0 / total
+    return P
+
 
 def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):
     '''Quantize a vector of numbers.
@@ -209,10 +258,17 @@ def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):
     if not quan_flag: quan_flag = len(fea_QN) * [1]
     try:
         QS = lambda a, b, c, flag: quantize_state(a, b, c)[1] if flag else a
-        res = [ QS(a, b, c, flag) for a, b, c, flag in zip(fea_vec , fea_QN, fea_range, quan_flag) ]
+        res = [ QS(a, b, c, flag) for a, b, c, flag in itertools.izip(fea_vec , fea_QN, fea_range, quan_flag) ]
     except:
         import pdb;pdb.set_trace()
     return res
+
+# def vector_quantize_state_flow_first(fea_vec, fea_QN, fea_range, quan_flag = None):
+#     """the length of fea_vec is the number of flows"""
+#     if not quan_flag: quan_flag = len(fea_QN) * [1]
+#     QS = lambda a, b, c, flag: quantize_state(a, b, c)[1] if flag else a
+#     res = [ QS(a, b, c, flag) for a, b, c, flag in zip(fea_vec , fea_QN, fea_range, quan_flag) ]
+#     pass
 
 def get_all_pmf(fea_vec, fea_QN, fea_range,  quan_flag=None):
     '''This Function Support Multiple Features, get probability mass function
