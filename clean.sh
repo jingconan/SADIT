@@ -4,6 +4,8 @@ rm ./Share/*.txt
 rm ./Simulator/*.txt
 rm -r ./Share/sens_*
 rm ./Share/BlindTest/*
+rm *.txt
+rm res.dat
 
 find . -iname "*.pyc" -exec rm '{}' ';'
 find . -iname "tags" -exec rm '{}' ';'

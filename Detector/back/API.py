@@ -4,7 +4,6 @@ This file defines useful API for other modules or program to use
 # from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
-from ART.ART import ARTDetector
 
 detector_map = {
         'mf': ModelFreeAnoDetector,
@@ -12,19 +11,16 @@ detector_map = {
         'mfmb': FBAnoDetector,
         'svm_fbf': SVMFlowByFlowDetector,
         'svm_temp': SVMTemporalDetector,
-        'art': ARTDetector,
         }
 
 # from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
 # from DataHandler import QuantizeDataHandler, DataFile
 from DataHandler import *
 data_handler_handle_map = {
+        'svm_temp': SVMTemporalHandler,
         'mf': QuantizeDataHandler,
         'mb': QuantizeDataHandler,
         'mfmb': QuantizeDataHandler,
-        'svm_temp': SVMTemporalHandler,
-        'svm_fbf':QuantizeDataHandler,
-        'art': FakeDataHandler,
         }
 
 from Data import *
@@ -34,7 +30,7 @@ data_map = {
         'xflow': PreloadHardDiskFile_xflow,
         'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
         }
-def detect(f_name, desc, res_args):
+def detect(f_name, desc):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.
     - *win_size* the window size
@@ -47,7 +43,7 @@ def detect(f_name, desc, res_args):
     data_file = data_map[ desc['data_type'] ](f_name)
     data_handler = data_handler_handle_map[desc['detector_type']](data_file, win_size, fea_option)
     detector = detector_map[ desc['detector_type'] ](desc)
-    detector.set_args(res_args)
+    # detector.detect(data_file)
     detector.detect(data_handler)
     return detector
 

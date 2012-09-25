@@ -52,7 +52,7 @@ args, res_args = parser.parse_known_args()
 ##################################
 ##   Enter Simple Detect Model  ##
 ##################################
-def pure_detect(args):
+def pure_detect(args, res_args):
     from Detector import detect
     import settings
     desc = settings.DETECTOR_DESC
@@ -60,7 +60,7 @@ def pure_detect(args):
     if args.data_type: desc['data_type'] = args.data_type
     if args.feature_option: desc['fea_option'] = eval(args.feature_option)
     if args.method: desc['detector_type'] = args.method
-    detector = detect(os.path.abspath(args.detect), desc)
+    detector = detect(os.path.abspath(args.detect), desc, res_args)
     print 'detector type, ', type(detector)
 
     if args.pic_name:
@@ -87,18 +87,18 @@ def exec_exper(args, res_args):
 
 
 def main(args, res_args):
-    try:
-        if args.detect:
-            pure_detect(args)
-        else:
-            if args.experiment not in exper_ops:
-                raise Exception('invalid experiment')
-            exec_exper(args, res_args)
+    # try:
+    if args.detect:
+        pure_detect(args, res_args)
+    else:
+        if args.experiment not in exper_ops:
+            raise Exception('invalid experiment')
+        exec_exper(args, res_args)
 
-    except Exception as e:
-        print '--> [Exception]: ', e
-        parser.print_help()
-        exit()
+    # except Exception as e:
+        # print '--> [Exception]: ', e
+        # parser.print_help()
+        # exit()
 
 if args.profile:
     import cProfile

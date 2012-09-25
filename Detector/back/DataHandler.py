@@ -6,7 +6,6 @@
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 
-
 # import sys; sys.path.append("..")
 from ClusterAlg import KMeans, KMedians
 from DetectorLib import vector_quantize_states, model_based, model_free
@@ -153,7 +152,7 @@ class QuantizeDataHandler(object):
 ## SVM Temporal Method Handler   ######
 #######################################
 from collections import Counter
-# import operator
+import operator
 class SVMTemporalHandler(QuantizeDataHandler):
     """Data Hanlder for SVM Temporal Detector approach. It use a set of features
     which will be defined here"""
@@ -203,24 +202,11 @@ class SVMTemporalHandler(QuantizeDataHandler):
         return fea_total_flow + fea_large_flow
 
     def get_svm_fea(self, rg=None, rg_type=None):
-        q_fea_vec = self.quantize_fea(rg, rg_type )
-        pmf = model_free( q_fea_vec, self.fea_QN )
-        # Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
-        svm_fea = pmf + [len(q_fea_vec[0])]
-        # svm_fea = [len(q_fea_vec[0])]
+        hash_quan_fea = self.hash_quantized_fea(rg, rg_type)
+        ct = Counter(hash_quan_fea)
+        q_level_num = reduce(operator.mul, self.fea_QN)
+        svm_fea = [0] * q_level_num
+        for k, v in ct.iteritems():
+            svm_fea[int(k)] = v
         print 'svm_fea, ', svm_fea
         return svm_fea
-
-        # return model_free
-        # ct = Counter(hash_quan_fea)
-        # q_level_num = reduce(operator.mul, self.fea_QN)
-        # svm_fea = [0] * q_level_num
-        # for k, v in ct.iteritems():
-        #     svm_fea[int(k)] = v
-        # print 'svm_fea, ', svm_fea
-        # return svm_fea
-
-class FakeDataHandler(object):
-    """This Data Handler do nothing"""
-    def __init__(self, data, *args, **kwargs):
-        self.data = data

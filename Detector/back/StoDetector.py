@@ -10,7 +10,7 @@ import sys
 sys.path.append("..")
 import os
 try:
-    from matplotlib.pyplot import figure, plot, show, subplot, title, savefig, xlim
+    from matplotlib.pyplot import figure, plot, show, subplot, title, savefig
     VIS = True
 except:
     print 'no matplotlib'
@@ -21,31 +21,6 @@ from util import DataEndException, FetchNoDataException,  abstract_method
 
 import cPickle as pickle
 from math import log
-import argparse
-
-
-def find_seg(flag):
-    """return (start and end point and level) of each segment"""
-    n  = len(flag)
-    start = [0]
-    end = []
-    tp = []
-    for i in xrange(n-1):
-        if flag[i+1] != flag[i]:
-            start.append(i+1)
-            # end.append(i+1) # to make lines continous
-            end.append(i+2)
-            tp.append(flag[i])
-    end.append(n)
-    tp.append(flag[n-1])
-    return zip(start, end, tp)
-
-def plot_seg(X, Y, flag, marker=None):
-    """plot X and Y, but the points with flag == true to be one color, the result to be another color
-    """
-    segs = find_seg(flag)
-    for a, b, tp in segs:
-        plot(X[a:b], Y[a:b], marker[tp])
 
 class AnoDetector (object):
     """It is an Abstract Base Class for the anomaly detector."""
@@ -62,16 +37,6 @@ class AnoDetector (object):
             that will be used
         rg_type is the type of the rg, can be ['flow'|'time']"""
         abstract_method()
-
-    def init_parser(self, parser):
-        parser.add_argument('--hoeff_far', default=None, type=float,
-                help="false alarm rate for hoeffding rule")
-
-    def set_args(self, argv):
-        parser = argparse.ArgumentParser(description='SVMDetector')
-        self.init_parser(parser)
-        self.args = parser.parse_args(argv)
-        self.__dict__.update(self.args.__dict__)
 
     def I(self, em1, em2):
         """abstract method to calculate the difference of two
@@ -285,33 +250,20 @@ class FBAnoDetector(AnoDetector):
         for gnuplot program to visualize later"""
         if not VIS: self._save_gnuplot_file(); return;
 
-        if hoeffding_false_alarm_rate: self.hoeff_far = hoeffding_false_alarm_rate
 
         rt = self.record_data['winT']
         figure()
         subplot(211)
         mf, mb = zip(*self.record_data['entropy'])
-        # if hoeffding_false_alarm_rate:
-        if self.hoeff_far:
-            # threshold = self.get_hoeffding_threshold(hoeffding_false_alarm_rate)
-            threshold = self.get_hoeffding_threshold(self.hoeff_far)
-            ano_flag = [ (1 if e > th  else 0) for e, th in zip(mf, threshold)]
-            plot_seg(rt, mf, ano_flag, ['b-', 'r-'])
-            plot(rt, threshold, 'g--')
-            # xlim(0, 2000)
-        else:
-            plot(rt, mf)
+        plot(rt, mf)
+        if hoeffding_false_alarm_rate:
+            threshold = self.get_hoeffding_threshold(hoeffding_false_alarm_rate)
+            plot(rt, threshold, '--')
         title('model free')
 
         subplot(212)
-        # if hoeffding_false_alarm_rate:
-        if self.hoeff_far:
-            ano_flag = [ (1 if e > th  else 0) for e, th in zip(mb, threshold)]
-            plot_seg(rt, mb, ano_flag, ['b-', 'r-'])
-            plot(rt, threshold, 'g--')
-            # xlim(0, 2000)
-        else:
-            plot(rt, mb)
+        plot(rt, mb)
+        if hoeffding_false_alarm_rate: plot(rt, threshold, '--')
         title('model based')
 
         if pic_name: savefig(pic_name)
@@ -426,12 +378,3 @@ class FBAnoDetector(AnoDetector):
     #         ano_flow_seq += range(st, ed)
 
     #     return ano_flow_seq
-
-if __name__ == "__main__":
-    flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]
-    res = find_seg(flag)
-    print 'res, ', res
-    for a, b, f in res:
-        print flag[a:b]
-        print 'flag, ', f
-

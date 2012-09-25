@@ -5,8 +5,9 @@ syntax: glob
 *.eps
 res/**
 Share/**
+Detector/ART/*.txt
+Detector/ART/*.csv
+*.txt
 *tags
 *.pk
 nohup.out
-Detector/ART/*.txt
-Detector/ART/*.csv

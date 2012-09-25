@@ -1,0 +1,1 @@
+SVM_FOLDER = /home/wangjing/Dropbox/Research/sadit-experimental/SVMFlowDetector/libsvm-3.12
