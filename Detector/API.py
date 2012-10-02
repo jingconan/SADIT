@@ -34,7 +34,7 @@ data_map = {
         'xflow': PreloadHardDiskFile_xflow,
         'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
         }
-def detect(f_name, desc, res_args):
+def detect(f_name, desc, res_args=[]):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.
     - *win_size* the window size

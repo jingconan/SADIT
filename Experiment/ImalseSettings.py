@@ -84,8 +84,12 @@ class ImalseSettings(object):
                 help='the configured dot file')
 
     def load_para(self, f_name, encap=Namespace, **kwargs):
-        """load parameters. **kwargs** contains some
-        additional parameters"""
+        """load parameters.
+
+        - **kwargs** contains some additional parameters
+        - **encap** is the additional operation done to the data, for example,
+            change from dict to Namespace class
+        """
         s = kwargs
         execfile(f_name, s)
         return s if encap is None else encap(s)

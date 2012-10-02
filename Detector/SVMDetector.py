@@ -185,7 +185,7 @@ class SVMFlowByFlowDetector(SVMDetector):
 
     def write_dat(self, data):
         fea = data.get_fea_slice()
-        # fea = [f[1:] for f in fea]
+        fea = [f[1:] for f in fea] # ignore cluster label
         # import pdb;pdb.set_trace()
         # zip_fea = data.quantize_fea()
         # fea = zip(*zip_fea)
@@ -212,7 +212,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         self.predict()
         self.load_pred()
 
-    def plot_pred(self, pic_show=True, pic_name=None):
+    def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):
         import matplotlib.pyplot as plt
         self.stat()
         fea_slice = self.get_start_time()
@@ -290,7 +290,7 @@ class SVMTemporalDetector(SVMDetector):
         self.predict()
         self.load_pred()
 
-    def plot_pred(self, pic_show=True, pic_name=None):
+    def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):
         import matplotlib.pyplot as plt
         self.stat()
         ano_idx = [i for i in xrange(self.detect_num) if self.pred[i] == self.ano_val]

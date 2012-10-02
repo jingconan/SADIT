@@ -47,6 +47,11 @@ parser.add_argument('--pic_name', default=None,
 parser.add_argument('--profile', default=None,
         help= """profile the program """)
 
+parser.add_argument('--hoeff_far', default=None, type=float,
+        help= """hoeffding false alarm rate, useful in stochastic method""")
+
+
+
 args, res_args = parser.parse_known_args()
 
 ##################################
@@ -64,9 +69,11 @@ def pure_detect(args, res_args):
     print 'detector type, ', type(detector)
 
     if args.pic_name:
-        detector.plot(pic_show=False, pic_name=args.pic_name)
+        detector.plot(pic_show=False,
+                pic_name=args.pic_name,
+                hoeffding_false_alarm_rate=args.hoeff_far)
     else:
-        detector.plot()
+        detector.plot(hoeffding_false_alarm_rate=args.hoeff_far)
 
     if args.export_flows:
         detector.export_abnormal_flow(args.export_flows,
