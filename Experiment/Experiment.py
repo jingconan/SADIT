@@ -9,6 +9,8 @@ from os import chdir as cd
 from os import system as sh
 # import numpy as np
 
+import argparse
+from util import load_para
 class Experiment(object):
     """
     base class for all experiments. Three important attributes
@@ -18,8 +20,15 @@ class Experiment(object):
     settings module is used to initialize the experiment, we need have a
     settings.py file with attribute 1. **NET_DESC** 2. **NORM_DESC** 3. **ANO_LIST**
     """
-    def __init__(self, settings):
-        self.settings = settings
+    # def __init__(self, settings):
+        # self.settings = settings
+    def __init__(self, argv, parser=None):
+        if parser is None:
+            parser = argparse.ArgumentParser()
+        self.init_parser(parser)
+        self.args, self.res_args = parser.parse_known_args(argv)
+        self.settings = load_para(self.args.default_settings)
+
     @property
     def win_size(self): return self.settings.DETECTOR_DESC['win_size']
     @property
@@ -71,6 +80,16 @@ class Experiment(object):
         # return detect(self.flow_file, self.win_size, self.fea_option, self.detector_type, self.settings.DETECTOR_DESC)
         self.detector = detect(self.flow_file, self.settings.DETECTOR_DESC)
         return self.detector
+
+    def init_parser(self, parser):
+        pass
+
+    def run(self):
+        self.configure()
+        self.simulate()
+        detector = self.detect()
+        detector.plot_entropy(hoeffding_false_alarm_rate = 0.01)
+
 
 class AttriChangeExper(Experiment):
     def __init__(self, settings):

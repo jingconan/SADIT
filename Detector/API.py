@@ -1,6 +1,7 @@
 """
 This file defines useful API for other modules or program to use
 """
+from __future__ import print_function, division
 # from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
@@ -33,13 +34,12 @@ data_map = {
         'pcap2netflow': PreloadHardDiskFile_pcap2netflow,
         'xflow': PreloadHardDiskFile_xflow,
         'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
+        'flow_exporter': PreloadHardDiskFile_FlowExporter,
         }
 def detect(f_name, desc, res_args=[]):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.
-    - *win_size* the window size
-    - *fea_option*
-
+    - *desc* is a parameter dictionary
     """
     win_size = desc['win_size']
     fea_option = desc['fea_option']

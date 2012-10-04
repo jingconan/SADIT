@@ -6,8 +6,8 @@ __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 __status__ = "Development"
 
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 import os
 try:
     from matplotlib.pyplot import figure, plot, show, subplot, title, savefig, xlim
@@ -258,7 +258,9 @@ class ModelBaseAnoDetector(AnoDetector):
 from Ident import *
 
 class FBAnoDetector(AnoDetector):
-    """model free and model based together"""
+    """model free and model based together, will be faster then run model free
+    and model based approaches separately since some intemediate results are reused.
+    """
     def I(self, em, norm_em):
         d_pmf, d_Pmb, d_mpmb = em
         pmf, Pmb, mpmb = norm_em

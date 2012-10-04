@@ -238,3 +238,17 @@ def get_help_docs(dic):
 def argsort(seq):
     # http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
     return sorted(range(len(seq)), key=seq.__getitem__)
+
+
+def load_para(f_name, encap=None, **kwargs):
+    """load parameters.
+
+    - **f_name**: is the path of the configuration file
+    - **encap**: is the additional operation done to the data, for example,
+        the default value encap=Namespace is to change parameters from dict
+        to Namespace class.
+    - **kwargs**: contains some additional parameters
+    """
+    s = kwargs
+    execfile(f_name, s)
+    return s if encap is None else encap(s)

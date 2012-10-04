@@ -125,6 +125,3 @@ def RawParseData(fileName):
 
 if __name__ == "__main__":
     ParseData('./data/data3a.txt')
-
-
-
