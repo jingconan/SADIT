@@ -49,14 +49,14 @@ class FlowStylizedValidationExper(DetectExper):
         # return self.detector
 
     def run(self):
-        DetectExper.run(self)
-        return self.detector
-
-        # self.configure()
-        # self.simulate()
-        # self.args.detect = self.ROOT + '/Simulator/n0_flow.txt'
         # DetectExper.run(self)
-        # self.detect()
+        # return self.detector
+
+        self.configure()
+        self.simulate()
+        # self.args.detect = self.ROOT + '/Simulator/n0_flow.txt'
+        DetectExper.run(self)
+        self.detect()
         return self.detector
 
 class AttriChangeExper(FlowStylizedValidationExper):

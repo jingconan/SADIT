@@ -47,7 +47,7 @@ class StoDetector (object):
 
     def init_parser(self, parser):
         # pass
-        parser.add_argument('--hoeff_far', default=None, type=float,
+        parser.add_argument('--hoeff_far', default=0.01, type=float,
                 help="false alarm rate for hoeffding rule")
 
     def set_args(self, argv):
@@ -110,8 +110,9 @@ class StoDetector (object):
 
             time += interval
 
-        self.record_data['threshold'] = self.get_hoeffding_threshold(self.args.hoeff_far) if self.args.hoeff_far else None
         self.detect_num = i - 1
+        self.record_data['threshold'] = self.get_hoeffding_threshold(self.args.hoeff_far) if self.args.hoeff_far else None
+        self.record_data['args'] = self.args
         return self.record_data
 
     def get_hoeffding_threshold(self, false_alarm_rate):
@@ -120,7 +121,7 @@ class StoDetector (object):
         and epsilon is the false alarm_rate
         """
         def hoeffding_rule(N, false_alarm_rate):
-            return -1.0 / N * log(false_alarm_rate) + 5 * log(N) / N
+            return -1.0 / N * log(false_alarm_rate) + 4 * log(N) / N
             # return -1.0 / flow_num_in_win * log(false_alarm_rate)
 
         res = []
@@ -160,11 +161,14 @@ class StoDetector (object):
 
     def dump(self, data_name):
         pickle.dump( self.record_data, open(data_name, 'w') )
+        # pickle.dump(self.__dict__, open(data_name, 'w') )
 
     def plot_dump(self, data_name, *args, **kwargs):
         """plot dumped data
         """
         self.record_data = pickle.load(open(data_name, 'r'))
+        data = pickle.load(open(data_name, 'r'))
+        # self.__dict__.update(data)
         self.plot(*args, **kwargs)
 
     @staticmethod

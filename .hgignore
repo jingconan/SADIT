@@ -10,3 +10,7 @@ Share/**
 nohup.out
 Detector/ART/*.txt
 Detector/ART/*.csv
+anomalyTimeData.txt
+clusters.txt
+coords.txt
+anomolies.txt
