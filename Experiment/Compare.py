@@ -1,28 +1,91 @@
 #!/usr/bin/env python
-from Detector import detect
+from __future__ import print_function, division
+from DetectExper import DetectExper
 import copy
-
-class Compare(object):
+import os
+import matplotlib.pyplot as plt
+from Detector import detector_plot_dump
+import cPickle as pickle
+class Compare(DetectExper):
+    """ Compare Different methods and plot the result in
     """
-    Compare Different methods and plot the result in
-    """
-    def __init__(self, desc_opt):
-        self.desc_opt = desc_opt
-        self.change_opt = get_attr_list(self.desc_opt)
-        if self.change_opt:
-            self.comb_num = reduce(operator.mul, [len(v) for k, v in self.change_opt.iteritems()])
-            self.comb = itertools.product(*self.change_opt.values())
-            self.comb_name = list(self.change_opt.keys())
+    def __init__(self, *args, **kwargs):
+        DetectExper.__init__(self, *args, **kwargs)
+        self.detectors = []
 
-if __name__ == "__main__":
-    import search_arg_settings
-    import argparse
-    parser = argparse.ArgumentParser(description='DetectArgSearch')
-    parser.add_argument('--file', dest='flow_file', default=None,
-            help = """the flow file used by experiment, if this option
-            is set, it will override the settings in setting file""")
-    args = parser.parse_args()
-    if args.flow_file:
-        search_arg_settings.desc['flow_file'] = args.flow_file
-    cls = DetectArgSearch(search_arg_settings.desc)
-    cls.run()
+    def init_parser(self, parser):
+        super(Compare, self).init_parser(parser)
+        parser.add_argument('--comp_methods', default=None, type=lambda x:x.split(','),
+                help="""method list that will be compared""")
+
+        parser.add_argument('--dump_folder', default=self.ROOT+'/Share/',
+                help="""folder that will store the dump file for each detector""")
+
+        parser.add_argument('--plot_dump', default=None,
+                help="""plot folder that store the dump several""")
+
+    def run(self):
+        if self.args.plot_dump:
+            self.plot_dump(self.args.plot_dump)
+            return
+
+        fig = plt.figure()
+        sp = len(self.args.comp_methods) * 100
+        sp += 10
+
+        d = os.path.dirname(self.args.dump_folder)
+        if not os.path.exists(d):
+            os.makedirs(d)
+
+        for method in self.args.comp_methods:
+            print('method: ', method)
+            self.args.method = method
+            detector = self.detect()
+            print('detector type, ', type(detector))
+            self.detectors.append(copy.deepcopy(detector))
+            detector.dump(self.args.dump_folder + '/dump_' + method + '.txt')
+
+            if method == 'mfmb':
+                detector.plot(figure_=fig, subplot_=[sp+1, sp+2],
+                        title_=['mf', 'mb'])
+                sp += 2
+            else:
+                detector.plot(figure_=fig, subplot_=sp+1, title_=method)
+                sp += 1
+
+        pickle.dump(self.args.comp_methods, open(self.args.dump_folder + '/dump_method_list.txt', 'w'))
+
+        if self.args.pic_name:
+            plt.savefig(self.args.pic_name)
+        if self.args.pic_show:
+            plt.show()
+
+    def plot_dump(self, dump_folder):
+        method_list = pickle.load(open(dump_folder + '/dump_method_list.txt', 'r'))
+        fig = plt.figure()
+        sp = len(method_list) * 100
+        sp += 10
+
+        for method in method_list:
+            data_name = dump_folder + '/dump_' + method + '.txt'
+
+            if method == 'mfmb':
+                # detector.plot(figure_=fig, subplot_=[sp+1, sp+2],
+                        # title_=['mf', 'mb'])
+                detector_plot_dump(data_name, method, dict(win_type='time'),
+                        figure_=fig, subplot_=[sp+1, sp+2],
+                        title_=['mf', 'mb'])
+                sp += 2
+            else:
+                detector_plot_dump(data_name, method, dict(win_type='time'),
+                        figure_=fig, subplot_=sp+1,
+                        title_=method)
+                # detector.plot(figure_=fig, subplot_=sp+1, title_=method)
+                sp += 1
+
+        if self.args.pic_name:
+            plt.savefig(self.args.pic_name)
+        if self.args.pic_show:
+            plt.show()
+
+

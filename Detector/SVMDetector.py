@@ -4,6 +4,12 @@ This file is the flow by flow svm detector
 import settings
 SVM_FOLDER = settings.ROOT + '/tools/libsvm-3.12'
 import subprocess
+try:
+    import matplotlib.pyplot as plt
+except:
+    plt = False
+from mod_util import plot_points
+import cPickle as pickle
 
 def write_svm_data_file(label, fea, f_name):
     fid = open(f_name, 'w')
@@ -157,10 +163,22 @@ class SVMDetector(object):
         self.ano_val = 1 if pred_num[1] < pred_num[-1] else -1
         print 'total flows', len(self.pred), 'alarm num, ', pred_num[self.ano_val]
 
-    def plot(self, *args, **kwargs): self.plot_pred(*args, **kwargs)
+    def plot(self, *args, **kwargs):
+        self.stat()
+        self.plot_pred(*args, **kwargs)
+
+    def plot_dump(self, data_name, *args, **kwargs):
+        """load the dumped results and plot it
+        """
+        data = pickle.load(open(data_name, 'r'))
+        self.__dict__.update(data)
+        self.plot_pred(*args, **kwargs)
 
     def get_start_time(self):
         return self.data_file.data.get_fea_slice(fea=['start_time'])
+
+    def dump(self, data_name):
+        pickle.dump( dict(pred=self.pred, ano_val=self.ano_val), open(data_name, 'w') )
 
 class SVMFlowByFlowDetector(SVMDetector):
     """SVM Flow By Flow Anomaly Detector Method"""
@@ -212,19 +230,30 @@ class SVMFlowByFlowDetector(SVMDetector):
         self.predict()
         self.load_pred()
 
-    def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):
-        import matplotlib.pyplot as plt
-        self.stat()
+    def plot_pred(self, *args, **kwargs):
+        # self.stat()
         fea_slice = self.get_start_time()
         min_t = float(fea_slice[0][0])
         start_time = [float(v[0])-min_t for v in fea_slice]
+        y = []
+        for i in xrange(len(start_time)):
+            if self.pred[i] == self.ano_val:
+                y.append(1)
+            else:
+                y.append(-1)
         x = [start_time[i] for i in xrange(len(start_time)) if self.pred[i] == self.ano_val]
         y = [1 for i in xrange(len(start_time)) if self.pred[i] == self.ano_val]
         # plt.plot(start_time, self.pred, '+')
-        plt.plot(x, y, '+r')
+        # threshold = [0] * len(start_time)
+        plot_points(x, y,
+                # threshold,
+                ano_marker=['r+'], threshold_marker=None,
+                *args, **kwargs)
+
+        # plt.plot(x, y, '+r')
         # plt.axis([0, 2000, 0, 1.1])
-        if pic_show: plt.show()
-        if pic_name: plt.savefig(pic_name)
+        # if pic_show: plt.show()
+        # if pic_name: plt.savefig(pic_name)
 
 from util import DataEndException, FetchNoDataException
 from PCA import PCA
@@ -290,18 +319,23 @@ class SVMTemporalDetector(SVMDetector):
         self.predict()
         self.load_pred()
 
-    def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):
-        import matplotlib.pyplot as plt
-        self.stat()
+    # def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):
+    def plot_pred(self, *args, **kwargs):
+        # import matplotlib.pyplot as plt
+        # self.stat()
         ano_idx = [i for i in xrange(self.detect_num) if self.pred[i] == self.ano_val]
         x = [i*self.interval for i in ano_idx]
         y = [abs(self.pred[i]) for i in ano_idx]
-        plt.plot(x, y, '+r')
+        plot_points(x, y,
+                ano_marker=['r+'], threshold_marker=None,
+                *args, **kwargs)
+
+        # plt.plot(x, y, '+r')
         # import pdb;pdb.set_trace()
         # plt.axis([0, 5000, 0, 1.1])
         # plt.axis([0, 2000, 0, 1.1])
-        if pic_show: plt.show()
-        if pic_name: plt.savefig(pic_name)
+        # if pic_show: plt.show()
+        # if pic_name: plt.savefig(pic_name)
 
 
 

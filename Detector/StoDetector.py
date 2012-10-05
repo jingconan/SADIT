@@ -9,45 +9,27 @@ __status__ = "Development"
 # import sys
 # sys.path.append("..")
 import os
+# try:
+#     from matplotlib.pyplot import figure, plot, show, subplot, title, savefig, xlim
+#     VIS = True
+# except:
+#     print 'no matplotlib'
+#     VIS = False
 try:
-    from matplotlib.pyplot import figure, plot, show, subplot, title, savefig, xlim
-    VIS = True
-except:
-    print 'no matplotlib'
-    VIS = False
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = False
 
 from DetectorLib import I1, I2
 from util import DataEndException, FetchNoDataException,  abstract_method
+from mod_util import plot_points
 
 import cPickle as pickle
 from math import log
 import argparse
 
 
-def find_seg(flag):
-    """return (start and end point and level) of each segment"""
-    n  = len(flag)
-    start = [0]
-    end = []
-    tp = []
-    for i in xrange(n-1):
-        if flag[i+1] != flag[i]:
-            start.append(i+1)
-            # end.append(i+1) # to make lines continous
-            end.append(i+2)
-            tp.append(flag[i])
-    end.append(n)
-    tp.append(flag[n-1])
-    return zip(start, end, tp)
-
-def plot_seg(X, Y, flag, marker=None):
-    """plot X and Y, but the points with flag == true to be one color, the result to be another color
-    """
-    segs = find_seg(flag)
-    for a, b, tp in segs:
-        plot(X[a:b], Y[a:b], marker[tp])
-
-class AnoDetector (object):
+class StoDetector (object):
     """It is an Abstract Base Class for the anomaly detector."""
     def __init__(self, desc):
         self.desc = desc
@@ -64,6 +46,7 @@ class AnoDetector (object):
         abstract_method()
 
     def init_parser(self, parser):
+        # pass
         parser.add_argument('--hoeff_far', default=None, type=float,
                 help="false alarm rate for hoeffding rule")
 
@@ -127,27 +110,62 @@ class AnoDetector (object):
 
             time += interval
 
+        self.record_data['threshold'] = self.get_hoeffding_threshold(self.args.hoeff_far) if self.args.hoeff_far else None
         self.detect_num = i - 1
         return self.record_data
 
-    def plot_entropy(self, pic_show=True, pic_name=None):
-        """plot the entropy for each window.
-        - **pic_show** is a switcher indicating whether there should be popup window
-            to show the picture.
-        - **pic_name** is the name for the ouput picture name
+    def get_hoeffding_threshold(self, false_alarm_rate):
+        """calculate the threshold of hoeffiding rule,
+        threshold = -1 / |G| log(epsilon) where |G| is the number of flows in the window
+        and epsilon is the false alarm_rate
         """
-        if not VIS: return
+        def hoeffding_rule(N, false_alarm_rate):
+            return -1.0 / N * log(false_alarm_rate) + 5 * log(N) / N
+            # return -1.0 / flow_num_in_win * log(false_alarm_rate)
+
+        res = []
+        for i in xrange(self.detect_num):
+            flow_seq = self._get_flow_seq(i)
+            flow_num_in_win = flow_seq[1] - flow_seq[0] + 1
+            threshold = hoeffding_rule(flow_num_in_win, false_alarm_rate)
+            res.append(threshold)
+
+        return res
+
+    def _get_flow_seq(self, win_idx):
+        """Get the starting and ending sequence number of all flows in this window
+        """
+        rg_type = self.desc['win_type']
+        win_size = self.desc['win_size']
+        interval = self.desc['interval']
+        if rg_type == 'time':
+            st = self.record_data['winT'][win_idx]
+            sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
+        elif rg_type == 'flow':
+            sp = interval * win_idx
+            ep = interval * (win_idx+1)
+        else:
+            raise Exception('unknow rg type')
+
+        return sp, ep
+
+    # def plot(self, far=None, *args, **kwargs):
+    def plot(self, *args, **kwargs):
         rt = self.record_data['winT']
-        figure()
-        plot(rt, self.record_data['entropy'])
-
-        if pic_name: savefig(pic_name)
-        if pic_show: show()
-
-    def plot(self, *args, **kwargs): self.plot_entropy(*args, **kwargs)
+        ep = self.record_data['entropy']
+        threshold = self.record_data['threshold']
+        plot_points(rt, ep, threshold,
+                xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+                *args, **kwargs)
 
     def dump(self, data_name):
         pickle.dump( self.record_data, open(data_name, 'w') )
+
+    def plot_dump(self, data_name, *args, **kwargs):
+        """plot dumped data
+        """
+        self.record_data = pickle.load(open(data_name, 'r'))
+        self.plot(*args, **kwargs)
 
     @staticmethod
     def find_abnormal_windows(entropy, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
@@ -169,40 +187,6 @@ class AnoDetector (object):
             return [ i for i in xrange(num) if entropy[i] >= entropy_threshold[i] ]
         else:
             return [ i for i in xrange(num) if entropy[i] >= entropy_threshold ]
-
-    def get_hoeffding_threshold(self, false_alarm_rate):
-        """calculate the threshold of hoeffiding rule,
-        threshold = -1 / |G| log(epsilon) where |G| is the number of flows in the window
-        and epsilon is the false alarm_rate
-        """
-        def hoeffding_rule(N, false_alarm_rate):
-            return -1.0 / N * log(false_alarm_rate) + 5 * log(N) / N
-            # return -1.0 / flow_num_in_win * log(false_alarm_rate)
-
-        res = []
-        for i in xrange(self.detect_num):
-            flow_seq = self._get_flow_seq(i)
-            flow_num_in_win = flow_seq[1] - flow_seq[0] + 1
-            threshold = hoeffding_rule(flow_num_in_win, false_alarm_rate)
-            res.append(threshold)
-
-        return res
-
-    def _get_flow_seq(self, win_idx):
-        """Get the starting and ending sequence number of all flows in this window"""
-        rg_type = self.desc['win_type']
-        win_size = self.desc['win_size']
-        interval = self.desc['interval']
-        if rg_type == 'time':
-            st = self.record_data['winT'][win_idx]
-            sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
-        elif rg_type == 'flow':
-            sp = interval * win_idx
-            ep = interval * (win_idx+1)
-        else:
-            raise Exception('unknow rg type')
-
-        return sp, ep
 
     def _export_ab_flow_entropy(self, entropy, fname,
             entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
@@ -237,16 +221,21 @@ class AnoDetector (object):
 
         fid.close()
 
-class ModelFreeAnoDetector(AnoDetector):
+class ModelFreeAnoDetector(StoDetector):
+    """Model Free approach, use I.I.D Assumption
+    """
     def I(self, d_pmf, pmf):
         return I1(d_pmf, pmf)
 
     def get_em(self, rg, rg_type):
         """get empirical measure"""
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
-        return pmf, Pmb, mpmb
+        # return pmf, Pmb, mpmb
+        return pmf
 
-class ModelBaseAnoDetector(AnoDetector):
+class ModelBaseAnoDetector(StoDetector):
+    """ Model based approach, use Markovian approach
+    """
     def I(self, em, norm_em):
         d_Pmb, d_mpmb = em
         Pmb, mpmb = norm_em
@@ -258,8 +247,7 @@ class ModelBaseAnoDetector(AnoDetector):
 
 
 from Ident import *
-
-class FBAnoDetector(AnoDetector):
+class FBAnoDetector(StoDetector):
     """model free and model based together, will be faster then run model free
     and model based approaches separately since some intemediate results are reused.
     """
@@ -282,44 +270,32 @@ class FBAnoDetector(AnoDetector):
             fid.write("%f %f %f\n"%(rt[i], mf[i], mb[i]))
         fid.close()
 
-    def plot_entropy(self, pic_show=True, pic_name=None, hoeffding_false_alarm_rate = None):
-        """plot the model free and model based entropy in the
-        same picture. if graphic environment(*matplotlib*. etc) is not installed,
-        self._save_gnuplot_file() will be called to save a gnuplot_file
-        for gnuplot program to visualize later"""
+    def plot(self, far=None, figure_=None, subplot_=[211, 212], title_=['model free', 'model based'],
+            pic_name=None, pic_show=False,
+            *args, **kwargs):
         if not VIS: self._save_gnuplot_file(); return;
 
-        if hoeffding_false_alarm_rate: self.hoeff_far = hoeffding_false_alarm_rate
-
         rt = self.record_data['winT']
-        figure()
-        subplot(211)
         mf, mb = zip(*self.record_data['entropy'])
-        # if hoeffding_false_alarm_rate:
-        if self.hoeff_far:
-            # threshold = self.get_hoeffding_threshold(hoeffding_false_alarm_rate)
-            threshold = self.get_hoeffding_threshold(self.hoeff_far)
-            ano_flag = [ (1 if e > th  else 0) for e, th in zip(mf, threshold)]
-            plot_seg(rt, mf, ano_flag, ['b-', 'r-'])
-            plot(rt, threshold, 'g--')
-            # xlim(0, 2000)
-        else:
-            plot(rt, mf)
-        title('model free')
+        threshold = self.record_data['threshold']
 
-        subplot(212)
-        # if hoeffding_false_alarm_rate:
-        if self.hoeff_far:
-            ano_flag = [ (1 if e > th  else 0) for e, th in zip(mb, threshold)]
-            plot_seg(rt, mb, ano_flag, ['b-', 'r-'])
-            plot(rt, threshold, 'g--')
-            # xlim(0, 2000)
-        else:
-            plot(rt, mb)
-        title('model based')
-
-        if pic_name: savefig(pic_name)
-        if pic_show: show()
+        if figure_ is None: figure_ = plt.figure()
+        plot_points(rt, mf, threshold,
+                figure_ = figure_,
+                xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+                subplot_ = subplot_[0],
+                title_ = title_[0],
+                pic_name=None, pic_show=False,
+                *args, **kwargs)
+        plot_points(rt, mb, threshold,
+                figure_ = figure_,
+                xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+                subplot_ = subplot_[1],
+                title_ = title_[1],
+                pic_name=None, pic_show=False,
+                *args, **kwargs)
+        if pic_name: plt.savefig(pic_name)
+        if pic_show: plt.show()
 
     def export_abnormal_flow(self, fname, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """

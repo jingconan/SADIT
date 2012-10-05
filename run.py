@@ -120,7 +120,7 @@ Default value of <exper> is DetectExper, other options are \n * %s"""%('\n * '.j
 
 
 parser = argparse.ArgumentParser(description='sadit', add_help=False)
-parser.add_argument('-e', '--experiment', default='Detect')
+parser.add_argument('-e', '--experiment', default='DetectExper')
 parser.add_argument('--profile', default=None,
         help= """profile the program """)
 args, res_args = parser.parse_known_args()

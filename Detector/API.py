@@ -51,6 +51,11 @@ def detect(f_name, desc, res_args=[]):
     detector.detect(data_handler)
     return detector
 
+def detector_plot_dump(data_name, type_, desc, *args, **kwargs):
+    detector = detector_map[type_](desc)
+    detector.set_args([])
+    detector.plot_dump(data_name, *args, **kwargs)
+
 def test_detect():
     ANO_ANA_DATA_FILE = './test_AnoAna.txt'
     DETECTOR_DESC = dict(
