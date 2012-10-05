@@ -4,10 +4,10 @@ import sys
 sys.path.append("..")
 from Configure import gen_anomaly_dot
 from Detector import detect
+from Detect import Detect
 
 from os import chdir as cd
 from os import system as sh
-# import numpy as np
 
 import argparse
 from util import load_para

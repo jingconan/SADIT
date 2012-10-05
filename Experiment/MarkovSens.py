@@ -1,18 +1,42 @@
 #!/usr/bin/env python
-from Sens import Sens
+# from Sens import Sens
+from AttriSensExper import Sens
 from MarkovExperiment import MarkovExperiment
 import cPickle as pickle
 import copy
 
 class MarkovSens(MarkovExperiment, Sens):
     """Sensitivity analysis of markov anomaly"""
-    def __init__(self, settings):
-        MarkovExperiment.__init__(self, settings)
+    def __init__(self, *args, **kwargs):
+        MarkovExperiment.__init__(self, *args, **kwargs)
         Sens.__init__(self)
-        self.sens_ano = settings.ANO_LIST[0] # Only support one anomaly right now
-        self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
+        self.sens_ano = self.ano_list[0] # Only support one anomaly right now
+        # self.sens_ano = settings.ANO_LIST[0] # Only support one anomaly right now
+        # self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
 
-    def run(self, sta_prob_option):
+    def init_parser(self, parser):
+        super(MarkovSens, self).init_parser(parser)
+        # ds = '[[0.9, 0.1],[0.7, 0.3],[0.5, 0.5],[0.8,0.2]]'
+        ds = '[[0.9, 0.1],[0.7, 0.3]]'
+        parser.add_argument('--sta_prob_option', default=ds, type=eval,
+                help = """the possible values for stationary probability distribution, should be a list of list."""
+                )
+        parser.add_argument('--store_res_file', default=self.ROOT + '/Share/det_obj_markov.out',
+                help="""file path to store the caculated results""")
+
+        parser.add_argument('--plot', default=None,
+                help = """plot previous calculated result""")
+
+
+    def run(self):
+        if self.args.plot:
+            self.plot_entropy(self.args.plot)
+            return
+
+        self._run(self.args.sta_prob_option)
+        self.plot_entropy(self.args.store_res_file)
+
+    def _run(self, sta_prob_option):
         det_obj_shelf = dict()
         self.sens_ano['ano_type'] = 'markov_anomaly'
         self.sens_ano['change'] = {}
@@ -27,7 +51,9 @@ class MarkovSens(MarkovExperiment, Sens):
             self.store_flow_file('markov_' + '_'.join([str(v) for v in sta_prob]))
             # self.clear_tmp_file()
 
-        f_obj = open(self.shelve_file, 'w')
+        # f_obj = open(self.shelve_file, 'w')
+        print '--> dump calculated result to [%s]'%(self.args.store_res_file)
+        f_obj = open(self.args.store_res_file, 'w')
         pickle.dump(det_obj_shelf, f_obj)
         f_obj.close()
 

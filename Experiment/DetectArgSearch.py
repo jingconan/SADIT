@@ -52,17 +52,27 @@ import itertools
 import operator
 import time
 import linecache
-class DetectArgSearch(object):
+from DetectExper import DetectExper
+from util import load_para
+class DetectArgSearch(DetectExper):
     """
     Run Detect with different parameters in a batch mode.
     """
-    def __init__(self, desc_opt):
-        self.desc_opt = desc_opt
+    # def __init__(self, desc_opt):
+    def __init__(self, *args, **kwargs):
+        super(DetectArgSearch, self).__init__(*args, **kwargs)
+        # self.desc_opt = self.default_settings
+        self.desc_opt = load_para(self.args.search_arg_settings)['desc']
+        # self.desc_opt = default_settings['DETECTOR_DESC']
+        # self.desc_opt = desc_opt
         self.change_opt = get_attr_list(self.desc_opt)
         if self.change_opt:
             self.comb_num = reduce(operator.mul, [len(v) for k, v in self.change_opt.iteritems()])
             self.comb = itertools.product(*self.change_opt.values())
             self.comb_name = list(self.change_opt.keys())
+
+    def init_parser(self, parser):
+        parser.add_argument('--search_arg_settings', default=self.ROOT+'/search_arg_settings.py')
 
     def _export_ab_flow_by_idx(self, flow_file, output_file, ab_flow_idx):
         fid = open(output_file, 'w')
@@ -148,7 +158,7 @@ class DetectArgSearch(object):
 
             self.detector = detect(template['flow_file'], template)
             name = '-'.join([n+'_'+str(v) for n, v in zip(self.comb_name, cb)])
-            self.export(RES_DIR+name, template)
+            # self.export(RES_DIR+name, template)
 
             end_time = time.clock()
             sim_dur = end_time - start_time

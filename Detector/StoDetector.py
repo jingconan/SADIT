@@ -224,7 +224,9 @@ class AnoDetector (object):
         for idx in ab_idx:
             seq += 1
             st = self.record_data['winT'][idx] if rg_type == 'time' else (interval * idx)
-            data, _ = self.data_file.get_fea_slice([st, st+win_size], rg_type)
+            # import pdb;pdb.set_trace()
+            # data, _ = self.data_file.get_fea_slice([st, st+win_size], rg_type)
+            data = self.data_file.get_fea_slice([st, st+win_size], rg_type)
             sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
             fid.write('Seq # [%i] for abnormal window: [%i], entropy: [%f], start time [%f]\n'%(seq, idx, entropy[idx], st))
             i = sp-1

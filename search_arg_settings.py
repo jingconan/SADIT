@@ -33,8 +33,10 @@ desc_2003 = dict(
     max_detect_num = 10,
     # data_handler = 'fs_deprec',
     # flow_file = '../Simulator/n0_flow.txt',
-    data_handler = 'xflow',
-    flow_file = '../../CyberData/20030902.07.flow.txt',
+    # data_type= 'xflow',
+    data_type = 'fs',
+    # flow_file = '../../CyberData/20030902.07.flow.txt',
+    flow_file = './Simulator/n0_flow.txt',
     # flow_file = '../../CyberData/back_20030902.07.flow.txt',
     ident = {
         'mf': {
@@ -79,7 +81,7 @@ desc_2007 = dict(
     normal_rg = None,
     detector_type = 'mfmb',
     max_detect_num = None,
-    data_handler = 'xflow',
+    data_type= 'xflow',
     flow_file = '../../CyberData/20070501.18.flow.txt',
 )
 

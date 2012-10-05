@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # Sensitivity Analysis of Anomaly Detection Method.
+from __future__ import print_function, division
 import sys
 sys.path.append("..")
-from Experiment import AttriChangeExper, gen_anomaly_dot
+# from Experiment import AttriChangeExper, gen_anomaly_dot
+from FlowStylizedValidationExper import AttriChangeExper, gen_anomaly_dot
 from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefig, xlabel, ylabel
 import cPickle as pickle
 import copy
@@ -16,18 +18,25 @@ def argsort(seq):
 class Sens(object):
     """base class for the sensitivity analysis"""
     def store_flow_file(self, suffix):
-        import settings, shutil
-        shutil.copyfile(settings.OUTPUT_FLOW_FILE, settings.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
-        file_name = settings.ROOT + '/Share/abnormal_flow_%s.txt'%(suffix)
-        shutil.copyfile(settings.EXPORT_ABNORMAL_FLOW_FILE, file_name)
+        # import settings, shutil
+        # shutil.copyfile(settings.OUTPUT_FLOW_FILE, settings.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
+        # file_name = settings.ROOT + '/Share/abnormal_flow_%s.txt'%(suffix)
+        # shutil.copyfile(settings.EXPORT_ABNORMAL_FLOW_FILE, file_name)
+
+        import shutil
+        shutil.copyfile(self.output_flow_file, self.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
+        file_name = self.ROOT + '/Share/abnormal_flow_%s.txt'%(suffix)
+        shutil.copyfile(self.export_abnormal_flow_file, file_name)
 
     def clear_tmp_file(self):
         import os
         os.system('rm %s'%(self.dot_file))
-        os.system('rm %s'%(self.flow_file))
+        os.system('rm %s'%(self.output_flow_file))
 
-    def plot_entropy(self):
-        f_obj = open(self.shelve_file, 'r')
+    def plot_entropy(self, store_res_file=None):
+        # f_obj = open(self.shelve_file, 'r')
+        # f_obj = open(self.args.store_res_file, 'r')
+        f_obj = open(store_res_file, 'r')
         det_obj_shelf = pickle.load(f_obj)
         f_obj.close()
         figure()
@@ -36,17 +45,18 @@ class Sens(object):
         # plot the curve in order
         sort_dict = sorted(det_obj_shelf.iteritems())
         keys = sorted(det_obj_shelf.iterkeys() )
-        legend_txt = [k + ' x' for k in keys]
+        # print('keys, ', keys)
+        legend_txt = [str(k) + ' x' for k in keys]
 
         for k, v in sort_dict:
-            print 'k, ', k
+            # print 'k, ', k
             rt = v['winT']
             mf, mb = zip(*v['entropy'])
             plot(rt, mf)
 
         # plot the first threshold
         for k, v in sort_dict:
-            if v['threshold']:
+            if v.get('threshold', None):
                 plot(v['winT'], v['threshold'], '--')
                 break
 
@@ -62,7 +72,7 @@ class Sens(object):
 
         # plot the first threshold
         for k, v in sort_dict:
-            if v['threshold']:
+            if v.get('threshold', None):
                 plot(v['winT'], v['threshold'], '--')
                 break
 
@@ -70,7 +80,7 @@ class Sens(object):
         legend(legend_txt)
         xlabel('time (s)')
         ylabel('$I_2$')
-        savefig(self.settings.ROOT + '/Share/res.eps')
+        savefig(self.ROOT + '/Share/res.eps')
         show()
 
     def configure(self):
@@ -82,25 +92,44 @@ class AttriSensExper(Sens, AttriChangeExper):
     it will change parameters and run the simulation for several times
     and plot the both model based and model free entropy
     ex:
-    .. code-block:: python
-
-        import settings
-        exper = SensExper(settings)
-        exper.run('flow_arrival_rate', [2, 4, 6])
-        exper.plot_entropy()
-
     """
-    def __init__(self, settings):
-        AttriChangeExper.__init__(self, settings)
+    def __init__(self, *args, **kwargs):
+        AttriChangeExper.__init__(self, *args, **kwargs)
         Sens.__init__(self)
-        self.sens_ano = settings.ANO_LIST[0]
+        self.sens_ano = self.ano_list[0]
         # self.shelve_file = '/home/jing/det_obj.out'
-        self.shelve_file = self.settings.ROOT + '/Share/det_obj.out'
+        self.shelve_file = self.ROOT + '/Share/det_obj.out'
 
     def configure(self):
         Sens.configure(self)
 
-    def run(self, attr, rg, far=None):
+    def init_parser(self, parser):
+        super(AttriSensExper, self).init_parser(parser)
+        parser.add_argument('--sens_attr', default=None, type=str,
+                help = """ specify the attribute you want to sensitivity
+                analysis, can be [flow_arrival_rate | flow_size_mean | flow_size_var ]""")
+
+        parser.add_argument('--rg', default=None, type=lambda x: [float(v)for v in x.rsplit(',')],
+                help = """ specify the values for degreee of anomaly, shoule be a command seperated number
+                for example: rg=2,3,4
+                """)
+
+        parser.add_argument('--store_res_file', default=self.ROOT + '/Share/det_obj.out',
+                help="""file path to store the caculated results""")
+
+        parser.add_argument('--plot', default=None,
+                help = """plot previous calculated result""")
+
+    def run(self):
+        if self.args.plot:
+            self.plot_entropy(self.args.plot)
+            return
+
+        if self.args.sens_attr is None or self.args.rg is None or self.args.detect_node_id is None:
+            raise Exception('you need to specify --sens_attr, --rg and --detect_node_id option')
+        self._run(self.args.sens_attr, self.args.rg, self.args.hoeff_far)
+
+    def _run(self, attr, rg, far=None):
         """attr is the name of attribute that will be changed. possible
         attrs are :
             - flow_arrival_rate
@@ -108,6 +137,8 @@ class AttriSensExper(Sens, AttriChangeExper):
             - flow_size_var
         rg is the list of possible values for *attr*.
         """
+        print('attr, ', attr)
+        print('rg, ', rg)
         det_obj_shelf = dict()
         self.sens_ano['ano_type'] = attr
         self.sens_ano['change'] = {}
@@ -124,10 +155,10 @@ class AttriSensExper(Sens, AttriChangeExper):
             self.store_flow_file(str(i))
             self.clear_tmp_file()
 
-        f_obj = open(self.shelve_file, 'w')
+        # f_obj = open(self.shelve_file, 'w')
+        f_obj = open(self.args.store_res_file, 'w')
         pickle.dump(det_obj_shelf, f_obj)
         f_obj.close()
-
 
 if __name__ == "__main__":
     import settings

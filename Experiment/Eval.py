@@ -4,8 +4,9 @@ to evaluate the performance of detector
 get the statistical quantify for the hypotheis test
 like False Alarm Rate, True
 """
-from Experiment import AttriChangeExper
+# from Experiment import AttriChangeExper
 from Detector.DataParser import RawParseData
+from FlowStylizedValidationExper import AttriChangeExper
 
 import matplotlib.pyplot as plt
 import cPickle as pickle
@@ -16,16 +17,29 @@ class Eval(AttriChangeExper):
     OUT_STRING = """tp: %f\t fn: %f\t tn: %f\t fp: %f
 sensitivity: %f\tspecificity: %f
 """
-    def __init__(self, settings):
-        AttriChangeExper.__init__(self, settings)
-        self.real_ab_flow_seq = None
+    real_ab_flow_seq = None
+
+    def init_parser(self, parser):
+        super(Eval, self).init_parser(parser)
+        parser.add_argument('--max_search_mf_states', default=12, type=int,
+                help = """max number of abnormal model free states it will search"""
+                )
+
+        parser.add_argument('--max_search_mb_states', default=144, type=int,
+                help = """max number of abnormal model free states it will search"""
+                )
+
 
     def get_ab_flow_seq(self):
         """get the sequence of all abnormal flows, get the reference ground truth"""
-        normal_flow_file_name = self.settings.ROOT + '/Simulator/n0_flow.txt'
+        # normal_flow_file_name = self.settings.ROOT + '/Simulator/n0_flow.txt'
+        normal_flow_file_name = self.output_flow_file
+
         self.normal_flow, self.fea_name = RawParseData(normal_flow_file_name)
 
-        ab_flow_file_name = self.settings.ROOT + '/Simulator/abnormal_n0_flow.txt'
+        # ab_flow_file_name = self.settings.ROOT + '/Simulator/abnormal_n0_flow.txt'
+
+        ab_flow_file_name = self.export_abnormal_flow_file
         self.flow, self.fea_name =  RawParseData(ab_flow_file_name)
 
         return [self.normal_flow.index(f) for f in self.flow]
@@ -71,7 +85,9 @@ sensitivity: %f\tspecificity: %f
                 'ComponentFlowPairIdent':'mb',
                 'DerivativeFlowPairIdent':'mb',
                 }
-        max_ab_state_num = dict(mf=12, mb=144) # it influence the max ab_state_num it will search
+        # max_ab_state_num = dict(mf=12, mb=144) # it influence the max ab_state_num it will search
+        max_ab_state_num = dict(mf=self.args.max_search_mf_states,
+                mb=self.args.max_search_mb_states) # it influence the max ab_state_num it will search
         rec = dict(zip(idents.keys(), [list() for i in xrange(len(idents))]))
         for ident_type, entropy_type in idents.iteritems():
             print 'ident_type, ', ident_type
@@ -117,6 +133,9 @@ sensitivity: %f\tspecificity: %f
                     entropy_threshold, ab_win_portion, ab_win_num)
 
         print 'ab_states, ', ab_states
+        # print 'entropy_type, ', entropy_type
+        # print 'entropy_threshold, ', entropy_threshold
+        # print 'ab_win_portion, ', ab_win_portion
         self.ab_seq = self.detector.get_ab_flow_seq(entropy_type,
                 entropy_threshold, ab_win_portion, ab_win_num,
                 ab_states)
@@ -316,6 +335,14 @@ sensitivity: %f\tspecificity: %f
                 ylabel = 'fnr and fpr',
                 pic_name = self.settings.ROOT+'/res/difference_ab_tran_pair_num_fnr_fpr.eps'
                 )
+
+    def run(self):
+        # self.configure()
+        # self.simulate()
+        self.detect()
+
+        self.compare_ident_method()
+        self.plot_roc_curve_ident()
 
 
 

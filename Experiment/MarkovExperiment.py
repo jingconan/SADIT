@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import sys
 sys.path.append("..")
-from Experiment import Experiment
+# from Experiment import Experiment
+from FlowStylizedValidationExper import FlowStylizedValidationExper
 # import numpy as np
 
 def Pi2P(pi1Vec):
@@ -13,8 +14,9 @@ def Pi2P(pi1Vec):
         res.append( (p12, p21) )
     return res
 
-class MarkovExperiment(Experiment):
-    def __init__(self, settings):
+class MarkovExperiment(FlowStylizedValidationExper):
+    # def __init__(self, settings):
+    def __init__(self, *args, **kwargs):
         self.g_size = 10
         self.srv_node_list = (0, 1)
         # self.normal_sta_prob = (0.1, 0.9)
@@ -25,13 +27,14 @@ class MarkovExperiment(Experiment):
         L = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'10', 'flow_arrival_rate':'0.3'}
         self.states = [H, L]
 
-        Experiment.__init__(self, settings)
+        # Experiment.__init__(self, settings)
+        super(MarkovExperiment, self).__init__(*args, **kwargs)
 
     def configure(self):
         self.get_net_desc()
         self.get_norm_desc()
         self.get_ano_list()
-        Experiment.configure(self)
+        super(MarkovExperiment, self).configure()
 
     def get_net_desc(self):
         self.net_desc['node_type'] = 'MarkovNode'
@@ -61,6 +64,14 @@ class MarkovExperiment(Experiment):
 
     @property
     def topo(self): return self.get_star_topo()
+
+
+    # def run(self):
+    #     exper.configure()
+    #     exper.simulate()
+    #     detector = exper.detect()
+    #     detector.plot_entropy()
+
 
 if __name__ == "__main__":
     import settings
