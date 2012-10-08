@@ -3,13 +3,19 @@ This file is the flow by flow svm detector
 """
 import settings
 SVM_FOLDER = settings.ROOT + '/tools/libsvm-3.12'
+
 import subprocess
+import cPickle as pickle
+import argparse
+
+from mod_util import plot_points
+from Base import BaseDetector
+
 try:
     import matplotlib.pyplot as plt
 except:
     plt = False
-from mod_util import plot_points
-import cPickle as pickle
+
 
 def write_svm_data_file(label, fea, f_name):
     fid = open(f_name, 'w')
@@ -20,17 +26,9 @@ def write_svm_data_file(label, fea, f_name):
         line = ['%s:%s'%(j+1, fea_v[j]) for j in xrange(len(fea_v)) ]
         fid.write(str(label[i]) + ' ' + ' '.join(line) + '\n')
 
-# from Detector.DataHandler import HardDiskFileHandler
-# from Detector.DataHandler import QuantizeDataHandler
-# class SVMDataHandler(HardDiskFileHandler):
-# class SVMDataHandler(QuantizeDataHandler):
-#     """Data Hanlder for SVM approach. It use a set of features
-#     which will be defined here"""
-#     pass
-
-import argparse
-class SVMDetector(object):
-    """base class for SVM Detector"""
+class SVMDetector(BaseDetector):
+    """base class for SVM Detector
+    """
     def __init__(self, desc):
         self.__dict__.update(desc)
         self.record_data = dict()

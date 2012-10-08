@@ -2,7 +2,10 @@ class BaseDetector(object):
     def set_args(self, argv):
         """set local parameters based on argv"""
         pass
-    def print_help(self):
-        self.parser.print_help()
+
+    def init_parser(self, parser):
         pass
-    pass
+
+    def detect(self, data_file):
+        """detect data_file"""
+        pass

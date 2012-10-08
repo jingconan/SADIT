@@ -19,9 +19,9 @@ from mod_util import plot_points
 import cPickle as pickle
 from math import log
 import argparse
+from Base import BaseDetector
 
-
-class StoDetector (object):
+class StoDetector (BaseDetector):
     """It is an Abstract Base Class for the anomaly detector."""
     def __init__(self, desc):
         self.desc = desc

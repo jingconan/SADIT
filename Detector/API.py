@@ -1,12 +1,16 @@
 """
-This file defines useful API for other modules or program to use
+This file defines useful APIs for other modules or program to use
 """
 from __future__ import print_function, division
-# from Detector_basic import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
+#######################################################
+###        Import Detectors                        ####
+#######################################################
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
 from ART.ART import ARTDetector
 
+# detector_map defines correspondence between detector
+# options with detector name
 detector_map = {
         'mf': ModelFreeAnoDetector,
         'mb': ModelBaseAnoDetector,
@@ -16,8 +20,8 @@ detector_map = {
         'art': ARTDetector,
         }
 
-# from DataHandler import HardDiskFileHandler, HardDiskFileHandler_pcap2netflow, SQLDataFileHandler_SperottoIPOM2009, DataFile
-# from DataHandler import QuantizeDataHandler, DataFile
+# usually one detector corresponds to one handler
+# handlers do some data preprocessing for detector.
 from DataHandler import *
 data_handler_handle_map = {
         'mf': QuantizeDataHandler,
@@ -50,7 +54,6 @@ def detect(f_name, desc, res_args=[]):
     """
     win_size = desc['win_size']
     fea_option = desc['fea_option']
-    # data_file = data_handler_handle_map[ desc['data_handler'] ](f_name, win_size, fea_option)
     data_file = data_map[ desc['data_type'] ](f_name)
     data_handler = data_handler_handle_map[desc['detector_type']](data_file, win_size, fea_option)
     detector = detector_map[ desc['detector_type'] ](desc)
@@ -59,6 +62,8 @@ def detect(f_name, desc, res_args=[]):
     return detector
 
 def detector_plot_dump(data_name, type_, desc, *args, **kwargs):
+    """don't actually detect, only plot precalculated data
+    """
     detector = detector_map[type_](desc)
     detector.set_args([])
     detector.plot_dump(data_name, *args, **kwargs)

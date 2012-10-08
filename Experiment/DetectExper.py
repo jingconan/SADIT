@@ -59,12 +59,6 @@ class DetectExper(object):
         parser.add_argument('--pic_show', default=False, action='store_true',
                 help = """whether to show the picture after finishing running""")
 
-        parser.add_argument('--profile', default=None,
-                help= """profile the program """)
-
-        # parser.add_argument('--hoeff_far', default=None, type=float,
-        #         help= """hoeffding false alarm rate, useful in stochastic method""")
-
         parser.add_argument('--default_settings', default= settings.ROOT+ '/settings.py',
                 help="""file_path for default settings, default value is the settings.py
                 in ROOT directory""")
