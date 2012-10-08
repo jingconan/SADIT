@@ -5,7 +5,8 @@ like False Alarm Rate.
 """
 # from Experiment import AttriChangeExper
 from Detector.DataParser import RawParseData
-from FlowStylizedValidationExper import AttriChangeExper
+# from FlowStylizedValidationExper import AttriChangeExper
+from IIDExper import AttriChangeExper
 
 import matplotlib.pyplot as plt
 import cPickle as pickle

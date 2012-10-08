@@ -5,7 +5,8 @@ follow Markovian model and test with the anomaly detectors
 import sys
 sys.path.append("..")
 # from Experiment import Experiment
-from FlowStylizedValidationExper import FlowStylizedValidationExper
+# from FlowStylizedValidationExper import FlowStylizedValidationExper
+from IIDExper import IIDExper
 # import numpy as np
 
 def Pi2P(pi1Vec):
@@ -17,7 +18,8 @@ def Pi2P(pi1Vec):
         res.append( (p12, p21) )
     return res
 
-class MarkovExper(FlowStylizedValidationExper):
+# class MarkovExper(FlowStylizedValidationExper):
+class MarkovExper(IIDExper):
     # def __init__(self, settings):
     def __init__(self, *args, **kwargs):
         self.g_size = 10

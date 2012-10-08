@@ -22,38 +22,51 @@ help_doc = dict()
 
 from Detector.API import detector_map
 
-# parser = argparse.ArgumentParser(description='sadit', add_help=False)
-parser = argparse.ArgumentParser(description='sadit')
-parser.add_argument('-e', '--experiment', default='DetectExper')
-# parser.add_argument('-e', '--experiment', default=None)
+parser = argparse.ArgumentParser(description='sadit', add_help=False)
+# parser = argparse.ArgumentParser(description='sadit')
+# parser.add_argument('-e', '--experiment', default='DetectExper')
+parser.add_argument('-e', '--experiment', default=None,
+        help="""print ./run.py -e <exper> -h for help of a experiment
+        Avaliable experiments are [%s]"""
+        %(' | '.join(exper_ops)))
 parser.add_argument('--profile', default=None,
         help= """profile the program """)
+
 parser.add_argument('-hm', '--help_method', default=None,
         help="""print the detailed help message for a method. Avaliable method [%s]"""
         %(' | '.join(detector_map.keys())))
-parser.add_argument('-he', '--help_exper', default=None,
-        help="""print the detailed help message for an experiment. Avaliable experiments are [%s]"""
-        %(' | '.join(exper_ops)))
+# parser.add_argument('-he', '--help_exper', default=None,
+        # help="""print the detailed help message for an experiment. Avaliable experiments are [%s]"""
+        # %(' | '.join(exper_ops)))
+
+parser.add_argument('-h', '--help', default=False, action='store_true',
+        help="""print help message and exit""")
 
 args, res_args = parser.parse_known_args()
 
 
+#####################################################
+###      Print Help Message
+#####################################################
+def print_exper_help(exper, res_args=[]):
+    exec('from Experiment.%s import %s'%(exper, exper))
+    argv = ['-h'] + res_args
+    exper = locals()[exper](argv)
+
 if len(sys.argv) == 1:
     parser.print_help()
     sys.exit()
-#     print("""please use ./run.py -e <exper> -h to get detailed help message for each experiment.
-# Default value of <exper> is DetectExper, other options are \n * %s"""
-# %('\n * '.join("[%s]: %s"%(exper, help_doc[exper])  for exper in exper_ops)))
-#     sys.exit()
 
-
-if args.help_exper:
-#     print("""please use ./run.py -e <exper> -h to get detailed help message for each experiment.
-# Default value of <exper> is DetectExper, other options are \n * %s"""
-# %('\n * '.join("[%s]: %s"%(exper, help_doc[exper])  for exper in exper_ops)))
-    exec('from Experiment.%s import %s'%(args.help_exper, args.help_exper))
-    exper = locals()[args.help_exper](['-h'])
+if args.help:
+    if args.experiment:
+        print_exper_help(args.experiment, res_args)
+    else:
+        parser.print_help()
     sys.exit()
+
+# if args.help_exper:
+    # print_exper_help(args.help_exper)
+    # sys.exit()
 
 if args.help_method:
     from Detector.API import print_detector_help

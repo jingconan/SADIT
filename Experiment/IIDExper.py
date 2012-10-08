@@ -14,7 +14,8 @@ from os import system as sh
 # import argparse
 from util import load_para, Namespace
 from DetectExper import DetectExper
-class FlowStylizedValidationExper(DetectExper):
+# class FlowStylizedValidationExper(DetectExper):
+class IIDExper(DetectExper):
     """
         - net_desc: description of the network
         - norm_desc: description of the normal case
@@ -22,7 +23,8 @@ class FlowStylizedValidationExper(DetectExper):
     """
 
     def __init__(self, *args, **kwargs):
-        super(FlowStylizedValidationExper, self).__init__(*args, **kwargs)
+        # super(FlowStylizedValidationExper, self).__init__(*args, **kwargs)
+        super(IIDExper, self).__init__(*args, **kwargs)
         default_settings = load_para(self.args.default_settings, Namespace)
         self.ano_list = default_settings.ANO_LIST
         self.net_desc = default_settings.NET_DESC
@@ -35,7 +37,8 @@ class FlowStylizedValidationExper(DetectExper):
         self.args.detect = self.output_flow_file
 
     def init_parser(self, parser):
-        super(FlowStylizedValidationExper, self).init_parser(parser)
+        # super(FlowStylizedValidationExper, self).init_parser(parser)
+        super(IIDExper, self).init_parser(parser)
         parser.add_argument('--detect_node_id', default=0, type=int,
                 help = """ specify the node id you want to monitor,
                 default value is 0""")
@@ -63,5 +66,6 @@ class FlowStylizedValidationExper(DetectExper):
         self.detect()
         return self.detector
 
-class AttriChangeExper(FlowStylizedValidationExper):
+# class AttriChangeExper(FlowStylizedValidationExper):
+class AttriChangeExper(IIDExper):
     pass

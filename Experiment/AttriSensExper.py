@@ -8,7 +8,8 @@ from __future__ import print_function, division
 import sys
 sys.path.append("..")
 # from Experiment import AttriChangeExper, gen_anomaly_dot
-from FlowStylizedValidationExper import AttriChangeExper, gen_anomaly_dot
+# from FlowStylizedValidationExper import AttriChangeExper, gen_anomaly_dot
+from IIDExper import AttriChangeExper, gen_anomaly_dot
 from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefig, xlabel, ylabel
 import cPickle as pickle
 import copy

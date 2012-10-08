@@ -7,15 +7,23 @@ import settings
 from Detector import detect
 from util import load_para
 
+from Detector.API import print_detector_help
 class DetectExper(object):
     ROOT = settings.ROOT
     def __init__(self, argv, parser=None):
         if parser is None:
-            parser = argparse.ArgumentParser()
+            parser = argparse.ArgumentParser(add_help=False)
         self.init_parser(parser)
         self.args, self.res_args = parser.parse_known_args(argv)
+        if self.args.help:
+            parser.print_help()
+            if self.args.method:
+                print_detector_help(self.args.method)
 
     def init_parser(self, parser):
+        parser.add_argument('-h', '--help', default=False, action='store_true',
+                help="""print help message""")
+
         parser.add_argument('-d', '--detect', default=None,
                 help='--detect [filename] will simply detect the flow file, simulator will not run in this case, \
                         detector will still use the configuration in the settings.py')
