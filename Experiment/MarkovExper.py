@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+""" Will generate the flows record when all the users
+follow Markovian model and test with the anomaly detectors
+"""
 import sys
 sys.path.append("..")
 # from Experiment import Experiment
@@ -14,7 +17,7 @@ def Pi2P(pi1Vec):
         res.append( (p12, p21) )
     return res
 
-class MarkovExperiment(FlowStylizedValidationExper):
+class MarkovExper(FlowStylizedValidationExper):
     # def __init__(self, settings):
     def __init__(self, *args, **kwargs):
         self.g_size = 10
@@ -28,13 +31,13 @@ class MarkovExperiment(FlowStylizedValidationExper):
         self.states = [H, L]
 
         # Experiment.__init__(self, settings)
-        super(MarkovExperiment, self).__init__(*args, **kwargs)
+        super(MarkovExper, self).__init__(*args, **kwargs)
 
     def configure(self):
         self.get_net_desc()
         self.get_norm_desc()
         self.get_ano_list()
-        super(MarkovExperiment, self).configure()
+        super(MarkovExper, self).configure()
 
     def get_net_desc(self):
         self.net_desc['node_type'] = 'MarkovNode'
@@ -75,7 +78,7 @@ class MarkovExperiment(FlowStylizedValidationExper):
 
 if __name__ == "__main__":
     import settings
-    exper = MarkovExperiment(settings)
+    exper = MarkovExper(settings)
     exper.configure()
     exper.simulate()
     detector = exper.detect()

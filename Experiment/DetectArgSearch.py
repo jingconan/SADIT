@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+""" Argument Search script for optimal parameters for stochastic
+method [model free and model based] methdod.
+"""
 
 import sys, os
 sys.path.append("..")

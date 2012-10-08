@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-"""
-to evaluate the performance of detector
+""" Evaluate the performance of detector
 get the statistical quantify for the hypotheis test
-like False Alarm Rate, True
+like False Alarm Rate.
 """
 # from Experiment import AttriChangeExper
 from Detector.DataParser import RawParseData

@@ -1,17 +1,18 @@
 #!/usr/bin/env python
+""" (experimental) Generate the traffic for multiserver case and
+test the alogirithm
+"""
 import sys
 sys.path.append("..")
 import settings
-from Experiment import Experiment
+from DetectExper import DetectExper
 import numpy as np
 from Detector import detect
 
-
-
-class MultiSrvExperiment(Experiment):
+class MultiSrvExperiment(DetectExper):
     def __init__(self, settings):
         self.init_para()
-        Experiment.__init__(self, settings)
+        DetectExper.__init__(self, settings)
         self.get_net_desc()
         self.get_norm_desc()
         self.get_ano_list()

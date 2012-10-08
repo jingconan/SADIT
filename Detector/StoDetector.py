@@ -6,22 +6,14 @@ __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 __status__ = "Development"
 
-# import sys
-# sys.path.append("..")
 import os
-# try:
-#     from matplotlib.pyplot import figure, plot, show, subplot, title, savefig, xlim
-#     VIS = True
-# except:
-#     print 'no matplotlib'
-#     VIS = False
 try:
     import matplotlib.pyplot as plt
 except ImportError:
     plt = False
 
 from DetectorLib import I1, I2
-from util import DataEndException, FetchNoDataException,  abstract_method
+from util import DataEndException, FetchNoDataException, abstract_method
 from mod_util import plot_points
 
 import cPickle as pickle
@@ -35,6 +27,12 @@ class StoDetector (object):
         self.desc = desc
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
 
+    def set_args(self, argv):
+        parser = argparse.ArgumentParser(description='SVMDetector')
+        self.init_parser(parser)
+        self.args = parser.parse_args(argv)
+        self.__dict__.update(self.args.__dict__)
+
     def __call__(self, *args, **kwargs):
         return self.detect(*args, **kwargs)
 
@@ -46,15 +44,8 @@ class StoDetector (object):
         abstract_method()
 
     def init_parser(self, parser):
-        # pass
         parser.add_argument('--hoeff_far', default=0.01, type=float,
                 help="false alarm rate for hoeffding rule")
-
-    def set_args(self, argv):
-        parser = argparse.ArgumentParser(description='SVMDetector')
-        self.init_parser(parser)
-        self.args = parser.parse_args(argv)
-        self.__dict__.update(self.args.__dict__)
 
     def I(self, em1, em2):
         """abstract method to calculate the difference of two
@@ -122,7 +113,9 @@ class StoDetector (object):
         """
         def hoeffding_rule(N, false_alarm_rate):
             return -1.0 / N * log(false_alarm_rate) + 4 * log(N) / N
+            # return -1.0 / N * log(false_alarm_rate) + 2 * log(N) / N
             # return -1.0 / flow_num_in_win * log(false_alarm_rate)
+        # print 'false_alarm_rate, ', false_alarm_rate
 
         res = []
         for i in xrange(self.detect_num):
@@ -167,7 +160,7 @@ class StoDetector (object):
         """plot dumped data
         """
         self.record_data = pickle.load(open(data_name, 'r'))
-        data = pickle.load(open(data_name, 'r'))
+        # data = pickle.load(open(data_name, 'r'))
         # self.__dict__.update(data)
         self.plot(*args, **kwargs)
 
@@ -277,7 +270,7 @@ class FBAnoDetector(StoDetector):
     def plot(self, far=None, figure_=None, subplot_=[211, 212], title_=['model free', 'model based'],
             pic_name=None, pic_show=False,
             *args, **kwargs):
-        if not VIS: self._save_gnuplot_file(); return;
+        # if not VIS: self._save_gnuplot_file(); return;
 
         rt = self.record_data['winT']
         mf, mb = zip(*self.record_data['entropy'])

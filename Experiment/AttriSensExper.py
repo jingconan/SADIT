@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-# Sensitivity Analysis of Anomaly Detection Method.
+""" Sensitivity analysis of anomaly detector under
+attribute anomaly. The detector will be run under
+different degree of attribute anoamly, and the output
+will be drawn in the same plot.
+"""
 from __future__ import print_function, division
 import sys
 sys.path.append("..")

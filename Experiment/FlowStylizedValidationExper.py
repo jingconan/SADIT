@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+""" Flow Stylized Validation Experiemnt. Properties
+of flow will be changed( flow size mean, flow access rate), e.t.c
+and test with anomaly detectors.
+"""
 from Configure import gen_anomaly_dot
 # from Detector import detect
 # from Detect import Detect

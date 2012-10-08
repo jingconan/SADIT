@@ -1,14 +1,16 @@
 #!/usr/bin/env python
-# from Sens import Sens
+""" Sensitivity analysis anomaly detectors under
+markovian traffic model
+"""
 from AttriSensExper import Sens
-from MarkovExperiment import MarkovExperiment
+from MarkovExper import MarkovExper
 import cPickle as pickle
 import copy
 
-class MarkovSens(MarkovExperiment, Sens):
+class MarkovSens(MarkovExper, Sens):
     """Sensitivity analysis of markov anomaly"""
     def __init__(self, *args, **kwargs):
-        MarkovExperiment.__init__(self, *args, **kwargs)
+        MarkovExper.__init__(self, *args, **kwargs)
         Sens.__init__(self)
         self.sens_ano = self.ano_list[0] # Only support one anomaly right now
         # self.sens_ano = settings.ANO_LIST[0] # Only support one anomaly right now
@@ -26,7 +28,6 @@ class MarkovSens(MarkovExperiment, Sens):
 
         parser.add_argument('--plot', default=None,
                 help = """plot previous calculated result""")
-
 
     def run(self):
         if self.args.plot:

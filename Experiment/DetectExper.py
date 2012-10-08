@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-Default Experimenet, will simply detect the flow file
+""" Default experimenet, will simply detect the flow data
 """
 import argparse
 import os
@@ -43,9 +42,9 @@ class DetectExper(object):
         parser.add_argument('--export_flows', default=None,
                 help = """ specify the file name of exported abnormal flows. Default is not export
                 """)
-        parser.add_argument('--entropy_threshold', default=None,
-                help = """ the threshold for entropy,
-                """)
+        # parser.add_argument('--entropy_threshold', default=None,
+        #         help = """ the threshold for entropy,
+        #         """)
         parser.add_argument('--pic_name', default= settings.ROOT + '/res.eps',
                 help = """picture name for the detection result""")
 

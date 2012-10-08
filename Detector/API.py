@@ -36,6 +36,13 @@ data_map = {
         'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
         'flow_exporter': PreloadHardDiskFile_FlowExporter,
         }
+
+def print_detector_help(type_):
+    """print help message of detector with type_
+    """
+    detector = detector_map[ type_ ]({})
+    detector.set_args(['-h'])
+
 def detect(f_name, desc, res_args=[]):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.

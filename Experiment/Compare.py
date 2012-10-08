@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+""" Compare different method and plot the temporal
+results in the same window.
+"""
 from __future__ import print_function, division
 from DetectExper import DetectExper
 import copy
