@@ -10,15 +10,6 @@ import os
 
 # Get experiment options
 exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/') if f_name.lower().endswith('py') and not f_name.startswith('__')]
-# Get simple document for each experiment
-help_doc = dict()
-# try:
-#     for exper in exper_ops:
-#         exec('from Experiment import %s'%(exper))
-#         help_doc[exper] = locals()[exper].__doc__ if locals()[exper].__doc__ else ''
-# except Exception as e:
-#     print('--> Exception [%s]. not all experiments can be imported, check them!!'%(e))
-#     sys.exit()
 
 from Detector.API import detector_map
 
