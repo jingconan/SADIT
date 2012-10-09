@@ -75,6 +75,7 @@ class DetectArgSearch(DetectExper):
             self.comb_name = list(self.change_opt.keys())
 
     def init_parser(self, parser):
+        super(DetectArgSearch, self).init_parser(parser)
         parser.add_argument('--search_arg_settings', default=self.ROOT+'/search_arg_settings.py')
 
     def _export_ab_flow_by_idx(self, flow_file, output_file, ab_flow_idx):

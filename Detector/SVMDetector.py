@@ -205,8 +205,8 @@ class SVMFlowByFlowDetector(SVMDetector):
 
     def write_dat(self, data):
         fea = data.get_fea_slice()
-        fea = [f[1:] for f in fea] # ignore cluster label
-        # import pdb;pdb.set_trace()
+        # fea = [f[1:] for f in fea] # ignore cluster label
+        fea = [f[2:] for f in fea] # ignore cluster label
         # zip_fea = data.quantize_fea()
         # fea = zip(*zip_fea)
         # fea_str = data.data.get_fea_slice(['flow_size'])
@@ -219,6 +219,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         sample_fea = self.sample(fea, self.desc['sample_ratio'])
         # import pdb;pdb.set_trace()
         sample_fea = self.norm_fea(sample_fea)
+        # import pdb;pdb.set_trace()
         # sample_fea = self.pca(sample_fea)
         # import pdb;pdb.set_trace()
         label = [0] * len(sample_fea)

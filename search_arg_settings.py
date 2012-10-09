@@ -36,7 +36,8 @@ desc_2003 = dict(
     # data_type= 'xflow',
     data_type = 'fs',
     # flow_file = '../../CyberData/20030902.07.flow.txt',
-    flow_file = './Simulator/n0_flow.txt',
+    # flow_file = './Simulator/n0_flow.txt',
+    flow_file = '../demo_test_data/flow_size_mean_2x_t_5000s_anomaly_1000s_to_1300s/n0_flow.txt',
     # flow_file = '../../CyberData/back_20030902.07.flow.txt',
     ident = {
         'mf': {
