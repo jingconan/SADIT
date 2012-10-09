@@ -63,7 +63,7 @@ class StoDetector (WindowDetector):
                 help='entropy threshold to determine the anomaly, has \
                 higher priority than hoeff_far')
 
-        parser.add_argument('--ccoef', default=2, type=float,
+        parser.add_argument('--ccoef', default=30.0, type=float,
                 help="""correction coefficient for calculat threshold using hoeffding rule.
                 hoeffding threshold is only a asymotical result. An O(n) linear term has been
                 abandon during the analysis, however, it practice, this term is important. You
@@ -148,6 +148,8 @@ class StoDetector (WindowDetector):
         """hoeffding rule with linear correction term
         """
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
+        # import pdb;pdb.set_trace()
+        # print('ccoef, ', self.desc['ccoef'])
         return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
 
     def get_hoeffding_threshold(self, false_alarm_rate):

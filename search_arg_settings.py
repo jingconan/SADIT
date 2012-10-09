@@ -22,7 +22,7 @@ desc_2003 = dict(
     unified_nominal_pdf = False, # used in sensitivities analysis
     fea_option = {
         'dist_to_center':2,
-        'flow_size':2,
+        'flow_size':[2, 3],
         'cluster':[4, 6]
         },
     normal_rg = None,

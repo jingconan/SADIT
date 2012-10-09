@@ -1,4 +1,0 @@
-This tool use Support Vector Machine(SVM) to implement the flow by flow identification. 
-
-the input is the exported flows by Simulator.
-

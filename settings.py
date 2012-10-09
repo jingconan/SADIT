@@ -10,6 +10,7 @@ traffic condition of the ARO Network.
 # ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
 # ROOT = '/home/wangjing/Dropbox/Research/sadit'
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
+# ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
 ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
 
 
@@ -122,8 +123,8 @@ DETECTOR_DESC = dict(
         # interval=2000,
         # win_size = 10,
         # win_size=100,
-        # win_size=50,
-        win_size=70,
+        win_size=60,
+        # win_size=20,
         # win_size=2000,
         # win_size=200,
         win_type='time', # 'time'|'flow'

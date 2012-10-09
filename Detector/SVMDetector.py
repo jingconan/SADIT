@@ -165,7 +165,9 @@ class SVMDetector(BaseDetector):
         """load the dumped results and plot it
         """
         data = pickle.load(open(data_name, 'r'))
+        # import pdb;pdb.set_trace()
         self.__dict__.update(data)
+        # self.desc.update(data)
         self.record_data = data
         self.plot_pred(*args, **kwargs)
 
@@ -173,7 +175,7 @@ class SVMDetector(BaseDetector):
         return self.data_file.data.get_fea_slice(fea=['start_time'])
 
     def dump(self, data_name):
-        var = ['pred', 'ano_val', 'args', 'detect_num', 'interval']
+        var = ['pred', 'ano_val', 'args', 'detect_num', 'interval', 'desc']
         # record_data = dict()
         for v in var:
             self.record_data[v] = self.__dict__.get(v, None)
