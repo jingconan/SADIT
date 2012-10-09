@@ -19,19 +19,21 @@ from mod_util import plot_points
 import cPickle as pickle
 from math import log
 import argparse
-from Base import BaseDetector
+# from Base import BaseDetector
+from Base import WindowDetector
 
-class StoDetector (BaseDetector):
+class StoDetector (WindowDetector):
     """It is an Abstract Base Class for the anomaly detector."""
     def __init__(self, desc):
         self.desc = desc
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
 
-    def set_args(self, argv):
-        parser = argparse.ArgumentParser(description='SVMDetector')
-        self.init_parser(parser)
-        self.args = parser.parse_args(argv)
-        self.__dict__.update(self.args.__dict__)
+    # def set_args(self, argv):
+    #     parser = argparse.ArgumentParser(description='SVMDetector')
+    #     self.init_parser(parser)
+    #     self.args = parser.parse_args(argv)
+    #     self.__dict__.update(self.args.__dict__)
+    #     self.desc.update(self.args.__dict__)
 
     def __call__(self, *args, **kwargs):
         return self.detect(*args, **kwargs)
@@ -44,8 +46,31 @@ class StoDetector (BaseDetector):
         abstract_method()
 
     def init_parser(self, parser):
+        """ entropy_th specify the threshold manually.
+        hoeff_far and ccoef are the parameter of hoeffding threshold rule.
+        Increase hoeff_far will decrease threshold
+        Increase ccoef will increase threshold
+        A small window size will make hoeff_far play more role, while a larger
+        window size will let ccoef more significant.
+        """
+        super(StoDetector, self).init_parser(parser)
         parser.add_argument('--hoeff_far', default=0.01, type=float,
-                help="false alarm rate for hoeffding rule")
+                help="""false alarm rate for hoeffding rule, if this parameter is set while
+                entropy_th parameter is not set, will calculate threshold according to
+                hoeffding rule. Increase hoeff_far will decrease threshold""")
+
+        parser.add_argument('--entropy_th', default=None, type=float,
+                help='entropy threshold to determine the anomaly, has \
+                higher priority than hoeff_far')
+
+        parser.add_argument('--ccoef', default=0.1, type=float,
+                help="""correction coefficient for calculat threshold using hoeffding rule.
+                hoeffding threshold is only a asymotical result. An O(n) linear term has been
+                abandon during the analysis, however, it practice, this term is important. You
+                need run on some test data set to deterine an approraite correction coefficient
+                first. Increase ccoef will increase threshold.
+                """)
+
 
     def I(self, em1, em2):
         """abstract method to calculate the difference of two
@@ -77,6 +102,7 @@ class StoDetector (BaseDetector):
 
         win_size = self.desc['win_size']
         interval = self.desc['interval']
+
         time = self.desc['fr_win_size'] if ('flow_rate' in self.desc['fea_option'].keys()) else 0
 
         i = 0
@@ -102,26 +128,40 @@ class StoDetector (BaseDetector):
             time += interval
 
         self.detect_num = i - 1
-        self.record_data['threshold'] = self.get_hoeffding_threshold(self.args.hoeff_far) if self.args.hoeff_far else None
-        self.record_data['args'] = self.args
+
+        # get the threshold:
+        # if self.args.entropy_th is not None:
+        if self.desc.get('entropy_th') is not None:
+            # import pdb;pdb.set_trace()
+            self.record_data['threshold'] = [self.args.entropy_th] * self.detect_num
+        # elif self.args.hoeff_far is not None:
+        elif self.desc.get('hoeff_far') is not None:
+            self.record_data['threshold'] = self.get_hoeffding_threshold(self.desc['hoeff_far'])
+        else:
+            self.record_data['threshold'] = None
+        # record the parameters
+        # self.record_data['args'] = self.args
+        self.record_data['desc'] = self.desc
+
         return self.record_data
+    def hoeffding_rule(self, n, false_alarm_rate):
+        """hoeffding rule with linear correction term
+        """
+        # return -1.0 / n * log(false_alarm_rate) + 4 * log(n) / n
+        # import pdb;pdb.set_trace()
+        # return -1.0 / n * log(false_alarm_rate) + self.args.ccoef * log(n) / n
+        return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
         threshold = -1 / |G| log(epsilon) where |G| is the number of flows in the window
         and epsilon is the false alarm_rate
         """
-        def hoeffding_rule(N, false_alarm_rate):
-            return -1.0 / N * log(false_alarm_rate) + 4 * log(N) / N
-            # return -1.0 / N * log(false_alarm_rate) + 2 * log(N) / N
-            # return -1.0 / flow_num_in_win * log(false_alarm_rate)
-        # print 'false_alarm_rate, ', false_alarm_rate
-
         res = []
         for i in xrange(self.detect_num):
             flow_seq = self._get_flow_seq(i)
             flow_num_in_win = flow_seq[1] - flow_seq[0] + 1
-            threshold = hoeffding_rule(flow_num_in_win, false_alarm_rate)
+            threshold = self.hoeffding_rule(flow_num_in_win, false_alarm_rate)
             res.append(threshold)
 
         return res
@@ -147,6 +187,7 @@ class StoDetector (BaseDetector):
     def plot(self, *args, **kwargs):
         rt = self.record_data['winT']
         ep = self.record_data['entropy']
+        # import pdb;pdb.set_trace()
         threshold = self.record_data['threshold']
         plot_points(rt, ep, threshold,
                 xlabel_=self.desc['win_type'], ylabel_= 'entropy',

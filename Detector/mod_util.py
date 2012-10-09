@@ -47,7 +47,7 @@ def plot_points(X, Y, threshold=None,  pic_show=False,
     if ylim_:
         plt.ylim(ylim_)
 
-    if threshold:
+    if threshold is not None:
         ano_flag = [ (1 if e > th  else 0) for e, th in zip(Y, threshold)]
         plot_seg(X, Y, ano_flag, ano_marker, *args, **kwargs)
         if threshold_marker is not None:

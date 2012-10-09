@@ -8,8 +8,9 @@ traffic condition of the ARO Network.
 ### change this before you try to run the code                ###
 #################################################################
 # ROOT = '/home/wangjing/Dropbox/Research/sadit-experimental'
-ROOT = '/home/wangjing/Dropbox/Research/sadit'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit'
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
+ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
 
 
 #################################
@@ -116,7 +117,8 @@ DETECTOR_DESC = dict(
         # win_size = 50,
         # interval=20,
         # interval=4,
-        interval=10,
+        # interval=10,
+        interval=30,
         # interval=2000,
         # win_size = 10,
         # win_size=100,
