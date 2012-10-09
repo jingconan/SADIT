@@ -18,7 +18,7 @@ from mod_util import plot_points
 
 import cPickle as pickle
 from math import log
-import argparse
+# import argparse
 # from Base import BaseDetector
 from Base import WindowDetector
 
@@ -63,7 +63,7 @@ class StoDetector (WindowDetector):
                 help='entropy threshold to determine the anomaly, has \
                 higher priority than hoeff_far')
 
-        parser.add_argument('--ccoef', default=0.1, type=float,
+        parser.add_argument('--ccoef', default=2, type=float,
                 help="""correction coefficient for calculat threshold using hoeffding rule.
                 hoeffding threshold is only a asymotical result. An O(n) linear term has been
                 abandon during the analysis, however, it practice, this term is important. You
@@ -147,10 +147,8 @@ class StoDetector (WindowDetector):
     def hoeffding_rule(self, n, false_alarm_rate):
         """hoeffding rule with linear correction term
         """
-        # return -1.0 / n * log(false_alarm_rate) + 4 * log(n) / n
-        # import pdb;pdb.set_trace()
-        # return -1.0 / n * log(false_alarm_rate) + self.args.ccoef * log(n) / n
-        return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
+        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
+        return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
