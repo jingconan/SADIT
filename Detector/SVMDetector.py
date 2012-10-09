@@ -30,11 +30,12 @@ class SVMDetector(BaseDetector):
     """base class for SVM Detector
     """
     def __init__(self, desc):
-        self.__dict__.update(desc)
+        # self.__dict__.update(desc)
+        self.desc = desc
         self.record_data = dict()
 
     @property
-    def rg_type(self): return self.win_type
+    def rg_type(self): return self.desc['win_type']
 
     def init_parser(self, parser):
         parser.add_argument('--svm_type', default=0,
@@ -76,12 +77,6 @@ class SVMDetector(BaseDetector):
         parser.add_argument('--scale_para_file', default=settings.ROOT + '/Share/scale.sf',
                 help="svm")
 
-    def set_args(self, argv):
-        parser = argparse.ArgumentParser(description='SVMDetector')
-        self.init_parser(parser)
-        self.args = parser.parse_args(argv)
-        self.__dict__.update(self.args.__dict__)
-
     @staticmethod
     def norm_fea(fea):
         """normalize the feature to [0, 1]"""
@@ -104,9 +99,9 @@ class SVMDetector(BaseDetector):
         if not NUMPY:
             return fea_list
 
-        pc = PCA(fea_list, self.pca_th)
+        pc = PCA(fea_list, self.desc['pca_th'])
 
-        if self.pca_var_pic:
+        if self.desc.get('pca_var_pic'):
             from matplotlib import pyplot as plt
             plt.plot(pc.d, 'b-+')
             plt.title('variance of each component at pca')
@@ -118,35 +113,35 @@ class SVMDetector(BaseDetector):
 
     def scale(self):
         print 'start to scale ...'
-        scale_file = self.svm_dat_file + '.scale'
+        scale_file = self.desc['svm_dat_file'] + '.scale'
         subprocess.check_call(' '.join([SVM_FOLDER + '/svm-scale',
-            '-s', self.scale_para_file,
-            self.svm_dat_file,
+            '-s', self.desc['scale_para_file'],
+            self.desc['svm_dat_file'],
             '>',
             scale_file
             ]), shell=True)
-        self.svm_dat_file = scale_file
+        self.desc['svm_dat_file'] = scale_file
 
     def train(self):
         print 'start to train...'
         subprocess.check_call([SVM_FOLDER + '/svm-train',
             '-s', '2',
-            '-t', str(self.kernel_type),
-            '-d', str(self.degree),
-            '-n', str(self.nu),
-            '-g', str(self.gamma),
-            self.svm_dat_file,
-            self.svm_model_file])
+            '-t', str(self.desc['kernel_type']),
+            '-d', str(self.desc['degree']),
+            '-n', str(self.desc['nu']),
+            '-g', str(self.desc['gamma']),
+            self.desc['svm_dat_file'],
+            self.desc['svm_model_file']])
 
     def predict(self):
         print 'start to predict...'
         subprocess.check_call([SVM_FOLDER + '/svm-predict',
-            self.svm_dat_file,
-            self.svm_model_file,
-            self.svm_pred_file])
+            self.desc['svm_dat_file'],
+            self.desc['svm_model_file'],
+            self.desc['svm_pred_file']])
 
     def load_pred(self):
-        fid = open(self.svm_pred_file)
+        fid = open(self.desc['svm_pred_file'])
         self.pred = []
         while True:
             line = fid.readline()
@@ -186,6 +181,7 @@ class SVMDetector(BaseDetector):
 
         # pickle.dump(self.__dict__, open(data_name, 'w') )
 
+
 class SVMFlowByFlowDetector(SVMDetector):
     """SVM Flow By Flow Anomaly Detector Method"""
     # MAX_FLOW_ONE_TIME = 1e4 # max number of flow it will compare each time
@@ -205,7 +201,7 @@ class SVMFlowByFlowDetector(SVMDetector):
 
     def get_start_time(self):
         start_time = self.data_file.data.get_fea_slice(fea=['start_time'])
-        return self.sample(start_time, self.sample_ratio)
+        return self.sample(start_time, self.desc['sample_ratio'])
 
     def write_dat(self, data):
         fea = data.get_fea_slice()
@@ -220,13 +216,13 @@ class SVMFlowByFlowDetector(SVMDetector):
         # write_svm_data_file(label, fea, self.svm_dat_file)
 
         #### SAMPLE FEATURE TO REDUCE COMPUTATION TIME ####
-        sample_fea = self.sample(fea, self.sample_ratio)
+        sample_fea = self.sample(fea, self.desc['sample_ratio'])
         # import pdb;pdb.set_trace()
         sample_fea = self.norm_fea(sample_fea)
         # sample_fea = self.pca(sample_fea)
         # import pdb;pdb.set_trace()
         label = [0] * len(sample_fea)
-        write_svm_data_file(label, sample_fea, self.svm_dat_file)
+        write_svm_data_file(label, sample_fea, self.desc['svm_dat_file'])
 
     def detect(self, data):
         self.data_file = data
@@ -241,7 +237,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         start_time = [float(v[0])-min_t for v in fea_slice]
         self.record_data['start_time'] = start_time
         self.record_data['pred'] = self.pred
-        self.record_data['interval'] = self.interval
+        self.record_data['interval'] = self.desc['interval']
 
 
     def plot_pred(self, xlim_=None, ylim_=None, *args, **kwargs):
@@ -279,9 +275,17 @@ try:
 except:
     NUMPY = False
 
-class SVMTemporalDetector(SVMDetector):
+from Base import WindowDetector
+class SVMTemporalDetector(SVMDetector, WindowDetector):
     """SVM Temporal Difference Detector. Proposed by R.L Taylor. Implemented by
     J. C. Wang <wangjing@bu.ed> """
+
+    def init_parser(self, parser):
+        SVMDetector.init_parser(self, parser)
+        WindowDetector.init_parser(self, parser)
+
+    def set_args(self, argv):
+        SVMDetector.set_args(self, argv)
 
     def write_dat(self, data_handler):
         """construct feature and write dat data for libsvm use. data is a Data Handler Class. refer
@@ -292,14 +296,14 @@ class SVMTemporalDetector(SVMDetector):
         i = 0
         while True:
             i += 1
-            if self.max_detect_num and i > self.max_detect_num:
+            if self.desc.get('max_detect_num') and i > self.desc.get('max_detect_num'):
                 break
             if self.rg_type == 'time' : print 'time: %f' %(time)
             else: print 'flow: %s' %(time)
 
             try:
                 # fea = data_handler.get_svm_feature(rg=[time, time+self.win_size], rg_type=self.rg_type)
-                fea = data_handler.get_svm_fea(rg=[time, time+self.win_size], rg_type=self.rg_type)
+                fea = data_handler.get_svm_fea(rg=[time, time+self.desc['win_size']], rg_type=self.rg_type)
                 fea_list.append(fea)
             except FetchNoDataException:
                 print 'there is no data to detect in this window'
@@ -308,7 +312,7 @@ class SVMTemporalDetector(SVMDetector):
                 break
 
             # import pdb;pdb.set_trace()
-            time += self.interval
+            time += self.desc['interval']
 
         self.detect_num = i - 1
 
@@ -316,7 +320,7 @@ class SVMTemporalDetector(SVMDetector):
         fea_list = self.pca(fea_list)
         # import pdb;pdb.set_trace()
         label = [0] * len(fea_list)
-        write_svm_data_file(label, fea_list, self.svm_dat_file)
+        write_svm_data_file(label, fea_list, self.desc['svm_dat_file'])
 
     # def train(self):
     #     print 'start to train...'
@@ -341,11 +345,11 @@ class SVMTemporalDetector(SVMDetector):
         # import matplotlib.pyplot as plt
         # self.stat()
         ano_idx = [i for i in xrange(self.detect_num) if self.pred[i] == self.ano_val]
-        x = [i*self.interval for i in ano_idx]
+        x = [i*self.desc['interval'] for i in ano_idx]
         y = [abs(self.pred[i]) for i in ano_idx]
         plot_points(x, y,
                 ano_marker=['ro'], threshold_marker=None,
-                xlim_=[0, self.detect_num*self.interval], ylim_=[-1.5, 1.5],
+                xlim_=[0, self.detect_num*self.desc['interval']], ylim_=[-1.5, 1.5],
                 markersize=10,
                 *args, **kwargs)
 
