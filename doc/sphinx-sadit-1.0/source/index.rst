@@ -153,97 +153,73 @@ Usage
 =====================================
 To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
 **settings.py** to the absolute path of the source directory. Then type ::
-    $ ./run.py
+    $ ./run.py -h
 
 in the command line. The help document will come out
 
-usage: run.py [-h] [-e EXPERIMENT] [-i INTERPRETER] [-d DETECT] [-m METHOD]
-              [--data_handler DATA_HANDLER] [--feature_option FEATURE_OPTION]
-              [--export_flows EXPORT_FLOWS]
-              [--entropy_threshold ENTROPY_THRESHOLD] [--pic_name PIC_NAME]
+usage: run.py [-e EXPERIMENT] [--profile PROFILE] [-hm HELP_METHOD] [-h]
 
 sadit
 
 optional arguments:
-  -h, --help            show this help message and exit
   -e EXPERIMENT, --experiment EXPERIMENT
-                        specify the experiment name you want to execute.
-                        Experiments availiable are: ['Eval', 'Experiment',
-                        'test', 'Sens', 'DetectArgSearch', 'MarkovSens',
-                        'MultiSrvExperiment', 'ImalseSettings',
-                        'MarkovExperiment']. An integrated experiment will run
-                        fs-simulator first and use detector to detect the
-                        result.
-  -i INTERPRETER, --interpreter INTERPRETER
-                        --specify the interperter you want to use, now support
-                        [cpython], and [pypy](only for detector)
-  -d DETECT, --detect DETECT
-                        --detect [filename] will simply detect the flow file,
-                        simulator will not run in this case, detector will
-                        still use the configuration in the settings.py
-  -m METHOD, --method METHOD
-                        --method [method] will specify the method to use.
-                        Avaliable options are: ['svm_fbf':
-                        SVMFlowByFlowDetector SVM Flow By Flow Anomaly
-                        Detector Method | 'mf': ModelFreeAnoDetector | 'mfmb':
-                        FBAnoDetector model free and model based together |
-                        'svm_temp': SVMTemporalDetector SVM Temporal
-                        Difference Detector. Proposed by R.L Taylor.
-                        Implemented by J. C. Wang <wangjing@bu.ed> | 'mb':
-                        ModelBaseAnoDetector]
-  --data_handler DATA_HANDLER
-                        --specify the data handler you want to use, the
-                        availiable option are: ['fs_deprec': DataFile from fs
-                        output flow file to feature, this class is
-                        *depreciated* | 'fs': HardDiskFileHandler Data is
-                        stored as Hard Disk File | 'xflow':
-                        HardDiskFileHandler_xflow | 'SperottoIPOM2009':
-                        SQLDataFileHandler_SperottoIPOM2009 "Data File wrapper
-                        for SperottoIPOM2009 format. it is store in mysql
-                        server, visit http://traces.simpleweb.org/traces/netfl
-                        ow/netflow2/dataset_description.txt for more
-                        information | 'pcap2netflow':
-                        HardDiskFileHandler_pcap2netflow]
-  --feature_option FEATURE_OPTION
-                        specify the feature option. feature option is a
-                        dictionary describing the quantization level for each
-                        feature. You need at least specify 'cluster' and
-                        'dist_to_center'. Note that, the value of 'cluster' is
-                        the cluster number. The avaliability of other features
-                        depend on the data handler.
-  --export_flows EXPORT_FLOWS
-                        specify the file name of exported abnormal flows.
-                        Default is not export
-  --entropy_threshold ENTROPY_THRESHOLD
-                        the threshold for entropy,
-  --pic_name PIC_NAME   picture name for the detection result
+                        print ./run.py -e <exper> -h for help of a experiment
+                        Avaliable experiments are [Eval | Compare |
+                        MarkovExper | DetectExper | AttriSensExper | IIDExper
+                        | DetectArgSearch | MarkovSens | MultiSrvExperiment |
+                        ImalseSettings]
+  --profile PROFILE     profile the program
+  -hm HELP_METHOD, --help_method HELP_METHOD
+                        print the detailed help message for a method.
+                        Avaliable method [mf | art | mb | mfmb | svm_fbf |
+                        svm_temp]
+  -h, --help            print help message and exit
 
-The help document is quite clear, the only parameter I want clarify is
-*--experiment*. It specify the experiment you want to execute. An **experiment**
-is actually a executable python script in Experiment folder. 
-..  I will take
-..  *Experiment.py* as an example to describle experiment.
-Avaliable experiments as follows:
-    - **Experiment.py**: basic experiment which includes configuration,
-      simulation and detection, which corresponds to generating the
-      configuration files, generating the labeled flow records and detectng the
-      anomalies in the records, respectively.
-    - **Sens.py**: Do sensistive analysis by change the degree of of anomalies,
-      run the detection algorithm accordingly and show results in the same
-      figure.
-    - **MarkovExperiment.py**: Similar with Experiment, but for Markov type of
-      anomalies
-    - **MarkovSens.py**: Sensitivity analysis of MarkovExperiment
-    - **Eval.py**: Evaluation of the detection algorithmm calculate fpr, fnr and
-      plot the ROC curve
-    - **DetectArgSearch.py**: runs detection algortihms with all combinations of
+*--experiment* specify the experiment you want to execute. An **experiment**
+is actually a subcommand that has certain functionality.
+
+Avaliable experiments are as follows:
+    - **DetectExper**: detect the flow record data specified by *-d* option
+    - **IIDExper**: generate flow records with I.I.D model and test the
+      algorithm with these flow records.
+    - **MarkovExper**: generate flow records with Markov model and test the
+      algorithm with these flow records
+    - **AttrSensExper**: change the degree of anomaly in **IIDExper**, run the
+      algorithm accordingly and show results in the same figure.
+    - **MarkovSens**: change the degree of anomaly in **MarkovExper**, run
+      the algorithm accordingly and show results in the same figure.
+    - **Eval**: Evaluation of the detection algorithmm(calculate fpr, fnr and
+      plot the ROC curve)
+    - **DetectArgSearch**: runs detection algortihms with all combinations of
       parameters and outputs the results to a folder, helps to select the
       optimal parameters.
+    - **Compare**: run several detection algorithms and save the intermediate
+      results. Can also load results load computed before and show comparison figure.
 
-In addition to the parameters in the command line, SADIT has some more tunable
-parameters in **ROOT/settings.py**. you can customize **SADIT** through changing
-parameters in **settings.py** file. Since it is a typical python script, so you can
-use any non-trival python sentence in the **settings.py**. 
+To see the help message of an  experiment, just type ::
+    $ ./run.py -e <exper> -h
+
+to get the help message of an experiment, just type ::
+    $ ./run.py -hm <detector>
+
+Whenever you are not sure about the options you can set, just add *-h* to the end
+of command and execute it and help message will be printed correspondingly.
+
+You can change parameters in two ways:
+    - **ROOT/settings.py** contains some default
+      parameters(**ROOT/setting_arg_search.py** contains the default parameters
+      for **DetectArgSearch** experiment). When you don't specify parameters in
+      the commandline, these default values will be used. Of course, you can
+      change these parameters by editing the files.
+    - You can set the parameters of experiments as well as detectors through
+      command line.
+
+..
+    In addition to the parameters in the command line, 
+    SADIT has some more tunable parameters in **ROOT/settings.py**. you can
+    customize **SADIT** through changing parameters in **settings.py** file. Since
+    it is a typical python script, so you can use any non-trival python sentence in
+    the **settings.py**. 
 
 Parameters for Labeled Flow Generator
 -------------------------------------
@@ -320,13 +296,19 @@ start with *abnormal_* is the exported abnormal flows correspondingly.
 **line format**
     prefix nodename time flow_start_time flow_end_time src_ip:src_port->dst_ip:dst_port protocol payload destname unknown flowsize unknown
 
-After finishing your detection algorihms, you need to add the corresponding
-class name to **detector_map** in *ROOT/Detector/API.py*. Then you can implement
-your own experiment to compare your algorithms with existing algorithms in
-SADIT. Look at the sample examples in  *ROOT/Experiemnt/* folder. Your can run
-your experiment by typing ::
+After finishing your detection algorihms, the last thing you need to do is to
+add the corresponding class name to **detector_map** in *ROOT/Detector/API.py*.
+After that you will be able to use your detection algorithm. You can use
+**Compare** experiment to compare with other algorithm or **Eval** algorithm to
+Evaluate your algorithm. You can also implement new experiment to play with your
+new algorithm.
 
-    ./run.py -e <Your Experiment Name>
+..
+    Then you can implement
+    your own experiment to compare your algorithms with existing algorithms in
+    SADIT. Look at the sample examples in  *ROOT/Experiemnt/* folder. Your can run
+    your experiment by typing ::
+        ./run.py -e <Your Experiment Name>
 
 Use Other flow records
 -------------------------------------
@@ -421,15 +403,13 @@ this software depends on all softwares that fs-simulate depends on:
 besides: it requires:
     - numpy `Get <http://numpy.scipy.org/>`_
     - matplotlib `Get <http://matplotlib.sourceforge.net/>`_
-    - pygame `Get <http://www.pygame.org/news.html>`_
     - profilehooks `Get <http://mg.pov.lt/profilehooks/>`_
 
-if you are in debain bases system. you can simple use ::
+if you are in debain based system. you can simple use ::
 
     sudo apt-get install python-dev
     sudo apt-get install python-numpy
     sudo apt-get install python-matplotlib
-    sud0 apt-get install python-pygame
 
 .. toctree::
     :maxdepth: 2

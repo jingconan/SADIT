@@ -169,128 +169,91 @@ support to export anoumalous flows(add label information).</p>
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
 <strong>settings.py</strong> to the absolute path of the source directory. Then type</p>
-<div class="highlight-python"><pre>$ ./run.py</pre>
+<div class="highlight-python"><pre>$ ./run.py -h</pre>
 </div>
 <p>in the command line. The help document will come out</p>
-<dl class="docutils">
-<dt>usage: run.py [-h] [-e EXPERIMENT] [-i INTERPRETER] [-d DETECT] [-m METHOD]</dt>
-<dd>[&#8211;data_handler DATA_HANDLER] [&#8211;feature_option FEATURE_OPTION]
-[&#8211;export_flows EXPORT_FLOWS]
-[&#8211;entropy_threshold ENTROPY_THRESHOLD] [&#8211;pic_name PIC_NAME]</dd>
-</dl>
+<p>usage: run.py [-e EXPERIMENT] [&#8211;profile PROFILE] [-hm HELP_METHOD] [-h]</p>
 <p>sadit</p>
 <dl class="docutils">
 <dt>optional arguments:</dt>
-<dd><table class="first last docutils option-list" frame="void" rules="none">
+<dd><table class="first docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-e <var>EXPERIMENT</var></span>, <span class="option">--experiment <var>EXPERIMENT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>print ./run.py -e &lt;exper&gt; -h for help of a experiment
+Avaliable experiments are [Eval | Compare |
+MarkovExper | DetectExper | AttriSensExper | IIDExper
+| DetectArgSearch | MarkovSens | MultiSrvExperiment |
+ImalseSettings]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--profile <var>PROFILE</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>profile the program</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>-hm HELP_METHOD, &#8211;help_method HELP_METHOD</dt>
+<dd>print the detailed help message for a method.
+Avaliable method [mf | art | mb | mfmb | svm_fbf |
+svm_temp]</dd>
+</dl>
+<table class="last docutils option-list" frame="void" rules="none">
 <col class="option" />
 <col class="description" />
 <tbody valign="top">
 <tr><td class="option-group">
 <kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
-<td>show this help message and exit</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-e <var>EXPERIMENT</var></span>, <span class="option">--experiment <var>EXPERIMENT</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>specify the experiment name you want to execute.
-Experiments availiable are: [&#8216;Eval&#8217;, &#8216;Experiment&#8217;,
-&#8216;test&#8217;, &#8216;Sens&#8217;, &#8216;DetectArgSearch&#8217;, &#8216;MarkovSens&#8217;,
-&#8216;MultiSrvExperiment&#8217;, &#8216;ImalseSettings&#8217;,
-&#8216;MarkovExperiment&#8217;]. An integrated experiment will run
-fs-simulator first and use detector to detect the
-result.</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-i <var>INTERPRETER</var></span>, <span class="option">--interpreter <var>INTERPRETER</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>&#8211;specify the interperter you want to use, now support
-[cpython], and [pypy](only for detector)</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-d <var>DETECT</var></span>, <span class="option">--detect <var>DETECT</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>&#8211;detect [filename] will simply detect the flow file,
-simulator will not run in this case, detector will
-still use the configuration in the settings.py</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-m <var>METHOD</var></span>, <span class="option">--method <var>METHOD</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>&#8211;method [method] will specify the method to use.
-Avaliable options are: [&#8216;svm_fbf&#8217;:
-SVMFlowByFlowDetector SVM Flow By Flow Anomaly
-Detector Method | &#8216;mf&#8217;: ModelFreeAnoDetector | &#8216;mfmb&#8217;:
-FBAnoDetector model free and model based together |
-&#8216;svm_temp&#8217;: SVMTemporalDetector SVM Temporal
-Difference Detector. Proposed by R.L Taylor.
-Implemented by J. C. Wang &lt;<a class="reference external" href="mailto:wangjing&#37;&#52;&#48;bu&#46;ed">wangjing<span>&#64;</span>bu<span>&#46;</span>ed</a>&gt; | &#8216;mb&#8217;:
-ModelBaseAnoDetector]</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--data_handler <var>DATA_HANDLER</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>&#8211;specify the data handler you want to use, the
-availiable option are: [&#8216;fs_deprec&#8217;: DataFile from fs
-output flow file to feature, this class is
-<em>depreciated</em> | &#8216;fs&#8217;: HardDiskFileHandler Data is
-stored as Hard Disk File | &#8216;xflow&#8217;:
-HardDiskFileHandler_xflow | &#8216;SperottoIPOM2009&#8217;:
-SQLDataFileHandler_SperottoIPOM2009 &#8220;Data File wrapper
-for SperottoIPOM2009 format. it is store in mysql
-server, visit <a class="reference external" href="http://traces.simpleweb.org/traces/netfl">http://traces.simpleweb.org/traces/netfl</a>
-ow/netflow2/dataset_description.txt for more
-information | &#8216;pcap2netflow&#8217;:
-HardDiskFileHandler_pcap2netflow]</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--feature_option <var>FEATURE_OPTION</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>specify the feature option. feature option is a
-dictionary describing the quantization level for each
-feature. You need at least specify &#8216;cluster&#8217; and
-&#8216;dist_to_center&#8217;. Note that, the value of &#8216;cluster&#8217; is
-the cluster number. The avaliability of other features
-depend on the data handler.</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--export_flows <var>EXPORT_FLOWS</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>specify the file name of exported abnormal flows.
-Default is not export</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--entropy_threshold <var>ENTROPY_THRESHOLD</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>the threshold for entropy,</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--pic_name <var>PIC_NAME</var></span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>picture name for the detection result</td></tr>
+<td>print help message and exit</td></tr>
 </tbody>
 </table>
 </dd>
 </dl>
-<p>The help document is quite clear, the only parameter I want clarify is
-<em>&#8211;experiment</em>. It specify the experiment you want to execute. An <strong>experiment</strong>
-is actually a executable python script in Experiment folder.
-..  I will take
-..  <em>Experiment.py</em> as an example to describle experiment.
-Avaliable experiments as follows:</p>
-<blockquote>
-<div><ul class="simple">
-<li><strong>Experiment.py</strong>: basic experiment which includes configuration,
-simulation and detection, which corresponds to generating the
-configuration files, generating the labeled flow records and detectng the
-anomalies in the records, respectively.</li>
-<li><strong>Sens.py</strong>: Do sensistive analysis by change the degree of of anomalies,
-run the detection algorithm accordingly and show results in the same
-figure.</li>
-<li><strong>MarkovExperiment.py</strong>: Similar with Experiment, but for Markov type of
-anomalies</li>
-<li><strong>MarkovSens.py</strong>: Sensitivity analysis of MarkovExperiment</li>
-<li><strong>Eval.py</strong>: Evaluation of the detection algorithmm calculate fpr, fnr and
-plot the ROC curve</li>
-<li><strong>DetectArgSearch.py</strong>: runs detection algortihms with all combinations of
+<p><em>&#8211;experiment</em> specify the experiment you want to execute. An <strong>experiment</strong>
+is actually a subcommand that has certain functionality.</p>
+<dl class="docutils">
+<dt>Avaliable experiments are as follows:</dt>
+<dd><ul class="first last simple">
+<li><strong>DetectExper</strong>: detect the flow record data specified by <em>-d</em> option</li>
+<li><strong>IIDExper</strong>: generate flow records with I.I.D model and test the
+algorithm with these flow records.</li>
+<li><strong>MarkovExper</strong>: generate flow records with Markov model and test the
+algorithm with these flow records</li>
+<li><strong>AttrSensExper</strong>: change the degree of anomaly in <strong>IIDExper</strong>, run the
+algorithm accordingly and show results in the same figure.</li>
+<li><strong>MarkovSens</strong>: change the degree of anomaly in <strong>MarkovExper</strong>, run
+the algorithm accordingly and show results in the same figure.</li>
+<li><strong>Eval</strong>: Evaluation of the detection algorithmm(calculate fpr, fnr and
+plot the ROC curve)</li>
+<li><strong>DetectArgSearch</strong>: runs detection algortihms with all combinations of
 parameters and outputs the results to a folder, helps to select the
 optimal parameters.</li>
+<li><strong>Compare</strong>: run several detection algorithms and save the intermediate
+results. Can also load results load computed before and show comparison figure.</li>
 </ul>
-</div></blockquote>
-<p>In addition to the parameters in the command line, SADIT has some more tunable
-parameters in <strong>ROOT/settings.py</strong>. you can customize <strong>SADIT</strong> through changing
-parameters in <strong>settings.py</strong> file. Since it is a typical python script, so you can
-use any non-trival python sentence in the <strong>settings.py</strong>.</p>
+</dd>
+<dt>To see the help message of an  experiment, just type ::</dt>
+<dd>$ ./run.py -e &lt;exper&gt; -h</dd>
+<dt>to get the help message of an experiment, just type ::</dt>
+<dd>$ ./run.py -hm &lt;detector&gt;</dd>
+</dl>
+<p>Whenever you are not sure about the options you can set, just add <em>-h</em> to the end
+of command and execute it and help message will be printed correspondingly.</p>
+<dl class="docutils">
+<dt>You can change parameters in two ways:</dt>
+<dd><ul class="first last simple">
+<li><strong>ROOT/settings.py</strong> contains some default
+parameters(<strong>ROOT/setting_arg_search.py</strong> contains the default parameters
+for <strong>DetectArgSearch</strong> experiment). When you don&#8217;t specify parameters in
+the commandline, these default values will be used. Of course, you can
+change these parameters by editing the files.</li>
+<li>You can set the parameters of experiments as well as detectors through
+command line.</li>
+</ul>
+</dd>
+</dl>
 <div class="section" id="parameters-for-labeled-flow-generator">
 <h3>Parameters for Labeled Flow Generator<a class="headerlink" href="#parameters-for-labeled-flow-generator" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">NET_DESC</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
@@ -360,13 +323,12 @@ start with <em>abnormal_</em> is the exported abnormal flows correspondingly.</p
 <dt><strong>line format</strong></dt>
 <dd>prefix nodename time flow_start_time flow_end_time src_ip:src_port-&gt;dst_ip:dst_port protocol payload destname unknown flowsize unknown</dd>
 </dl>
-<p>After finishing your detection algorihms, you need to add the corresponding
-class name to <strong>detector_map</strong> in <em>ROOT/Detector/API.py</em>. Then you can implement
-your own experiment to compare your algorithms with existing algorithms in
-SADIT. Look at the sample examples in  <em>ROOT/Experiemnt/</em> folder. Your can run
-your experiment by typing</p>
-<div class="highlight-python"><pre>./run.py -e &lt;Your Experiment Name&gt;</pre>
-</div>
+<p>After finishing your detection algorihms, the last thing you need to do is to
+add the corresponding class name to <strong>detector_map</strong> in <em>ROOT/Detector/API.py</em>.
+After that you will be able to use your detection algorithm. You can use
+<strong>Compare</strong> experiment to compare with other algorithm or <strong>Eval</strong> algorithm to
+Evaluate your algorithm. You can also implement new experiment to play with your
+new algorithm.</p>
 </div>
 <div class="section" id="use-other-flow-records">
 <h3>Use Other flow records<a class="headerlink" href="#use-other-flow-records" title="Permalink to this headline">¶</a></h3>
@@ -455,16 +417,14 @@ this software depends on all softwares that fs-simulate depends on:</p>
 <dd><ul class="first last simple">
 <li>numpy <a class="reference external" href="http://numpy.scipy.org/">Get</a></li>
 <li>matplotlib <a class="reference external" href="http://matplotlib.sourceforge.net/">Get</a></li>
-<li>pygame <a class="reference external" href="http://www.pygame.org/news.html">Get</a></li>
 <li>profilehooks <a class="reference external" href="http://mg.pov.lt/profilehooks/">Get</a></li>
 </ul>
 </dd>
 </dl>
-<p>if you are in debain bases system. you can simple use</p>
+<p>if you are in debain based system. you can simple use</p>
 <div class="highlight-python"><pre>sudo apt-get install python-dev
 sudo apt-get install python-numpy
-sudo apt-get install python-matplotlib
-sud0 apt-get install python-pygame</pre>
+sudo apt-get install python-matplotlib</pre>
 </div>
 <div class="toctree-wrapper compound">
 <ul class="simple">
