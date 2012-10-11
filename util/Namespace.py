@@ -48,23 +48,20 @@ class Namespace(dict):
     def from_object(cls, obj, names=None):
         if names is None:
             names = dir(obj)
-        # import pdb;pdb.set_trace()
-        ns = dict([name, getattr(obj, name)] for name in names)
-        # ns = {name:getattr(obj, name) for name in names}
+        ns = {name:getattr(obj, name) for name in names}
+        import pdb;pdb.set_trace()
         return cls(ns)
 
     @classmethod
     def from_mapping(cls, ns, names=None):
         if names:
-            # ns = {name:ns[name] for name in names}
-            ns = dict([name,ns[name]] for name in names)
+            ns = {name:ns[name] for name in names}
         return cls(ns)
 
     @classmethod
     def from_sequence(cls, seq, names=None):
         if names:
-            # seq = {name:val for name, val in seq if name in names}
-            seq = dict([name,val] for name, val in seq if name in names)
+            seq = {name:val for name, val in seq if name in names}
         return cls(seq)
 
     #------------------------

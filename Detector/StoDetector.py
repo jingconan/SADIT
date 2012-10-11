@@ -387,7 +387,11 @@ class FBAnoDetector(StoDetector):
                 win_ab_flow_seq = [i+st for i in range(0, ed-st) if quan_level[i] in ab_flow_info]
             else:
                 ano_tran_set = [(i+st, i+st+1) for i in range(0, ed-st-1) if (quan_level[i], quan_level[i+1]) in ab_flow_info]
-                win_ab_flow_seq = set.union(*[set(flow_states) for flow_states in zip(*ano_tran_set)])
+                if ano_tran_set:
+                    win_ab_flow_seq_raw = [set(flow_states) for flow_states in zip(*ano_tran_set)]
+                    win_ab_flow_seq = set.union(*win_ab_flow_seq_raw)
+                else:
+                    win_ab_flow_seq = []
 
             ano_flow_seq += win_ab_flow_seq
 

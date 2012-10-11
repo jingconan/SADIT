@@ -174,7 +174,8 @@ try:
 except:
     Counter = False
 
-    import itertools
+import itertools
+
 def model_based(q_fea_vec, fea_QN):
     '''estimate the transition probability. It has same input parameter with model_free.
 
@@ -264,11 +265,11 @@ def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):
 
     '''
     if not quan_flag: quan_flag = len(fea_QN) * [1]
-    try:
-        QS = lambda a, b, c, flag: quantize_state(a, b, c)[1] if flag else a
-        res = [ QS(a, b, c, flag) for a, b, c, flag in itertools.izip(fea_vec , fea_QN, fea_range, quan_flag) ]
-    except:
-        import pdb;pdb.set_trace()
+    # try:
+    QS = lambda a, b, c, flag: quantize_state(a, b, c)[1] if flag else a
+    res = [ QS(a, b, c, flag) for a, b, c, flag in itertools.izip(fea_vec , fea_QN, fea_range, quan_flag) ]
+    # except :
+        # import pdb;pdb.set_trace()
     return res
 
 # def vector_quantize_state_flow_first(fea_vec, fea_QN, fea_range, quan_flag = None):

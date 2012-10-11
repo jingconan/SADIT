@@ -133,14 +133,16 @@ class DetectArgSearch(DetectExper):
 
     def export(self, prefix, desc):
         """export outputs"""
-        self.detector.plot_entropy(False, prefix+'.eps')
+        # self.detector.plot_entropy(False, prefix+'.eps')
+        print 'prefix, ', prefix
+        self.detector.plot(pic_name = prefix+'.eps')
         self.export_ab_flow_short_cut(prefix+'-raw.txt', desc)
         self.export_ab_flow_formated(prefix+'-formated.txt', desc)
         self.export_ident_flow(prefix+'-ident.txt', 'mf', desc)
         self.export_ident_flow(prefix+'-ident.txt', 'mb', desc)
 
     def run(self):
-        RES_DIR = '../res/'
+        RES_DIR = './res/'
         if not self.change_opt:
             template = copy.deepcopy(self.desc_opt)
             self.detector = detect(template['flow_file'], template)
@@ -162,7 +164,7 @@ class DetectArgSearch(DetectExper):
 
             self.detector = detect(template['flow_file'], template)
             name = '-'.join([n+'_'+str(v) for n, v in zip(self.comb_name, cb)])
-            # self.export(RES_DIR+name, template)
+            self.export(RES_DIR+name, template)
 
             end_time = time.clock()
             sim_dur = end_time - start_time

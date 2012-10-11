@@ -12,7 +12,7 @@ traffic condition of the ARO Network.
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 # ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
 # ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
-ROOT = '/home/wangjing/Documents/sadit'
+ROOT = '/home/wangjing/Dropbox/Research/sadit'
 
 
 #################################
