@@ -4,9 +4,13 @@ from subprocess import check_call as call
 import sys
 sys.path.insert(0, '../..')
 from Detector.mod_util import plot_points
-import matplotlib.pyplot as plt
 import cPickle as pickle
 import os
+
+try:
+    import matplotlib.pyplot as plt
+except:
+    plt = False
 class ARTDetector(object):
     ROOT = '/home/wangjing/Dropbox/Research/sadit'
     HOME = ROOT + '/Detector/ART'

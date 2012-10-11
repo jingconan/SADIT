@@ -152,7 +152,11 @@ class QuantizeDataHandler(object):
 #######################################
 ## SVM Temporal Method Handler   ######
 #######################################
-from collections import Counter
+try:
+    from collections import Counter
+except ImportError:
+    Counter = False
+
 # import operator
 class SVMTemporalHandler(QuantizeDataHandler):
     """Data Hanlder for SVM Temporal Detector approach. It use a set of features

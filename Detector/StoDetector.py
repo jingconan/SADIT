@@ -312,6 +312,7 @@ class FBAnoDetector(StoDetector):
             pic_name=None, pic_show=False,
             *args, **kwargs):
         # if not VIS: self._save_gnuplot_file(); return;
+        if not plt: self._save_gnuplot_file(); return;
 
         rt = self.record_data['winT']
         mf, mb = zip(*self.record_data['entropy'])

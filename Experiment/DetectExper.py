@@ -75,6 +75,8 @@ class DetectExper(object):
         if args.method:
             desc['detector_type'] = args.method
 
+        if args.detect is None:
+            raise Exception('You need specify file path that will be analyzed!!')
         detector = detect(os.path.abspath(args.detect), desc, res_args)
         self.detector = detector
 

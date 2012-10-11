@@ -169,8 +169,12 @@ def model_based_deprec(q_fea_vec, fea_QN):
     mp = [v*1.0/fl for v in mp]
     return P, mp
 
-from collections import Counter
-import itertools
+try:
+    from collections import Counter
+except:
+    Counter = False
+
+    import itertools
 def model_based(q_fea_vec, fea_QN):
     '''estimate the transition probability. It has same input parameter with model_free.
 
@@ -241,6 +245,10 @@ def model_free(q_fea_vec, fea_QN):
     for k, v in ct.iteritems():
         P[int(k)] = v * 1.0 / total
     return P
+
+if Counter is False:
+    model_free = model_free_deprec
+    model_based = model_based_deprec
 
 
 def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):

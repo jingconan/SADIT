@@ -13,6 +13,7 @@ from os import system as sh
 
 # import argparse
 from util import load_para, Namespace
+# from util import load_para
 from DetectExper import DetectExper
 # class FlowStylizedValidationExper(DetectExper):
 class IIDExper(DetectExper):
@@ -25,12 +26,22 @@ class IIDExper(DetectExper):
     def __init__(self, *args, **kwargs):
         # super(FlowStylizedValidationExper, self).__init__(*args, **kwargs)
         super(IIDExper, self).__init__(*args, **kwargs)
+        # default_settings = load_para(self.args.default_settings)
         default_settings = load_para(self.args.default_settings, Namespace)
+        # self.ano_list = default_settings['ANO_LIST']
+        # self.net_desc = default_settings['NET_DESC']
+        # self.dot_file = default_settings['OUTPUT_DOT_FILE']
+        # self.norm_desc = default_settings['NORM_DESC']
+        # self.sim_t = default_settings['sim_t']
+
         self.ano_list = default_settings.ANO_LIST
         self.net_desc = default_settings.NET_DESC
         self.dot_file = default_settings.OUTPUT_DOT_FILE
         self.norm_desc = default_settings.NORM_DESC
         self.sim_t = default_settings.sim_t
+
+
+
         # self.ROOT = default_settings.ROOT
         self.output_flow_file = self.ROOT + '/Simulator/n%i_flow.txt'%(self.args.detect_node_id)
         self.export_abnormal_flow_file = self.ROOT + '/Simulator/abnormal_n%i_flow.txt'%(self.args.detect_node_id)
