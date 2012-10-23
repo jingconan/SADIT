@@ -28,13 +28,6 @@ class StoDetector (WindowDetector):
         self.desc = desc
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
 
-    # def set_args(self, argv):
-    #     parser = argparse.ArgumentParser(description='SVMDetector')
-    #     self.init_parser(parser)
-    #     self.args = parser.parse_args(argv)
-    #     self.__dict__.update(self.args.__dict__)
-    #     self.desc.update(self.args.__dict__)
-
     def __call__(self, *args, **kwargs):
         return self.detect(*args, **kwargs)
 
@@ -114,10 +107,9 @@ class StoDetector (WindowDetector):
             else: print 'flow: %s' %(time)
 
             try:
-                # d_pmf, d_Pmb, d_mpmb = self.data_file.get_em(rg=[time, time+win_size], rg_type='time')
+                self.rg = [time, time+win_size] # For two window method
                 em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
                 entropy = self.I(em, self.norm_em)
-                # flow_num = self.get_flow_num(rg=[time, time+win_size], rg_type=rg_type)
                 self.record( entropy=entropy, winT = time, threshold = 0, em=em)
             except FetchNoDataException:
                 print 'there is no data to detect in this window'
@@ -128,6 +120,7 @@ class StoDetector (WindowDetector):
             time += interval
 
         self.detect_num = i - 1
+        # import pdb;pdb.set_trace()
 
         # get the threshold:
         # if self.args.entropy_th is not None:
@@ -173,6 +166,7 @@ class StoDetector (WindowDetector):
         win_size = self.desc['win_size']
         interval = self.desc['interval']
         if rg_type == 'time':
+            # import pdb;pdb.set_trace()
             st = self.record_data['winT'][win_idx]
             sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
         elif rg_type == 'flow':
@@ -449,6 +443,169 @@ class FBAnoDetector(StoDetector):
     #         ano_flow_seq += range(st, ed)
 
     #     return ano_flow_seq
+
+class TwoWindowAnoDetector(FBAnoDetector):
+    """ Two Window Stochastic Anomaly Detector
+    """
+    def init_parser(self, parser):
+        super(TwoWindowAnoDetector, self).init_parser(parser)
+        parser.add_argument('--norm_win_ratio', default=5.0, type=float,
+                help=""" the ratio of normal window with the detection window size.
+                """)
+
+    def I(self, em, norm_em):
+        """ Use emperical measure of large window as nominal emperical measure.
+        """
+        norm_win_size = self.desc['norm_win_ratio'] * self.desc['win_size']
+        # st = self.rg[0] - norm_win_size if (self.rg[0] > norm_win_size ) else 0
+        if self.rg[0] > norm_win_size:
+            norm_rg = [self.rg[0] - norm_win_size, self.rg[0]]
+            norm_win_em = self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+        else:
+            norm_win_em = norm_em
+
+        d_pmf, d_Pmb, d_mpmb = em
+        pmf, Pmb, mpmb = norm_win_em
+        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
+
+
+import copy
+class AdaStoDetector(TwoWindowAnoDetector):
+
+    def detect(self, data_file):
+        self.data_file = data_file
+        self.info = dict()
+        # for win_size in [10, 50, 200, 400, 1000, 1500]:
+        # for win_size in [10, 60, 200]:
+        for win_size in [50, 100, 200, 500, 1000, 2000]:
+            em_info = self.cal_em('time', win_size)
+            adj_entro = self.cal_adj_entro(em_info['em'])
+            self.info[win_size] = {'em_info':em_info, 'adj_entro':adj_entro}
+
+    def cal_adj_entro(self, em):
+        M = len(em)
+        adj_entro = []
+        for i in xrange(M-1):
+            adj_entro.append( self.I(em[i], em[i+1]) )
+
+        return adj_entro
+
+    def plot(self, *args, **kwargs):
+        # rt = self.record_data['winT']
+        # plt.plot(rt[])
+        # import pdb;pdb.set_trace()
+        # plot_points(rt[0:-1], self.adj_entro,
+                # *args, **kwargs)
+
+        fig = plt.figure()
+        mf_ax = fig.add_subplot(211)
+        mb_ax = fig.add_subplot(212)
+        # mf_fig = plt.figure()
+        # mb_fig = plt.figure()
+        for ws, info in self.info.iteritems():
+            adj_entro = info['adj_entro']
+            zip_ae = zip(*adj_entro)
+            rt = info['em_info']['winT'][0:-1]
+            # plt.plot(rt, zip_ae[0], figure=mf_fig)
+            # plt.plot(rt, zip_ae[1], figure=mb_fig)
+            mf_ax.plot(rt, zip_ae[0])
+            mb_ax.plot(rt, zip_ae[1])
+        leg = [str(v) for v in self.info.keys()]
+        mf_ax.legend(leg)
+        mb_ax.legend(leg)
+        plt.savefig('adj_entro.pdf')
+        plt.show()
+        import pdb;pdb.set_trace()
+
+    def cal_em(self, rg_type, win_size):
+        self.record_data = dict(winT=[], em=[], rg=[])
+        time = 0
+        i = 0
+        while True:
+            i += 1
+            if rg_type == 'time' : print 'time: %f' %(time)
+            else: print 'flow: %s' %(time)
+
+            try:
+                self.rg = [time, time+win_size] # For two window method
+                em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
+                self.record( winT = time, em=em, rg=self.rg)
+            except FetchNoDataException:
+                print 'there is no data to detect in this window'
+            except DataEndException:
+                print 'reach data end, break'
+                break
+
+            time += win_size
+        return copy.deepcopy(self.record_data)
+
+import numpy as np
+class EM(object):
+    def __init__(self, data):
+        self.data = [np.array(d) for d in data]
+
+    def __add__(self, val):
+        for i in xrange(len(self.data)):
+            self.data[i] = self.data[i] + val[i]
+        return self
+    def __div__(self, val):
+        for i in xrange(len(self.data)):
+            self.data[i] /= val
+        return self
+
+
+class PeriodStoDetector(FBAnoDetector):
+    def init_parser(self, parser):
+        super(PeriodStoDetector, self).init_parser(parser)
+        parser.add_argument('--period', default=1000.0, type=float,
+                help="""the period of underlying traffic""")
+
+    def I(self, em, norm_em):
+        i = 0
+        norm_win_em = EM(norm_em)
+        period = self.desc['period']
+        while True:
+            i += 1
+            try:
+                norm_rg = [self.rg[0] + i * period, self.rg[1] + i * period] #FIXME need to look back
+                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            except FetchNoDataException:
+                break
+            except DataEndException:
+                break
+        j = 0
+        while True:
+            i += 1
+            j -= 1
+            if self.rg[0] + j * period < 0:
+                break
+            try:
+                norm_rg = [self.rg[0] + j * period, self.rg[1] + j * period] #FIXME need to look back
+                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            except FetchNoDataException:
+                break
+            except DataEndException:
+                break
+
+        norm_win_em = norm_win_em / i
+        norm_win_em = norm_win_em.data
+
+        d_pmf, d_Pmb, d_mpmb = em
+        pmf, Pmb, mpmb = norm_win_em
+        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
+
+    # def plot(self, *args, **kwargs):
+    #     rt = self.record_data['winT']
+    #     ep = self.record_data['entropy']
+    #     i = -1
+    #     for v in rt:
+    #         i += 1
+    #         if v > 3000:
+    #             break
+    #     threshold = self.record_data['threshold']
+    #     plot_points(rt[:i], ep[:i], threshold,
+    #             xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+    #             *args, **kwargs)
 
 if __name__ == "__main__":
     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]

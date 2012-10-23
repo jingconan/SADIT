@@ -6,12 +6,16 @@ from __future__ import print_function, division
 ###        Import Detectors                        ####
 #######################################################
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
+from StoDetector import TwoWindowAnoDetector, AdaStoDetector, PeriodStoDetector
 from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
 from ART.ART import ARTDetector
 
 # detector_map defines correspondence between detector
 # options with detector name
 detector_map = {
+        '2w': TwoWindowAnoDetector,
+        'ada':AdaStoDetector,
+        'period': PeriodStoDetector,
         'mf': ModelFreeAnoDetector,
         'mb': ModelBaseAnoDetector,
         'mfmb': FBAnoDetector,
@@ -27,6 +31,9 @@ data_handler_handle_map = {
         'mf': QuantizeDataHandler,
         'mb': QuantizeDataHandler,
         'mfmb': QuantizeDataHandler,
+        '2w': QuantizeDataHandler,
+        'ada': QuantizeDataHandler,
+        'period': QuantizeDataHandler,
         'svm_temp': SVMTemporalHandler,
         'svm_fbf':QuantizeDataHandler,
         'art': FakeDataHandler,

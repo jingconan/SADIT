@@ -41,6 +41,7 @@ class PreloadHardDiskFile(Data):
 
     def _init(self):
         self.fea_vec, self.fea_name = RawParseData(self.f_name)
+        # import pdb;pdb.set_trace()
         self.zip_fea_vec = None
         self.t = [ float(t) for t in self._get_value_list('start_time')]
         self.min_time = min(self.t)
