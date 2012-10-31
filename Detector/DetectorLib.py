@@ -24,6 +24,13 @@ except:
 
 import operator
 
+import math
+def entropy(prob):
+    """calculate shannon entropy
+    """
+    return sum(-1 * p * math.log(p) for p in prob if (p > 0 and p < 1))
+
+
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
 import copy

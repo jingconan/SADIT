@@ -109,7 +109,7 @@ class StoDetector (WindowDetector):
             try:
                 self.rg = [time, time+win_size] # For two window method
                 em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
-                entropy = self.I(em, self.norm_em)
+                entropy = self.I(em, norm_em=self.norm_em)
                 self.record( entropy=entropy, winT = time, threshold = 0, em=em)
             except FetchNoDataException:
                 print 'there is no data to detect in this window'
@@ -444,7 +444,23 @@ class FBAnoDetector(StoDetector):
 
     #     return ano_flow_seq
 
-class TwoWindowAnoDetector(FBAnoDetector):
+""" The following part contains several algorithms that select normal emperical
+measure in a novel way
+"""
+class DynamicStoDetector(FBAnoDetector):
+    """Base Class for All Dynamic Stochasic Detector
+    """
+    def I(self, em, **kwargs):
+        d_pmf, d_Pmb, d_mpmb = em
+        self.desc['em'] = em
+        pmf, Pmb, mpmb = self.cal_norm_em(**kwargs)
+        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
+
+    def cal_norm_em(self, **kwargs):
+        self.desc.update(kwargs)
+
+
+class TwoWindowAnoDetector(DynamicStoDetector):
     """ Two Window Stochastic Anomaly Detector
     """
     def init_parser(self, parser):
@@ -453,9 +469,12 @@ class TwoWindowAnoDetector(FBAnoDetector):
                 help=""" the ratio of normal window with the detection window size.
                 """)
 
-    def I(self, em, norm_em):
+    def cal_norm_em(self, **kwargs):
         """ Use emperical measure of large window as nominal emperical measure.
         """
+        super(TwoWindowAnoDetector, self).cal_norm_em(**kwargs)
+
+        norm_em = self.desc['norm_em']
         norm_win_size = self.desc['norm_win_ratio'] * self.desc['win_size']
         # st = self.rg[0] - norm_win_size if (self.rg[0] > norm_win_size ) else 0
         if self.rg[0] > norm_win_size:
@@ -464,10 +483,228 @@ class TwoWindowAnoDetector(FBAnoDetector):
         else:
             norm_win_em = norm_em
 
-        d_pmf, d_Pmb, d_mpmb = em
-        pmf, Pmb, mpmb = norm_win_em
-        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
+        return norm_win_em
 
+import numpy as np
+class EM(object):
+    """emperical measure
+    """
+    def __init__(self, data=None):
+        if data is not None:
+            self.data = [np.array(d) for d in data]
+        else:
+            self.data = None
+
+    def __add__(self, val):
+        if self.data is None:
+            self.data = [np.array(d) for d in val]
+            return self
+
+        for i in xrange(len(self.data)):
+            self.data[i] = self.data[i] + val[i]
+        return self
+
+    def __div__(self, val):
+        for i in xrange(len(self.data)):
+            self.data[i] /= val
+        return self
+
+
+class PeriodStoDetector(DynamicStoDetector):
+    """Stochastic Detector Designed to Detect Anomaly when the
+    normal behaviour change periodically
+
+    """
+    def init_parser(self, parser):
+        super(PeriodStoDetector, self).init_parser(parser)
+        parser.add_argument('--period', default=1000.0, type=float,
+                help="""the period of underlying traffic""")
+
+    def cal_norm_em(self, **kwargs):
+        super(PeriodStoDetector, self).cal_norm_em(**kwargs)
+
+        norm_em = self.desc['norm_em']
+
+        i = -1 if norm_em is None else 0
+        norm_win_em = EM(norm_em)
+
+        period = self.desc['period']
+        while True:
+            i += 1
+            try:
+                norm_rg = [self.rg[0] + i * period, self.rg[1] + i * period] #FIXME need to look back
+                # import ipdb;ipdb.set_trace()
+                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            except FetchNoDataException:
+                break
+            except DataEndException:
+                break
+        j = 0
+        while True:
+            i += 1
+            j -= 1
+            if self.rg[0] + j * period < 0:
+                break
+            try:
+                norm_rg = [self.rg[0] + j * period, self.rg[1] + j * period] #FIXME need to look back
+                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            except FetchNoDataException:
+                break
+            except DataEndException:
+                break
+
+        norm_win_em = norm_win_em / i
+        norm_win_em = norm_win_em.data
+
+        return norm_win_em
+
+    # def plot(self, *args, **kwargs):
+    #     rt = self.record_data['winT']
+    #     ep = self.record_data['entropy']
+    #     i = -1
+    #     for v in rt:
+    #         i += 1
+    #         if v > 3000:
+    #             break
+    #     threshold = self.record_data['threshold']
+    #     plot_points(rt[:i], ep[:i], threshold,
+    #             xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+    #             *args, **kwargs)
+
+
+class DummyShiftWindowDetector(DynamicStoDetector):
+    """ For data in window i, simply using the data in widnow i-shift to
+    calculate norm_em
+    """
+    def init_parser(self, parser):
+        parser.add_argument('--shift', default=0, type=int,
+                help="""shift for the window used as reference traffic""")
+
+    def cal_norm_em(self, **kwargs):
+        """ For data in window i, simply using the data in widnow i-shift to
+        calculate norm_em
+        """
+        super(DummyShiftWindowDetector, self).cal_norm_em(**kwargs)
+        norm_em = self.desc['norm_em']
+        win_size = self.desc['win_size']
+        shift = self.desc['shift']
+        assert(self.rg[1] - self.rg[0] == win_size)
+        norm_rg = [self.rg[0] - shift * win_size, self.rg[1] - shift * win_size]
+        norm_win_em = self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            # norm_win_em = norm_em
+
+        return norm_win_em
+
+
+
+from DetectorLib import entropy
+class AutoSelectStoDetector(DynamicStoDetector):
+    """ Auto Select Suitable Nomral emperical measure
+    """
+    def __init__(self, desc):
+        super(AutoSelectStoDetector, self).__init__(desc)
+        self.det = {
+                'period': PeriodStoDetector(desc),
+                '2w': TwoWindowAnoDetector(desc),
+                'shift': DummyShiftWindowDetector(desc),
+                }
+        self.det_para_name = {
+                'period':'period',
+                '2w':'norm_win_ratio',
+                'shift':'shift',
+                }
+    def init_parser(self, parser):
+        pass
+        # for k, v in self.det.iteritems():
+        #     v.init_parser(parser)
+    def detect(self, data_file):
+        self.process_history_data(data_file)
+        super(AutoSelectStoDetector, self).detect(data_file)
+
+    def cal_entropy(self, em):
+        """calculate entropy for a single emperical measure
+        """
+        if em is None:
+            return float('inf'), float('inf')
+
+        pmf, Pmb, mpmb = em
+        pmf = np.array(pmf) / np.sum(pmf)
+        mf_entro = entropy(pmf)
+        Pmb = np.array(Pmb) / np.sum(Pmb)
+        mb_entro = entropy(pmf.reshape(-1,))
+        return mf_entro, mb_entro
+
+    def process_history_data(self, history_file):
+        win_size = self.desc['win_size']
+
+        pn = self.det_para_name
+        data = {
+                # 'period':[1e3, 2e3, 1.5e3],
+                # 'period':[4e3],
+                'period': 1e3 * np.arange(0.2, 4, 0.1),
+                # 'norm_win_ratio':[3, 500],
+                'norm_win_ratio':range(1, 10),
+                # 'shift':[1, 2, 3, 4, 5],
+                # 'shift':[-1, -2, -3, -4, -5, -6, -7, -8],
+                'shift':range(-40,-1)
+                # 'shift':[-20, -22, -30, -33],
+                # 'shift':[-1],
+                }
+        self.desc.update(data)
+
+        self.ref_pool = dict()
+        for d_name, d_obj in self.det.iteritems():
+            p_name = pn[d_name]
+            for val in self.desc.get(p_name, []):
+                # d_obj.rg = [0, win_size]
+                # d_obj.rg = [1e3, 1e3+win_size]
+                d_obj.rg = [2e3, 2e3+win_size]
+                # d_obj.rg = [990, 990+win_size]
+                d_obj.data_file = history_file
+                self.ref_pool['%s_%f'%(p_name, val)] = d_obj.cal_norm_em(**{p_name:val, 'norm_em':None})
+
+        # calculate entropy for each emperical measure
+        self.ref_pool_entropy = dict()
+        for k, em in self.ref_pool.iteritems():
+            self.ref_pool_entropy[k] = self.cal_entropy(em)
+
+    def cal_norm_em(self, **kwargs):
+        """calculate normal emperical measure
+        """
+        super(AutoSelectStoDetector, self).cal_norm_em(**kwargs)
+        em_entropy = self.cal_entropy(self.desc['em'])
+        ref_entropy = self.ref_pool_entropy.values()
+        diff = abs(np.array(em_entropy) - np.array(ref_entropy))
+        mf_min_diff, mb_min_diff = np.min(diff, axis=0)
+        mf_idx, mb_idx = np.argmin(diff, axis=0)
+        print 'mf_min_diff, ', mf_min_diff
+        print 'mb_min_diff, ', mb_min_diff
+
+        key = self.ref_pool_entropy.keys()
+        # return self.ref_pool[key[mf_idx]], self.ref_pool[key[mb_idx]]
+        # return self.ref_pool[key[mf_idx]]
+        print 'mb_idx, ', mb_idx
+        return self.ref_pool[key[mb_idx]]
+
+    def I(self, em, **kwargs):
+        d_pmf, d_Pmb, d_mpmb = em
+        self.desc['em'] = em
+        h_ref_size = len(self.ref_pool)
+        I_rec = np.zeros((h_ref_size, 2))
+        i = -1
+        for k, norm_em in self.ref_pool.iteritems():
+            i += 1
+            if norm_em is None:
+                I_rec[i, :] = [float('inf'), float('inf')]
+                continue
+
+            pmf, Pmb, mpmb = norm_em
+            I_rec[i, :] = [I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)]
+
+        print 'I_rec, ', I_rec
+        res = np.min(I_rec, axis=0)
+        print 'res, ', res
+        return res
 
 import copy
 class AdaStoDetector(TwoWindowAnoDetector):
@@ -483,6 +720,8 @@ class AdaStoDetector(TwoWindowAnoDetector):
             self.info[win_size] = {'em_info':em_info, 'adj_entro':adj_entro}
 
     def cal_adj_entro(self, em):
+        """calculate the cross entropy of two adjacent matrix
+        """
         M = len(em)
         adj_entro = []
         for i in xrange(M-1):
@@ -539,73 +778,7 @@ class AdaStoDetector(TwoWindowAnoDetector):
             time += win_size
         return copy.deepcopy(self.record_data)
 
-import numpy as np
-class EM(object):
-    def __init__(self, data):
-        self.data = [np.array(d) for d in data]
 
-    def __add__(self, val):
-        for i in xrange(len(self.data)):
-            self.data[i] = self.data[i] + val[i]
-        return self
-    def __div__(self, val):
-        for i in xrange(len(self.data)):
-            self.data[i] /= val
-        return self
-
-
-class PeriodStoDetector(FBAnoDetector):
-    def init_parser(self, parser):
-        super(PeriodStoDetector, self).init_parser(parser)
-        parser.add_argument('--period', default=1000.0, type=float,
-                help="""the period of underlying traffic""")
-
-    def I(self, em, norm_em):
-        i = 0
-        norm_win_em = EM(norm_em)
-        period = self.desc['period']
-        while True:
-            i += 1
-            try:
-                norm_rg = [self.rg[0] + i * period, self.rg[1] + i * period] #FIXME need to look back
-                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
-            except FetchNoDataException:
-                break
-            except DataEndException:
-                break
-        j = 0
-        while True:
-            i += 1
-            j -= 1
-            if self.rg[0] + j * period < 0:
-                break
-            try:
-                norm_rg = [self.rg[0] + j * period, self.rg[1] + j * period] #FIXME need to look back
-                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
-            except FetchNoDataException:
-                break
-            except DataEndException:
-                break
-
-        norm_win_em = norm_win_em / i
-        norm_win_em = norm_win_em.data
-
-        d_pmf, d_Pmb, d_mpmb = em
-        pmf, Pmb, mpmb = norm_win_em
-        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
-
-    # def plot(self, *args, **kwargs):
-    #     rt = self.record_data['winT']
-    #     ep = self.record_data['entropy']
-    #     i = -1
-    #     for v in rt:
-    #         i += 1
-    #         if v > 3000:
-    #             break
-    #     threshold = self.record_data['threshold']
-    #     plot_points(rt[:i], ep[:i], threshold,
-    #             xlabel_=self.desc['win_type'], ylabel_= 'entropy',
-    #             *args, **kwargs)
 
 if __name__ == "__main__":
     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]
