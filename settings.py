@@ -157,7 +157,7 @@ DETECTOR_DESC = dict(
         # gamma = 0.01,
 
         #### only for Generalized Emperical Measure #####
-        small_win_size = 10,
+        small_win_size = 1,
         g_quan_N = 2,
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.

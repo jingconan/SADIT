@@ -276,34 +276,21 @@ class CombinedEM(object):
         quan_EM_list = []
         for i in xrange(len(self.data)):
             dat = self.data[i]
-            _, quan_level = quantize_state(dat.flatten(), quan_N, [0, 1])
+            quan_level = quantize_state(dat.flatten(), quan_N, [0, 1])
             quan_EM = np.array(quan_level).reshape(dat.shape)
             quan_EM_list.append(quan_EM)
         return CombinedEM(quan_EM_list)
-
-    @property
-    def mf(self):
-        return self.data[0]
-        # return regularize(self.data[0])
 
     def regularize(self):
         self.data = [regularize(d) for d in self.data]
 
     @property
+    def mf(self):
+        return self.data[0]
+
+    @property
     def mb(self):
         return self.data[1], self.data[2]
-        # return regularize(self.data[1]), regularize(self.data[2])
-
-# from itertools import product
-# def counter_to_dist(ct, shape):
-#     """ Change a collections.Counter to a numpy array representing the
-#     distribution
-#     """
-#     dist = np.zeros(shape)
-#     for pos in product(*(range(n) for n in shape)):
-#         dist[pos] = ct[pos]
-#     dist = dist / np.sum(dist)
-#     return dist
 
 class CombinedEMList(object):
     def __init__(self, em_list=[]):
@@ -433,7 +420,7 @@ class ModelFreeFeaGeneralizedEMHandler(GeneralizedEMHandler):
 
 class ModelBasedFeaGeneralizedEMHandler(GeneralizedEMHandler):
     """ calculate the model free and model based emprical measure when the
-    underline feature is model free emperical empeasure
+    underline feature is model based emperical empeasure
     """
     def get_em(self, rg, rg_type):
         self.cal_base_em_list(rg, rg_type)

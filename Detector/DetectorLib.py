@@ -4,32 +4,15 @@
 ### -- Created at [2012-03-01 14:55:21]
 ### -- [2012-03-01 17:13:27] support multi feature
 ### -- [2012-03-01 22:05:29] get_flow_rate, test with flowSize, dur, flowRate
-
-# from OldDetector import *
 import sys
 sys.path.append("..")
-
-import settings
-from util import *
-
-from DataParser import ParseData
-from ClusterAlg import *
-# from Derivative import *
-
-try:
-   from matplotlib.pyplot import *
-except:
-   print 'no matplotlib'
-   VIS = False
-
+from util import np, Counter
 import operator
-
 import math
 def shannon_entropy(prob):
     """calculate shannon entropy
     """
     return sum(-1 * p * math.log(p) for p in prob if (p > 0 and p < 1))
-
 
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
@@ -76,7 +59,6 @@ def quantize_state(x, nx, rg):
           nx-1]
         - *rg* is the range for the feature
     Output:
-        - quantized value
         - quantized level
     """
 
@@ -86,21 +68,29 @@ def quantize_state(x, nx, rg):
         return x, [0]*len(x)
 
     stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
-    res = []
     g = []
-    # print 'stepSize: ' + str(stepSize)
     for ele in x:
-        # seq = round( (ele - minVal ) / stepSize )
         seq = int( (ele - minVal ) / stepSize + 0.5)
-        # if seq >= nx:
-            # import pdb; pdb.set_trace()
-            # seq = nx
         if seq >= nx-1:
             seq = nx -1
-        y = minVal +  seq * stepSize
-        res.append(y)
         g.append(seq)
-    return res, g
+    # return res, g
+    return g
+
+def np_quantize_state(x, nx, rg):
+    """fast quantize_state that use numpy library
+    """
+    x = np.array(x)
+    minVal, maxVal = rg
+    if minVal == maxVal:
+        print('[warning] range size 0, rg: ', rg)
+        return x, [0]*len(x)
+
+    stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
+    return np.round( (x - minVal) / stepSize)
+
+if np:
+    quantize_state = np_quantize_state
 
 def get_dist_to_center(data, cluster, centerPt, DF):
     i = -1
@@ -161,13 +151,20 @@ def trans_data(flow):
             # value += digit[i+1] * reduce(operator.mul, level[0:i+1])
         # return value
 
+basis_cache = dict() # ugly global cache of basis to accelerate the program
 def get_feature_hash_list(F, level):
     ''' For each list of feature and corresponding quantized level.
     Get the hash value correspondingly
     '''
-    basis = [1]
-    for i in xrange( len(level) - 1 ):
-        basis.append( basis[-1] * level[i] )
+    # import pdb;pdb.set_trace()
+    if isinstance(level, list):
+        level = tuple(level)
+    basis = basis_cache.get(level, None)
+    if basis is None:
+        basis = [1]
+        for i in xrange( len(level) - 1 ):
+            basis.append( basis[-1] * level[i] )
+
     return [ sum( d*b for d, b in zip(digits, basis) ) for digits in zip(*F) ]
 
 from util import zeros
@@ -198,11 +195,6 @@ def model_based_deprec(q_fea_vec, fea_QN):
     # mp = mp / fl
     mp = [v*1.0/fl for v in mp]
     return P, mp
-
-# try:
-#     from collections import Counter
-# except:
-#     Counter = False
 
 import itertools
 
@@ -269,7 +261,7 @@ def model_free(q_fea_vec, fea_QN):
     # import pdb;pdb.set_trace()
     QLevelNum = reduce(operator.mul, fea_QN)
     P = [0] * QLevelNum
-    fl = len(q_fea_vec[0])
+    # fl = len(q_fea_vec[0])
     m_list = get_feature_hash_list(q_fea_vec, fea_QN)
 
     ct = Counter(m_list)
@@ -281,10 +273,9 @@ def model_free(q_fea_vec, fea_QN):
         import pdb;pdb.set_trace()
     return P
 
-if Counter is False:
+if not Counter :
     model_free = model_free_deprec
     model_based = model_based_deprec
-
 
 def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):
     '''Quantize a vector of numbers.
@@ -299,121 +290,12 @@ def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):
 
     '''
     if not quan_flag: quan_flag = len(fea_QN) * [1]
-    # try:
-    QS = lambda a, b, c, flag: quantize_state(a, b, c)[1] if flag else a
+    QS = lambda a, b, c, flag: quantize_state(a, b, c) if flag else a
     res = [ QS(a, b, c, flag) for a, b, c, flag in itertools.izip(fea_vec , fea_QN, fea_range, quan_flag) ]
-    # except :
-        # import pdb;pdb.set_trace()
     return res
-
-# def vector_quantize_state_flow_first(fea_vec, fea_QN, fea_range, quan_flag = None):
-#     """the length of fea_vec is the number of flows"""
-#     if not quan_flag: quan_flag = len(fea_QN) * [1]
-#     QS = lambda a, b, c, flag: quantize_state(a, b, c)[1] if flag else a
-#     res = [ QS(a, b, c, flag) for a, b, c, flag in zip(fea_vec , fea_QN, fea_range, quan_flag) ]
-#     pass
-
-def get_all_pmf(fea_vec, fea_QN, fea_range,  quan_flag=None):
-    '''This Function Support Multiple Features, get probability mass function
-
-    - fea_vec : is a list of list containing all the features in a window. len(fea_vec)
-               equals to the number of feature types. len(fea_vec[0]) equals to the number of flows in this
-               window.
-    - fea_QN : quantized number for each feature. len(feaQn) equals to the number of feature types.
-    - fea_range : a list of two-digit tupe containing the range for each user. the
-                 length for first diemension equals to the number of feature types.
-                 the length of the second dimension is two.
-
-    '''
-    qFeaVec = vector_quantize_states(fea_vec, fea_QN, fea_range, quan_flag)
-    # import pdb;pdb.set_trace()
-    pmf = model_free(qFeaVec, fea_QN)
-    Pmb, mpmb = model_based(qFeaVec, fea_QN)
-    return pmf, Pmb, mpmb
-
-def get_flow_rate(t, cluster):
-    '''Get Estimation of Flow Rate For Each User input:
-
-    - **t** : arrival time
-    - **cluster** : cluster labels flows
-
-    output is Estimated flow arrival rate for each time
-    '''
-    win = settings.FLOW_RATE_ESTIMATE_WINDOW
-    fr = []
-    for i in xrange(len(t)):
-        idx = Find(t, t[i] - win)
-        if idx == -1: idx = 0
-        c = cluster[i]
-        fr.append( cluster[idx:i].count(c) )
-
-    return fr
-
-
-def get_feature(fName, clusterNum, cutHead=True):
-    '''Get feature by parsing the data file.
-
-    - fName : is the name for the flow file generated by fs-simulator
-    - clusterNum : the number of cluster in K-means clustering.
-    - cutHead : if we use estimated value of flow rate. The beginning part of
-                the estimation will be not accurate. cutHead flag indicates
-                whether we need to delete beginning part of the data or not.
-
-    '''
-    flow = ParseData(fName);
-    srcIPVec, flowSize, t, dur = trans_data(flow)
-
-    # import pdb;pdb.set_trace()
-    cluster, centerPt = KMeans(srcIPVec, clusterNum, DF)
-    distToCenter = get_dist_to_center(srcIPVec, cluster, centerPt, DF)
-    flowRate = get_flow_rate(t, cluster)
-
-    if cutHead:
-        ns = Find(t, min(t) + settings.FLOW_RATE_ESTIMATE_WINDOW)
-        srcIPVec = srcIPVec[ns:]
-        flowSize = flowSize[ns:]
-        t = t[ns:]
-        dur = dur[ns:]
-        flowRate = flowRate[ns:]
-
-    exec settings.LOAD_FEATURE
-
-    quanFlag = ( len(feaVec) - 1 ) * [1] + [0]
-    feaRange = get_range(feaVec)
-    return feaVec, feaRange, quanFlag, t, centerPt
-
-# def gen_norminal_pdf(fName, clusterNum, ND, NF, dumpFlag =False):
-def gen_norminal_pdf(f_name, fea_QN, dump_flag =False):
-    '''This function is to generate the nominal probability densition function for
-    both model free and model free case.
-
-    - f_name : is the name for the flow file generated by fs-simulator
-    - fea_QN : quantized number for each feature. len(feaQn) equals to the number of feature types.
-    - dump_flag : indicate whether dump the generated nominal pdf to a data file.
-
-    '''
-
-    '''Generate the nominal probability mass function'''
-    feaVec, feaRange, quanFlag, t, centerPt = get_feature(f_name, fea_QN[-1])
-
-    # ns = 0 # normal start
-    ns = Find(t, min(t) + settings.FLOW_RATE_ESTIMATE_WINDOW)
-    ne = Find(t, min(t) + settings.ANOMALY_TIME[0] - 10) + 1
-    n_feaVec = SL(feaVec, ns, ne)
-
-    pmf, Pmb, mpmb = get_all_pmf(n_feaVec, fea_QN, feaRange,  quanFlag)
-
-    data = pmf, Pmb, mpmb, feaRange
-    if dump_flag:
-        pickle.dump( data, open(NominalPDFFile, 'w') )
-    return pmf, Pmb, mpmb, feaVec, fea_QN, feaRange,  quanFlag, t, centerPt
 
 def SL(data, st, ed):
     return [d[st:ed] for d in data]
 
 def get_range(data):
     return [ (min(x), max(x)) for x in data ]
-
-if __name__ == "__main__":
-    import Detector.AnomalyDetector
-    Detector.AnomalyDetector.compare(sys.argv[1])
