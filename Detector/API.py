@@ -6,7 +6,7 @@ from __future__ import print_function, division
 ###        Import Detectors                        ####
 #######################################################
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
-from StoDetector import TwoWindowAnoDetector, AdaStoDetector, PeriodStoDetector
+from StoDetector import TwoWindowAnoDetector, PeriodStoDetector
 from StoDetector import AutoSelectStoDetector
 from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
 from ART.ART import ARTDetector
@@ -16,7 +16,7 @@ from ART.ART import ARTDetector
 detector_map = {
         'auto': AutoSelectStoDetector,
         '2w': TwoWindowAnoDetector,
-        'ada':AdaStoDetector,
+        # 'ada':AdaStoDetector,
         'period': PeriodStoDetector,
         'mf': ModelFreeAnoDetector,
         'mb': ModelBaseAnoDetector,
@@ -24,6 +24,8 @@ detector_map = {
         'svm_fbf': SVMFlowByFlowDetector,
         'svm_temp': SVMTemporalDetector,
         'art': ARTDetector,
+        'gen_fb_mf':FBAnoDetector, # feature is model free emperical measure
+        'gen_fb_mb':FBAnoDetector, # feature is model based emperical measure
         }
 
 # usually one detector corresponds to one handler
@@ -35,11 +37,14 @@ data_handler_handle_map = {
         'mb': QuantizeDataHandler,
         'mfmb': QuantizeDataHandler,
         '2w': QuantizeDataHandler,
-        'ada': QuantizeDataHandler,
+        # 'ada': QuantizeDataHandler,
         'period': QuantizeDataHandler,
         'svm_temp': SVMTemporalHandler,
         'svm_fbf':QuantizeDataHandler,
         'art': FakeDataHandler,
+
+        'gen_fb_mf':ModelFreeFeaGeneralizedEMHandler, # feature is model free emperical measure
+        'gen_fb_mb':ModelBasedFeaGeneralizedEMHandler, # feature is model based emperical measure
         }
 
 from Data import *
@@ -62,10 +67,12 @@ def detect(f_name, desc, res_args=[]):
     - *f_name* the name or a list of name for the flow file.
     - *desc* is a parameter dictionary
     """
-    win_size = desc['win_size']
+    # win_size = desc['win_size']
     fea_option = desc['fea_option']
     data_file = data_map[ desc['data_type'] ](f_name)
-    data_handler = data_handler_handle_map[desc['detector_type']](data_file, win_size, fea_option)
+    # data_handler = data_handler_handle_map[desc['detector_type']](data_file, fea_option)
+    data_handler = data_handler_handle_map[desc['detector_type']](data_file, desc)
+
     detector = detector_map[ desc['detector_type'] ](desc)
     detector.set_args(res_args)
     detector.detect(data_handler)

@@ -7,10 +7,11 @@ __email__ = "wangjing@bu.edu"
 __status__ = "Development"
 
 import os
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    plt = False
+from util import plt
+# try:
+#     import matplotlib.pyplot as plt
+# except ImportError:
+#     plt = False
 
 from DetectorLib import I1, I2
 from util import DataEndException, FetchNoDataException, abstract_method
@@ -445,7 +446,8 @@ class FBAnoDetector(StoDetector):
     #     return ano_flow_seq
 
 """ The following part contains several algorithms that select normal emperical
-measure in a novel way
+measure in a novel way. They are designed to handle the case that the nominal traffic
+itself is time-varying
 """
 class DynamicStoDetector(FBAnoDetector):
     """Base Class for All Dynamic Stochasic Detector
@@ -461,7 +463,12 @@ class DynamicStoDetector(FBAnoDetector):
 
 
 class TwoWindowAnoDetector(DynamicStoDetector):
-    """ Two Window Stochastic Anomaly Detector
+    """ Two Window Stochastic Anomaly Detector.
+    - A small window to capture the transient information
+    - A relative long window as a reference traffic. This window
+        should be properly chosen so that it can reflect the stationary
+        property of the traffic.
+
     """
     def init_parser(self, parser):
         super(TwoWindowAnoDetector, self).init_parser(parser)
@@ -486,35 +493,13 @@ class TwoWindowAnoDetector(DynamicStoDetector):
         return norm_win_em
 
 import numpy as np
-class EM(object):
-    """emperical measure
-    """
-    def __init__(self, data=None):
-        if data is not None:
-            self.data = [np.array(d) for d in data]
-        else:
-            self.data = None
-
-    def __add__(self, val):
-        if self.data is None:
-            self.data = [np.array(d) for d in val]
-            return self
-
-        for i in xrange(len(self.data)):
-            self.data[i] = self.data[i] + val[i]
-        return self
-
-    def __div__(self, val):
-        for i in xrange(len(self.data)):
-            self.data[i] /= val
-        return self
-
+from DataHandler import CombinedEM
 
 class PeriodStoDetector(DynamicStoDetector):
     """Stochastic Detector Designed to Detect Anomaly when the
-    normal behaviour change periodically
-
+    normal behaviour change periodically. Only choose traffic periodically as normal traffic
     """
+
     def init_parser(self, parser):
         super(PeriodStoDetector, self).init_parser(parser)
         parser.add_argument('--period', default=1000.0, type=float,
@@ -526,7 +511,7 @@ class PeriodStoDetector(DynamicStoDetector):
         norm_em = self.desc['norm_em']
 
         i = -1 if norm_em is None else 0
-        norm_win_em = EM(norm_em)
+        norm_win_em = CombinedEM(norm_em)
 
         period = self.desc['period']
         while True:
@@ -581,27 +566,31 @@ class DummyShiftWindowDetector(DynamicStoDetector):
                 help="""shift for the window used as reference traffic""")
 
     def cal_norm_em(self, **kwargs):
-        """ For data in window i, simply using the data in widnow i-shift to
+        """ For data in window *i*, simply using the data in widnow *i-shift* to
         calculate norm_em
         """
         super(DummyShiftWindowDetector, self).cal_norm_em(**kwargs)
-        norm_em = self.desc['norm_em']
         win_size = self.desc['win_size']
         shift = self.desc['shift']
         assert(self.rg[1] - self.rg[0] == win_size)
         norm_rg = [self.rg[0] - shift * win_size, self.rg[1] - shift * win_size]
         norm_win_em = self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
-            # norm_win_em = norm_em
 
         return norm_win_em
 
-
-
-from DetectorLib import entropy
+from DetectorLib import shannon_entropy
 class AutoSelectStoDetector(DynamicStoDetector):
     """ Auto Select Suitable Nomral emperical measure
+    This is an ensemble method which can ensemble
+        1. PeriodStoDetector
+        2. TwoWindowAnoDetector
+        3. DummyShiftWindowDetector
     """
     def __init__(self, desc):
+        """
+        self.det are correspondence of detect id and class
+        self.det_para_name is the correspondence of detector and parameters
+        """
         super(AutoSelectStoDetector, self).__init__(desc)
         self.det = {
                 'period': PeriodStoDetector(desc),
@@ -629,15 +618,20 @@ class AutoSelectStoDetector(DynamicStoDetector):
 
         pmf, Pmb, mpmb = em
         pmf = np.array(pmf) / np.sum(pmf)
-        mf_entro = entropy(pmf)
+        mf_entro = shannon_entropy(pmf)
         Pmb = np.array(Pmb) / np.sum(Pmb)
-        mb_entro = entropy(pmf.reshape(-1,))
+        mb_entro = shannon_entropy(pmf.reshape(-1,))
         return mf_entro, mb_entro
 
     def process_history_data(self, history_file):
+        """ process history data using different methods and
+            1. store the emperical measure calculate
+            2. calculate the emtropy of each emperical measure
+        """
         win_size = self.desc['win_size']
 
         pn = self.det_para_name
+        """specify the method and the parameters will be used"""
         data = {
                 # 'period':[1e3, 2e3, 1.5e3],
                 # 'period':[4e3],
@@ -687,6 +681,9 @@ class AutoSelectStoDetector(DynamicStoDetector):
         return self.ref_pool[key[mb_idx]]
 
     def I(self, em, **kwargs):
+        """ Suppose we have emperical NE_i calcumated by detector i, i=1,...,N
+        the output I = min(I(E, NE_i)) for i =1,...,N
+        """
         d_pmf, d_Pmb, d_mpmb = em
         self.desc['em'] = em
         h_ref_size = len(self.ref_pool)
@@ -705,79 +702,6 @@ class AutoSelectStoDetector(DynamicStoDetector):
         res = np.min(I_rec, axis=0)
         print 'res, ', res
         return res
-
-import copy
-class AdaStoDetector(TwoWindowAnoDetector):
-
-    def detect(self, data_file):
-        self.data_file = data_file
-        self.info = dict()
-        # for win_size in [10, 50, 200, 400, 1000, 1500]:
-        # for win_size in [10, 60, 200]:
-        for win_size in [50, 100, 200, 500, 1000, 2000]:
-            em_info = self.cal_em('time', win_size)
-            adj_entro = self.cal_adj_entro(em_info['em'])
-            self.info[win_size] = {'em_info':em_info, 'adj_entro':adj_entro}
-
-    def cal_adj_entro(self, em):
-        """calculate the cross entropy of two adjacent matrix
-        """
-        M = len(em)
-        adj_entro = []
-        for i in xrange(M-1):
-            adj_entro.append( self.I(em[i], em[i+1]) )
-
-        return adj_entro
-
-    def plot(self, *args, **kwargs):
-        # rt = self.record_data['winT']
-        # plt.plot(rt[])
-        # import pdb;pdb.set_trace()
-        # plot_points(rt[0:-1], self.adj_entro,
-                # *args, **kwargs)
-
-        fig = plt.figure()
-        mf_ax = fig.add_subplot(211)
-        mb_ax = fig.add_subplot(212)
-        # mf_fig = plt.figure()
-        # mb_fig = plt.figure()
-        for ws, info in self.info.iteritems():
-            adj_entro = info['adj_entro']
-            zip_ae = zip(*adj_entro)
-            rt = info['em_info']['winT'][0:-1]
-            # plt.plot(rt, zip_ae[0], figure=mf_fig)
-            # plt.plot(rt, zip_ae[1], figure=mb_fig)
-            mf_ax.plot(rt, zip_ae[0])
-            mb_ax.plot(rt, zip_ae[1])
-        leg = [str(v) for v in self.info.keys()]
-        mf_ax.legend(leg)
-        mb_ax.legend(leg)
-        plt.savefig('adj_entro.pdf')
-        plt.show()
-        import pdb;pdb.set_trace()
-
-    def cal_em(self, rg_type, win_size):
-        self.record_data = dict(winT=[], em=[], rg=[])
-        time = 0
-        i = 0
-        while True:
-            i += 1
-            if rg_type == 'time' : print 'time: %f' %(time)
-            else: print 'flow: %s' %(time)
-
-            try:
-                self.rg = [time, time+win_size] # For two window method
-                em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
-                self.record( winT = time, em=em, rg=self.rg)
-            except FetchNoDataException:
-                print 'there is no data to detect in this window'
-            except DataEndException:
-                print 'reach data end, break'
-                break
-
-            time += win_size
-        return copy.deepcopy(self.record_data)
-
 
 
 if __name__ == "__main__":

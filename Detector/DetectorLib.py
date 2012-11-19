@@ -25,7 +25,7 @@ except:
 import operator
 
 import math
-def entropy(prob):
+def shannon_entropy(prob):
     """calculate shannon entropy
     """
     return sum(-1 * p * math.log(p) for p in prob if (p > 0 and p < 1))
@@ -68,6 +68,18 @@ def I1(nu, mu):
     return abs(e)
 
 def quantize_state(x, nx, rg):
+    """quantize state
+
+    Input:
+        - *x* is a list of elements that need to be quantized
+        - *nx* is the quantized level. the quantized value can be [0, ...,
+          nx-1]
+        - *rg* is the range for the feature
+    Output:
+        - quantized value
+        - quantized level
+    """
+
     minVal, maxVal = rg
     if minVal == maxVal:
         print '[warning] range size 0, rg: ', rg
@@ -80,9 +92,11 @@ def quantize_state(x, nx, rg):
     for ele in x:
         # seq = round( (ele - minVal ) / stepSize )
         seq = int( (ele - minVal ) / stepSize + 0.5)
-        if seq >= nx:
+        # if seq >= nx:
             # import pdb; pdb.set_trace()
-            seq = nx
+            # seq = nx
+        if seq >= nx-1:
+            seq = nx -1
         y = minVal +  seq * stepSize
         res.append(y)
         g.append(seq)
@@ -130,22 +144,31 @@ def trans_data(flow):
 
         # show()
 
-def f_hash(digit, level):
-    '''This is just a hash function. to map a sequence to a unique number.
-    The implemetation is: return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0] ...
-    '''
-    if len(digit) == 3: # just try to make it faster for special case
-        return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0]
-    else:
-        value = digit[0]
-        for i in xrange(len(digit)-1):
-            value += digit[i+1] * reduce(operator.mul, level[0:i+1])
-        return value
+# def f_hash(digit, level):
+#     '''This is just a hash function. to map a sequence to a unique number.
+#     The implemetation is: return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0] ...
+#     '''
+#     if len(digit) == 3: # just try to make it faster for special case
+#         return digit[0] + digit[1] * level[0] + digit[2] * level[1] * level[0]
+#     else:
+#         value = digit[0]
+#         basis = [1]
+#         for i in xrange( len(digit) - 1 ):
+#             basis.append( basis[-1] * level[i] )
+#         value = sum( d*b for d, b zip(digit, basis) )
 
-def get_feature_hash_list(F, Q):
-    '''For each list of feature and corresponding quantized level.
-    Get the hash value correspondingly'''
-    return [ f_hash(f, Q) for f in zip(*F) ]
+        # for i in xrange(len(digit)-1):
+            # value += digit[i+1] * reduce(operator.mul, level[0:i+1])
+        # return value
+
+def get_feature_hash_list(F, level):
+    ''' For each list of feature and corresponding quantized level.
+    Get the hash value correspondingly
+    '''
+    basis = [1]
+    for i in xrange( len(level) - 1 ):
+        basis.append( basis[-1] * level[i] )
+    return [ sum( d*b for d, b in zip(digits, basis) ) for digits in zip(*F) ]
 
 from util import zeros
 def model_based_deprec(q_fea_vec, fea_QN):
@@ -176,10 +199,10 @@ def model_based_deprec(q_fea_vec, fea_QN):
     mp = [v*1.0/fl for v in mp]
     return P, mp
 
-try:
-    from collections import Counter
-except:
-    Counter = False
+# try:
+#     from collections import Counter
+# except:
+#     Counter = False
 
 import itertools
 
@@ -243,6 +266,7 @@ def model_free(q_fea_vec, fea_QN):
                window.
     - fea_QN : this is a list storing the quantized number for each feature.
     '''
+    # import pdb;pdb.set_trace()
     QLevelNum = reduce(operator.mul, fea_QN)
     P = [0] * QLevelNum
     fl = len(q_fea_vec[0])
@@ -250,8 +274,11 @@ def model_free(q_fea_vec, fea_QN):
 
     ct = Counter(m_list)
     total = sum(ct.values())
-    for k, v in ct.iteritems():
-        P[int(k)] = v * 1.0 / total
+    try:
+        for k, v in ct.iteritems():
+            P[int(k)] = v * 1.0 / total
+    except:
+        import pdb;pdb.set_trace()
     return P
 
 if Counter is False:
@@ -266,7 +293,7 @@ def vector_quantize_states(fea_vec , fea_QN, fea_range, quan_flag=None):
                equals to the number of feature types. len(fea_vec[0]) equals to the number of flows in this
                window.
     - fea_QN : quantized number for each feature. len(feaQn) equals to the number of feature types.
-    - fea_range : a list of two-digit tupe containing the range for each user. the
+    - fea_range : a list of two-digit tupe containing the range for each feature. the
                  length for first diemension equals to the number of feature types.
                  the length of the second dimension is two.
 

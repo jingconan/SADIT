@@ -1,10 +1,11 @@
 """ Module level utility functions
 """
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    print 'no matplotlib'
-    plt = False
+# try:
+#     import matplotlib.pyplot as plt
+# except ImportError:
+#     print 'no matplotlib'
+#     plt = False
+from util import plt
 
 def find_seg(flag):
     """return (start and end point and level) of each segment"""

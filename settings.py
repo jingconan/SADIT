@@ -136,7 +136,8 @@ DETECTOR_DESC = dict(
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
-        fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
+        # fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
+        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
@@ -145,6 +146,7 @@ DETECTOR_DESC = dict(
         normal_rg = None,
         detector_type = 'mfmb',
         max_detect_num = None,
+        # max_detect_num = 10,
         # max_detect_num = 20,
         # max_detect_num = 100,
         # data_handler = 'fs',
@@ -153,6 +155,10 @@ DETECTOR_DESC = dict(
 
         #### only for SVM approach #####
         # gamma = 0.01,
+
+        #### only for Generalized Emperical Measure #####
+        small_win_size = 10,
+        g_quan_N = 2,
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.
 

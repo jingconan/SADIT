@@ -6,14 +6,14 @@
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 
-
 # import sys; sys.path.append("..")
-from ClusterAlg import KMeans, KMedians
+# from ClusterAlg import KMeans, KMedians
+from ClusterAlg import KMedians
 from DetectorLib import vector_quantize_states, model_based, model_free
 from util import DF, NOT_QUAN, QUAN
-from util import abstract_method, FetchNoDataException
+from util import abstract_method, FetchNoDataException, DataEndException
 
-from DataHandler_deprec import DataFile
+# from DataHandler_deprec import DataFile
 ##############################################################
 ####                  Interface Class                   ######
 ##############################################################
@@ -22,6 +22,10 @@ class DataHandler(object):
     Data class as the data source. And it generate the emperical measure based
     on the data class.
     """
+    def __init__(self, data, desc):
+        self.data = data
+        self.desc = desc
+
     def get_em(self, rg=None, rg_type='time'):
         """get emperical measure within a range. emeprical measure is used to
         represent the data in this range. For example, it can the probability
@@ -38,11 +42,16 @@ def long_to_dotted(ip):
 
 from DetectorLib import get_feature_hash_list
 from itertools import izip
-class QuantizeDataHandler(object):
-    """Quantize the feature in the Data"""
-    def __init__(self, data, fr_win_size=None, fea_option=None):
+class QuantizeDataHandler(DataHandler):
+    """Quantize the feature in the Data
+    """
+    def __init__(self, data, desc):
+        """
+        - fea_option: specified the quantized level for each feature
+        """
+        super(QuantizeDataHandler, self).__init__(data, desc)
         self._init_data(data)
-        self.fr_win_size = fr_win_size
+        fea_option = desc['fea_option']
         self.fea_option  = fea_option
         self.direct_fea_list = [ k for k in fea_option.keys() if k not in ['cluster', 'dist_to_center']]
         self.fea_QN = [fea_option['cluster'], fea_option['dist_to_center']] + [fea_option[k] for k in self.direct_fea_list]
@@ -152,10 +161,11 @@ class QuantizeDataHandler(object):
 #######################################
 ## SVM Temporal Method Handler   ######
 #######################################
-try:
-    from collections import Counter
-except ImportError:
-    Counter = False
+from util import Counter
+# try:
+#     from collections import Counter
+# except ImportError:
+#     Counter = False
 
 # import operator
 class SVMTemporalHandler(QuantizeDataHandler):
@@ -167,8 +177,8 @@ class SVMTemporalHandler(QuantizeDataHandler):
             'flow_size': lambda x: [float(v[0]) for v in x],
             }
 
-    def __init__(self, data, fr_win_size=None, fea_option=None):
-        QuantizeDataHandler.__init__(self, data, fr_win_size, fea_option)
+    def __init__(self, data, desc=None):
+        QuantizeDataHandler.__init__(self, data, desc)
         # self._init_data(data)
         self.update_unique_src_ip()
         self.large_flow_thres = 5e1
@@ -225,6 +235,208 @@ class SVMTemporalHandler(QuantizeDataHandler):
         # return svm_fea
 
 class FakeDataHandler(object):
-    """This Data Handler do nothing"""
+    """ This Data Handler do nothing"""
     def __init__(self, data, *args, **kwargs):
         self.data = data
+
+
+from util import np
+from DetectorLib import quantize_state
+
+def regularize(val):
+    return (val - np.min(val)) / (np.max(val) - np.min(val))
+
+class CombinedEM(object):
+    """combined emperical measure
+
+    combines model free and model based emperical together
+    list of np.array
+    """
+    def __init__(self, data=None):
+        if data is not None:
+            self.data = [np.array(d) for d in data]
+        else:
+            self.data = None
+
+    def __add__(self, val):
+        if self.data is None:
+            self.data = [np.array(d) for d in val]
+            return self
+
+        for i in xrange(len(self.data)):
+            self.data[i] = self.data[i] + val[i]
+        return self
+
+    def __div__(self, val):
+        for i in xrange(len(self.data)):
+            self.data[i] /= val
+        return self
+
+    def quantize(self, quan_N):
+        quan_EM_list = []
+        for i in xrange(len(self.data)):
+            dat = self.data[i]
+            _, quan_level = quantize_state(dat.flatten(), quan_N, [0, 1])
+            quan_EM = np.array(quan_level).reshape(dat.shape)
+            quan_EM_list.append(quan_EM)
+        return CombinedEM(quan_EM_list)
+
+    @property
+    def mf(self):
+        return self.data[0]
+        # return regularize(self.data[0])
+
+    def regularize(self):
+        self.data = [regularize(d) for d in self.data]
+
+    @property
+    def mb(self):
+        return self.data[1], self.data[2]
+        # return regularize(self.data[1]), regularize(self.data[2])
+
+# from itertools import product
+# def counter_to_dist(ct, shape):
+#     """ Change a collections.Counter to a numpy array representing the
+#     distribution
+#     """
+#     dist = np.zeros(shape)
+#     for pos in product(*(range(n) for n in shape)):
+#         dist[pos] = ct[pos]
+#     dist = dist / np.sum(dist)
+#     return dist
+
+class CombinedEMList(object):
+    def __init__(self, em_list=[]):
+        self.data = em_list
+
+    def get_mf_mf_dist(self):
+        """ model free distribution of model free emperical measure
+        """
+        N = len(self.data[0].mf.flatten())
+        return model_free([em.mf.flatten() for em in self.data],
+                [self.g_quan_N]*N)
+
+    def get_mb_mf_dist(self):
+        """ model free distribution of model free emperical measure
+        """
+        N = len(self.data[0].mf.flatten())
+        return model_based([em.mf.flatten() for em in self.data],
+                [self.g_quan_N]*N)
+
+
+    def get_mf_mb_dist(self):
+        """ model free distribution of model based emperical measure
+        """
+        N = len(self.data[0].mb[0].flatten())
+        return model_free([em.mb[0].flatten() for em in self.data],
+                [self.g_quan_N]*N)
+
+    def get_mb_mb_dist(self):
+        """ model based distribution of model based emperical measure
+        """
+        N = len(self.data[0].mb[0].flatten())
+        return model_based([em.mb[1].flatten() for em in self.data],
+                [self.g_quan_N]*N)
+
+    # def get_dist(self):
+    #     """get distribution of emperical measure
+    #     """
+    #     return self.get_mf_mf_dist, self.get_mf_mb_dist
+
+    def quantize(self, g_quan_N):
+        self.data = [d.quantize(g_quan_N) for d in self.data]
+        self.g_quan_N = g_quan_N
+
+    def append(self, em):
+        self.data.append(CombinedEM(em))
+        self.mf_shape = self.data[-1].mf.shape
+        self.mb_shape = self.data[-1].mb[0].shape, self.data[-1].mb[1].shape
+
+    def regularize(self):
+        for d in self.data:
+            d.regularize()
+
+
+class GeneralizedEMHandler(DataHandler):
+    """ Generalized Emperical Measure Handler
+
+    Can Treat the emperical measure caculated by normal data handler as
+    feature and calcuale the generalized EM
+    """
+    def __init__(self, data, desc):
+        super(GeneralizedEMHandler, self).__init__(data, desc)
+        self.desc = desc
+        self.small_win_size = desc['small_win_size']
+        self.g_quan_N = desc['g_quan_N']
+        self.handler = QuantizeDataHandler(data, desc)
+
+    def quantize_fea(self, rg=None, rg_type=None):
+        """get quantized features for part of the flows"""
+        fea_vec = self.get_fea_slice(rg, rg_type)
+        q_fea_vec = vector_quantize_states(izip(*fea_vec), self.fea_QN,
+                izip(*self.global_fea_range), self.quan_flag)
+        return q_fea_vec
+
+    def cal_base_em_list(self, rg, rg_type):
+        """calculate all the base emperical that will be used as feature"""
+        if rg is None:
+            rg = [0, float('inf')]
+
+        pt = rg[0]
+        em_list = CombinedEMList()
+
+
+        while pt <= rg[1]:
+            try:
+                em = self.handler.get_em(
+                        rg=[pt, pt+self.small_win_size],
+                        rg_type=rg_type)
+                em_list.append( em )
+                pt += self.small_win_size
+            except FetchNoDataException:
+                print 'there is no data to detect in this window'
+            except DataEndException:
+                print 'reach data end, break'
+                if rg[1] != float('inf'):
+                    raise
+                break
+
+        self.em_list = em_list
+        self.em_list.regularize()
+        self.em_list.quantize(self.g_quan_N)
+
+    def get_em(self):
+        """get generalized emperical measure
+        """
+        abstract_method()
+
+""" The following two handlers has the same output with QuantizeDataHandler,
+which means it can work with any Detector that receive QuantizeDataHandler,
+which includes:
+    1. ModelFreeAnoDetector
+    2. ModelBaseAnoDetector
+    3. FBAnoDetector
+    4. PeriodStoDetector
+    5. TwoWindowAnoDetector
+    6. AutoSelectStoDetector
+"""
+
+class ModelFreeFeaGeneralizedEMHandler(GeneralizedEMHandler):
+    """ calculate the model free and model based emprical measure when the
+    underline feature is model free emperical empeasure
+    """
+    def get_em(self, rg, rg_type):
+        self.cal_base_em_list(rg, rg_type)
+        mf = self.em_list.get_mf_mf_dist()
+        mb = self.em_list.get_mb_mf_dist()
+        return mf, mb[0], mb[1]
+
+class ModelBasedFeaGeneralizedEMHandler(GeneralizedEMHandler):
+    """ calculate the model free and model based emprical measure when the
+    underline feature is model free emperical empeasure
+    """
+    def get_em(self, rg, rg_type):
+        self.cal_base_em_list(rg, rg_type)
+        mf = self.em_list.get_mf_mb_dist()
+        mb = self.em_list.get_mb_mb_dist()
+        return mf, mb[0], mb[1]

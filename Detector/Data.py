@@ -252,11 +252,13 @@ class PreloadHardDiskFile_FlowExporter(PreloadHardDiskFile):
 ####  more information (trace 8)                        ######
 ##############################################################
 
-try:
-    import _mysql
-except ImportError as e:
-    print '--> [warning] cannot import sql related function, \
-            reading for sql server is not supported'
+# from util import _mysql
+from util import mysql
+# try:
+#     import _mysql
+# except ImportError as e:
+#     print '--> [warning] cannot import sql related function, \
+#             reading for sql server is not supported'
     # print '--> e:', e
 
 get_sec_msec = lambda x: [int(x), int( (x-int(x)) * 1e3)]
@@ -266,7 +268,8 @@ class SQLFile_SperottoIPOM2009(Data):
      http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
     """
     def __init__(self, spec):
-        self.db = _mysql.connect(**spec)
+        # self.db = _mysql.connect(**spec)
+        self.db = mysql.connect(**spec)
         self._init()
 
     def _init(self):
@@ -431,7 +434,7 @@ class PreloadHardDiskFile_xflow(PreloadHardDiskFile):
             Sb=12,
             Sp=13,
             )
-        dotted_to_int = lambda x: [int(val) for val in x.rsplit('.')]
+        # dotted_to_int = lambda x: [int(val) for val in x.rsplit('.')]
         port_str_to_int = lambda x: int(x[1:])
         attr_convert = lambda x: float( x.rsplit('=')[1].rsplit(',')[0] )
         handler = dict(
