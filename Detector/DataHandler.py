@@ -244,7 +244,9 @@ from util import np
 from DetectorLib import quantize_state
 
 def regularize(val):
-    return (val - np.min(val)) / (np.max(val) - np.min(val))
+    max_ = np.max(val)
+    min_ = np.min(val)
+    return val if (max_ == min_) else (val - min_) / (max_ - min_)
 
 class CombinedEM(object):
     """combined emperical measure
@@ -254,7 +256,7 @@ class CombinedEM(object):
     """
     def __init__(self, data=None):
         if data is not None:
-            self.data = [np.array(d) for d in data]
+            self.data = [(np.array(d) if d is not None else None) for d in data]
         else:
             self.data = None
 
@@ -276,13 +278,16 @@ class CombinedEM(object):
         quan_EM_list = []
         for i in xrange(len(self.data)):
             dat = self.data[i]
-            quan_level = quantize_state(dat.flatten(), quan_N, [0, 1])
-            quan_EM = np.array(quan_level).reshape(dat.shape)
+            if dat is None:
+                quan_EM = None
+            else:
+                quan_level = quantize_state(dat.flatten(), quan_N, [0, 1])
+                quan_EM = np.array(quan_level).reshape(dat.shape)
             quan_EM_list.append(quan_EM)
         return CombinedEM(quan_EM_list)
 
     def regularize(self):
-        self.data = [regularize(d) for d in self.data]
+        self.data = [(regularize(d) if d is not None else None) for d in self.data]
 
     @property
     def mf(self):
@@ -292,43 +297,22 @@ class CombinedEM(object):
     def mb(self):
         return self.data[1], self.data[2]
 
+def flatten(val):
+    return None if val is None else val.flatten()
+
 class CombinedEMList(object):
-    def __init__(self, em_list=[]):
-        self.data = em_list
+    def __init__(self, em_list=None):
+        self.data = [] if em_list is None else em_list
 
-    def get_mf_mf_dist(self):
-        """ model free distribution of model free emperical measure
-        """
-        N = len(self.data[0].mf.flatten())
-        return model_free([em.mf.flatten() for em in self.data],
-                [self.g_quan_N]*N)
+    def __len__(self):
+        return len(self.data)
 
-    def get_mb_mf_dist(self):
-        """ model free distribution of model free emperical measure
-        """
-        N = len(self.data[0].mf.flatten())
-        return model_based([em.mf.flatten() for em in self.data],
-                [self.g_quan_N]*N)
+    def __iter__(self):
+        for d in self.data:
+            yield d
 
-
-    def get_mf_mb_dist(self):
-        """ model free distribution of model based emperical measure
-        """
-        N = len(self.data[0].mb[0].flatten())
-        return model_free([em.mb[0].flatten() for em in self.data],
-                [self.g_quan_N]*N)
-
-    def get_mb_mb_dist(self):
-        """ model based distribution of model based emperical measure
-        """
-        N = len(self.data[0].mb[0].flatten())
-        return model_based([em.mb[1].flatten() for em in self.data],
-                [self.g_quan_N]*N)
-
-    # def get_dist(self):
-    #     """get distribution of emperical measure
-    #     """
-    #     return self.get_mf_mf_dist, self.get_mf_mb_dist
+    def __getitem__(self, key):
+        return self.data[key]
 
     def quantize(self, g_quan_N):
         self.data = [d.quantize(g_quan_N) for d in self.data]
@@ -336,13 +320,29 @@ class CombinedEMList(object):
 
     def append(self, em):
         self.data.append(CombinedEM(em))
-        self.mf_shape = self.data[-1].mf.shape
-        self.mb_shape = self.data[-1].mb[0].shape, self.data[-1].mb[1].shape
+        self.mf_shape = None if self.data[-1].mf is None else self.data[-1].mf.shape
+        self.mb_shape = None if self.data[-1].mb[0] is None else (self.data[-1].mb[0].shape, self.data[-1].mb[1].shape)
 
     def regularize(self):
         for d in self.data:
             d.regularize()
 
+# class ModelFreeEM(object):
+#     def __init__(self, q_fea_vec, fea_QN):
+#         self.q_fea_vec = q_fea_vec
+#         self.fea_QN = fea_QN
+
+#     def add(self):
+#         pass
+
+#     def get_dist(self):
+#         pmf = model_free(zip(*self.q_fea_vec), self.fea_QN)
+#         return pmf
+
+# class ModelBasedEM(object):
+#     def __init__(self, fea):
+#         pass
+#     pass
 
 class GeneralizedEMHandler(DataHandler):
     """ Generalized Emperical Measure Handler
@@ -372,12 +372,12 @@ class GeneralizedEMHandler(DataHandler):
         pt = rg[0]
         em_list = CombinedEMList()
 
-
         while pt <= rg[1]:
             try:
                 em = self.handler.get_em(
                         rg=[pt, pt+self.small_win_size],
                         rg_type=rg_type)
+                # print('t: %i em: %s'%(pt, em))
                 em_list.append( em )
                 pt += self.small_win_size
             except FetchNoDataException:
@@ -389,13 +389,25 @@ class GeneralizedEMHandler(DataHandler):
                 break
 
         self.em_list = em_list
+        # print('leng, ', len(self.em_list.data))
+
+    def get_em(self, rg, rg_type):
+        self.cal_base_em_list(rg, rg_type)
         self.em_list.regularize()
         self.em_list.quantize(self.g_quan_N)
 
-    def get_em(self):
+        mf = self.get_mf_dist()
+        mb = self.get_mb_dist()
+        return mf, mb[0], mb[1]
+
+
+class QuantizeGeneralizedEMHandler(GeneralizedEMHandler):
+    def get_em(self, *args, **kwargs):
         """get generalized emperical measure
         """
-        abstract_method()
+        return self.handler.get_em(*args, **kwargs)
+
+
 
 """ The following two handlers has the same output with QuantizeDataHandler,
 which means it can work with any Detector that receive QuantizeDataHandler,
@@ -412,18 +424,39 @@ class ModelFreeFeaGeneralizedEMHandler(GeneralizedEMHandler):
     """ calculate the model free and model based emprical measure when the
     underline feature is model free emperical empeasure
     """
-    def get_em(self, rg, rg_type):
-        self.cal_base_em_list(rg, rg_type)
-        mf = self.em_list.get_mf_mf_dist()
-        mb = self.em_list.get_mb_mf_dist()
-        return mf, mb[0], mb[1]
+    def get_mf_dist(self):
+        """ model free distribution of model free emperical measure
+        """
+        N = len(self.em_list[0].mf.flatten())
+        # return model_free([flatten(em.mf) for em in self.em_list],
+        #         [self.g_quan_N]*N)
+        print('len self.em_list', len(self.em_list))
+        mf = model_free([flatten(em.mf) for em in self.em_list],
+                [self.g_quan_N]*N)
+        print('mf ', mf )
+        return mf
+
+    def get_mb_dist(self):
+        """ model free distribution of model free emperical measure
+        """
+        N = len(self.em_list[0].mf.flatten())
+        return model_based([flatten(em.mf) for em in self.em_list],
+                [self.g_quan_N]*N)
 
 class ModelBasedFeaGeneralizedEMHandler(GeneralizedEMHandler):
     """ calculate the model free and model based emprical measure when the
     underline feature is model based emperical empeasure
     """
-    def get_em(self, rg, rg_type):
-        self.cal_base_em_list(rg, rg_type)
-        mf = self.em_list.get_mf_mb_dist()
-        mb = self.em_list.get_mb_mb_dist()
-        return mf, mb[0], mb[1]
+    def get_mf_dist(self):
+        """ model free distribution of model based emperical measure
+        """
+        N = len(self.em_list[0].mb[0].flatten())
+        return model_free([flatten(em.mb[0]) for em in self.em_list],
+                [self.g_quan_N]*N)
+
+    def get_mb_dist(self):
+        """ model based distribution of model based emperical measure
+        """
+        N = len(self.em_list[0].mb[0].flatten())
+        return model_based([flatten(em.mb[0]) for em in self.em_list],
+                [self.g_quan_N]*N)

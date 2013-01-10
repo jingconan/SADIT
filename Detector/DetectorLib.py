@@ -86,8 +86,12 @@ def np_quantize_state(x, nx, rg):
         print('[warning] range size 0, rg: ', rg)
         return x, [0]*len(x)
 
-    stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
-    return np.round( (x - minVal) / stepSize)
+    # stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
+    # return np.round( (x - minVal) * 1.0 / stepSize)
+    stepSize = (maxVal - minVal) * 1.0 / nx
+    quan = np.floor( (x - minVal) / stepSize )
+    quan[quan == nx] = nx-1
+    return quan
 
 if np:
     quantize_state = np_quantize_state
@@ -206,6 +210,11 @@ def model_based(q_fea_vec, fea_QN):
                window.
     - fea_QN : this is a list storing the quantized number for each feature.
     '''
+    if len(q_fea_vec[0]) < 2:
+        # print('these is only one sample in the range, cannot calculate ' \
+                # 'model based emperical measure')
+        return None, None
+
     QLevelNum = reduce(operator.mul, fea_QN)
     m_list = get_feature_hash_list(q_fea_vec, fea_QN)
     mp = zeros((QLevelNum, ))

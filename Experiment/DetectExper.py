@@ -59,6 +59,10 @@ class DetectExper(object):
         parser.add_argument('--pic_show', default=False, action='store_true',
                 help = """whether to show the picture after finishing running""")
 
+
+        parser.add_argument('--csv', default=None,
+                help = """the path of the file to save plots a text output""")
+
         parser.add_argument('--default_settings', default= settings.ROOT+ '/settings.py',
                 help="""file_path for default settings, default value is the settings.py
                 in ROOT directory""")
@@ -101,5 +105,9 @@ class DetectExper(object):
 
         detector.plot(pic_show=args.pic_show,
                 pic_name=args.pic_name,
+                csv=args.csv,
                 )
+
+        # if args.csv:
+            # detector.save_plot_as_csv(args.csv)
                 # far=args.hoeff_far)

@@ -14,7 +14,7 @@ from util import abstract_method, FetchNoDataException
 
 from DataHandler_deprec import DataFile
 ##############################################################
-####                  Interface Class                   ######
+####                  Abstract Class                   ######
 ##############################################################
 class DataHandler(object):
     """virtual base class for Data Hanlder. Data Handler contains one or more

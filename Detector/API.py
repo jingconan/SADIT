@@ -8,6 +8,9 @@ from __future__ import print_function, division
 from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
 from StoDetector import TwoWindowAnoDetector, PeriodStoDetector
 from StoDetector import AutoSelectStoDetector
+from StoDetector import ExpectedStoDetector
+from RobustDetector import RobustDetector
+
 from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
 from ART.ART import ARTDetector
 
@@ -26,12 +29,15 @@ detector_map = {
         'art': ARTDetector,
         'gen_fb_mf':FBAnoDetector, # feature is model free emperical measure
         'gen_fb_mb':FBAnoDetector, # feature is model based emperical measure
+        'expect' :ExpectedStoDetector,
+        'robust': RobustDetector,
         }
 
 # usually one detector corresponds to one handler
 # handlers do some data preprocessing for detector.
 from DataHandler import *
 data_handler_handle_map = {
+        'robust': QuantizeDataHandler,
         'auto': QuantizeDataHandler,
         'mf': QuantizeDataHandler,
         'mb': QuantizeDataHandler,
@@ -45,6 +51,7 @@ data_handler_handle_map = {
 
         'gen_fb_mf':ModelFreeFeaGeneralizedEMHandler, # feature is model free emperical measure
         'gen_fb_mb':ModelBasedFeaGeneralizedEMHandler, # feature is model based emperical measure
+        'expect':QuantizeGeneralizedEMHandler,
         }
 
 from Data import *

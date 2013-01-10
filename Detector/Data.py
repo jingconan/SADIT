@@ -75,6 +75,7 @@ class PreloadHardDiskFile(Data):
 
             assert(sp != -1 and ep != -1)
             if (sp == len(self.t)-1 or ep == len(self.t)-1):
+                # import pdb;pdb.set_trace()
                 raise DataEndException()
         else:
             raise ValueError('unknow window type')

@@ -252,3 +252,13 @@ def load_para(f_name, encap=None, **kwargs):
     s = kwargs
     execfile(f_name, s)
     return s if encap is None else encap(s)
+
+
+
+import csv
+def save_csv(f_name, names, *args):
+    with open(f_name, 'w') as f:
+        w = csv.writer(f)
+        w.writerow(names)
+        w.writerows(zip(*args))
+

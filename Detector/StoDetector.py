@@ -12,9 +12,12 @@ from util import plt
 #     import matplotlib.pyplot as plt
 # except ImportError:
 #     plt = False
+# import csv
+
 
 from DetectorLib import I1, I2
 from util import DataEndException, FetchNoDataException, abstract_method
+from util import save_csv
 from mod_util import plot_points
 
 import cPickle as pickle
@@ -257,8 +260,8 @@ class StoDetector (WindowDetector):
 class ModelFreeAnoDetector(StoDetector):
     """Model Free approach, use I.I.D Assumption
     """
-    def I(self, d_pmf, pmf):
-        return I1(d_pmf, pmf)
+    def I(self, em, norm_em):
+        return I1(em, norm_em)
 
     def get_em(self, rg, rg_type):
         """get empirical measure"""
@@ -294,24 +297,34 @@ class FBAnoDetector(StoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return pmf, Pmb, mpmb
 
-    def _save_gnuplot_file(self):
-        res_f_name = './res.dat'
-        fid = open(res_f_name, 'w')
-        rt = self.record_data['winT']
-        mf, mb = zip(*self.record_data['entropy'])
-        for i in xrange(len(rt)):
-            fid.write("%f %f %f\n"%(rt[i], mf[i], mb[i]))
-        fid.close()
+    # def _save_gnuplot_file(self):
+    #     res_f_name = './res.dat'
+    #     fid = open(res_f_name, 'w')
+    #     rt = self.record_data['winT']
+    #     mf, mb = zip(*self.record_data['entropy'])
+    #     for i in xrange(len(rt)):
+    #         fid.write("%f %f %f\n"%(rt[i], mf[i], mb[i]))
+    #     fid.close()
+
+
+    # def save_plot_as_csv(self, f_name):
+    #     mf, mb = zip(*self.record_data['entropy'])
+    #     save_csv(f_name, ['mf', 'mb'], mf, mb)
+
 
     def plot(self, far=None, figure_=None, subplot_=[211, 212], title_=['model free', 'model based'],
-            pic_name=None, pic_show=False,
+            pic_name=None, pic_show=False, csv=None,
             *args, **kwargs):
         # if not VIS: self._save_gnuplot_file(); return;
-        if not plt: self._save_gnuplot_file(); return;
+        # if not plt: self._save_gnuplot_file(); return;
+        if not plt: self.save_plot_as_csv()
 
         rt = self.record_data['winT']
         mf, mb = zip(*self.record_data['entropy'])
         threshold = self.record_data['threshold']
+
+        if csv:
+            save_csv(csv, ['rt', 'mf', 'mb', 'threshold'], rt, mf, mb, threshold)
 
         if figure_ is None: figure_ = plt.figure()
         plot_points(rt, mf, threshold,
@@ -330,6 +343,7 @@ class FBAnoDetector(StoDetector):
                 *args, **kwargs)
         if pic_name: plt.savefig(pic_name)
         if pic_show: plt.show()
+
 
     def export_abnormal_flow(self, fname, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """
@@ -574,6 +588,7 @@ class DummyShiftWindowDetector(DynamicStoDetector):
         shift = self.desc['shift']
         assert(self.rg[1] - self.rg[0] == win_size)
         norm_rg = [self.rg[0] - shift * win_size, self.rg[1] - shift * win_size]
+        # import pdb;pdb.set_trace()
         norm_win_em = self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
 
         return norm_win_em
@@ -597,6 +612,7 @@ class AutoSelectStoDetector(DynamicStoDetector):
                 '2w': TwoWindowAnoDetector(desc),
                 'shift': DummyShiftWindowDetector(desc),
                 }
+        """correspondence of the detector and the parameter name"""
         self.det_para_name = {
                 'period':'period',
                 '2w':'norm_win_ratio',
@@ -625,7 +641,7 @@ class AutoSelectStoDetector(DynamicStoDetector):
 
     def process_history_data(self, history_file):
         """ process history data using different methods and
-            1. store the emperical measure calculate
+            1. store the emperical measure calculated
             2. calculate the emtropy of each emperical measure
         """
         win_size = self.desc['win_size']
@@ -633,14 +649,14 @@ class AutoSelectStoDetector(DynamicStoDetector):
         pn = self.det_para_name
         """specify the method and the parameters will be used"""
         data = {
-                # 'period':[1e3, 2e3, 1.5e3],
+                'period':[1e3, 2e3, 1.5e3],
                 # 'period':[4e3],
-                'period': 1e3 * np.arange(0.2, 4, 0.1),
+                # 'period': 1e3 * np.arange(0.2, 4, 0.1),
                 # 'norm_win_ratio':[3, 500],
                 'norm_win_ratio':range(1, 10),
                 # 'shift':[1, 2, 3, 4, 5],
                 # 'shift':[-1, -2, -3, -4, -5, -6, -7, -8],
-                'shift':range(-40,-1)
+                # 'shift':range(-40,-1)
                 # 'shift':[-20, -22, -30, -33],
                 # 'shift':[-1],
                 }
@@ -651,10 +667,11 @@ class AutoSelectStoDetector(DynamicStoDetector):
             p_name = pn[d_name]
             for val in self.desc.get(p_name, []):
                 # d_obj.rg = [0, win_size]
-                # d_obj.rg = [1e3, 1e3+win_size]
-                d_obj.rg = [2e3, 2e3+win_size]
+                d_obj.rg = [1e3, 1e3+win_size]
+                # d_obj.rg = [2e3, 2e3+win_size]
                 # d_obj.rg = [990, 990+win_size]
                 d_obj.data_file = history_file
+                # import pdb;pdb.set_trace()
                 self.ref_pool['%s_%f'%(p_name, val)] = d_obj.cal_norm_em(**{p_name:val, 'norm_em':None})
 
         # calculate entropy for each emperical measure
@@ -703,6 +720,39 @@ class AutoSelectStoDetector(DynamicStoDetector):
         print 'res, ', res
         return res
 
+class ExpectedStoDetector(AutoSelectStoDetector):
+    def process_history_data(self, history_file):
+        """ process history data using different methods and
+            1. store the emperical measure calculate
+            2. calculate the emtropy of each emperical measure
+        """
+        d_obj = FBAnoDetector(self.desc)
+        history_file.cal_base_em_list(rg=self.desc['normal_rg'],
+                rg_type=self.desc['win_type'])
+        self.ref_pool = history_file.em_list
+
+    def I(self, em, **kwargs):
+        """ Suppose we have emperical NE_i calcumated by detector i, i=1,...,N
+        the output I = min(I(E, NE_i)) for i =1,...,N
+        """
+        d_pmf, d_Pmb, d_mpmb = em
+        self.desc['em'] = em
+        h_ref_size = len(self.ref_pool)
+        I_rec = np.zeros((h_ref_size, 2))
+        i = -1
+        for norm_em in self.ref_pool:
+            i += 1
+            if norm_em is None:
+                I_rec[i, :] = [float('inf'), float('inf')]
+                continue
+
+            pmf = norm_em.mf
+            Pmb, mpmb = norm_em.mb
+            I_rec[i, :] = [I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)]
+
+        res = np.mean(I_rec, axis=0)
+        # res = np.min(I_rec, axis=0)
+        return res
 
 if __name__ == "__main__":
     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]

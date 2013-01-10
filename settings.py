@@ -12,7 +12,8 @@ traffic condition of the ARO Network.
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 # ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
 # ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
-ROOT = '/home/wangjing/Dropbox/Research/sadit'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit'
+ROOT = '/Users/wangjing/Dropbox/Research/sadit'
 
 
 #################################
@@ -124,10 +125,10 @@ DETECTOR_DESC = dict(
         # interval=2000,
         # win_size = 10,
         # win_size=100,
-        win_size=60,
+        # win_size=60,
         # win_size=20,
-        # win_size=2000,
-        # win_size=200,
+        # win_size=20000,
+        win_size=200,
         win_type='time', # 'time'|'flow'
         # win_type='flow', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate
@@ -136,8 +137,9 @@ DETECTOR_DESC = dict(
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
-        # fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
-        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
+        # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
+        # fea_option = {'dist_to_center':1, 'flow_size':3, 'cluster':1},
         # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,
@@ -158,7 +160,8 @@ DETECTOR_DESC = dict(
 
         #### only for Generalized Emperical Measure #####
         small_win_size = 1,
-        g_quan_N = 2,
+        # small_win_size = 1000,
+        g_quan_N = 3,
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.
 

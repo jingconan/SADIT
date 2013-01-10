@@ -6,13 +6,15 @@ sys.path.insert(0, '../..')
 from Detector.mod_util import plot_points
 import cPickle as pickle
 import os
+import settings
 
 try:
     import matplotlib.pyplot as plt
 except:
     plt = False
 class ARTDetector(object):
-    ROOT = '/home/wangjing/Dropbox/Research/sadit'
+    # ROOT = '/home/wangjing/Dropbox/Research/sadit'
+    ROOT = settings.ROOT
     HOME = ROOT + '/Detector/ART'
     inter_csv_data = HOME + '/output.csv'
     def __init__(self, desc={}):

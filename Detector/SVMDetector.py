@@ -10,6 +10,7 @@ import argparse
 
 from mod_util import plot_points
 from Base import BaseDetector
+from util import save_csv
 
 try:
     import matplotlib.pyplot as plt
@@ -157,6 +158,11 @@ class SVMDetector(BaseDetector):
         self.ano_val = 1 if pred_num[1] < pred_num[-1] else -1
         print 'total flows', len(self.pred), 'alarm num, ', pred_num[self.ano_val]
 
+
+    def save_plot_as_csv(self, f_name):
+        self.stat()
+        save_csv(f_name, ['mf', 'mb'], mf, mb)
+
     def plot(self, *args, **kwargs):
         self.stat()
         self.plot_pred(*args, **kwargs)
@@ -243,7 +249,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         self.record_data['interval'] = self.desc['interval']
 
 
-    def plot_pred(self, xlim_=None, ylim_=None, *args, **kwargs):
+    def plot_pred(self, xlim_=None, ylim_=None, csv=None, *args, **kwargs):
         # self.stat()
         start_time = self.record_data['start_time']
         self.pred = self.record_data['pred']
@@ -259,6 +265,8 @@ class SVMFlowByFlowDetector(SVMDetector):
         y = [1 for i in xrange(len(start_time)) if self.pred[i] == self.ano_val]
         # plt.plot(start_time, self.pred, '+')
         # threshold = [0] * len(start_time)
+        if csv:
+            save_csv(csv, ['x', 'y'], x, y)
         plot_points(x, y,
                 # threshold,
                 xlim_=[0, max(start_time)], ylim_=[-1.5, 1.5],
@@ -344,12 +352,15 @@ class SVMTemporalDetector(SVMDetector, WindowDetector):
         self.load_pred()
 
     # def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):
-    def plot_pred(self, xlim_=None, ylim_=None, *args, **kwargs):
+    def plot_pred(self, xlim_=None, ylim_=None, csv=None, *args, **kwargs):
         # import matplotlib.pyplot as plt
         # self.stat()
         ano_idx = [i for i in xrange(self.detect_num) if self.pred[i] == self.ano_val]
         x = [i*self.desc['interval'] for i in ano_idx]
         y = [abs(self.pred[i]) for i in ano_idx]
+        if csv:
+            save_csv(csv, ['x', 'y'], x, y)
+
         plot_points(x, y,
                 ano_marker=['ro'], threshold_marker=None,
                 xlim_=[0, self.detect_num*self.desc['interval']], ylim_=[-1.5, 1.5],
