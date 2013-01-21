@@ -12,8 +12,8 @@ traffic condition of the ARO Network.
 # ROOT = '/Users/wangjing/Dropbox/Research/sadit-experimental'
 # ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
 # ROOT = '/home/wangjing/Documents/CyberSecurity/sadit'
-# ROOT = '/home/wangjing/Dropbox/Research/sadit'
-ROOT = '/Users/wangjing/Dropbox/Research/sadit'
+ROOT = '/home/wangjing/Dropbox/Research/sadit'
+# ROOT = '/Users/wangjing/Dropbox/Research/sadit'
 
 
 #################################
@@ -65,11 +65,13 @@ ANO_DESC = {
         # 'ATIP':['8.8.8.8'],
         # 'anoType':'flow_size_mean_arrival_rate',
         'ano_node_seq':2,
-        'T':(2000, 3000),
+        # 'T':(2000, 3000),
+        'T':(5000, 5500),
         # 'T':(1200, 1400),
-        'change':{'flow_arrival_rate':6},
+        # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
+        'change':{'flow_size_mean':2},
         # 'change':{'flow_size_mean':6},
         # 'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
         # 'change':{'flow_size_var':6},
@@ -120,15 +122,15 @@ DETECTOR_DESC = dict(
         # win_size = 50,
         # interval=20,
         # interval=4,
-        # interval=10,
-        interval=30,
+        interval=10,
+        # interval=30,
+        # interval=100,
         # interval=2000,
         # win_size = 10,
         # win_size=100,
-        # win_size=60,
-        # win_size=20,
+        win_size=100,
         # win_size=20000,
-        win_size=200,
+        # win_size=200,
         win_type='time', # 'time'|'flow'
         # win_type='flow', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate

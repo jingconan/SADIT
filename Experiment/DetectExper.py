@@ -24,8 +24,9 @@ class DetectExper(object):
         parser.add_argument('-h', '--help', default=False, action='store_true',
                 help="""print help message""")
 
-        parser.add_argument('-d', '--detect', default=None,
-                help='--detect [filename] will simply detect the flow file, simulator will not run in this case, \
+        # parser.add_argument('-d', '--detect', default=None,
+        parser.add_argument('-d', '--data', default=None,
+                help='--data [filename] will simply detect the flow file, simulator will not run in this case, \
                         detector will still use the configuration in the settings.py')
 
         from Detector.API import detector_map, data_map
@@ -79,9 +80,9 @@ class DetectExper(object):
         if args.method:
             desc['detector_type'] = args.method
 
-        if args.detect is None:
+        if args.data is None:
             raise Exception('You need specify file path that will be analyzed!!')
-        detector = detect(os.path.abspath(args.detect), desc, res_args)
+        detector = detect(os.path.abspath(args.data), desc, res_args)
         self.detector = detector
 
         if args.export_flows:

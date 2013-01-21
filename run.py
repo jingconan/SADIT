@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/python -B
+#!/usr/bin/env python -B
 from __future__ import print_function, division
 import settings
 import sys

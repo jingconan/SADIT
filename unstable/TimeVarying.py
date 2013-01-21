@@ -51,7 +51,8 @@ def tran_flow_size_to_time_varying(f_name, out_f_name, transform):
 from math import sin, pi
 def tran_sin(t, x):
     mint = min(t)
-    M = 1e3
+    # M = 1e3
+    M = 5e3
     # M = 2e3
     # T = 1000
     T = 8000
@@ -71,9 +72,15 @@ if __name__ == "__main__":
             # '../../CyberSecurity/ARO_demo/data/flow_size_mean_2x_t_5000s_anomaly_1000s_to_1300s/n0_flow.txt',
             # '../../CyberSecurity/time_varying/data/n0_flow_M_2e3_T_4e3.txt', tran_sin)
 
+    # tran_flow_size_to_time_varying(
+    #         '../../CyberSecurity/ARO_demo/data/flow_size_mean_2x_t_5000s_anomaly_1000s_to_1300s/n0_flow.txt',
+    #         './test.txt', tran_sin)
+
     tran_flow_size_to_time_varying(
-            '../../CyberSecurity/ARO_demo/data/flow_size_mean_2x_t_5000s_anomaly_1000s_to_1300s/n0_flow.txt',
+            './n0_flow.txt',
             './test.txt', tran_sin)
+
+
 
 
 
