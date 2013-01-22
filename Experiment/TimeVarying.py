@@ -2,11 +2,15 @@
 """ Experiment For Time Varying Traffic
 Will generate traffic based on existing flow records, just change
 the flow size based on some distribution.
+
+Detect the results and save some some folder
 """
 from __future__ import print_function
 import sys
 sys.path.insert(0, '..')
+import os
 
+from util import mkiter, meval
 from Detector.DataParser import RawParseData
 
 # FORMAT of FS output file
@@ -34,14 +38,17 @@ def tran_flow_size_to_time_varying(f_name, out_f_name, transform,
     t_idx = keys.index('start_time')
     fs_idx = keys.index('flow_size')
     t = [float(vt) for vt in zip_flows[t_idx]]
+    mint = min(t)
+    nt = [v_ - mint for v_ in t]
+
     flow_size = [float(fs) for fs in zip_flows[fs_idx]]
     fig = plt.figure()
     ax1 = fig.add_subplot(211)
-    plt.plot(t, flow_size, axes=ax1)
+    plt.plot(nt, flow_size, axes=ax1)
     new_flow_size = transform(t, flow_size)
     zip_flows[fs_idx] = [str(fs) for fs in new_flow_size]
     ax2 = fig.add_subplot(212)
-    plt.plot(t, new_flow_size, axes=ax2)
+    plt.plot(nt, new_flow_size, axes=ax2)
     # plt.savefig('scene.pdf')
     plt.savefig(data_pic_name)
     # plt.show()
@@ -50,37 +57,42 @@ def tran_flow_size_to_time_varying(f_name, out_f_name, transform,
     write_file(out_f_name, FS_FORMAT, flows, keys)
 
 from math import sin, pi
-def tran_sin(t, x, M, T):
+def tran_sin(t, x, M, T, phase):
     mint = min(t)
-    shift = pi/2
-    y = [vx + M * sin( 2*pi / T * (vt-mint) + shift ) for vt, vx in zip(t, x)]
+    y = [vx + M * sin( 2*pi / T * (vt-mint) + phase) for vt, vx in zip(t, x)]
     return y
 
-
-import os
-from IIDExper import IIDExper, load_para, Namespace
+from IIDExper import IIDExper, load_para
 from Detector import detect
+from itertools import product
 class TimeVarying(IIDExper):
     def init_parser(self, parser):
         super(TimeVarying, self).init_parser(parser)
-        parser.add_argument('--M', default=0, type=eval,
-                help = """M value""")
-        parser.add_argument('--T', default=0, type=eval,
-                help = """Period value""")
-        parser.add_argument('--res_folder', default='.',
+        parser.add_argument('--M', default=0, type=meval,
+                help = """amplitude of the sine time varying normal traffic""")
+        parser.add_argument('--T', default=0, type=meval,
+                help = """period of the sine time varying normal traffic""")
+        parser.add_argument('--phase', default=0, type=meval,
+                help = """phase of the sine time varying normal traffic""")
+
+        parser.add_argument('--res_folder', default='./res',
                 help = """res folder""")
+        # parser.add_argument('--no_sim', default=False, action='store_true',
+        parser.add_argument('--no_sim', default=True, action='store_true',
+                help = """turn on this switch to disable the fs simulaiton""")
+        parser.add_argument('--pad_len', default=7 ,
+                help = """pad the file names with leading zeros to the samd
+                length so that the
+                order is correct""")
 
     def detect(self, data, pic_name):
         args = self.args
         res_args = self.res_args
         default_settings = load_para(args.default_settings)
         desc = default_settings['DETECTOR_DESC']
-        if args.data_type:
-            desc['data_type'] = args.data_type
-        if args.feature_option:
-            desc['fea_option'] = eval(args.feature_option)
-        if args.method:
-            desc['detector_type'] = args.method
+        if args.data_type: desc['data_type'] = args.data_type
+        if args.feature_option: desc['fea_option'] = eval(args.feature_option)
+        if args.method: desc['detector_type'] = args.method
 
         detector = detect(os.path.abspath(data), desc, res_args)
         detector.plot(pic_show=False,
@@ -88,24 +100,34 @@ class TimeVarying(IIDExper):
                 csv=pic_name+'.csv')
 
         self.detector = detector
-
-
         return self.detector
 
 
     def run(self):
-        # self.configure()
-        # self.simulate()
-        for m in self.args.M:
-            for tt in self.args.T:
-                out_f_name = '%s/M_%s_T_%s_flow.txt'%(self.args.res_folder, m, tt)
-                data_pic_name = '%s/M_%s_T_%s_pic.pdf'%(self.args.res_folder, m, tt)
-                res_pic_name = '%s/M_%s_T_%s_res.pdf'%(self.args.res_folder, m, tt)
-                tran_flow_size_to_time_varying(self.output_flow_file,
-                        out_f_name,
-                        lambda t, x:tran_sin(t, x, m, tt),
-                        data_pic_name,
-                        )
-                self.detect(out_f_name, res_pic_name)
+        if not self.args.no_sim:
+            self.configure()
+            self.simulate()
+
+        if not os.path.exists(self.args.res_folder):
+            os.makedirs(self.args.res_folder)
+        args = self.args
+        D = args.pad_len
+        M = mkiter(args.M)
+        T = mkiter(args.T)
+        phase = mkiter(self.args.phase)
+        for m, tt, ph in product(M, T, phase):
+            prefix = '%s/%s_M_%0*d_T_%0*d_ph_%0*f_'%(args.res_folder,
+                    args.method,
+                    D, m,
+                    D, tt, D, ph)
+            out_f_name = prefix + 'flow.txt'
+            data_pic_name = prefix + 'pic.png'
+            res_pic_name = prefix + 'res.png'
+            tran_flow_size_to_time_varying(self.output_flow_file,
+                    out_f_name,
+                    lambda t, x:tran_sin(t, x, m, tt, ph),
+                    data_pic_name,
+                    )
+            self.detect(out_f_name, res_pic_name)
 
         return self.detector

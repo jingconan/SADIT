@@ -5,22 +5,28 @@ from __future__ import print_function, division
 #######################################################
 ###        Import Detectors                        ####
 #######################################################
-from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
-from StoDetector import TwoWindowAnoDetector, PeriodStoDetector
-from StoDetector import AutoSelectStoDetector
-from StoDetector import ExpectedStoDetector
-from RobustDetector import RobustDetector
+# from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
+# from StoDetector import TwoWindowAnoDetector, PeriodStoDetector
+# from StoDetector import AutoSelectStoDetector
+# from StoDetector import ExpectedStoDetector
+# from RobustDetector import RobustDetector
 
-from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
+# from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
+from StoDetector import *
+from RobustDetector import *
+from SVMDetector import *
+
 from ART.ART import ARTDetector
 
 # detector_map defines correspondence between detector
 # options with detector name
 detector_map = {
         'auto': AutoSelectStoDetector,
-        '2w': TwoWindowAnoDetector,
+        # '2w': TwoWindowAnoDetector,
+        'two_win': TwoWindowAnoDetector,
         # 'ada':AdaStoDetector,
         'period': PeriodStoDetector,
+        'speriod': PeriodStaticDetector,
         'mf': ModelFreeAnoDetector,
         'mb': ModelBaseAnoDetector,
         'mfmb': FBAnoDetector,
@@ -42,9 +48,11 @@ data_handler_handle_map = {
         'mf': QuantizeDataHandler,
         'mb': QuantizeDataHandler,
         'mfmb': QuantizeDataHandler,
-        '2w': QuantizeDataHandler,
+        # '2w': QuantizeDataHandler,
+        'two_win': QuantizeDataHandler,
         # 'ada': QuantizeDataHandler,
         'period': QuantizeDataHandler,
+        'speriod': QuantizeDataHandler,
         'svm_temp': SVMTemporalHandler,
         'svm_fbf':QuantizeDataHandler,
         'art': FakeDataHandler,

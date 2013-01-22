@@ -86,16 +86,23 @@ class StoDetector (WindowDetector):
         for k, v in self.record_data.iteritems():
             self.record_data[k] = []
 
+    def cal_norm_em(self):
+        nominal_rg = self.desc['normal_rg']
+        rg_type = self.desc['win_type']
+        return self.get_em(rg=nominal_rg, rg_type=rg_type)
+
     # def detect(self, data_file, nominal_rg = [0, 1000], rg_type='time',  max_detect_num=None):
     def detect(self, data_file):
         """main function to detect. it will slide the window, get the emperical
         measure and get the indicator"""
-        nominal_rg = self.desc['normal_rg']
+        # nominal_rg = self.desc['normal_rg']
         rg_type = self.desc['win_type']
         max_detect_num = self.desc['max_detect_num']
 
         self.data_file = data_file
-        self.norm_em = self.get_em(rg=nominal_rg, rg_type=rg_type)
+        # self.norm_em = self.get_em(rg=nominal_rg, rg_type=rg_type)
+        self.norm_em = self.cal_norm_em()
+        # self.desc['norm_em'] = self.norm_em
 
         win_size = self.desc['win_size']
         interval = self.desc['interval']
@@ -519,33 +526,37 @@ class PeriodStoDetector(DynamicStoDetector):
         parser.add_argument('--period', default=1000.0, type=float,
                 help="""the period of underlying traffic""")
 
-    def cal_norm_em(self, **kwargs):
+    def cal_norm_em(self, rg=None, **kwargs):
         super(PeriodStoDetector, self).cal_norm_em(**kwargs)
+        if rg is None:
+            return StoDetector.cal_norm_em(self)
 
-        norm_em = self.desc['norm_em']
-
+        norm_em = self.desc.get('norm_em', None)
         i = -1 if norm_em is None else 0
+
         norm_win_em = CombinedEM(norm_em)
 
         period = self.desc['period']
         while True:
             i += 1
             try:
-                norm_rg = [self.rg[0] + i * period, self.rg[1] + i * period] #FIXME need to look back
+                norm_rg = [rg[0] + i * period, rg[1] + i * period] #FIXME need to look back
                 # import ipdb;ipdb.set_trace()
                 norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
             except FetchNoDataException:
                 break
             except DataEndException:
                 break
+            except AttributeError: #FIXME
+                return
         j = 0
         while True:
             i += 1
             j -= 1
-            if self.rg[0] + j * period < 0:
+            if rg[0] + j * period < 0:
                 break
             try:
-                norm_rg = [self.rg[0] + j * period, self.rg[1] + j * period] #FIXME need to look back
+                norm_rg = [rg[0] + j * period, rg[1] + j * period] #FIXME need to look back
                 norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
             except FetchNoDataException:
                 break

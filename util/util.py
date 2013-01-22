@@ -259,6 +259,21 @@ import csv
 def save_csv(f_name, names, *args):
     with open(f_name, 'w') as f:
         w = csv.writer(f)
-        w.writerow(names)
-        w.writerows(zip(*args))
+        valid_idx = [i for i in xrange(len(args)) if args[i] is not None]
+        valid_names = [names[i] for i in valid_idx]
+        valid_args = [args[i] for i in valid_idx]
+        w.writerow(valid_names)
+        w.writerows(zip(*valid_args))
 
+
+import collections
+def mkiter(e):
+    """make e iteratable"""
+    if not isinstance(e, collections.Iterable):
+        return [e]
+    else:
+        return e
+
+import numpy as np
+def meval(cmd):
+    return eval(cmd)

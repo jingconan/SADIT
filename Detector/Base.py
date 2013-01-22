@@ -6,6 +6,7 @@ class BaseDetector(object):
         self.init_parser(parser)
         args = parser.parse_args(argv)
         m_args = dict((k, v) for k, v in args.__dict__.iteritems() if v is not None)
+        self.args = args
         self.desc.update(m_args)
 
     def init_parser(self, parser):
@@ -16,6 +17,7 @@ class BaseDetector(object):
         pass
 
 class WindowDetector(BaseDetector):
+    """Base class for Window based Methods"""
     def init_parser(self, parser):
         parser.add_argument('--interval', default=None, type=float,
                 help='interval between two consequent detection')

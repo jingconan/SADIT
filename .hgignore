@@ -4,6 +4,7 @@ syntax: glob
 *.dot
 *flow.txt
 *.eps
+res/
 res/*.eps
 res/*.txt
 Share/**
