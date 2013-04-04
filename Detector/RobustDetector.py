@@ -1,15 +1,7 @@
 # from StoDetector import DynamicStoDetector
 import itertools
 from StoDetector import *
-from util import mkiter, meval
-def del_none_key(dt):
-    """delete key whose value is None"""
-    res = dict()
-    for k, v in dt.iteritems():
-        if v is not None:
-            res[k] = v
-    return res
-
+from util import mkiter, meval, del_none_key
 class EnsembleDetector(object):
     def __init__(self):
         self.det = dict()
@@ -25,82 +17,6 @@ class EnsembleDetector(object):
     def call(self, alg_name, action, *args, **kwargs):
         pass
 
-# class StaticAdaptor(object):
-#     """ To make Static Detectors (model free and model based methods)
-#     to be called in the same way as DynamicStoDetector
-#     Can also be used to make dynamic method static.
-#     """
-#     def __init__(self):
-#         self.cache_norm_em = None
-
-#     def cal_norm_em(self, **kwargs):
-#         self.desc.update(kwargs)
-#         if self.cache_norm_em is None:
-#             self.cache_norm_em = self.static_action()
-#         return self.cache_norm_em
-
-# class RefDetector(FBAnoDetector, StaticAdaptor):
-#     """To make FBAnoDetector to be called in the same way as
-#     DynamicStoDetector
-#     """
-#     def __init__(self, desc):
-#         FBAnoDetector.__init__(self, desc)
-#         StaticAdaptor.__init__(self)
-
-#     def static_action(self):
-#         return FBAnoDetector.get_em(self,
-#                 rg=self.desc['normal_rg'],
-#                 rg_type=self.desc['win_type'])
-
-class RefDetector(FBAnoDetector):
-    """To make FBAnoDetector to be called in the same way as
-    DynamicStoDetector
-    """
-    def cal_norm_em(self, **kwargs):
-        return FBAnoDetector.get_em(self,
-                rg=self.desc['normal_rg'],
-                rg_type=self.desc['win_type'])
-
-class PeriodStaticDetector(PeriodStoDetector):
-    def init_parser(self, parser):
-        super(PeriodStaticDetector, self).init_parser(parser)
-        parser.add_argument('--start', default=0, type=float,
-                help="""start point of the period selection""")
-
-    def I(self, em, norm_em):
-        d_pmf, d_Pmb, d_mpmb = em
-        pmf, Pmb, mpmb = norm_em
-        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
-
-    def cal_norm_em(self, **kwargs):
-        self.desc.update(kwargs)
-        # import pdb;pdb.set_trace()
-        nrg = [self.desc['start'],
-                self.desc['start'] + self.desc['win_size']]
-        return PeriodStoDetector.cal_norm_em(self, rg=nrg)
-
-# class PeriodStaticDetector(PeriodStoDetector, StaticAdaptor):
-#     """Make period stochastic detect static to accelerate
-#     """
-#     def __init__(self, desc):
-#         PeriodStoDetector.__init__(self, desc)
-#         StaticAdaptor.__init__(self)
-
-#     def init_parser(self, parser):
-#         PeriodStoDetector.init_parser(self, parser)
-#         parser.add_argument('--start', default=0, type=float,
-#                 help="""start point of the period selection""")
-
-#     def cal_norm_em(self, **kwargs):
-#         return StaticAdaptor.cal_norm_em(self, **kwargs)
-
-#     def static_action(self):
-#         nrg = [self.desc['start'],
-#                 self.desc['start'] + self.desc['win_size']]
-#         print 'nrg', nrg
-#         import pdb;pdb.set_trace()
-#         return PeriodStoDetector.cal_norm_em(self, rg=nrg)
-
 class RobustDetector(EnsembleDetector, FBAnoDetector):
     """ Robust Detector is designed for dynamic network environment
     """
@@ -110,30 +26,19 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
 
     def init_parser(self, parser):
         pass
-        # parser.add_argument('--two_win_nwr', default=None,
-        #         type=lambda x:mkiter(meval(x)),
-        #         help = """norm_win_ratio in TwoWindowAnoDetector""")
-        # parser.add_argument('--period_period', default=None,
-        #         type=lambda x:mkiter(meval(x)),
-        #         help = """period parameter in PeriodStoDetector""")
 
     def detect(self, data_file):
         self.ref_pool = dict()
 
-        # self.register('period', PeriodStoDetector(self.desc),
-        #         {'period':self.args.period_period})
-        # self.register('two_win', TwoWindowAnoDetector(self.desc),
-        #         {'norm_win_ratio':self.args.two_win_nwr})
-
-        self.register('ref', RefDetector(self.desc), {}, 'static')
+        self.register('mfmb', FBAnoDetector(self.desc), {}, 'static')
         # self.register('period', PeriodStoDetector(self.desc),
                 # {'period':[1e3, 2e3]})
         self.register('speriod', PeriodStaticDetector(self.desc),
                 # {'period':[1e3, 2e3, 3e3, 1e2, 5e2], 'start':[0, 100, 200]},
-                {'period':[1e3, 2e3, 1140], 'start':[0]},
+                {'period':[1e3, 2e3, 600, 200], 'start':[0, 150]},
                 'static')
         # self.register('two_win', TwoWindowAnoDetector(self.desc),
-                # {'norm_win_ratio':[4, 5]})
+        #         {'norm_win_ratio':[2, 10]})
 
         # self.process_history_data(data_file)
         FBAnoDetector.detect(self, data_file)

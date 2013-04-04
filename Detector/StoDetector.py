@@ -86,8 +86,9 @@ class StoDetector (WindowDetector):
         for k, v in self.record_data.iteritems():
             self.record_data[k] = []
 
-    def cal_norm_em(self):
+    def cal_norm_em(self, **kwargs):
         nominal_rg = self.desc['normal_rg']
+        # import pdb;pdb.set_trace()
         rg_type = self.desc['win_type']
         return self.get_em(rg=nominal_rg, rg_type=rg_type)
 
@@ -446,6 +447,7 @@ class FBAnoDetector(StoDetector):
         ident.set_detect_result([(1 if i in ab_idx else 0) for i in xrange(len(nu_set))])
         return ident.filter_states(ab_idx, portion, ab_states_num)
 
+
     # def get_ab_flow_seq_mb(self, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         # mf, mb = zip(*self.record_data['entropy'])
         # ab_idx = self.find_abnormal_windows(mb, entropy_threshold, ab_win_portion, ab_win_num)
@@ -465,6 +467,48 @@ class FBAnoDetector(StoDetector):
     #         ano_flow_seq += range(st, ed)
 
     #     return ano_flow_seq
+
+"""Static Methods"""
+class PeriodStaticDetector(FBAnoDetector):
+    def init_parser(self, parser):
+        super(PeriodStaticDetector, self).init_parser(parser)
+        parser.add_argument('--start', default=0, type=float,
+                help="""start point of the period selection""")
+        parser.add_argument('--period', default=1000.0, type=float,
+                help="""the period of underlying traffic""")
+
+    def cal_norm_em(self, **kwargs):
+        self.desc.update(kwargs)
+        rg = [self.desc['start'],
+                self.desc['start'] + self.desc['win_size']]
+
+        norm_win_em = CombinedEM(None)
+        norm_rg_ref = self.desc.get('normal_rg')
+        if norm_rg_ref is None: norm_rg_ref = [0, float('inf')]
+        period = self.desc['period']
+
+        i = -1
+        j = (norm_rg_ref[0] - rg[0]) / period
+        if period >= (norm_rg_ref[1] - norm_rg_ref[0]):
+            raise Exception('period is too largw')
+
+        while True:
+            i += 1
+            j += 1
+            try:
+                norm_rg = [rg[0] + j * period, rg[1] + j * period] #FIXME need to look back
+                if norm_rg[1] > norm_rg_ref[1]:
+                    break
+                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            except FetchNoDataException:
+                break
+            except DataEndException:
+                break
+
+        norm_win_em = norm_win_em / i
+        norm_win_em = norm_win_em.data
+
+        return norm_win_em
 
 """ The following part contains several algorithms that select normal emperical
 measure in a novel way. They are designed to handle the case that the nominal traffic
@@ -532,16 +576,23 @@ class PeriodStoDetector(DynamicStoDetector):
             return StoDetector.cal_norm_em(self)
 
         norm_em = self.desc.get('norm_em', None)
-        i = -1 if norm_em is None else 0
-
         norm_win_em = CombinedEM(norm_em)
-
+        norm_rg_ref = self.desc['normal_rg']
         period = self.desc['period']
+
+        i = -1 if norm_em is None else 0
+        j = (norm_rg_ref[0] - rg[0]) / period
+        if period >= (norm_rg_ref[1] - norm_rg_ref[0]):
+            raise Exception('period is too largw')
+
         while True:
             i += 1
+            j += 1
             try:
-                norm_rg = [rg[0] + i * period, rg[1] + i * period] #FIXME need to look back
-                # import ipdb;ipdb.set_trace()
+                # norm_rg = [rg[0] + i * period, rg[1] + i * period] #FIXME need to look back
+                norm_rg = [rg[0] + j * period, rg[1] + j * period] #FIXME need to look back
+                if norm_rg[1] > norm_rg_ref[1]:
+                    break
                 norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
             except FetchNoDataException:
                 break
@@ -549,19 +600,19 @@ class PeriodStoDetector(DynamicStoDetector):
                 break
             except AttributeError: #FIXME
                 return
-        j = 0
-        while True:
-            i += 1
-            j -= 1
-            if rg[0] + j * period < 0:
-                break
-            try:
-                norm_rg = [rg[0] + j * period, rg[1] + j * period] #FIXME need to look back
-                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
-            except FetchNoDataException:
-                break
-            except DataEndException:
-                break
+        # j = 0
+        # while True:
+        #     i += 1
+        #     j -= 1
+        #     if rg[0] + j * period < norm_rg_ref[0]:
+        #         break
+        #     try:
+        #         norm_rg = [rg[0] + j * period, rg[1] + j * period] #FIXME need to look back
+        #         norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+        #     except FetchNoDataException:
+        #         break
+        #     except DataEndException:
+        #         break
 
         norm_win_em = norm_win_em / i
         norm_win_em = norm_win_em.data
@@ -764,6 +815,7 @@ class ExpectedStoDetector(AutoSelectStoDetector):
         res = np.mean(I_rec, axis=0)
         # res = np.min(I_rec, axis=0)
         return res
+
 
 if __name__ == "__main__":
     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]

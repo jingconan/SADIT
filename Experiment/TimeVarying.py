@@ -94,6 +94,7 @@ class TimeVarying(IIDExper):
         if args.feature_option: desc['fea_option'] = eval(args.feature_option)
         if args.method: desc['detector_type'] = args.method
 
+        # import pdb;pdb.set_trace()
         detector = detect(os.path.abspath(data), desc, res_args)
         detector.plot(pic_show=False,
                 pic_name=pic_name,

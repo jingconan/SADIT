@@ -275,5 +275,17 @@ def mkiter(e):
         return e
 
 import numpy as np
+from numpy import arange, pi, linspace
 def meval(cmd):
+    """to make arange, pi and linespace to be able to used directly in eval()"""
     return eval(cmd)
+
+def del_none_key(dt):
+    """delete key whose value is None"""
+    res = dict()
+    for k, v in dt.iteritems():
+        if v is not None:
+            res[k] = v
+    return res
+
+

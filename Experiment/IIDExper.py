@@ -28,7 +28,7 @@ class IIDExper(DetectExper):
         # self.ROOT = default_settings.ROOT
         self.output_flow_file = self.ROOT + '/Simulator/n%i_flow.txt'%(self.args.detect_node_id)
         self.export_abnormal_flow_file = self.ROOT + '/Simulator/abnormal_n%i_flow.txt'%(self.args.detect_node_id)
-        self.args.detect = self.output_flow_file
+        self.args.data = self.output_flow_file
 
     def init_parser(self, parser):
         super(IIDExper, self).init_parser(parser)
