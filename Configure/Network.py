@@ -40,9 +40,10 @@ class Network(Dot):
 
     def init(self, net_desc, norm_desc):
         self.net_desc = net_desc
-        self._init_addr_helper()
-        self.Node = node_map[self.net_desc['node_type']]
         self.norm_desc = norm_desc
+
+        self._init_addr_helper()
+        self.Node = node_map[net_desc['node_type']]
         self._topo(self.net_desc['topo'])
         self._config_traffic()
 
@@ -57,9 +58,8 @@ class Network(Dot):
     #         self.node_list[i].init_traffic(self.norm_desc, srv_node_list)
 
     def _config_traffic(self):
-        """config the traffic of network, there will be
-        traffic for any combination of self.norm_desc['src_nodes']
-        and self.norm_desc['dst_Nodes']
+        """ config the traffic of network, initialize traffic from
+        *self.norm_desc['src_nodes']* to *self.norm_desc['dst_Nodes']*
         """
         dst_node_list = [self.node_list[i] for i in self.norm_desc['dst_nodes']]
         for i in self.norm_desc['src_nodes']:

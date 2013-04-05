@@ -1,13 +1,7 @@
-# from pydot import *
 from pydot import Node
-# NODE_NUM = 0
-
-import sys
-sys.path.append("..")
-# from util import *
+import sys; sys.path.append("..")
 from util import types, Load
 from mod_util import choose_ip_addr
-# from mod_util import *
 
 from Generator import get_generator
 from Modulator import Modulator, MarkovModulator, MVModulator
@@ -56,25 +50,38 @@ class NNode(Node):
         """
         self.ipdests.append(addr)
 
-    def _get_generator_list(self, dst_node, para_list):
-        """returns the default generator list"""
-        res = []
-        for state in para_list:
+    def _get_generator_list(self, dst_node, states):
+        """ create one generator for each state in **states**.
+            - **ipsrc** is randomly choosen from **self.ipdests**
+            - **ipdst** is randomly choosen from dst_node.ipdests
+        """
+        gl = []
+        for state in states:
             s = Load(state)
             s['ipsrc'] = choose_ip_addr(self.ipdests).rsplit('/')[0]
             s['ipdst'] = choose_ip_addr(dst_node.ipdests).rsplit('/')[0]
             gen = get_generator(s)
-            res.append(gen)
-        return res
+            gl.append(gen)
+        return gl
 
     def init_traffic(self, norm_desc, dst_nodes):
+        """  Initialize the normal traffic
+        """
         self.norm_desc = norm_desc
-        para_list = norm_desc['node_para']['states']
+        states = norm_desc['node_para']['states']
         for node in dst_nodes:
             self.add_modulator(norm_desc['start'],
                     norm_desc['profile'],
-                    self._get_generator_list(node, para_list))
+                    self._get_generator_list(node, states))
 
+
+    def init_traffic_dynamic(self, norm_desc, dst_nodes):
+        self.norm_desc = norm_desc
+        states = norm_desc['node_para']['states']
+        for node in dst_nodes:
+            self.add_modulator(norm_desc['start'],
+                    norm_desc['profile'],
+                    self._get_generator_list(node, states))
 
     def add_modulator(self, start, profile, generator):
         """generator is a Generator Object"""

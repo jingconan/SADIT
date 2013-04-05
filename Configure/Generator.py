@@ -1,4 +1,4 @@
-
+from __future__ import print_function, division
 import sys
 sys.path.append("..")
 # from util import *
@@ -48,12 +48,15 @@ class HarpoonG(Generator):
         # change the parameters
         for attr, ratio in change_para.iteritems():
             if isinstance(ratio, str):
-                if change_para[0] is '=':
-                    new.para[attr.lower()] = ratio
-                elif change_para[0] is '+':
-                    new.para[attr.lower()] += ratio
-                elif change_para[0] is 'x':
-                    new.para[attr.lower()] *= ratio
+                tp = ratio[0]
+                r = float(ratio[1:])
+                print('tp', tp)
+                if tp is '=':
+                    new.para[attr.lower()] = r
+                elif tp is '+':
+                    new.para[attr.lower()] += r
+                elif tp is 'x':
+                    new.para[attr.lower()] *= r
                 else:
                     raise Exception('unknown change parameter')
             # for backward compatibility
@@ -75,8 +78,10 @@ class MVGenerator(HarpoonG):
                 lossrate='randomchoice(0.001)',
                 )
 
-gmap = {'harpoon':HarpoonG,
-        'mv':MVGenerator}
+gmap = {
+        'harpoon':HarpoonG,
+        'mv':MVGenerator,
+        }
 def get_generator(gen_desc):
     gen_class = gmap[gen_desc['TYPE']]
     return gen_class(**gen_desc)

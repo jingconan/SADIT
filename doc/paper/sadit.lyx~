@@ -69,8 +69,56 @@ figs-within-sections
 Systematic Anomaly Detection of Internet Traffic
 \end_layout
 
-\begin_layout Standard
+\begin_layout Section
+Structure
+\end_layout
 
+\begin_layout Standard
+fs-simulator
+\end_layout
+
+\begin_layout Section
+Experiments
+\end_layout
+
+\begin_layout Subsection
+DetectExper
+\end_layout
+
+\begin_layout Subsection
+DetectArgSearch
+\end_layout
+
+\begin_layout Subsection
+IIDExper
+\end_layout
+
+\begin_layout Subsection
+Markov Experiment
+\end_layout
+
+\begin_layout Section
+Methods
+\end_layout
+
+\begin_layout Subsection
+Model-free & Model-based method
+\end_layout
+
+\begin_layout Subsection
+Window SVM
+\end_layout
+
+\begin_layout Subsection
+Flow SVM
+\end_layout
+
+\begin_layout Subsection
+ART Method
+\end_layout
+
+\begin_layout Subsection
+Robust Method
 \end_layout
 
 \end_body

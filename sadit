@@ -66,8 +66,9 @@ if args.help_method:
     sys.exit()
 
 def main(args, res_args):
+    """ Execute the experiment """
     if args.experiment not in exper_ops:
-        raise Exception('invalid experiment')
+        raise Exception('invalid experiment, experiments must be defined in ./Experiment/ folder')
         # exec_exper(args, res_args)
     exec('from Experiment.%s import %s'%(args.experiment, args.experiment))
     exper = locals()[args.experiment](res_args)

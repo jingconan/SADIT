@@ -2,6 +2,34 @@
 This is a sample setting file for ARO(Army Research Office) demo.
 The topology is proposed by Dan and try to simulation the typical
 traffic condition of the ARO Network.
+    - NET_DESC: network descriptor
+
+        - *size*: size of the network
+        - *topo*: adjacent matrix of the network
+        - *link_attr_default*:
+        - *node_type*:
+        - *node_para*:
+
+    - NORM_DESC
+
+        - *TYPE* = 'NORMAl',
+        - *start* = '0',
+        - *node_para* = {'states':[gen_desc]},
+        - *profile* = DEFAULT_PROFILE,
+        - *src_nodes*
+        - *dst_nodes*
+
+    - ANO_LIST
+
+    - ANO_DESC
+
+        - *anoType*
+        - *ano_node_seq*: the sequence of node this anomaly affects.
+        - *T':(5000, 5500) during of the anomaly.
+        - *change*: attribute that will be changed during the anomaly
+        - *srv_id*:
+
+    - DETECTOR_DESC
 """
 #################################################################
 ### ROOT is the root directory for you directory, be aware to ###
@@ -22,11 +50,17 @@ ROOT = '/home/wangjing/Dropbox/Research/sadit'
 zeros = lambda s:[[0 for i in xrange(s[1])] for j in xrange(s[0])]
 # from numpy import zeros
 
+## --- Graph Size -----
 # g_size = 8
 # g_size = 4
 g_size = 10
+
+## --- Server Node List ----
 # srv_node_list = [0, 1]
 srv_node_list = [0]
+
+## --- Network topology -----
+# - star topology for each server.
 topo = zeros([g_size, g_size])
 for i in xrange(g_size):
     if i in srv_node_list:
@@ -35,27 +69,70 @@ for i in xrange(g_size):
     for srv_node in srv_node_list:
         topo[i][srv_node] = 1
 
+# link Attribute
+link_attr_default = {
+        'weight':'10',
+        'capacity':'10000000',
+        'delay':'0.01'
+        }
+
+NET_DESC = dict(
+        topo=topo,
+        size = len(topo),
+        srv_list = srv_node_list,
+        link_attr_default = link_attr_default,
+        node_type = 'NNode',
+        node_para = {},
+        )
 
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 8000
-start = 0
+sim_t = 8000 # simulation time
+start = 0 # start time
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
+# gen_desc describes the default default generator
 # gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e5', 'flow_size_var':'100', 'flow_arrival_rate':'0.5'}
-gen_desc = {'TYPE':'harpoon', 'flow_size_mean':'4e3', 'flow_size_var':'100', 'flow_arrival_rate':'1'}
+gen_desc1 = {
+        'TYPE':'harpoon', # type of flow generated, defined in fs
+        'flow_size_mean':'4e3', # flow size is normal distribution. Mean
+        'flow_size_var':'100', # variance
+        'flow_arrival_rate':'1' # flow arrival is poisson distribution. Arrival rate
+        }
+
+# base1 =  {
+#         'val': [10, 10],
+#         'dis_interval': 10,
+#         'base_type': 'flow_size_mean',
+#         }
+
 NORM_DESC = dict(
         TYPE = 'NORMAl',
         start = '0',
-        node_para = {'states':[gen_desc]},
+        node_para = {'states':[gen_desc1]},
         profile = DEFAULT_PROFILE,
-        # start topology
         src_nodes = range(g_size),
         dst_nodes = srv_node_list,
         )
 
-# ANOMALY_TIME = (1200, 1400)
+# NORM_DESC = dict(
+#         TYPE = 'DYNAMIC',
+#         start = '0',
+#         node_para = {
+#                     'states': [gen_desc1],
+#                     'base': [base1],
+#                     },
+#         profile = DEFAULT_PROFILE,
+#         src_nodes = range(g_size),
+#         dst_nodes = srv_node_list,
+#         )
+
+
+
+#################################
+##   Parameter For Anomaly     ##
+#################################
 # ANO_DESC = {'anoType':'TARGET_ONE_SERVER',
 ANO_DESC = {
         # 'anoType':'flow_arrival_rate',
@@ -71,27 +148,16 @@ ANO_DESC = {
         # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
         # 'change':{'flow_arrival_rate':2},
-        'change':{'flow_size_mean':2},
+        'change':{'flow_size_mean':'x2'},
         # 'change':{'flow_size_mean':6},
         # 'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
         # 'change':{'flow_size_var':6},
         'srv_id':0,
         }
 
-ANO_LIST = [ANO_DESC]
+ANO_LIST = [ANO_DESC] # list of anomalies
 # ANO_LIST = []
 
-
-link_attr_default = {'weight':'10', 'capacity':'10000000', 'delay':'0.01'} # link Attribute
-NET_DESC = dict(
-        topo=topo,
-        # size=topo.shape[0],
-        size=len(topo),
-        srv_list=srv_node_list,
-        link_attr_default=link_attr_default,
-        node_type='NNode',
-        node_para={},
-        )
 
 
 IPS_FILE = ROOT + '/Configure/ips.txt'
@@ -111,9 +177,9 @@ OUTPUT_DOT_FILE = ROOT + '/Share/conf.dot'
 OUTPUT_FLOW_FILE = ROOT + '/Simulator/n0_flow.txt'
 IPS_FILE = ROOT + '/Configure/ips.txt'
 
-#############################
-##   Parameters For Detector ##
-#############################
+#################################
+##   Parameters For Detector  ###
+#################################
 ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 DETECTOR_DESC = dict(
         # file_type = 'SQL',
@@ -139,9 +205,9 @@ DETECTOR_DESC = dict(
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
-        fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
+        # fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
-        # fea_option = {'dist_to_center':1, 'flow_size':3, 'cluster':1},
+        fea_option = {'dist_to_center':1, 'flow_size':3, 'cluster':1},
         # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':2},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':1},
         ano_ana_data_file = ANO_ANA_DATA_FILE,

@@ -62,7 +62,6 @@ class BadConfigError(Exception):
     def __str__(self):
         return repr(self.value)
 
-
 import copy
 class Anomaly(object):
     """basis class for anomaly. Its subclass will provide run() method
