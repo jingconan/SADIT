@@ -35,6 +35,8 @@ class IIDExper(DetectExper):
         parser.add_argument('--detect_node_id', default=0, type=int,
                 help = """ specify the node id you want to monitor,
                 default value is 0""")
+        parser.add_argument('--no_sim', default=False, action='store_true',
+                help = """turn on this switch to disable the fs simulaiton""")
 
     def configure(self):
         gen_anomaly_dot(self.ano_list, self.net_desc, self.norm_desc, self.dot_file)
@@ -45,8 +47,9 @@ class IIDExper(DetectExper):
         cd(self.ROOT)
 
     def run(self):
-        self.configure()
-        self.simulate()
+        if not self.args.no_sim:
+            self.configure()
+            self.simulate()
         super(IIDExper, self).run()
         return self.detector
 

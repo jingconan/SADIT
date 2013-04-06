@@ -37,13 +37,53 @@ def get_pos(l, v):
             continue
         return i - 1
 
+def interval_intersect(i1, i2):
+    """  Check whether two intervals **[i1[0], i1[1])** and **[i2[0], i2[1])** have
+    intersection or not.
+
+    >>> interval_intersect([1, 3], [3, 4])
+    False
+    >>> interval_intersect([1, 3], [2.9, 4])
+    True
+    >>> interval_intersect([1, 3], [0, 0.5])
+    False
+    >>> interval_intersect([1, 3], [1.5, 2.5])
+    True
+    >>> interval_intersect([1, 3], [1.5, 4.5])
+    True
+    >>> interval_intersect((500, 600), (0, 800))
+    True
+    """
+    if i1[0] <= i2[0]:
+        if i1[1] > i2[0]:
+            return True
+        else:
+            return False
+    elif i1[0] >= i2[1]:
+        return False
+    else:
+        return True
+
 def insert_break_pt(b, dur, num):
-    """b is a break point that will break dur, for example,
-    if b = 35, and dur = (20, 20, 10), num = (1, 2, 1)the result will be
-        (20, 15, 5, 10), the new num will be (1, 2, 2, 1)"""
+    """ *b* is a break point that will break *dur*,
+    for example,
+
+    >>> b = 35
+    >>> dur = (20, 20, 10)
+    >>> num = (1, 2, 1)
+    >>> new_dur, new_num, bk_pt = insert_break_pt(b, dur, num)
+    >>> print new_dur
+    [20, 15, 5, 10]
+    >>> print new_num
+    [1, 2, 2, 1]
+    >>> print bk_pt
+    2
+    """
     t = [0] + list(cumsum( dur ))
     nt = copy.deepcopy(t)
     new_num = list(copy.deepcopy(num))
+    # print 't, ', t
+    # print 'b, ', b
     i = get_pos(t, b)
 
     if i is None:
@@ -82,14 +122,33 @@ class Anomaly(object):
         self.ano_node = None
 
     def get_profile_with_ano(self, mod_start, mod_profile, ano_t):
-        """in fs, one modulator can only one behaviour
+        """ in fs, one modulator can only one behaviour
         toe simulate the change of behaviour of the modulator,
-        the abnormal haviour will be generator by new modulators."""
+        the abnormal haviour will be generator by new modulators.
+        """
         start, end = ano_t
-        start -= mod_start
-        end -= mod_start
-        d, n, i1 = insert_break_pt(start, mod_profile[0], mod_profile[1])
-        d, n, i2 = insert_break_pt(end, d, n)
+        # start -= mod_start
+        # end -= mod_start
+        mod_end = sum(mod_profile[0])
+        print 'start, ', start
+        print 'end, ', end
+        print 'mod_profile, ', mod_profile
+        if start <= mod_start: #
+            d, n = mod_profile
+            i1 = 0
+            # new_mod_start = mod_start
+        else:
+            d, n, i1 = insert_break_pt(start - mod_start, mod_profile[0], mod_profile[1])
+            # assert(mod_start + sum(d[0]) == start)
+            # new_mod_start = start
+
+        if end >= mod_end:
+            i2 = len(d)
+        else:
+            d, n, i2 = insert_break_pt(end - mod_start, d, n)
+            # st = mod_start + sum(d)
+        # assert(st == end)
+
         normal_profile_1 = ( tuple(d[:i1]), tuple(n[:i1]) )
         abnormal_profile = ( tuple(d[i1:i2]), tuple(n[i1:i2]) )
         normal_profile_2 = ( tuple(d[i2:]), tuple(n[i2:]) )
@@ -99,33 +158,49 @@ class Anomaly(object):
         # """cut into three pieces"""
 
     def _infect_modulator(self, ano_t, m_id, mod):
+        """  infect modules
+            - *ano_t*: duration of the anomaly
+            - *m_id*: the id of modulator that will be infected.
+            - *mod*: attribute of the modulator
+
+        Input:
+        Output:
+        """
         ano_node = self.ano_node
         generator = ano_node.generator
-
+        start, end = ano_t
         mod_start = eval(mod['start'])
         mod_profile = mod['profile']
+        s_id = mod['generator'] # get id for source generator
+
+        # check whether this modular should be infect or not
+        # only infect this modular with it has intersection with *ano_t*
+        mod_end = mod_start + sum(mod_profile[0])
+        if not interval_intersect(ano_t, [mod_start, mod_end]):
+            return
+
         np1, ap, np2 = self.get_profile_with_ano(mod_start, mod_profile, ano_t)
 
-        s_id = mod['generator'] # get id for source generator
-        ano_node.add_modulator(start=str(mod_start), profile=np1, generator = [generator[s_id]])
+        if len(np1[0]) > 0:
+            ano_node.add_modulator(start=str(mod_start), profile=np1, generator = [generator[s_id]])
 
-        start, end = ano_t
-        # st = mod_start + float(np.sum(np1[0]))
-        st = mod_start + float(sum(np1[0]))
-        assert(st == start)
+            st = mod_start + float(sum(np1[0]))
+            assert(st == start)
 
-        self.new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
-        ano_node.add_modulator(start=str(start),
-                profile=ap,
-                generator = [ self.new_generator ])
+        if len(ap[0]) > 0:
+            self.new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
+            ano_node.add_modulator(start=str(start),
+                    profile=ap,
+                    generator = [ self.new_generator ])
 
-        # export para to help to export ano flo
-        self._export_ano_flow_para(self.new_generator)
+            # export para to help to export ano flo
+            self._export_ano_flow_para(self.new_generator)
 
         # st = mod_start + float(np.sum(np1[0])) + float(np.sum(ap[0]))
-        st = mod_start + float(sum(np1[0])) + float(sum(ap[0]))
-        assert(st == end)
-        ano_node.add_modulator(start=str(end), profile=np2, generator=[ generator[s_id] ])
+        # st = mod_start + float(sum(np1[0])) + float(sum(ap[0]))
+        # assert(st == end)
+        if len(np2[0]) > 0:
+            ano_node.add_modulator(start=str(end), profile=np2, generator=[ generator[s_id] ])
 
         # delete original modulator
         del ano_node.modulator[m_id]
@@ -144,6 +219,7 @@ class Anomaly(object):
 
         m_back = copy.deepcopy(self.ano_node.modulator)
 
+        # import ipdb;ipdb.set_trace()
         for m_id, mod in m_back.iteritems(): # infect each modulator, change attribute by ratio
             self._infect_modulator(ano_t, m_id, mod)
 
@@ -260,3 +336,7 @@ class TargetOneServer(Anomaly):
             if self.ano_node.generator[s_id]['ipdst'] not in srv_ip_addr:
                 continue
             self._infect_modulator(ano_t, m_id, mod)
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

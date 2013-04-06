@@ -5,6 +5,7 @@ from mod_util import choose_ip_addr
 
 from Generator import get_generator
 from Modulator import Modulator, MarkovModulator, MVModulator
+from copy import deepcopy
 
 class NNode(Node):
     # node_seq = 0
@@ -65,6 +66,14 @@ class NNode(Node):
         return gl
 
     def init_traffic(self, norm_desc, dst_nodes):
+        if norm_desc['TYPE'] == 'stationary':
+            self.init_traffic_static(norm_desc, dst_nodes)
+        elif norm_desc['TYPE'] == 'dynamic':
+            self.init_traffic_dynamic(norm_desc, dst_nodes)
+        else:
+            raise Exception("unknown tye of NORM_DESC")
+
+    def init_traffic_static(self, norm_desc, dst_nodes):
         """  Initialize the normal traffic
         """
         self.norm_desc = norm_desc
@@ -76,12 +85,40 @@ class NNode(Node):
 
 
     def init_traffic_dynamic(self, norm_desc, dst_nodes):
+        """  initialize normal traffic that is time varying
+        """
         self.norm_desc = norm_desc
         states = norm_desc['node_para']['states']
+        shifts = norm_desc['node_para']['shifts']
+        sim_t = norm_desc['sim_t']
+        start = Load(norm_desc['start'])
+        di = shifts['dis_interval']
+
+        def add_shifts_to_states(states, base_type, shift_val):
+            """ sf:
+                - base_type:
+                - val:
+                - dis_interval: discretized interval
+            """
+            res = deepcopy(states)
+            for i in xrange(len(res)):
+                res[i][base_type] += '+ %f'%(shift_val)
+            return res
+
+        int_num = (sim_t - start)/ di
+        # assert( len(shifts['val']) >= int_num )
+        if len(shifts['val']) < int_num:
+            raise Exception("shifts['val'] is too short!! should at least has [%d] "
+                    "element"%(int_num))
         for node in dst_nodes:
-            self.add_modulator(norm_desc['start'],
-                    norm_desc['profile'],
-                    self._get_generator_list(node, states))
+            for idx in xrange(int_num):
+                shifted_states = add_shifts_to_states(states,
+                        shifts['base_type'],
+                        shifts['val'][idx])
+                self.add_modulator(
+                        str(start + idx * di), #start time
+                        ((di,),(1,)), # profile ((duration,), (num,))
+                        self._get_generator_list(node, shifted_states))
 
     def add_modulator(self, start, profile, generator):
         """generator is a Generator Object"""

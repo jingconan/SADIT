@@ -77,9 +77,6 @@ class TimeVarying(IIDExper):
 
         parser.add_argument('--res_folder', default='./res',
                 help = """res folder""")
-        # parser.add_argument('--no_sim', default=False, action='store_true',
-        parser.add_argument('--no_sim', default=True, action='store_true',
-                help = """turn on this switch to disable the fs simulaiton""")
         parser.add_argument('--pad_len', default=7 ,
                 help = """pad the file names with leading zeros to the samd
                 length so that the
