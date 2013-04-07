@@ -37,6 +37,39 @@ def plot_points(X, Y, threshold=None,  pic_show=False,
         ano_marker=['b-', 'r-'], threshold_marker='g--',
         xlim_=None, ylim_=None,
         *args, **kwargs):
+    """ plot points and lines is a customized way for showing anomalies
+
+    Parameters:
+    ---------------
+    X : list
+        x coordinates
+    Y : list
+        Y coordinates
+    threshold : list, optional
+        threshold of detection result
+    pic_show : bool, optional
+        whether busy waiting and show picture
+    pic_name : str, optional
+        name of the output picture file
+    figure_ : figure handle, optional
+        figure handle in which this will be plotted.
+    subplot_ : int, optional
+        subplot id
+    xlabel_, ylabel_, title_ : str, optional
+        label for x axis and y axis and title of the figure
+    ano_marker : list of str, optional
+        ano_marker[0] is the marker for normal windows
+        ano_marker[1] is the markov for abnormal windows
+    threshold_marker : str, optional
+        marker for threshold
+    xlim_, ylim_ : list, optional
+        range of x and y axies.
+
+    Returns:
+    --------------
+    None
+
+    """
     if not plt:
         return -1;
     if not figure_:

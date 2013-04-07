@@ -27,7 +27,23 @@ from math import log
 from Base import WindowDetector
 
 class StoDetector (WindowDetector):
-    """It is an Abstract Base Class for the anomaly detector."""
+    """ Abstract Base Class for stochastic anomaly detector.
+
+    Parameters
+    -------------
+    - desc: dict
+            Dictionary of default parameters
+
+        + normal_rg : list
+                range of normal traffic, if
+        + win_type :
+        + max_detect_num
+        + interval
+        + fea_option
+        + entropy_th
+        + hoeff_far
+
+    """
     def __init__(self, desc):
         self.desc = desc
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
@@ -37,18 +53,27 @@ class StoDetector (WindowDetector):
 
     def get_em(self, rg, rg_type):
         """abstract method. Get empirical measure,
-        rg is a list specify the start and the end point of the data
-            that will be used
-        rg_type is the type of the rg, can be ['flow'|'time']"""
+
+        Parameters
+        -------------
+        rg : list
+                specify the start and the end point of the data that will be
+                used.
+        rg_type :  {'flow', 'time'}
+                type of the rg.
+        """
         abstract_method()
 
     def init_parser(self, parser):
-        """ entropy_th specify the threshold manually.
+        """ add parameters
+
+        entropy_th specify the threshold manually.
         hoeff_far and ccoef are the parameter of hoeffding threshold rule.
         Increase hoeff_far will decrease threshold
         Increase ccoef will increase threshold
         A small window size will make hoeff_far play more role, while a larger
         window size will let ccoef more significant.
+
         """
         super(StoDetector, self).init_parser(parser)
         parser.add_argument('--hoeff_far', default=0.01, type=float,
@@ -70,8 +95,11 @@ class StoDetector (WindowDetector):
 
 
     def I(self, em1, em2):
-        """abstract method to calculate the difference of two
-        empirical measure"""
+        """ calculate the K-L divergence of two emperical measures
+
+        [abstract method]
+
+        """
         abstract_method()
 
     def get_flow_num(self, rg, rg_type):
@@ -94,8 +122,23 @@ class StoDetector (WindowDetector):
 
     # def detect(self, data_file, nominal_rg = [0, 1000], rg_type='time',  max_detect_num=None):
     def detect(self, data_file):
-        """main function to detect. it will slide the window, get the emperical
-        measure and get the indicator"""
+        """ main function to detect.
+
+        it will slide the window, get the emperical measure and get the
+        indicator
+
+        Parameters
+        --------------------
+        data_file : subclass of **DataHandler**.
+                See DataHandler.py.
+
+        Returns
+        --------------------
+        record_data: dict
+                + desc : parameters used in the detection
+                + threshold : threshold
+
+        """
         # nominal_rg = self.desc['normal_rg']
         rg_type = self.desc['win_type']
         max_detect_num = self.desc['max_detect_num']
@@ -149,18 +192,45 @@ class StoDetector (WindowDetector):
         self.record_data['desc'] = self.desc
 
         return self.record_data
+
     def hoeffding_rule(self, n, false_alarm_rate):
-        """hoeffding rule with linear correction term
+        """ hoeffding rule with linear correction term
+
+        Parameters:
+        --------------
+        n : int
+            Number of flows in the window
+        false_alarm_rate : float
+            false alarm rate
+
+        Returns
+        --------------
+        ht : float
+            hoeffding threshold
+
+
         """
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
-        # import pdb;pdb.set_trace()
-        # print('ccoef, ', self.desc['ccoef'])
         return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
-        threshold = -1 / |G| log(epsilon) where |G| is the number of flows in the window
-        and epsilon is the false alarm_rate
+
+        Parameters:
+        ---------------
+        false_alarm_rate : float
+            false alarm rate
+
+        Returns
+        ---------------
+        res : list
+            list of thresholds for each window.
+
+        Notes:
+        ----------------
+        :math: `threshold = -1 / |G| log(epsilon)` where |G| is the number of flows in
+        the window and `epsilon` is the false alarm_rate
+
         """
         res = []
         for i in xrange(self.detect_num):
@@ -191,6 +261,17 @@ class StoDetector (WindowDetector):
 
     # def plot(self, far=None, *args, **kwargs):
     def plot(self, *args, **kwargs):
+        """  plot the detection result
+
+        Parameters:
+        ---------------
+        See plot_points
+
+        Returns:
+        --------------
+        None
+
+        """
         rt = self.record_data['winT']
         ep = self.record_data['entropy']
         # import pdb;pdb.set_trace()
@@ -213,7 +294,11 @@ class StoDetector (WindowDetector):
 
     @staticmethod
     def find_abnormal_windows(entropy, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
-        """find abnormal windows. There are three standards to select abnormal windows:
+        """ find abnormal windows
+
+        Notes
+        -----------
+        find abnormal windows. There are three standards to select abnormal windows:
             1. when the entropy >= entropy_threshold. when entropy_threshold is a list. the length of entropy_threshold should
                 equals the length of entropy. The element in this list is the entropy threshold for window with corresponding position.
             2. when it is winthin the top *portion* of entropy, 0 <= *portion* <= 1
@@ -235,10 +320,31 @@ class StoDetector (WindowDetector):
     def _export_ab_flow_entropy(self, entropy, fname,
             entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """export abnormal flows based on entropy
-        - **entropy** is a list of entropy, one number for each window
-        - **fname** is the output abnormal flow file name
-        - **entropy_threshold**, **ab_win_portion** and **ab_win_num** are criterion
-        to identifi abnormal window, see docs of *find_abnormal_windows* for detailed meaning
+
+        Parameters
+        --------------
+        entropy : list
+            a list of entropy, one number for each window
+        fname : str,
+            file name of the output abnormal flow
+        entropy_threshold, ab_win_portion : str, optional
+            criterion to identifi abnormal window, see docs of
+            *find_abnormal_windows* for detailed meaning
+        ab_win_num : int, optional
+            criterion to identifi abnormal window, see docs of
+            *find_abnormal_windows* for detailed meaning
+
+        Returns
+        --------------
+        None
+
+        Notes
+        ----------------
+        - abnormal windows are identifed.
+        - all flows in those windows are exported as abnormal flows.
+        - self.data_file.data._get_where() is used in current version, which
+          should be fixed in the future
+
         """
 
         ab_idx = self.find_abnormal_windows(entropy, entropy_threshold, ab_win_portion, ab_win_num)
@@ -255,7 +361,7 @@ class StoDetector (WindowDetector):
             # import pdb;pdb.set_trace()
             # data, _ = self.data_file.get_fea_slice([st, st+win_size], rg_type)
             data = self.data_file.get_fea_slice([st, st+win_size], rg_type)
-            sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
+            sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type) #FIXME
             fid.write('Seq # [%i] for abnormal window: [%i], entropy: [%f], start time [%f]\n'%(seq, idx, entropy[idx], st))
             i = sp-1
             for l in data:
@@ -278,7 +384,7 @@ class ModelFreeAnoDetector(StoDetector):
         return pmf
 
 class ModelBaseAnoDetector(StoDetector):
-    """ Model based approach, use Markovian approach
+    """ Model based approach, use Markovian Assumption
     """
     def I(self, em, norm_em):
         d_Pmb, d_mpmb = em
@@ -305,26 +411,9 @@ class FBAnoDetector(StoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return pmf, Pmb, mpmb
 
-    # def _save_gnuplot_file(self):
-    #     res_f_name = './res.dat'
-    #     fid = open(res_f_name, 'w')
-    #     rt = self.record_data['winT']
-    #     mf, mb = zip(*self.record_data['entropy'])
-    #     for i in xrange(len(rt)):
-    #         fid.write("%f %f %f\n"%(rt[i], mf[i], mb[i]))
-    #     fid.close()
-
-
-    # def save_plot_as_csv(self, f_name):
-    #     mf, mb = zip(*self.record_data['entropy'])
-    #     save_csv(f_name, ['mf', 'mb'], mf, mb)
-
-
     def plot(self, far=None, figure_=None, subplot_=[211, 212], title_=['model free', 'model based'],
             pic_name=None, pic_show=False, csv=None,
             *args, **kwargs):
-        # if not VIS: self._save_gnuplot_file(); return;
-        # if not plt: self._save_gnuplot_file(); return;
         if not plt: self.save_plot_as_csv()
 
         rt = self.record_data['winT']
@@ -353,10 +442,17 @@ class FBAnoDetector(StoDetector):
         if pic_show: plt.show()
 
 
-    def export_abnormal_flow(self, fname, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
-        """
-        export the abnormal flows for abnormal windows based on model_free entropy and model_based entropy
-        see **AnoDetector.export_abnormal_flow** for the meaning of the parameters.
+    def export_abnormal_flow(self, fname, entropy_threshold=None,
+            ab_win_portion=None, ab_win_num=None):
+        """ export the abnormal flows for abnormal windows
+
+        based on model_free entropy and model_based entropy
+
+        See Also
+        ---------------
+        see **StoDetector._export_ab_flow_entropy** for the meaning of the
+        parameters.
+
         """
         mf, mb = zip(*self.record_data['entropy'])
         # select portion of the window to be abnormal
@@ -364,18 +460,27 @@ class FBAnoDetector(StoDetector):
         basename = os.path.basename(fname)
 
         # for model free entropy
-        self._export_ab_flow_entropy(mf, dirname + '/mf-' + basename, entropy_threshold, ab_win_portion, ab_win_num)
+        self._export_ab_flow_entropy(mf, dirname + '/mf-' + basename,
+                entropy_threshold, ab_win_portion, ab_win_num)
 
         # for model based entropy
-        self._export_ab_flow_entropy(mb, dirname + '/mb-' + basename, entropy_threshold, ab_win_portion, ab_win_num)
+        self._export_ab_flow_entropy(mb, dirname + '/mb-' + basename,
+                entropy_threshold, ab_win_portion, ab_win_num)
 
     def get_ab_flow_seq(self, entropy_type, entropy_threshold=None, ab_win_portion=None, ab_win_num=None,
             ab_flow_info = None):
             # ab_flow_state=None, ab_flow_tran=None):
-        """get abnormal flow sequence number. the input is citerions which window will be abnormal window
-        see **AnoDetector.export_abnormal_flow** for the meaning of the citerion parameters.
-        **ab_flow_info** represents either abnormal flow state(for model free approach) and abnormal flow trantision
+        """get abnormal flow sequence number.
+
+        the input is citerions which window will be abnormal window
+
+        Notes:
+        ----------------------------
+        see **AnoDetector.export_abnormal_flow** for the meaning of the
+        citerion parameters.  **ab_flow_info** represents either abnormal flow
+        state(for model free approach) and abnormal flow trantision
         pair(for model based approach).
+
         """
         # assert( (ab_flow_state and not ab_flow_tran) or (not ab_flow_state and ab_flow_tran) )
         # if ab_flow_tran: # set the flow_state be the set of all
@@ -417,23 +522,81 @@ class FBAnoDetector(StoDetector):
     def ident(self, ident_type, entropy_type, portion=None, ab_states_num=None,
             entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """ Identificate the anomalous flow state or flow transition pair
-        - **ident_type** can be any Identification Class in Ident.py
-        - **entropy_type** can be ['mf'|'mb']. 'mf' will identify the flow state, and 'mb' will identify the flow
-                transition pair.
-        - **portion** is the portion of flow state that will be selected as anomalous.
-        - **ab_states_num** is the number of flow states that will be selected as anomalous. **portion** has higher priority
+
+        Parameters:
+        --------------------------------
+        ident_type : {'FlowStateIdent', 'ComponentFlowStateIdent',
+            'DerivativeFlowStateIdent', 'FlowPairIdent', 'componentflowpairident',
+            'DerivativeFlowPairIdent'}
+        entropy_type : {'mf', 'mb'}.
+                'mf' will identify the flow state
+                'mb' will identify the flow transition pair.
+        portion : float
+                portion of flow state that will be selected as anomalous.
+        ab_states_num : int
+                the number of flow states that will be selected as anomalous.
+
+
+        Returns:
+        ---------------------------------------
+            res : list
+                if ident_type is a FlowStateIdent type, each element in the
+                    `res` is the sequence of identifed flow states. Otherwise,
+                    each element in `res` is a two element pair
+                    (from_state_idx, to_state_idx)
+
+        Notes:
+        ------------------------------
+        - *ident_type* can be any Identification Class in Ident.py
+        - **portion** has higher priority
             than **ab_states_num**
+        - 1. first the abnormal window indices are identified. 2. according to
+          ident_type, some flows in the abnormal window indices are exported.
+
         """
         em_record_set = self.record_data['em']
         def tran_to_joint(tp, mar):
-            """input is transition probability, margin probability,
-            out put is the joint probability distribution"""
+            """
+
+            Parameters:
+            ---------------
+                tp : list of list
+                    transition probability
+                mar : list
+                    margin probability
+
+            Returns:
+            --------------
+                res : list
+                    joint probability distribution
+
+
+            Notes:
+            --------------
+                joint_prob[a][b] = tp[a][b] * mar[p]
+
+            """
             res = []
             for tp, m in zip(tp,mar):
                 res.append([m*p for p in tp])
             return res
 
         def get_nu_set(em_record_set, entropy_type):
+            """  get empirical measure according to entropy_type
+
+            Parameters:
+            ---------------
+                em_record_set : list
+                    result
+                entropy_type : {'mf', 'mb'}
+
+            Returns:
+            --------------
+            res : list
+                if entropy_type == 'mf', return model-free empirical measure
+                if entropy_type == 'mb', return model-based empirical measure
+
+            """
             if entropy_type == 'mf':
                 return [em[0] for em in em_record_set]
             elif entropy_type == 'mb':
@@ -443,7 +606,8 @@ class FBAnoDetector(StoDetector):
         mu = get_nu_set([self.norm_em], entropy_type)[0]
         ident = globals()[ident_type](nu_set, mu)
         mf, mb = zip(*self.record_data['entropy'])
-        ab_idx = self.find_abnormal_windows(locals()[entropy_type], entropy_threshold, ab_win_portion, ab_win_num)
+        ab_idx = self.find_abnormal_windows(locals()[entropy_type],
+                entropy_threshold, ab_win_portion, ab_win_num)
         ident.set_detect_result([(1 if i in ab_idx else 0) for i in xrange(len(nu_set))])
         return ident.filter_states(ab_idx, portion, ab_states_num)
 

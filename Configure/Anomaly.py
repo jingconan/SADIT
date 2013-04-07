@@ -152,6 +152,7 @@ class Anomaly(object):
         normal_profile_1 = ( tuple(d[:i1]), tuple(n[:i1]) )
         abnormal_profile = ( tuple(d[i1:i2]), tuple(n[i1:i2]) )
         normal_profile_2 = ( tuple(d[i2:]), tuple(n[i2:]) )
+        # import ipdb;ipdb.set_trace()
         return normal_profile_1, abnormal_profile, normal_profile_2
 
     # def cut_profile(profile, status):
@@ -188,7 +189,9 @@ class Anomaly(object):
             assert(st == start)
 
         if len(ap[0]) > 0:
+        # if False:
             self.new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
+            # import ipdb;ipdb.set_trace()
             ano_node.add_modulator(start=str(start),
                     profile=ap,
                     generator = [ self.new_generator ])

@@ -88,7 +88,7 @@ NET_DESC = dict(
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 800 # simulation time
+sim_t = 8000 # simulation time
 start = 0 # start time
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
@@ -98,17 +98,29 @@ gen_desc1 = {
         'TYPE':'harpoon', # type of flow generated, defined in fs
         'flow_size_mean':'4e3', # flow size is normal distribution. Mean
         'flow_size_var':'100', # variance
-        'flow_arrival_rate':'10' # flow arrival is poisson distribution. Arrival rate
+        'flow_arrival_rate':'1' # flow arrival is poisson distribution. Arrival rate
         }
 
 import math
 dis_interval = 100
 int_num = (sim_t - start) / dis_interval
+# shift1_val = [500 * math.sin(0.01 * v * dis_interval) \
+        # for v in xrange(int_num)]
+
+shift1_val = [10 * math.sin(0.01 * v * dis_interval) \
+        for v in xrange(int_num)]
+
+# shift1_val = [0 \
+        # for v in xrange(int_num)]
+# from pylab import *
+# plot(shift1_val)
+# show()
 shift1 =  {
         # 'val': [10, 10],
-        'val': [3e3 * math.sin(0.01 * dis_interval) for v in xrange(int_num)],
+        'val': shift1_val,
         'dis_interval': dis_interval,
-        'base_type': 'flow_size_mean',
+        # 'base_type': 'flow_size_mean',
+        'base_type': 'flow_arrival_rate',
         }
 
 # NORM_DESC = dict(
@@ -121,8 +133,8 @@ shift1 =  {
 #         )
 
 NORM_DESC = dict(
-        TYPE = 'dynamic',
-        # TYPE = 'stationary',
+        # TYPE = 'dynamic',
+        TYPE = 'stationary',
         start = '0',
         sim_t = sim_t,
         node_para = {
@@ -152,8 +164,8 @@ ANO_DESC = {
         # 'T':(1200, 1400),
         # 'change':{'flow_arrival_rate':6},
         # 'change':{'flow_arrival_rate':4},
-        # 'change':{'flow_arrival_rate':2},
-        'change':{'flow_size_mean':'x5'},
+        # 'change':{'flow_arrival_rate':'x5'},
+        'change':{'flow_size_mean':'x1.5'},
         # 'change':{'flow_size_mean':6},
         # 'change':{'flow_size_mean':0.5, 'flow_arrival_rate':3},
         # 'change':{'flow_size_var':6},
@@ -219,6 +231,7 @@ DETECTOR_DESC = dict(
         # normal_rg = [0, 1000],
         # normal_rg = [0, 1000],
         normal_rg = None,
+        # normal_rg = [0, 300],
         # normal_rg = [0, 4000],
         # normal_rg = [0, float('inf')],
         detector_type = 'mfmb',

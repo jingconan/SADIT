@@ -116,7 +116,7 @@ class FlowPairIdent(FlowStateIdent):
         state_idx = super(FlowPairIdent, self).filter_states(ano_idx_set, portion, num)
         return [self.idx2sub(idx) for idx in state_idx]
 
-class ComponentFlowPairIdent(FlowPairIdent):
+class componentflowpairident(FlowPairIdent):
     @staticmethod
     def info_cal(a, ma, b, mb):
         return 0 if (a == 0 or ma ==0 or b == 0 or mb == 0) else a * log( (a*1.0/ma) / (b*1.0/mb))

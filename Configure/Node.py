@@ -111,10 +111,11 @@ class NNode(Node):
             raise Exception("shifts['val'] is too short!! should at least has [%d] "
                     "element"%(int_num))
         for node in dst_nodes:
-            for idx in xrange(int_num):
+            for idx in xrange(int_num): # each discretized interval
                 shifted_states = add_shifts_to_states(states,
                         shifts['base_type'],
                         shifts['val'][idx])
+                # import ipdb;ipdb.set_trace()
                 self.add_modulator(
                         str(start + idx * di), #start time
                         ((di,),(1,)), # profile ((duration,), (num,))

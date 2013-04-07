@@ -95,10 +95,12 @@ def ParseData(fileName):
 import re
 from util import argsort
 def RawParseData(fileName):
-    """
-    the input is the filename of the flow file that needs to be parsed.
-    the ouput is list of dictionary contains the information for each flow in the data. all these information are strings, users need
-    to tranform them by themselves
+    """ Parse the file without convert them.
+
+    - **input**: the filename of the flow file that needs to be parsed.
+    - **ouput**: a list of dictionary contains the information for each
+      flow in the data. all these information are strings, users need to
+      tranform them by themselves
     """
     flow = []
     # FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, octets=13, ) # Defines the FORMAT of the data file
