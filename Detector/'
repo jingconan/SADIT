@@ -26,15 +26,6 @@ from math import log
 # from Base import BaseDetector
 from Base import WindowDetector
 
-# def run_until_data_end(func, parameters):
-#     for para in parameters:
-#         try:
-#             yield func(*para)
-#         except FetchNoDataException:
-#             break #FIXME
-#         except DataEndException as e:
-#             raise e
-
 class StoDetector (WindowDetector):
     """ Abstract Base Class for stochastic anomaly detector.
 
@@ -641,24 +632,6 @@ class FBAnoDetector(StoDetector):
 
     #     return ano_flow_seq
 
-class SlowDriftStaticDetector(FBAnoDetector):
-    def init_parser(self, parser):
-        parser.add_argument('--start', default=0, type=float,
-                help="""start point of the normal traffic""")
-        parser.add_argument('--delta_t', default=10.0, type=float,
-                help="""delta_t is a small time range during which the normal
-                behavior is considered unchanged""")
-
-    def cal_norm_em(self, **kwargs):
-        self.desc.update(kwargs)
-        start = self.desc['start']
-        delta_t = self.desc['delta_t']
-        win_type = self.desc['win_type']
-
-        rg = [start, start + delta_t]
-        norm_win_em = self.get_em(rg=norm_rg,rg_type=win_type)
-        return norm_win_em
-
 class PeriodStaticDetector(FBAnoDetector):
     """Static Methods
 
@@ -677,7 +650,6 @@ class PeriodStaticDetector(FBAnoDetector):
         self.desc.update(kwargs)
         start = self.desc['start']
         win_size = self.desc['win_size']
-        win_type = self.desc['win_type']
         period = self.desc['period']
         delta_t = self.desc['delta_t']
 
@@ -687,21 +659,22 @@ class PeriodStaticDetector(FBAnoDetector):
         norm_rg_ref = self.desc.get('normal_rg')
         if norm_rg_ref is None: norm_rg_ref = [0, float('inf')]
 
+        i = -1
         j = (norm_rg_ref[0] - rg[0]) / period
         if period >= (norm_rg_ref[1] - norm_rg_ref[0]):
             raise Exception('period is too large')
 
         while True:
+            i += 1
             j += 1
             try:
                 norm_rg = [rg[0] + j * period, rg[1] + j * period]
                 if norm_rg[1] > norm_rg_ref[1]:
                     break
-                norm_win_em += self.get_em(
-                        rg=norm_rg,
-                        rg_type=win_type)
+                norm_win_em = norm_win_em + self.get_em(rg=norm_rg,
+                        rg_type=self.desc['win_type'])
             except FetchNoDataException:
-                break #FIXME
+                break
             except DataEndException:
                 break
 

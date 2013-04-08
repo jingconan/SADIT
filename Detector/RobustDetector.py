@@ -16,7 +16,7 @@ class EnsembleDetector(object):
         alg_name : str
             name of the algorithm
         alg : a class object
-            subclass of DynamicStoDetector
+            require *cal_norm_em* function.
         para : dict
             dict of all parameters. All the combinations
             of parameters will be tried
@@ -45,9 +45,13 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
         FBAnoDetector.__init__(self, desc)
         EnsembleDetector.__init__(self)
 
-    def init_parser(self, parser):
-        # FIXME add options to replace the register commands in def detect
-        pass
+    # def init_parser(self, parser):
+        # EnsembleDetector.init_parser(parser)
+        # FBAnoDetector.init_parser(parser)
+        # parser.add_argument('--start', default=0, type=float,
+        #         help="""start point of the period selection""")
+
+        # pass
 
     def detect(self, data_file):
         self.ref_pool = dict()
@@ -57,8 +61,13 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
                 # {'period':[1e3, 2e3]})
         self.register('speriod', PeriodStaticDetector(self.desc),
                 # {'period':[1e3, 2e3, 3e3, 1e2, 5e2], 'start':[0, 100, 200]},
-                {'period':[1e3, 2e3, 600, 200], 'start':[0, 150]},
+                {'period':[1e3, 2e3, 600, 200],
+                    'start':[0, 150],
+                    'delta_t':[100, 200]},
                 'static')
+        self.register('slowdrift', SlowDriftStaticDetector(self.desc),
+                {}
+                )
         # self.register('two_win', TwoWindowAnoDetector(self.desc),
         #         {'norm_win_ratio':[2, 10]})
 

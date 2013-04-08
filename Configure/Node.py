@@ -7,6 +7,49 @@ from Generator import get_generator
 from Modulator import Modulator, MarkovModulator, MVModulator
 from copy import deepcopy
 
+# def load_base_traffic(f_name):
+#     """  Load Base Traffic
+
+#     Parameters:
+#     ---------------
+#     f_name : str
+#         name of the base traffic
+#     Returns:
+#     --------------
+#     """
+#     with open(f_name, 'r') as fid:
+#         time = []
+#         traffic = []
+#         for line in fid.readlines():
+#             t, val = [float(l) for l in line.split()]
+#             time.append(t)
+#             traffic.append(val)
+#         return time, traffic
+
+# import numpy as np
+# def loadtxt
+
+from numpy import loadtxt
+
+def check_pipe_para(para):
+    """
+
+    Parameters:
+    ---------------
+    para : list or str
+        if para is list, return itself, if para is str starts with "< " and
+            follows by a file name, load the parameters in the txt
+
+    Returns:
+        para : lsit
+            a list of parameters
+    --------------
+    """
+    if isinstance(para, str) and para.startswith('< '):
+        f_name = para.split('< ')[0]
+        return loadtxt(f_name)
+    return para
+
 class NNode(Node):
     # node_seq = 0
     def __init__(self, ipdests, node_seq, **argv):
@@ -86,40 +129,44 @@ class NNode(Node):
 
     def init_traffic_dynamic(self, norm_desc, dst_nodes):
         """  initialize normal traffic that is time varying
+
+        Notes:
+        ----------------------------
         """
         self.norm_desc = norm_desc
         states = norm_desc['node_para']['states']
         shifts = norm_desc['node_para']['shifts']
-        sim_t = norm_desc['sim_t']
-        start = Load(norm_desc['start'])
-        di = shifts['dis_interval']
+        # sim_t = norm_desc['sim_t']
+        # start = Load(norm_desc['start'])
+        # sv = shifts['val']
+
+        shifts_val = check_pipe_para(shifts['val'])
+        print('shifts_val', shifts_val)
+        shifts_time = check_pipe_para(shifts['time'])
+        print('shifts_time', shifts_time)
 
         def add_shifts_to_states(states, base_type, shift_val):
             """ sf:
                 - base_type:
                 - val:
-                - dis_interval: discretized interval
             """
             res = deepcopy(states)
             for i in xrange(len(res)):
                 res[i][base_type] += '+ %f'%(shift_val)
             return res
 
-        int_num = (sim_t - start)/ di
-        # assert( len(shifts['val']) >= int_num )
-        if len(shifts['val']) < int_num:
-            raise Exception("shifts['val'] is too short!! should at least has [%d] "
-                    "element"%(int_num))
+        if len(shifts_time) != len(shifts_val):
+            raise Exception("shifts['val'] is wrong!!")
+
         for node in dst_nodes:
-            for idx in xrange(int_num): # each discretized interval
+            for i in xrange(len(shifts_val) - 1): # each discretized interval
                 shifted_states = add_shifts_to_states(states,
                         shifts['base_type'],
-                        shifts['val'][idx])
-                # import ipdb;ipdb.set_trace()
-                self.add_modulator(
-                        str(start + idx * di), #start time
-                        ((di,),(1,)), # profile ((duration,), (num,))
-                        self._get_generator_list(node, shifted_states))
+                        shifts_val[i])
+
+                pf = ((shifts_time[i+1] - shifts_time[i], ), (1,))
+                gl = self._get_generator_list(node, shifted_states)
+                self.add_modulator( str(shifts_time[i]), pf, gl)
 
     def add_modulator(self, start, profile, generator):
         """generator is a Generator Object"""

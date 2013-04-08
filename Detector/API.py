@@ -21,7 +21,7 @@ from ART.ART import ARTDetector
 # detector_map defines correspondence between detector
 # options with detector name
 detector_map = {
-        'auto': AutoSelectStoDetector,
+        # 'auto': AutoSelectStoDetector,
         # '2w': TwoWindowAnoDetector,
         'two_win': TwoWindowAnoDetector,
         # 'ada':AdaStoDetector,
@@ -35,8 +35,7 @@ detector_map = {
         'art': ARTDetector,
         'gen_fb_mf':FBAnoDetector, # feature is model free emperical measure
         'gen_fb_mb':FBAnoDetector, # feature is model based emperical measure
-        'expect' :ExpectedStoDetector,
-        'robust': RobustDetector,
+        # 'robust': RobustDetector,
         }
 
 # usually one detector corresponds to one handler
@@ -44,7 +43,7 @@ detector_map = {
 from DataHandler import *
 data_handler_handle_map = {
         'robust': QuantizeDataHandler,
-        'auto': QuantizeDataHandler,
+        # 'auto': QuantizeDataHandler,
         'mf': QuantizeDataHandler,
         'mb': QuantizeDataHandler,
         'mfmb': QuantizeDataHandler,
@@ -59,7 +58,7 @@ data_handler_handle_map = {
 
         'gen_fb_mf':ModelFreeFeaGeneralizedEMHandler, # feature is model free emperical measure
         'gen_fb_mb':ModelBasedFeaGeneralizedEMHandler, # feature is model based emperical measure
-        'expect':QuantizeGeneralizedEMHandler,
+        # 'expect':QuantizeGeneralizedEMHandler,
         }
 
 from Data import *

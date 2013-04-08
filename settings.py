@@ -88,7 +88,7 @@ NET_DESC = dict(
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 8000 # simulation time
+sim_t = 3600 * 24 # simulation time
 start = 0 # start time
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
@@ -98,29 +98,38 @@ gen_desc1 = {
         'TYPE':'harpoon', # type of flow generated, defined in fs
         'flow_size_mean':'4e3', # flow size is normal distribution. Mean
         'flow_size_var':'100', # variance
-        'flow_arrival_rate':'1' # flow arrival is poisson distribution. Arrival rate
+        'flow_arrival_rate':'0.1' # flow arrival is poisson distribution. Arrival rate
         }
 
-import math
-dis_interval = 100
-int_num = (sim_t - start) / dis_interval
+# import math
+# dis_interval = 100
+# int_num = (sim_t - start) / dis_interval
 # shift1_val = [500 * math.sin(0.01 * v * dis_interval) \
         # for v in xrange(int_num)]
 
-shift1_val = [10 * math.sin(0.01 * v * dis_interval) \
-        for v in xrange(int_num)]
+# shift1_val = [10 * math.sin(0.01 * v * dis_interval) \
+        # for v in xrange(int_num)]
+# shift1_time = np.linspace(0, sim_t, len(shift1_val))
 
 # shift1_val = [0 \
         # for v in xrange(int_num)]
 # from pylab import *
 # plot(shift1_val)
 # show()
+import numpy as np
+from numpy import loadtxt
+dis_interval = 3600
 shift1 =  {
         # 'val': [10, 10],
-        'val': shift1_val,
-        'dis_interval': dis_interval,
-        # 'base_type': 'flow_size_mean',
-        'base_type': 'flow_arrival_rate',
+        # 'val': shift1_val,
+        # 'val' : '< ./misc/Robust_Data/traffic_val.txt',
+        # 'val' : 0.1 * loadtxt(ROOT  + '/misc/Robust_Data/traffic_val.txt'),
+        'val' : 1e3 * loadtxt(ROOT  + '/misc/Robust_Data/traffic_val.txt'),
+        # 'time' : '< ./misc/Robust_Data/traffic_time.txt',
+        'time' : np.array(range(25)) * 3600,
+        # 'time': shift1_time,
+        'base_type': 'flow_size_mean',
+        # 'base_type': 'flow_arrival_rate',
         }
 
 # NORM_DESC = dict(
@@ -133,8 +142,8 @@ shift1 =  {
 #         )
 
 NORM_DESC = dict(
-        # TYPE = 'dynamic',
-        TYPE = 'stationary',
+        TYPE = 'dynamic',
+        # TYPE = 'stationary',
         start = '0',
         sim_t = sim_t,
         node_para = {
@@ -159,7 +168,8 @@ ANO_DESC = {
         # 'anoType':'flow_size_mean_arrival_rate',
         'ano_node_seq':2,
         # 'T':(2000, 3000),
-        'T':(500, 600),
+        # 'T':(500, 600),
+        'T':(20000, 21000),
         # 'T':(5000, 5500),
         # 'T':(1200, 1400),
         # 'change':{'flow_arrival_rate':6},
@@ -172,7 +182,30 @@ ANO_DESC = {
         'srv_id':0,
         }
 
-ANO_LIST = [ANO_DESC] # list of anomalies
+ANO_DESC2 = {
+        'anoType':'anomaly',
+        'ano_node_seq':2,
+        'T':(60000, 61000),
+        'change':{'flow_size_mean':'x1.5'},
+        'srv_id':0,
+        }
+
+ANO_DESC_TEMP = {
+        'anoType':'anomaly',
+        'ano_node_seq':2,
+        'T':'REPLACE_ME',
+        'change':{'flow_size_mean':'x1.5'},
+        'srv_id':0,
+        }
+
+ANO_LIST = []
+import copy
+for i in [1, 2, 3, 4, 5, 6, 7]:
+    ano_desc = copy.deepcopy(ANO_DESC_TEMP)
+    ano_desc['T'] = (i * 10000, i * 10000 + 1000)
+    ANO_LIST.append(ano_desc)
+
+# ANO_LIST = [ANO_DESC, ANO_DESC2] # list of anomalies
 # ANO_LIST = []
 
 
@@ -180,8 +213,8 @@ ANO_LIST = [ANO_DESC] # list of anomalies
 IPS_FILE = ROOT + '/Configure/ips.txt'
 
 
-EXPORT_ABNORMAL_FLOW = True
-# EXPORT_ABNORMAL_FLOW = False
+# EXPORT_ABNORMAL_FLOW = True
+EXPORT_ABNORMAL_FLOW = False
 EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
 # EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_flow.txt'
 EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_n0_flow.txt'
