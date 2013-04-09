@@ -240,18 +240,36 @@ def argsort(seq):
     return sorted(range(len(seq)), key=seq.__getitem__)
 
 
-def load_para(f_name, encap=None, **kwargs):
+def load_para(f_name, encap=None, allow_types=(list, str, dict, float, int),
+        kwargs={}):
     """load parameters.
 
-    - **f_name**: is the path of the configuration file
-    - **encap**: is the additional operation done to the data, for example,
+    Parameters:
+    ----------------------
+    f_name : str
+        is the path of the configuration file
+    allow_types : tuple
+        specify the allowed types in parameter file.
+    encap : function
+        is the additional operation done to the data, for example,
         the default value encap=Namespace is to change parameters from dict
         to Namespace class.
-    - **kwargs**: contains some additional parameters
+    kwargs : dict
+        contains some additional parameters
     """
-    s = kwargs
-    execfile(f_name, s)
-    return s if encap is None else encap(s)
+    ss = kwargs
+    execfile(f_name, ss)
+    if allow_types is not None:
+        res = dict()
+        for k, v in ss.iteritems():
+            for t_ in allow_types:
+                if isinstance(v, t_):
+                    res[k] = v
+                    break
+        ss = res
+    del ss['__builtins__']
+
+    return ss if encap is None else encap(ss)
 
 
 
@@ -289,3 +307,7 @@ def del_none_key(dt):
     return res
 
 
+def update_not_none(d1, d2):
+    for k, v in d2.iteritems():
+        if v is not None:
+            d1[k] = v

@@ -85,9 +85,9 @@ def detect(f_name, desc, res_args=[]):
     fea_option = desc['fea_option']
     data_file = data_map[ desc['data_type'] ](f_name)
     # data_handler = data_handler_handle_map[desc['detector_type']](data_file, fea_option)
-    data_handler = data_handler_handle_map[desc['detector_type']](data_file, desc)
+    data_handler = data_handler_handle_map[desc['method']](data_file, desc)
 
-    detector = detector_map[ desc['detector_type'] ](desc)
+    detector = detector_map[ desc['method'] ](desc)
     detector.set_args(res_args)
     detector.detect(data_handler)
     return detector

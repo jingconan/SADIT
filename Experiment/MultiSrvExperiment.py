@@ -5,14 +5,15 @@ test the alogirithm
 import sys
 sys.path.append("..")
 import settings
-from DetectExper import DetectExper
+# from DetectExper import DetectExper
 import numpy as np
 from Detector import detect
+from Detect import Detect
 
-class MultiSrvExperiment(DetectExper):
+class MultiSrvExperiment(Detect):
     def __init__(self, settings):
         self.init_para()
-        DetectExper.__init__(self, settings)
+        Detect.__init__(self, settings)
         self.get_net_desc()
         self.get_norm_desc()
         self.get_ano_list()

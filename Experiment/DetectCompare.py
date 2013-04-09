@@ -3,21 +3,22 @@
 results in the same window.
 """
 from __future__ import print_function, division
-from DetectExper import DetectExper
-import copy
+from Detect import Detect
+# import copy
 import os
 import matplotlib.pyplot as plt
 from Detector import detector_plot_dump
 import cPickle as pickle
-class Compare(DetectExper):
+
+class DetectCompare(Detect):
     """ Compare Different methods and plot the result in
     """
     def __init__(self, *args, **kwargs):
-        DetectExper.__init__(self, *args, **kwargs)
-        self.detectors = []
+        # Detect.__init__(self, *args, **kwargs)
+        super(DetectCompare, self).__init__(*args, **kwargs)
 
     def init_parser(self, parser):
-        super(Compare, self).init_parser(parser)
+        super(DetectCompare, self).init_parser(parser)
         parser.add_argument('--comp_methods', default=None, type=lambda x:x.split(','),
                 help="""method list that will be compared""")
 
@@ -49,7 +50,7 @@ class Compare(DetectExper):
             self.args.method = method
             detector = self.detect()
             print('detector type, ', type(detector))
-            self.detectors.append(copy.deepcopy(detector))
+            # import ipdb;ipdb.set_trace()
 
             if method == 'mfmb':
                 detector.plot(figure_=fig, subplot_=[sp+1, sp+2],

@@ -198,6 +198,7 @@ class StoDetector (WindowDetector):
             self.record_data['threshold'] = None
         # record the parameters
         # self.record_data['args'] = self.args
+        # self.record_data['desc'] = tuple(self.desc.items())
         self.record_data['desc'] = self.desc
 
         return self.record_data
@@ -290,6 +291,7 @@ class StoDetector (WindowDetector):
                 *args, **kwargs)
 
     def dump(self, data_name):
+        # import ipdb;ipdb.set_trace()
         pickle.dump( self.record_data, open(data_name, 'w') )
         # pickle.dump(self.__dict__, open(data_name, 'w') )
 

@@ -17,10 +17,21 @@ from Detector.API import detector_map
 parser = argparse.ArgumentParser(description='sadit', add_help=False)
 # parser = argparse.ArgumentParser(description='sadit')
 # parser.add_argument('-e', '--experiment', default='DetectExper')
-parser.add_argument('-e', '--experiment', default=None,
-        help="""print ./run.py -e <exper> -h for help of a experiment
+
+# parser.add_argument('-c', '--config', default=None,
+#         help="""a configuration script describing the network network, normal
+#         traffic and anomalies""")
+
+# parser.add_argument('-e', '--experiment', default=None,
+#         help="""print ./run.py -e <exper> -h for help of a experiment
+#         Avaliable experiments are [%s]"""
+#         %(' | '.join(exper_ops)))
+
+parser.add_argument('experiment', default=None, nargs='?',
+        help="""print ./run.py <exper> -h for help of a experiment
         Avaliable experiments are [%s]"""
         %(' | '.join(exper_ops)))
+
 parser.add_argument('--profile', default=None,
         help= """profile the program """)
 
