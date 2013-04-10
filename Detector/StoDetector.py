@@ -422,7 +422,7 @@ class FBAnoDetector(StoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return pmf, Pmb, mpmb
 
-    def plot(self, far=None, figure_=None, subplot_=[211, 212], title_=['model free', 'model based'],
+    def plot(self, far=None, figure_=None, subplot_=(211, 212), title_=['model free', 'model based'],
             pic_name=None, pic_show=False, csv=None,
             *args, **kwargs):
         if not plt: self.save_plot_as_csv()
@@ -435,6 +435,7 @@ class FBAnoDetector(StoDetector):
             save_csv(csv, ['rt', 'mf', 'mb', 'threshold'], rt, mf, mb, threshold)
 
         if figure_ is None: figure_ = plt.figure()
+        # import ipdb;ipdb.set_trace()
         plot_points(rt, mf, threshold,
                 figure_ = figure_,
                 xlabel_=self.desc['win_type'], ylabel_= 'entropy',
@@ -656,9 +657,10 @@ class SlowDriftStaticDetector(FBAnoDetector):
         start = self.desc['start']
         delta_t = self.desc['delta_t']
         win_type = self.desc['win_type']
+        normal_rg = self.desc['normal_rg']
 
         rg = [start, start + delta_t]
-        norm_win_em = self.get_em(rg=norm_rg,rg_type=win_type)
+        norm_win_em = self.get_em(rg=normal_rg,rg_type=win_type)
         return norm_win_em
 
 class PeriodStaticDetector(FBAnoDetector):
@@ -693,7 +695,9 @@ class PeriodStaticDetector(FBAnoDetector):
         if period >= (norm_rg_ref[1] - norm_rg_ref[0]):
             raise Exception('period is too large')
 
+        i = 0
         while True:
+            i += 1
             j += 1
             try:
                 norm_rg = [rg[0] + j * period, rg[1] + j * period]

@@ -5,12 +5,8 @@ different degree of attribute anoamly, and the output
 will be drawn in the same plot.
 """
 from __future__ import print_function, division
-import sys
-sys.path.append("..")
-# from Experiment import AttriChangeExper, gen_anomaly_dot
-# from FlowStylizedValidationExper import AttriChangeExper, gen_anomaly_dot
 from IIDExper import AttriChangeExper, gen_anomaly_dot
-from matplotlib.pyplot import figure, plot, show, subplot, title, legend, savefig, xlabel, ylabel
+import matplotlib.pyplot as plt
 import cPickle as pickle
 import copy
 
@@ -23,11 +19,6 @@ def argsort(seq):
 class Sens(object):
     """base class for the sensitivity analysis"""
     def store_flow_file(self, suffix):
-        # import settings, shutil
-        # shutil.copyfile(settings.OUTPUT_FLOW_FILE, settings.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
-        # file_name = settings.ROOT + '/Share/abnormal_flow_%s.txt'%(suffix)
-        # shutil.copyfile(settings.EXPORT_ABNORMAL_FLOW_FILE, file_name)
-
         import shutil
         shutil.copyfile(self.output_flow_file, self.ROOT+'/Share/n0_flow_%s.txt'%(suffix))
         file_name = self.ROOT + '/Share/abnormal_flow_%s.txt'%(suffix)
@@ -44,8 +35,8 @@ class Sens(object):
         f_obj = open(store_res_file, 'r')
         det_obj_shelf = pickle.load(f_obj)
         f_obj.close()
-        figure()
-        subplot(211)
+        plt.figure()
+        plt.subplot(211)
 
         # plot the curve in order
         sort_dict = sorted(det_obj_shelf.iteritems())
@@ -57,36 +48,36 @@ class Sens(object):
             # print 'k, ', k
             rt = v['winT']
             mf, mb = zip(*v['entropy'])
-            plot(rt, mf)
+            plt.plot(rt, mf)
 
         # plot the first threshold
         for k, v in sort_dict:
             if v.get('threshold', None):
-                plot(v['winT'], v['threshold'], '--')
+                plt.plot(v['winT'], v['threshold'], '--')
                 break
 
-        title('model free')
-        legend(legend_txt)
-        ylabel('$I_1$')
+        plt.title('model free')
+        plt.legend(legend_txt)
+        plt.ylabel('$I_1$')
 
-        subplot(212)
+        plt.subplot(212)
         for k, v in sort_dict:
             rt = v['winT']
             mf, mb = zip(*v['entropy'])
-            plot(rt, mb)
+            plt.plot(rt, mb)
 
         # plot the first threshold
         for k, v in sort_dict:
             if v.get('threshold', None):
-                plot(v['winT'], v['threshold'], '--')
+                plt.plot(v['winT'], v['threshold'], '--')
                 break
 
-        title('model based')
-        legend(legend_txt)
-        xlabel('time (s)')
-        ylabel('$I_2$')
-        savefig(self.ROOT + '/Share/res.eps')
-        show()
+        plt.title('model based')
+        plt.legend(legend_txt)
+        plt.xlabel('time (s)')
+        plt.ylabel('$I_2$')
+        plt.savefig(self.ROOT + '/Share/res.eps')
+        plt.show()
 
     def configure(self):
         gen_anomaly_dot([self.sens_ano], self.net_desc, self.norm_desc, self.dot_file)

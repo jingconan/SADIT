@@ -2,6 +2,7 @@
 import itertools
 from StoDetector import *
 from util import mkiter, meval, del_none_key
+import copy
 class EnsembleDetector(object):
     def __init__(self):
         self.det = dict()
@@ -56,22 +57,13 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
     def detect(self, data_file):
         self.ref_pool = dict()
 
-        self.register('mfmb', FBAnoDetector(self.desc), {}, 'static')
-        # self.register('period', PeriodStoDetector(self.desc),
-                # {'period':[1e3, 2e3]})
-        self.register('speriod', PeriodStaticDetector(self.desc),
-                # {'period':[1e3, 2e3, 3e3, 1e2, 5e2], 'start':[0, 100, 200]},
-                {'period':[1e3, 2e3, 600, 200],
-                    'start':[0, 150],
-                    'delta_t':[100, 200]},
-                'static')
-        self.register('slowdrift', SlowDriftStaticDetector(self.desc),
-                {}
-                )
-        # self.register('two_win', TwoWindowAnoDetector(self.desc),
-        #         {'norm_win_ratio':[2, 10]})
+        register_info = self.desc['register_info']
+        for method, prop in register_info.iteritems():
+            self.register(method,
+                    globals()[method](copy.deepcopy(self.desc)),
+                    prop['para'],
+                    prop['type'])
 
-        # self.process_history_data(data_file)
         FBAnoDetector.detect(self, data_file)
 
     def _loop_para(self, alg_name, history_file, int_rg):
@@ -107,6 +99,7 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
         para_dict = self.det_para[alg_name]
         for para_list in itertools.product(*para_dict.values()):
             cp = dict(zip(para_dict.keys(), para_list))
+            # print('cp, ', cp)
             key = (alg_name, str(cp))
             if self.det_type[alg_name] == 'static' and (self.ref_pool.get(key, None) is not None):
                 continue
@@ -172,3 +165,6 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
         print '--------------------'
         return res
 
+
+    # def plot(self, *args, **kwargs):
+        # StoDetector.plot(self, *args, **kwargs)

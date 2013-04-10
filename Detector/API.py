@@ -35,7 +35,7 @@ detector_map = {
         'art': ARTDetector,
         'gen_fb_mf':FBAnoDetector, # feature is model free emperical measure
         'gen_fb_mb':FBAnoDetector, # feature is model based emperical measure
-        # 'robust': RobustDetector,
+        'robust': RobustDetector,
         }
 
 # usually one detector corresponds to one handler

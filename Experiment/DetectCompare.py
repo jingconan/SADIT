@@ -37,10 +37,6 @@ class DetectCompare(Detect):
             self.plot_dump(self.args.dump_folder)
             return
 
-        fig = plt.figure()
-        sp = len(self.args.comp_methods) * 100
-        sp += 10
-
         d = os.path.abspath(self.args.dump_folder)
         if not os.path.exists(d):
             os.makedirs(d)
@@ -50,24 +46,11 @@ class DetectCompare(Detect):
             self.args.method = method
             detector = self.detect()
             print('detector type, ', type(detector))
-            # import ipdb;ipdb.set_trace()
-
-            if method == 'mfmb':
-                detector.plot(figure_=fig, subplot_=[sp+1, sp+2],
-                        title_=['mf', 'mb'])
-                sp += 2
-            else:
-                detector.plot(figure_=fig, subplot_=sp+1, title_=method)
-                # detector.plot(figure_=fig, subplot_=sp+1, ylabel_=method)
-                sp += 1
             detector.dump(self.args.dump_folder + '/dump_' + method + '.txt')
 
-        pickle.dump(self.args.comp_methods, open(self.args.dump_folder + '/dump_method_list.txt', 'w'))
+        with open(self.args.dump_folder + '/dump_method_list.txt', 'w') as f:
+            pickle.dump(self.args.comp_methods, f)
 
-        if self.args.pic_name:
-            plt.savefig(self.args.pic_name)
-        if self.args.pic_show:
-            plt.show()
 
     def plot_dump(self, dump_folder):
         if self.args.comp_methods:
@@ -76,12 +59,17 @@ class DetectCompare(Detect):
             method_list = pickle.load(open(dump_folder + '/dump_method_list.txt', 'r'))
         fig = plt.figure()
         sp = len(method_list) * 100
+        double_fig_methods = ['mfmb', 'robust']
+        for m in double_fig_methods:
+            if m in method_list:
+                sp += 100
         sp += 10
 
         for method in method_list:
+            print('method', method)
             data_name = dump_folder + '/dump_' + method + '.txt'
 
-            if method == 'mfmb':
+            if method in double_fig_methods:
                 # detector.plot(figure_=fig, subplot_=[sp+1, sp+2],
                         # title_=['mf', 'mb'])
                 detector_plot_dump(data_name, method, dict(win_type='time'),

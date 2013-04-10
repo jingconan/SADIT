@@ -156,11 +156,11 @@ def trans_data(flow):
         # return value
 
 basis_cache = dict() # ugly global cache of basis to accelerate the program
-def get_feature_hash_list(F, level):
+def get_feature_hash_list_old(F, level):
     ''' For each list of feature and corresponding quantized level.
     Get the hash value correspondingly
     '''
-    # import pdb;pdb.set_trace()
+    import pdb;pdb.set_trace()
     if isinstance(level, list):
         level = tuple(level)
     basis = basis_cache.get(level, None)
@@ -170,6 +170,34 @@ def get_feature_hash_list(F, level):
             basis.append( basis[-1] * level[i] )
 
     return [ sum( d*b for d, b in zip(digits, basis) ) for digits in zip(*F) ]
+
+cache_ = dict()
+import itertools
+def get_feature_hash_list(F, level):
+    """
+
+    Parameters:
+    ---------------
+    Returns:
+    --------------
+    Examples
+    --------------
+    """
+    # FIXME Add doctest here
+    level = tuple(level)
+    try:
+        return [cache_[level][vec] for vec in itertools.izip(*F)]
+    except KeyError:
+        # import ipdb;ipdb.set_trace()
+        basis = [1]
+        cache_[level] = dict()
+        for i in xrange( len(level) - 1 ):
+            basis.append( basis[-1] * level[i] )
+        for digits in itertools.product(*[range(d) for d in level]):
+            cache_[level][digits] = sum( d*b for d, b in zip(digits, basis) )
+
+        return get_feature_hash_list(F, level)
+
 
 from util import zeros
 def model_based_deprec(q_fea_vec, fea_QN):
