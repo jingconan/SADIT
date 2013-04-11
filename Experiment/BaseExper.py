@@ -1,10 +1,11 @@
 import argparse
 import settings
-from util import abstract_method
+from util import abstract_method, load_para, Namespace
 
 class BaseExper(object):
     ROOT = settings.ROOT
     def __init__(self, argv, parser=None):
+        # import ipdb;ipdb.set_trace()
         if parser is None:
             parser = argparse.ArgumentParser(add_help=False)
         self.parser = parser
@@ -12,7 +13,9 @@ class BaseExper(object):
         self.args, self.res_args = parser.parse_known_args(argv)
 
     def init_parser(self, parser):
-        abstract_method()
+        parser.add_argument('-c', '--config', default=None,
+                type=lambda x: load_para(x, Namespace),
+                help="""config""")
 
     def run(self):
         abstract_method()

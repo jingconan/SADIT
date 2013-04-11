@@ -36,7 +36,7 @@ DETECTOR_DESC = dict(
         unified_nominal_pdf = False, # used in sensitivities analysis
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
-        # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
+        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
         # fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
         # fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
         # fea_option = {'dist_to_center':1, 'flow_size':3, 'cluster':1},
@@ -70,32 +70,6 @@ DETECTOR_DESC = dict(
         small_win_size = 1,
         # small_win_size = 1000,
         g_quan_N = 3,
-
-        ##### For Batch Method #######
-        batch_var = ['fea_option.dist_to_center'],
-        fea_option = {'dist_to_center':[1, 2, 3], 'flow_size':3, 'cluster':1},
-        res_folder = './res_batch_test/',
-        data = './Simulator/n0_flow.txt',
-        method = 'mfmb',
-        entropy_threshold = None,
-        ab_win_portion = None,
-        ab_win_num = 10,
-        ident = {
-            'mf': {
-                'ident_type': 'ComponentFlowStateIdent',
-                'portion': None,
-                'ab_states_num': 1,
-                },
-
-            'mb': {
-
-                # 'ident_type': None,
-                'ident_type': 'ComponentFlowPairIdent',
-                'portion': None,
-                'ab_states_num': 1,
-                },
-            },
-
         )
 # when using different data_hanlder, you will have different set of avaliable options for fea_option.
 

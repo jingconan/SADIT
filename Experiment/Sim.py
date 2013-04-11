@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-# import argparse
-# import settings
+"""  Simualtion Onlay
+
+"""
 from BaseExper import BaseExper
 from Configure import gen_anomaly_dot
 from os import chdir as cd
 from os import system as sh
 
-from util import load_para, Namespace
 class Sim(BaseExper):
     """
     Attributes:
@@ -34,9 +34,7 @@ class Sim(BaseExper):
         self.dot_file = self.args.dot
 
     def init_parser(self, parser):
-        parser.add_argument('-c', '--config', default=None,
-                type=lambda x: load_para(x, Namespace),
-                help="""config""")
+        super(Sim, self).init_parser(parser)
         parser.add_argument('--dot', default=self.ROOT + '/Share/conf.dot',
                 help="""output dot file""")
 

@@ -3,16 +3,14 @@
 get the statistical quantify for the hypotheis test
 like False Alarm Rate.
 """
-# from Experiment import AttriChangeExper
 from Detector.DataParser import RawParseData
-# from FlowStylizedValidationExper import AttriChangeExper
-from IIDExper import AttriChangeExper
+from Detect import Detect
 
 import matplotlib.pyplot as plt
 import cPickle as pickle
 import itertools
 
-class Eval(AttriChangeExper):
+class Eval(Detect):
     """plot ROC curve for the hypothesis test"""
     OUT_STRING = """tp: %f\t fn: %f\t tn: %f\t fp: %f
 sensitivity: %f\tspecificity: %f
@@ -26,20 +24,21 @@ sensitivity: %f\tspecificity: %f
                 )
 
         parser.add_argument('--max_search_mb_states', default=144, type=int,
-                help = """max number of abnormal model free states it will search"""
+                help = """max number of abnormal model free states it will
+                search"""
                 )
 
+        parser.add_argument('--ab_flows_data', default=144, type=int,
+                help = """file name for the abnormal flows exported by detector
+                itself. used as reference"""
+                )
 
     def get_ab_flow_seq(self):
         """get the sequence of all abnormal flows, get the reference ground truth"""
-        # normal_flow_file_name = self.settings.ROOT + '/Simulator/n0_flow.txt'
-        normal_flow_file_name = self.output_flow_file
-
+        normal_flow_file_name = self.desc['data']
         self.normal_flow, self.fea_name = RawParseData(normal_flow_file_name)
 
-        # ab_flow_file_name = self.settings.ROOT + '/Simulator/abnormal_n0_flow.txt'
-
-        ab_flow_file_name = self.export_abnormal_flow_file
+        ab_flow_file_name = self.desc['ab_flows_data']
         self.flow, self.fea_name =  RawParseData(ab_flow_file_name)
 
         return [self.normal_flow.index(f) for f in self.flow]

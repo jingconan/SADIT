@@ -87,5 +87,3 @@ class DetectCompare(Detect):
             plt.savefig(self.args.pic_name)
         if self.args.pic_show:
             plt.show()
-
-

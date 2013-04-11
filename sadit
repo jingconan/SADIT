@@ -83,7 +83,15 @@ def main(args, res_args):
         # exec_exper(args, res_args)
     exec('from Experiment.%s import %s'%(args.experiment, args.experiment))
     exper = locals()[args.experiment](res_args)
-    exper.run()
+    try:
+        exper.run()
+    except KeyError:
+        print('Probabably you forget to specify some options?'
+                ' run sadit <exper> -h for more information.')
+        import traceback
+        tb = traceback.format_exc()
+        print(tb)
+        # print(e)
 
 if args.profile:
     import cProfile

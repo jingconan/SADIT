@@ -5,13 +5,15 @@ from BaseExper import BaseExper
 import os
 # import settings
 from Detector import detect
-from util import load_para, update_not_none
+# from util import load_para, update_not_none
+from util import update_not_none
 import copy
 
 from Detector.API import print_detector_help
 class Detect(BaseExper):
     def __init__(self, argv, parser=None):
-        super(Detect, self).__init__(argv, parser)
+        # super(Detect, self).__init__(argv, parser)
+        BaseExper.__init__(self, argv, parser)
 
         if self.args.help :
             self.parser.print_help()
@@ -23,6 +25,7 @@ class Detect(BaseExper):
             import sys; sys.exit(0)
 
     def init_parser(self, parser):
+        super(Detect, self).init_parser(parser)
         parser.add_argument('-h', '--help', default=False, action='store_true',
                 help="""print help message""")
 
@@ -30,9 +33,9 @@ class Detect(BaseExper):
                 help="""--data [filename] will simply detect the flow file,
                 simulator will not run in this case""")
 
-        parser.add_argument('-c', '--config', default=None,
-                type=load_para,
-                help="""config file with default arguments for detector""")
+        # parser.add_argument('-c', '--config', default=None,
+        #         type=load_para,
+        #         help="""config file with default arguments for detector""")
 
         from Detector.API import detector_map, data_map
         from util import get_help_docs

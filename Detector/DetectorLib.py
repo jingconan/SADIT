@@ -9,6 +9,8 @@ sys.path.append("..")
 from util import np, Counter
 import operator
 import math
+import itertools
+
 def shannon_entropy(prob):
     """calculate shannon entropy
     """
@@ -88,6 +90,7 @@ def np_quantize_state(x, nx, rg):
 
     # stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
     # return np.round( (x - minVal) * 1.0 / stepSize)
+    # import ipdb;ipdb.set_trace()
     stepSize = (maxVal - minVal) * 1.0 / nx
     quan = np.floor( (x - minVal) / stepSize )
     quan[quan == nx] = nx-1
@@ -172,7 +175,7 @@ def get_feature_hash_list_old(F, level):
     return [ sum( d*b for d, b in zip(digits, basis) ) for digits in zip(*F) ]
 
 cache_ = dict()
-import itertools
+# import itertools
 def get_feature_hash_list(F, level):
     """
 
@@ -228,7 +231,6 @@ def model_based_deprec(q_fea_vec, fea_QN):
     mp = [v*1.0/fl for v in mp]
     return P, mp
 
-import itertools
 
 def model_based(q_fea_vec, fea_QN):
     '''estimate the transition probability. It has same input parameter with model_free.
