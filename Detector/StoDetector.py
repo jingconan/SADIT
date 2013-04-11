@@ -305,7 +305,16 @@ class StoDetector (WindowDetector):
 
     @staticmethod
     def find_abnormal_windows(entropy, entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
-        """ find abnormal windows
+        """ find abnormal windows out of all windows
+
+        Parameters:
+        -----------
+        entropy_threshold : list of floats
+            list of threshold for each window
+        ab_win_portion
+            portion of windows considered as abnormal
+        ab_win_num : int
+            abnormal window number
 
         Notes
         -----------
@@ -328,7 +337,7 @@ class StoDetector (WindowDetector):
         else:
             return [ i for i in xrange(num) if entropy[i] >= entropy_threshold ]
 
-    def _export_ab_flow_entropy(self, entropy, fname,
+    def export_ab_flow_entropy(self, entropy, fname,
             entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
         """export abnormal flows based on entropy
 
@@ -462,7 +471,7 @@ class FBAnoDetector(StoDetector):
 
         See Also
         ---------------
-        see **StoDetector._export_ab_flow_entropy** for the meaning of the
+        see **StoDetector.export_ab_flow_entropy** for the meaning of the
         parameters.
 
         """
@@ -472,26 +481,39 @@ class FBAnoDetector(StoDetector):
         basename = os.path.basename(fname)
 
         # for model free entropy
-        self._export_ab_flow_entropy(mf, dirname + '/mf-' + basename,
+        self.export_ab_flow_entropy(mf, dirname + '/mf-' + basename,
                 entropy_threshold, ab_win_portion, ab_win_num)
 
         # for model based entropy
-        self._export_ab_flow_entropy(mb, dirname + '/mb-' + basename,
+        self.export_ab_flow_entropy(mb, dirname + '/mb-' + basename,
                 entropy_threshold, ab_win_portion, ab_win_num)
 
-    def get_ab_flow_seq(self, entropy_type, entropy_threshold=None, ab_win_portion=None, ab_win_num=None,
+    def get_ab_flow_seq(self, entropy_type, entropy_threshold=None,
+            ab_win_portion=None, ab_win_num=None,
             ab_flow_info = None):
             # ab_flow_state=None, ab_flow_tran=None):
         """get abnormal flow sequence number.
 
         the input is citerions which window will be abnormal window
 
-        Notes:
-        ----------------------------
-        see **AnoDetector.export_abnormal_flow** for the meaning of the
-        citerion parameters.  **ab_flow_info** represents either abnormal flow
-        state(for model free approach) and abnormal flow trantision
-        pair(for model based approach).
+        Parameters:
+        ---------------------------
+        entropy_type : {'mf', 'mb'}
+            type of entropy
+        entropy_threshold : list of floats
+            list of thresholds, each for a window.
+        ab_win_portion : float
+            portion of windows that will be considered as abnormal
+        ab_win_num :
+            number of windows that will be considered as abnormal
+        ab_flow_info : list
+            represents either abnormal flow state(for model free approach) and
+            abnormal flow trantision pair(for model based approach).
+
+        Returns:
+        ---------------------------
+        ano_flow_seq : list of ints
+            a list of sequence for flows that will be considered as abnormal.
 
         """
         # assert( (ab_flow_state and not ab_flow_tran) or (not ab_flow_state and ab_flow_tran) )

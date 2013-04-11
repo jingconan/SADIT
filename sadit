@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='sadit', add_help=False)
 #         %(' | '.join(exper_ops)))
 
 parser.add_argument('experiment', default=None, nargs='?',
-        help="""print ./run.py <exper> -h for help of a experiment
+        help="""print ./sadit <exper> -h for help of a experiment
         Avaliable experiments are [%s]"""
         %(' | '.join(exper_ops)))
 

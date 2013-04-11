@@ -367,7 +367,7 @@ class HarpoonGeneratorNode(GeneratorNode):
             - the configure must be in settings.py
             - only support *flow_size_mean*, *flow_arrival_rate*
         """
-        assert( len(settings.ANO_LIST) == 1) # only support export for single anomaly
+        # assert( len(settings.ANO_LIST) == 1) # only support export for single anomaly
         p_size = float(flowsize.rsplit(',')[0].rsplit('(')[1] ) # flow size mean
         p_interval = float(flowstart.rsplit(')')[0].rsplit('(')[1] ) # flow arrival rate
         p_var = float(flowsize.rsplit(',')[1].rsplit(')')[0])
