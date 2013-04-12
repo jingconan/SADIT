@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Detector.Ident &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Detector.Ident</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Anomalous Flow State or Flow Transition Pair Identification&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="c"># from util import abstract_method</span>
+<div class="viewcode-block" id="abstract_method"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.abstract_method">[docs]</a><span class="k">def</span> <span class="nf">abstract_method</span><span class="p">():</span> <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;abstract_method&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="mean"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.mean">[docs]</a><span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">idx_set</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">idx_set</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_set</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</div>
+<div class="viewcode-block" id="argsort"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.argsort">[docs]</a><span class="k">def</span> <span class="nf">argsort</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;arg sort in descending order&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">seq</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="get_slice"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.get_slice">[docs]</a><span class="k">def</span> <span class="nf">get_slice</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">idx_set</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">si</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_set</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="FlowStateIdent"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowStateIdent">[docs]</a><span class="k">class</span> <span class="nc">FlowStateIdent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;identify the anomalouse flow state,</span>
+<span class="sd">    need a series of prob distribution.</span>
+<span class="sd">    the abnormal window index and anomaly free window</span>
+<span class="sd">    index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu_set</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;P1, P2 are two lists contain the probability distribution &quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nu_set</span> <span class="o">=</span> <span class="n">nu_set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nu_set</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_info_state_by_state</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>  <span class="k">for</span> <span class="n">nu</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu_set</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_info</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FlowStateIdent.get_info_state_by_state"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowStateIdent.get_info_state_by_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_info_state_by_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">info_cal</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="n">mu</span><span class="p">)]</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FlowStateIdent.info_cal"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowStateIdent.info_cal">[docs]</a>    <span class="k">def</span> <span class="nf">info_cal</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+        <span class="n">abstract_method</span><span class="p">()</span>
+        <span class="c"># return 0 if (v1 == 0 or v2 == 0) else v1*log(v1*1.0/v2)</span>
+</div>
+<div class="viewcode-block" id="FlowStateIdent.set_detect_result"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowStateIdent.set_detect_result">[docs]</a>    <span class="k">def</span> <span class="nf">set_detect_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detect_result</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;set the detection result and calculate the state information mean</span>
+<span class="sd">        for normal state&quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">detect_result</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ano_free_idx</span> <span class="o">=</span> <span class="p">[</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">detect_result</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_state_info_mean</span> <span class="o">=</span> <span class="p">[</span><span class="n">mean</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ano_free_idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">si</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_info</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="FlowStateIdent.get_state_likelihood"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowStateIdent.get_state_likelihood">[docs]</a>    <span class="k">def</span> <span class="nf">get_state_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ano_idx_set</span><span class="p">):</span>
+        <span class="n">cal_likelihood</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">si</span><span class="p">,</span> <span class="n">norm</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span> <span class="n">mean</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">ano_idx_set</span><span class="p">)</span> <span class="o">-</span> <span class="n">norm</span><span class="p">)</span>
+        <span class="c"># def cal_likelihood(si, norm):</span>
+            <span class="c"># return abs( mean(si, ano_idx_set) - norm)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_likelihood</span> <span class="o">=</span> <span class="p">[</span><span class="n">cal_likelihood</span><span class="p">(</span><span class="n">si</span><span class="p">,</span> <span class="n">norm</span><span class="p">)</span> <span class="k">for</span> <span class="n">si</span><span class="p">,</span> <span class="n">norm</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_state_info_mean</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_likelihood</span>
+</div>
+<div class="viewcode-block" id="FlowStateIdent.filter_states"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowStateIdent.filter_states">[docs]</a>    <span class="k">def</span> <span class="nf">filter_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ano_idx_set</span><span class="p">,</span> <span class="n">portion</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;filter states that may cause the anomaly represetned by *ano_idx_set*,</span>
+<span class="sd">        you can either set *portion* of state that may be anomalous</span>
+<span class="sd">        for the *number* that may be anomalouse. the priority of *portion*</span>
+<span class="sd">        parameter is higher than the priority of *num*&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">portion</span><span class="p">:</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span> <span class="o">*</span> <span class="n">portion</span><span class="p">)</span>
+        <span class="n">state_likelihood</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state_likelihood</span><span class="p">(</span><span class="n">ano_idx_set</span><span class="p">)</span>
+        <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="n">state_likelihood</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sort_idx</span><span class="p">[:</span><span class="n">num</span><span class="p">]</span>
+</div></div>
+<div class="viewcode-block" id="ComponentFlowStateIdent"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.ComponentFlowStateIdent">[docs]</a><span class="k">class</span> <span class="nc">ComponentFlowStateIdent</span><span class="p">(</span><span class="n">FlowStateIdent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;use component to identify the flow state&quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ComponentFlowStateIdent.info_cal"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.ComponentFlowStateIdent.info_cal">[docs]</a>    <span class="k">def</span> <span class="nf">info_cal</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="n">v1</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">v1</span><span class="o">*</span><span class="mf">1.0</span><span class="o">/</span><span class="n">v2</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="DerivativeFlowStateIdent"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.DerivativeFlowStateIdent">[docs]</a><span class="k">class</span> <span class="nc">DerivativeFlowStateIdent</span><span class="p">(</span><span class="n">FlowStateIdent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;use the derivative to identify the flow state&quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="DerivativeFlowStateIdent.info_cal"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.DerivativeFlowStateIdent.info_cal">[docs]</a>    <span class="k">def</span> <span class="nf">info_cal</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="n">log</span><span class="p">(</span><span class="n">v1</span><span class="o">*</span><span class="mf">1.0</span><span class="o">/</span><span class="n">v2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+</div></div>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<div class="viewcode-block" id="FlowPairIdent"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent">[docs]</a><span class="k">class</span> <span class="nc">FlowPairIdent</span><span class="p">(</span><span class="n">FlowStateIdent</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowPairIdent.get_info_state_by_state"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent.get_info_state_by_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_info_state_by_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+        <span class="n">m_nu</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">nu</span><span class="p">]</span>
+        <span class="n">m_mu</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mu</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">info_cal</span><span class="p">(</span><span class="n">nu</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">m_nu</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">m_mu</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FlowPairIdent.info_cal"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent.info_cal">[docs]</a>    <span class="k">def</span> <span class="nf">info_cal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">mb</span><span class="p">):</span>
+        <span class="c"># return a * log( (a*1.0/ma) / (b*1.0/mb))</span>
+        <span class="n">abstract_method</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="FlowPairIdent.sub2idx"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent.sub2idx">[docs]</a>    <span class="k">def</span> <span class="nf">sub2idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="n">j</span></div>
+<div class="viewcode-block" id="FlowPairIdent.idx2sub"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent.idx2sub">[docs]</a>    <span class="k">def</span> <span class="nf">idx2sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">idx</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">idx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+</div>
+<div class="viewcode-block" id="FlowPairIdent.flatten"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent.flatten">[docs]</a>    <span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">m</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nu_set</span><span class="p">)</span>
+        <span class="k">assert</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span>
+        <span class="c"># self.info = [self.get_info_state_by_state(self.flatten(nu), self.flatten(mu)) for nu in nu_set]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_info_state_by_state</span><span class="p">(</span><span class="n">nu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="k">for</span> <span class="n">nu</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu_set</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state_info</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FlowPairIdent.filter_states"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.FlowPairIdent.filter_states">[docs]</a>    <span class="k">def</span> <span class="nf">filter_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ano_idx_set</span><span class="p">,</span> <span class="n">portion</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">state_idx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">FlowPairIdent</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">filter_states</span><span class="p">(</span><span class="n">ano_idx_set</span><span class="p">,</span> <span class="n">portion</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx2sub</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">state_idx</span><span class="p">]</span>
+</div></div>
+<div class="viewcode-block" id="ComponentFlowPairIdent"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.ComponentFlowPairIdent">[docs]</a><span class="k">class</span> <span class="nc">ComponentFlowPairIdent</span><span class="p">(</span><span class="n">FlowPairIdent</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ComponentFlowPairIdent.info_cal"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.ComponentFlowPairIdent.info_cal">[docs]</a>    <span class="k">def</span> <span class="nf">info_cal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">mb</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ma</span> <span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">mb</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="n">a</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="mf">1.0</span><span class="o">/</span><span class="n">ma</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="mf">1.0</span><span class="o">/</span><span class="n">mb</span><span class="p">))</span>
+</div></div>
+<div class="viewcode-block" id="DerivativeFlowPairIdent"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.DerivativeFlowPairIdent">[docs]</a><span class="k">class</span> <span class="nc">DerivativeFlowPairIdent</span><span class="p">(</span><span class="n">FlowPairIdent</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="DerivativeFlowPairIdent.info_cal"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.Ident.DerivativeFlowPairIdent.info_cal">[docs]</a>    <span class="k">def</span> <span class="nf">info_cal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">mb</span><span class="p">):</span>
+        <span class="k">return</span>  <span class="mi">0</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ma</span> <span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">mb</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="n">log</span><span class="p">(</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="mf">1.0</span><span class="o">/</span><span class="n">ma</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="mf">1.0</span><span class="o">/</span><span class="n">mb</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

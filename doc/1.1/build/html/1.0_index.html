@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to SADIT’s documentation! &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">SADIT 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-sadit-s-documentation">
+<h1>Welcome to SADIT&#8217;s documentation!<a class="headerlink" href="#welcome-to-sadit-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>SADIT is a byproduct of research project <strong>A Coordinated Approach to
+Cyber-Situation Awarness Based on Traffic Anomaly Detection</strong>.  It is the
+acronym of <strong>S</strong>ystematic <strong>A</strong>nomaly <strong>D</strong>etection of <strong>I</strong>nternet
+<strong>T</strong>raffic.  The motivation of SADIT is to make the comparison and the
+validation of internet anomaly deteciton algorithmes super easy.  It provides
+a collection of Internet Anomaly Detection algorithms proposed by several
+researchers. Now it contains:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Stochastic Anomaly Detector using Large Deviation Theory</li>
+<li>Deterministic Temporal Anomaly Detector using Support Vector Machine</li>
+<li>Deterministic Flow by Flow Detector using Support Vector Machine</li>
+<li>Anomaly Detection Techniques using ART theory</li>
+</ol>
+</div></blockquote>
+<p>SADIT is not limited to the four algorithms listed above, its utimate goal is to
+become a standard collection of a variety of internet anomaly detection
+algorithms.</p>
+<p>It also provides an easy-to-use tool to generate labeled flow records, which are
+helpful in validatation and comparison of methods.</p>
+<p>If you are a researcher interested in Internet Anomaly Detection, we strongly
+encourage you to implement your algorithms following the APIs and data format of
+SADIT so that you can easily compare your methods with exisiting algorithms in
+SADIT. Your help will be highly appreciated if you can contribute your own
+algorithm to the algorithm libray of SADIT. Feel free to contact me if you have
+any question.</p>
+</div>
+<div class="section" id="what-s-new">
+<h2>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
+<p>the version 1.0 is a result of big refactor of version 0.0. The refactor makes the code more
+scalable and less buggy.</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Paradigm of Object-oriented programming</strong>: The <strong>Configure</strong> module and <strong>Detector</strong> module have been rewritten under
+object-oriented paradigm. In version 0.0, all modules depends on the global
+settings file setting.py, which make the code more vulunerable to bugs. In this verison only
+few scripts depend on settings.py. Classes are widely used to reduce the need to
+pass parameters around. In case that parameters passing is required, well-defined structures are used.</li>
+<li><strong>Experiment</strong>: A new folder ROOT/Experiment appears to contain different
+experiments. You can write your own scripts of Experiment and put them in
+this folder.</li>
+<li><strong>Better Sensitivity Anaysis</strong>: In the version 0.0, sensitivity anaysis is
+done by change the global settings.py file and rerun the simulation. Since
+settings.py is a typical python module,changing it during the run is really not
+a good idea. In this version, special Experiment is designed to support
+sensitivity analysis.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p><strong>SADIT</strong> consists of  two parts. The first part is a collection of anomalies
+detection algorithms. The second part is labeled flow record generator. The
+follow sections will describe the two parts accordingly.</p>
+<div class="section" id="collection-of-anomaly-detection-algorithm">
+<h3>Collection of Anomaly Detection Algorithm<a class="headerlink" href="#collection-of-anomaly-detection-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>All the detection algorithms locates in the <em>ROOT/Detector</em> folder:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>SVMDetector.py</strong> contains two SVM based anomaly detection algorithmes
+1. SVM Temporal Detector and 2. SVM Flow by Flow Detector.</li>
+<li><strong>StoDetector.py</strong> contains two anomaly detection algorithms based on
+Large Deviation Theory.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="labeled-flow-records-generator">
+<h3>Labeled Flow Records Generator<a class="headerlink" href="#labeled-flow-records-generator" title="Permalink to this headline">¶</a></h3>
+<p>Labeled Flow Records Generator consists of a <em>Configurer</em> and a <em>Simulator</em>.
+The <em>Simulator</em> part is essentially a revised FS Simulator developed by
+researchers at UW Madison. <em>Configurer</em> first generate a flow specification (DOT
+format) file with certain types of anomalies, then the <em>Simulator</em> will generate
+flow records and corresponding labels.</p>
+<div class="section" id="configurer">
+<h4>Configurer<a class="headerlink" href="#configurer" title="Permalink to this headline">¶</a></h4>
+<p><em>Configurer</em> generate the corresponding DOT file according to description of user
+behaviour. The important concepts in <em>Configurer</em> are as follows:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><strong>Generator</strong>: description of a certain type of flow traffic. For
+examples, <em>Harpoon</em> generator represents <a class="reference external" href="http://cs.colgate.edu/~jsommers/harpoon/">harpoon flows</a>.</p>
+</li>
+<li><p class="first"><strong>Behaviour</strong>: description of temporal pattern. There are three types
+behaviour:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><strong>Normal</strong> behaviour is described by start time and duration.</p>
+</li>
+<li><dl class="first docutils">
+<dt><strong>I.I.D</strong> behaviour has a list of possible states, but one state</dt>
+<dd><p class="first last">will be selected as current state every <em>t</em> seconds
+according to certain probability distribution.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Markov</strong> the state in different time is not independtly and</dt>
+<dd><p class="first last">identically distributed,  but is a Markov process</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Modulator</strong>: combine <em>Behaviour</em> and <em>Generator</em>, basicially description
+of generator behaviour. There are three types of modulators, corresponding
+to three behaviours described above.</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="simulator">
+<h4>Simulator<a class="headerlink" href="#simulator" title="Permalink to this headline">¶</a></h4>
+<p>Simulator is basically a revised version of fs simulator. We have added
+support to export anoumalous flows(add label information).</p>
+</div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
+<strong>settings.py</strong> to the absolute path of the source directory. Then type</p>
+<div class="highlight-python"><pre>$ ./run.py -h</pre>
+</div>
+<p>in the command line. The help document will come out</p>
+<p>usage: run.py [-e EXPERIMENT] [&#8211;profile PROFILE] [-hm HELP_METHOD] [-h]</p>
+<p>sadit</p>
+<dl class="docutils">
+<dt>optional arguments:</dt>
+<dd><table class="first docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-e <var>EXPERIMENT</var></span>, <span class="option">--experiment <var>EXPERIMENT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>print ./run.py -e &lt;exper&gt; -h for help of a experiment
+Avaliable experiments are [Eval | Compare |
+MarkovExper | DetectExper | AttriSensExper | IIDExper
+| DetectArgSearch | MarkovSens | MultiSrvExperiment |
+ImalseSettings]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--profile <var>PROFILE</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>profile the program</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>-hm HELP_METHOD, &#8211;help_method HELP_METHOD</dt>
+<dd>print the detailed help message for a method.
+Avaliable method [mf | art | mb | mfmb | svm_fbf |
+svm_temp]</dd>
+</dl>
+<table class="last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
+<td>print help message and exit</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p><em>&#8211;experiment</em> specify the experiment you want to execute. An <strong>experiment</strong>
+is actually a subcommand that has certain functionality.</p>
+<dl class="docutils">
+<dt>Avaliable experiments are as follows:</dt>
+<dd><ul class="first last simple">
+<li><strong>DetectExper</strong>: detect the flow record data specified by <em>-d</em> option</li>
+<li><strong>IIDExper</strong>: generate flow records with I.I.D model and test the
+algorithm with these flow records.</li>
+<li><strong>MarkovExper</strong>: generate flow records with Markov model and test the
+algorithm with these flow records</li>
+<li><strong>AttrSensExper</strong>: change the degree of anomaly in <strong>IIDExper</strong>, run the
+algorithm accordingly and show results in the same figure.</li>
+<li><strong>MarkovSens</strong>: change the degree of anomaly in <strong>MarkovExper</strong>, run
+the algorithm accordingly and show results in the same figure.</li>
+<li><strong>Eval</strong>: Evaluation of the detection algorithmm(calculate fpr, fnr and
+plot the ROC curve)</li>
+<li><strong>DetectArgSearch</strong>: runs detection algortihms with all combinations of
+parameters and outputs the results to a folder, helps to select the
+optimal parameters.</li>
+<li><strong>Compare</strong>: run several detection algorithms and save the intermediate
+results. Can also load results load computed before and show comparison figure.</li>
+</ul>
+</dd>
+<dt>To see the help message of an  experiment, just type ::</dt>
+<dd>$ ./run.py -e &lt;exper&gt; -h</dd>
+<dt>to get the help message of an experiment, just type ::</dt>
+<dd>$ ./run.py -hm &lt;detector&gt;</dd>
+</dl>
+<p>Whenever you are not sure about the options you can set, just add <em>-h</em> to the end
+of command and execute it and help message will be printed correspondingly.</p>
+<dl class="docutils">
+<dt>You can change parameters in two ways:</dt>
+<dd><ul class="first last simple">
+<li><strong>ROOT/settings.py</strong> contains some default
+parameters(<strong>ROOT/setting_arg_search.py</strong> contains the default parameters
+for <strong>DetectArgSearch</strong> experiment). When you don&#8217;t specify parameters in
+the commandline, these default values will be used. Of course, you can
+change these parameters by editing the files.</li>
+<li>You can set the parameters of experiments as well as detectors through
+command line.</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="parameters-for-labeled-flow-generator">
+<h3>Parameters for Labeled Flow Generator<a class="headerlink" href="#parameters-for-labeled-flow-generator" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">NET_DESC</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">topo</span><span class="p">,</span> <span class="c"># a list of list, the adjacent matrix of the topology</span>
+        <span class="n">size</span><span class="p">,</span> <span class="c"># no. of nodes in the network</span>
+        <span class="n">srv_list</span><span class="p">,</span> <span class="c"># not used</span>
+        <span class="n">link_attr_default</span><span class="p">,</span> <span class="c"># default link attributed, delay, capacity, etc.</span>
+        <span class="n">node_type</span><span class="o">=</span><span class="s">&#39;NNode&#39;</span><span class="p">,</span> <span class="c"># Node type, can be &#39;NNode&#39;, &#39;MarkovNode&#39;, etc.</span>
+        <span class="n">node_para</span><span class="p">,</span> <span class="c"># not used.</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">NORM_DESC</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">TYPE</span><span class="p">,</span> <span class="c"># can be &#39;NORMAL&#39; or &#39;MARKOV&#39;</span>
+        <span class="n">start</span><span class="p">,</span> <span class="c"># start time, should be string</span>
+        <span class="n">node_para</span><span class="p">,</span> <span class="c"># node parameters for normal case</span>
+        <span class="n">profile</span><span class="p">,</span> <span class="n">DEFAULT_PROFILE</span><span class="p">,</span> <span class="c"># normal profile</span>
+        <span class="n">src_nodes</span><span class="p">,</span> <span class="c"># node that will send traffic</span>
+        <span class="n">dst_nodes</span><span class="p">,</span> <span class="c"># the destination of the traffic.</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ANO_DESC</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">anoType</span><span class="p">,</span> <span class="c"># anomaly type, can be anyone defined in  **ano_map** of *Configure/API.py*,</span>
+        <span class="n">ano_node_seq</span><span class="p">,</span> <span class="c"># the sequence no. of the abnormal node</span>
+        <span class="s">&#39;T&#39;</span><span class="p">:(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">),</span> <span class="c"># time range of the anomaly</span>
+        <span class="o">..</span><span class="p">,</span> <span class="c"># anomaly specific  parameters</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parameters-for-detectors">
+<h3>Parameters for Detectors<a class="headerlink" href="#parameters-for-detectors" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">DETECTOR_DESC</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">interval</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">win_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+        <span class="n">win_type</span><span class="o">=</span><span class="s">&#39;time&#39;</span><span class="p">,</span> <span class="c"># &#39;time&#39;|&#39;flow&#39;</span>
+        <span class="n">fr_win_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="c"># window size for estimation of flow rate</span>
+        <span class="n">false_alarm_rate</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+        <span class="n">unified_nominal_pdf</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="c"># used in sensitivities analysis</span>
+        <span class="n">fea_option</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;dist_to_center&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;flow_size&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;cluster&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">},</span>
+        <span class="n">ano_ana_data_file</span> <span class="o">=</span> <span class="n">ANO_ANA_DATA_FILE</span><span class="p">,</span>
+        <span class="n">normal_rg</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="c"># range for normal traffic, if it none, use the</span>
+        <span class="n">whole</span> <span class="n">traffic</span>
+        <span class="n">detector_type</span> <span class="o">=</span> <span class="s">&#39;mfmb&#39;</span><span class="p">,</span> <span class="c"># can be anyone specfied by **detector_map** in *Detector/API.py*</span>
+        <span class="n">max_detect_num</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="c"># the maximum detection number the detector will run</span>
+        <span class="n">data_handler</span> <span class="o">=</span> <span class="s">&#39;fs&#39;</span><span class="p">,</span> <span class="c"># specify the data handler, can be any value defined in</span>
+        <span class="n">data_handler_map</span> <span class="ow">in</span> <span class="n">Detector</span><span class="o">/</span><span class="n">API</span><span class="o">.</span><span class="n">py</span>
+
+        <span class="c">#### only for SVM approach #####</span>
+        <span class="c"># gamma = 0.01,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="want-to-implement-your-algorithm">
+<h2>Want to implement your algorithm?<a class="headerlink" href="#want-to-implement-your-algorithm" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="use-the-labeled-flow-records-generator-in-fs-simulator">
+<h3>Use the labeled flow records generator in fs simulator<a class="headerlink" href="#use-the-labeled-flow-records-generator-in-fs-simulator" title="Permalink to this headline">¶</a></h3>
+<p>The generated flows will be the <em>ROOT/Simulator</em> folder. The flows end with
+<em>_flow.txt</em>, for example, n0_flow.txt is the network flows trough node 0. File
+start with <em>abnormal_</em> is the exported abnormal flows correspondingly.</p>
+<dl class="docutils">
+<dt><strong>A typical line is</strong></dt>
+<dd>textexport n0 1348412129.925416 1348412129.925416 1348412130.070733 10.0.7.4:80-&gt;10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA</dd>
+<dt><strong>line format</strong></dt>
+<dd>prefix nodename time flow_start_time flow_end_time src_ip:src_port-&gt;dst_ip:dst_port protocol payload destname unknown flowsize unknown</dd>
+</dl>
+<p>After finishing your detection algorihms, the last thing you need to do is to
+add the corresponding class name to <strong>detector_map</strong> in <em>ROOT/Detector/API.py</em>.
+After that you will be able to use your detection algorithm. You can use
+<strong>Compare</strong> experiment to compare with other algorithm or <strong>Eval</strong> algorithm to
+Evaluate your algorithm. You can also implement new experiment to play with your
+new algorithm.</p>
+</div>
+<div class="section" id="use-other-flow-records">
+<h3>Use Other flow records<a class="headerlink" href="#use-other-flow-records" title="Permalink to this headline">¶</a></h3>
+<p>SADIT does not only support the text output format of fs simulator, but also
+several other types of flow data. The handler classes locate in the
+<em>DataHandler.py</em> and <em>DataHandler_xflow.py</em>
+<strong>DataFile</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>PreloadHardDistFile</strong> hard disk flow file generated by fs-simulator. It
+will preload all the flow file into memory, so it cannot deal with flow
+file larger than your memery</li>
+<li><strong>PreloadHardDistFile_pcap2netflow</strong> hard disk flow file generated by
+<a class="reference external" href="https://bitbucket.org/hbhzwj/pcap2netflow/src">pcap2netflow</a> tool(the
+format of <a class="reference external" href="http://www.mindrot.org/projects/softflowd/">flowd-reader</a>)</li>
+<li><strong>PreloadHardDistFile_xflow</strong>, hard disk flow file generated by xflow tool</li>
+<li><strong>SQLFile_SperottoIPOM2009</strong>, labeled data stored in mysql server provided
+by <a class="reference external" href="http://traces.simpleweb.org/traces/netflow/netflow2/">simpleweb.org</a></li>
+</ul>
+</div></blockquote>
+<p>The following class is the abstract base class for all data files</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Data</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;virtual base class for data. Data class deals with any implementation</span>
+<span class="sd">    details of the data. it can be a file, a sql data base, and so on, as long</span>
+<span class="sd">    as it support the pure virtual methods defined here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">get_fea_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rg_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get a slice of feature</span>
+<span class="sd">        - **rg** is the range for the slice</span>
+<span class="sd">        - **rg_type** is the type for range, it can be [&#39;flow&#39;|&#39;time&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abstract_method</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fea</span><span class="p">,</span> <span class="n">rg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rg_type</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get the max value of feature during a range</span>
+<span class="sd">        - **fea** is a list of feature name</span>
+<span class="sd">        - **rg** is the range</span>
+<span class="sd">        - **rg_type** is the range type</span>
+<span class="sd">        the output is the a list of element which contains the max</span>
+<span class="sd">        value of the feature in **fea**</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abstract_method</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">get_min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fea</span><span class="p">,</span> <span class="n">rg</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rg_time</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get min value of feature within a range. see **get_max** for</span>
+<span class="sd">        the meaning of the parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abstract_method</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>It defines the operation we can do with data files. The four
+algorithmes we implemented requires <strong>get_fea_slice</strong>, <strong>get_max</strong> and
+<strong>get_min</strong> operations. You can implement more operations, but at least
+implement these three operations.</p>
+<p>Optionally, you can implement a handler class that will manipulate the
+DataFile and and some useful quantities that may be useful to you algorithms.
+For example, we implemented <strong>HardDiskFileHandler</strong> with get_em() function to
+get probability distribution of the flows, which is useful for the stochastic
+approaches. If you just need the raw data, you can define simple handler class
+with data file object you want to use as member variable.</p>
+<p>Then you just need to add your data_handler to <strong>data_handler_handle_map</strong>
+defined in <em>ROOT/Detector/API.py</em></p>
+</div>
+</div>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p>You can download sadit from <a class="reference external" href="https://bitbucket.org/hbhzwj/sadit/get/2182e36f40d5.zip">here</a>.</p>
+<p>or you can user mercurial to get a complete copy with revision history</p>
+<div class="highlight-python"><pre>hg clone https://bitbucket.org/hbhzwj/sadit</pre>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>SADIT</strong> has been tested on python2.7.2.
+this software depends on all softwares that fs-simulate depends on:</p>
+<blockquote>
+<div><ul class="simple">
+<li>ipaddr (2.1.1)  <a class="reference external" href="http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz">Get</a></li>
+<li>networkx (1.0) <a class="reference external" href="http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz">Get</a></li>
+<li>pydot (1.0.2) <a class="reference external" href="http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz">Get</a></li>
+<li>pyparsing (1.5.2) <a class="reference external" href="http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyparsing%2Ffiles%2Fpyparsing%2Fpyparsing-1.5.2%2F&amp;ts=1332828745&amp;use_mirror=softlayer">Get</a></li>
+<li>py-radix (0.5) <a class="reference external" href="http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz">Get</a></li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>besides: it requires:</dt>
+<dd><ul class="first last simple">
+<li>numpy <a class="reference external" href="http://numpy.scipy.org/">Get</a></li>
+<li>matplotlib <a class="reference external" href="http://matplotlib.sourceforge.net/">Get</a></li>
+<li>profilehooks <a class="reference external" href="http://mg.pov.lt/profilehooks/">Get</a></li>
+</ul>
+</dd>
+</dl>
+<p>if you are in debain based system. you can simple use</p>
+<div class="highlight-python"><pre>sudo apt-get install python-dev
+sudo apt-get install python-numpy
+sudo apt-get install python-matplotlib</pre>
+</div>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li><a class="reference external" href="http://docs.python.org/glossary.html#glossary" title="(in Python v2.7)"><em>Glossary</em></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to SADIT&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#what-s-new">What&#8217;s New</a></li>
+<li><a class="reference internal" href="#structure">Structure</a><ul>
+<li><a class="reference internal" href="#collection-of-anomaly-detection-algorithm">Collection of Anomaly Detection Algorithm</a></li>
+<li><a class="reference internal" href="#labeled-flow-records-generator">Labeled Flow Records Generator</a><ul>
+<li><a class="reference internal" href="#configurer">Configurer</a></li>
+<li><a class="reference internal" href="#simulator">Simulator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#parameters-for-labeled-flow-generator">Parameters for Labeled Flow Generator</a></li>
+<li><a class="reference internal" href="#parameters-for-detectors">Parameters for Detectors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#want-to-implement-your-algorithm">Want to implement your algorithm?</a><ul>
+<li><a class="reference internal" href="#use-the-labeled-flow-records-generator-in-fs-simulator">Use the labeled flow records generator in fs simulator</a></li>
+<li><a class="reference internal" href="#use-other-flow-records">Use Other flow records</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/1.0_index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">SADIT 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

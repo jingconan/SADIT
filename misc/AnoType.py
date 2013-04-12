@@ -1,9 +1,10 @@
 """
 This file provides some utility function to detect the type of the anomaly
 """
+from __future__ import print_function, division, absolute_import
 import numpy as np
 from util import abstract_method
-from Derivative import ModelFreeDerivative, ModelBaseDerivative
+from .Derivative import ModelFreeDerivative, ModelBaseDerivative
 
 def CalIndicator(deri, intervalRatio):
     '''Calculate the difference of derivative on anomaly time w.r.t normal '''
@@ -39,9 +40,9 @@ class ModelFreeAnoTypeTest(AnoTypeTest):
     def detect_ano_type(self):
         norm_em = self.detector.norm_em
         self.deri = [ ModelFreeDerivative(d_pmf, norm_em) for d_pmf in self.get_em_vec() ]
-        print 'self.deri', self.deri
+        print('self.deri', self.deri)
         self.ano_indi = self.get_ano_indi()
-        print 'self.ano_indi', self.ano_indi
+        print('self.ano_indi', self.ano_indi)
 
 class ModelBaseAnoTypeTest(AnoTypeTest):
     def detect_ano_type(self):

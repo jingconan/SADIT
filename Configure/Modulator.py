@@ -1,8 +1,7 @@
-import sys
-sys.path.append("..")
+from __future__ import print_function, division, absolute_import
 # from util import *
 # from mod_util import *
-from mod_util import Attr
+from .mod_util import Attr
 class Modulator(object):
     """ * name
         * start
@@ -23,7 +22,7 @@ class Modulator(object):
     @property
     def start(self): return eval( self.desc['start'] )
 
-from Behaviour import MarkovBehaviour
+from .Behaviour import MarkovBehaviour
 class MarkovModulator(Modulator, MarkovBehaviour):
     """
         * name
@@ -62,7 +61,7 @@ class MarkovModulator(Modulator, MarkovBehaviour):
                 )
         self.mod_list.append(mod)
 
-from Behaviour import MVBehaviour
+from .Behaviour import MVBehaviour
 class MVModulator(Modulator, MVBehaviour):
     """
     Modulator defines the behaviour of generator within a range of time.

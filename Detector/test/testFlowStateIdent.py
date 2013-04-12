@@ -1,7 +1,6 @@
+from __future__ import print_function, division, absolute_import
 import unittest
-import sys
-sys.path.insert(0, "..")
-from Ident import *
+from ..Ident import *
 class FlowStateIdentTestCase(unittest.TestCase):
     def setUp(self):
         pass
@@ -19,7 +18,7 @@ class FlowStateIdentTestCase(unittest.TestCase):
         res2 = cls.get_state_likelihood([0, 1])
 
         # print res
-        print 'res2, ', res2
+        print('res2, ', res2)
 
 class FlowPairTestCase(unittest.TestCase):
     def setUp(self):

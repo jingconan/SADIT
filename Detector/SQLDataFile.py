@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """Class about parsing data files"""
+from __future__ import print_function, division, absolute_import
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 
-import sys
-sys.path.append("..")
 import _mysql
 from socket import inet_ntoa
 from struct import pack
 from util import DataEndException
-from DataFile import Data, HardDiskFileHandler
+from .Data import Data
+from .DataHandler import QuantizeDataHandler
 
 def long_to_dotted(ip):
     ip_addr = inet_ntoa(pack('!L', ip))
@@ -61,7 +61,7 @@ class SQLFile_SperottoIPOM2009(Data):
                 if rg[0] + self.min_time > self.max_time:
                     raise DataEndException("reach data end")
             else:
-                print 'rg_type', rg_type
+                print('rg_type', rg_type)
                 raise ValueError('unknow window type')
         else:
             SQL_SEN_WHERE = ""
@@ -93,7 +93,7 @@ class SQLFile_SperottoIPOM2009(Data):
         # return [line[0] for line in result] if len(fea) == 1 else result
         return result
 
-class SQLDataFileHandler_SperottoIPOM2009(HardDiskFileHandler):
+class SQLDataFileHandler_SperottoIPOM2009(QuantizeDataHandler):
     """"Data File wrapper for SperottoIPOM2009 format. it is store in mysql server, visit
     http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
     for more information"""
@@ -117,4 +117,4 @@ if __name__ ==  "__main__":
     # data_file.get_fea_slice([1, 10], 'flow')
 
     em = data_file.get_em([1, 1000], 'flow')
-    print 'em, ', em
+    print('em, ', em)

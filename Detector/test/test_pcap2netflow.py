@@ -1,8 +1,7 @@
 #!/usr/bin/env python
+from __future__ import print_function, division, absolute_import
 import sys
-sys.path.append("..")
-sys.path.append("../..")
-from Detector import *
+from ..Detector import *
 def test_pcap2netflow():
     ANO_ANA_DATA_FILE = './test_AnoAna.txt'
     DETECTOR_DESC = dict(

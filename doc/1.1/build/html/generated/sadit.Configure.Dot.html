@@ -1,0 +1,875 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Edge Module &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../index.html" />
+    <link rel="up" title="Configure Package" href="sadit.Configure.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="sadit.html" >sadit Package</a> &raquo;</li>
+          <li><a href="sadit.Configure.html" accesskey="U">Configure Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-sadit.Configure.Edge">
+<span id="edge-module"></span><h1><tt class="xref py py-mod docutils literal"><span class="pre">Edge</span></tt> Module<a class="headerlink" href="#module-sadit.Configure.Edge" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="sadit.Configure.Edge.NEdge">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Edge.</tt><tt class="descname">NEdge</tt><big>(</big><em>src</em>, <em>dst</em>, <em>attr</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Edge.html#NEdge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Edge.NEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Edge</span></tt></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_attribute_methods</span></tt>(obj_attributes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>(name)</td>
+<td>Get an attribute value by name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_attributes</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_destination</span></tt>()</td>
+<td>Get the edge&#8217;s destination node name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_parent_graph</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_sequence</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_source</span></tt>()</td>
+<td>Get the edges source node name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">parse_node_ref</span></tt>(node_str)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(name,&nbsp;value)</td>
+<td>Set an attribute value by name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_parent_graph</span></tt>(parent_graph)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_sequence</span></tt>(seq)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_string</span></tt>()</td>
+<td>Returns a string representation of the edge in dot language.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sadit.Configure.Network">
+<span id="network-module"></span><h1><tt class="xref py py-mod docutils literal"><span class="pre">Network</span></tt> Module<a class="headerlink" href="#module-sadit.Configure.Network" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="sadit.Configure.Network.Network">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Network.</tt><tt class="descname">Network</tt><a class="reference internal" href="../_modules/sadit/Configure/Network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Network.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Dot</span></tt></p>
+<p>Network Class specifiy the topology of the network.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="47%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>node_list</td>
+<td>list</td>
+<td>list of nodes</td>
+</tr>
+<tr class="row-even"><td>net_desc</td>
+<td>dict</td>
+<td>descriptor for the network</td>
+</tr>
+<tr class="row-odd"><td>norm_desc</td>
+<td>dict</td>
+<td>descriptor for the normal traffic</td>
+</tr>
+<tr class="row-even"><td>Node</td>
+<td>constructor {NNode, MarkovNode, MVNode}</td>
+<td>constructor to create new Node</td>
+</tr>
+<tr class="row-odd"><td>addr_helper</td>
+<td>Ipv4AddressHelper class</td>
+<td>manage Ipv4 Address</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Network.Network.InjectAnomaly" title="sadit.Configure.Network.Network.InjectAnomaly"><tt class="xref py py-obj docutils literal"><span class="pre">InjectAnomaly</span></tt></a>(A)</td>
+<td>Inject Anomaly into the network. A is the one type Anomaly</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_edge</span></tt>(graph_edge)</td>
+<td>Adds an edge object to the graph.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_node</span></tt>(graph_node)</td>
+<td>Adds a node object to the graph.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_subgraph</span></tt>(sgraph)</td>
+<td>Adds an subgraph object to the graph.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Network.Network.assign_link_interface_ip" title="sadit.Configure.Network.Network.assign_link_interface_ip"><tt class="xref py py-obj docutils literal"><span class="pre">assign_link_interface_ip</span></tt></a>(i,&nbsp;j)</td>
+<td>assign ip address for link between node i and node j</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">create</span></tt>([prog,&nbsp;format])</td>
+<td>Creates and returns a Postscript representation of the graph.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_attribute_methods</span></tt>(obj_attributes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>(name)</td>
+<td>Get an attribute value by name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_attributes</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_edge</span></tt>(src,&nbsp;dst)</td>
+<td>Retrieved an edge from the graph.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_edge_defaults</span></tt>(**attrs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_edge_list</span></tt>()</td>
+<td>Get the list of Edge instances.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_edges</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_graph_defaults</span></tt>(**attrs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_graph_type</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_name</span></tt>()</td>
+<td>Get the graph&#8217;s name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_next_sequence_number</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_node</span></tt>(name)</td>
+<td>Retrieved a node from the graph.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_node_defaults</span></tt>(**attrs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_node_list</span></tt>()</td>
+<td>Get the list of Node instances.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_nodes</span></tt>()</td>
+<td>Return an iterator.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_parent_graph</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_sequence</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_simplify</span></tt>()</td>
+<td>Get whether to simplify or not.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_strict</span></tt>(val)</td>
+<td>Get graph&#8217;s &#8216;strict&#8217; mode (True, False).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_subgraph</span></tt>(name)</td>
+<td>Retrieved a subgraph from the graph.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_subgraph_list</span></tt>()</td>
+<td>Get the list of Subgraph instances.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_subgraphs</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_suppress_disconnected</span></tt>(val)</td>
+<td>Get if suppress disconnected is set.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_top_graph_type</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_type</span></tt>()</td>
+<td>Get the graph&#8217;s type, &#8216;graph&#8217; or &#8216;digraph&#8217;.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Network.Network.init" title="sadit.Configure.Network.Network.init"><tt class="xref py py-obj docutils literal"><span class="pre">init</span></tt></a>(net_desc,&nbsp;norm_desc)</td>
+<td>Initialize the network</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(name,&nbsp;value)</td>
+<td>Set an attribute value by name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_edge_defaults</span></tt>(**attrs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_graph_defaults</span></tt>(**attrs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_graphviz_executables</span></tt>(paths)</td>
+<td>This method allows to manually specify the location of the GraphViz executables.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_name</span></tt>(graph_name)</td>
+<td>Set the graph&#8217;s name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_node_defaults</span></tt>(**attrs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_parent_graph</span></tt>(parent_graph)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_prog</span></tt>(prog)</td>
+<td>Sets the default program.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_sequence</span></tt>(seq)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_shape_files</span></tt>(file_paths)</td>
+<td>Add the paths of the required image files.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_simplify</span></tt>(simplify)</td>
+<td>Set whether to simplify or not.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_strict</span></tt>(val)</td>
+<td>Set graph to &#8216;strict&#8217; mode.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_suppress_disconnected</span></tt>(val)</td>
+<td>Suppress disconnected nodes in the output graph.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_type</span></tt>(graph_type)</td>
+<td>Set the graph&#8217;s type, &#8216;graph&#8217; or &#8216;digraph&#8217;.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_string</span></tt>()</td>
+<td>Returns a string representation of the graph in dot language.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Network.Network.write" title="sadit.Configure.Network.Network.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(fName)</td>
+<td>write the DOT file to <em>fName</em></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sadit.Configure.Network.Network.InjectAnomaly">
+<tt class="descname">InjectAnomaly</tt><big>(</big><em>A</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Network.html#Network.InjectAnomaly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Network.Network.InjectAnomaly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inject Anomaly into the network. A is the one type Anomaly</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>A</strong> : subclass of Anomaly</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>None</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Network.Network.assign_link_interface_ip">
+<tt class="descname">assign_link_interface_ip</tt><big>(</big><em>i</em>, <em>j</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Network.html#Network.assign_link_interface_ip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Network.Network.assign_link_interface_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>assign ip address for link between node i and node j</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>i, j</strong> : int</p>
+<blockquote>
+<div><p>Node id for two end points of the link</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>None</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p><cite>link_to_ip_map</cite> is a dictionary defining the ip address for each link.
+If the link can be founded in <cite>link_to_ip_map</cite>, corresponding ip
+address will be assigned, otherwise <cite>addr_helper</cite> will create a new
+subnetwork for this link and assign ip addresses accordingly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Network.Network.init">
+<tt class="descname">init</tt><big>(</big><em>net_desc</em>, <em>norm_desc</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Network.html#Network.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Network.Network.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>net_desc</strong> : dict</p>
+<blockquote>
+<div><p>descriptor for network</p>
+</div></blockquote>
+<p><strong>norm_desc</strong> : dict</p>
+<blockquote>
+<div><p>descriptor for normal traffic</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>None</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Network.Network.write">
+<tt class="descname">write</tt><big>(</big><em>fName</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Network.html#Network.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Network.Network.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>write the DOT file to <em>fName</em></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-sadit.Configure.Node">
+<span id="node-module"></span><h1><tt class="xref py py-mod docutils literal"><span class="pre">Node</span></tt> Module<a class="headerlink" href="#module-sadit.Configure.Node" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="sadit.Configure.Node.MVNode">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Node.</tt><tt class="descname">MVNode</tt><big>(</big><em>ipdests</em>, <em>node_seq</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sadit.Configure.Node.MarkovNode" title="sadit.Configure.Node.MarkovNode"><tt class="xref py py-class docutils literal"><span class="pre">sadit.Configure.Node.MarkovNode</span></tt></a></p>
+<p>Node for Multi Variable Node</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_interface_addr</span></tt>(addr)</td>
+<td>addr should be the CIDR format. e.g. 10.0.7.0/24</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.MVNode.add_modulator" title="sadit.Configure.Node.MVNode.add_modulator"><tt class="xref py py-obj docutils literal"><span class="pre">add_modulator</span></tt></a>(start,&nbsp;profile,&nbsp;generator_list)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_style</span></tt>(style)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clear_modulator</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_attribute_methods</span></tt>(obj_attributes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.MVNode.gen_to_id" title="sadit.Configure.Node.MVNode.gen_to_id"><tt class="xref py py-obj docutils literal"><span class="pre">gen_to_id</span></tt></a>(generator_list)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>(name)</td>
+<td>Get an attribute value by name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_attributes</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Node.MVNode.get_modulator" title="sadit.Configure.Node.MVNode.get_modulator"><tt class="xref py py-obj docutils literal"><span class="pre">get_modulator</span></tt></a>(start,&nbsp;profile,&nbsp;s_id_list,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_name</span></tt>()</td>
+<td>Get the node&#8217;s name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_parent_graph</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_port</span></tt>()</td>
+<td>Get the node&#8217;s port.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_sequence</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.MVNode.init_traffic" title="sadit.Configure.Node.MVNode.init_traffic"><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic</span></tt></a>(norm_desc,&nbsp;dst_nodes)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic_dynamic</span></tt>(norm_desc,&nbsp;dst_nodes)</td>
+<td>initialize normal traffic that is time varying</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic_static</span></tt>(norm_desc,&nbsp;dst_nodes)</td>
+<td>Initialize the normal traffic</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(name,&nbsp;value)</td>
+<td>Set an attribute value by name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_name</span></tt>(node_name)</td>
+<td>Set the node&#8217;s name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_parent_graph</span></tt>(parent_graph)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_sequence</span></tt>(seq)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">sync</span></tt>()</td>
+<td>sync to the dot property</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_string</span></tt>()</td>
+<td>Returns a string representation of the node in dot language.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sadit.Configure.Node.MVNode.add_modulator">
+<tt class="descname">add_modulator</tt><big>(</big><em>start</em>, <em>profile</em>, <em>generator_list</em>, <em>joint_dist=None</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.add_modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.add_modulator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.MVNode.gen_to_id">
+<tt class="descname">gen_to_id</tt><big>(</big><em>generator_list</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.gen_to_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.gen_to_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.MVNode.get_modulator">
+<tt class="descname">get_modulator</tt><big>(</big><em>start</em>, <em>profile</em>, <em>s_id_list</em>, <em>joint_dist</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.get_modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.get_modulator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.MVNode.init_traffic">
+<tt class="descname">init_traffic</tt><big>(</big><em>norm_desc</em>, <em>dst_nodes</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.init_traffic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.init_traffic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.MVNode.interval">
+<tt class="descname">interval</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.interval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.MVNode.joint_dist">
+<tt class="descname">joint_dist</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.joint_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.joint_dist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.MVNode.para_list">
+<tt class="descname">para_list</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.para_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.para_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.MVNode.profile">
+<tt class="descname">profile</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.MVNode.start">
+<tt class="descname">start</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MVNode.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MVNode.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sadit.Configure.Node.MarkovNode">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Node.</tt><tt class="descname">MarkovNode</tt><big>(</big><em>ipdests</em>, <em>node_seq</em>, <em>**markov_desc</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MarkovNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MarkovNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sadit.Configure.Node.NNode" title="sadit.Configure.Node.NNode"><tt class="xref py py-class docutils literal"><span class="pre">sadit.Configure.Node.NNode</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_interface_addr</span></tt>(addr)</td>
+<td>addr should be the CIDR format. e.g. 10.0.7.0/24</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.MarkovNode.add_modulator" title="sadit.Configure.Node.MarkovNode.add_modulator"><tt class="xref py py-obj docutils literal"><span class="pre">add_modulator</span></tt></a>(start,&nbsp;profile,&nbsp;generator_list)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_style</span></tt>(style)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clear_modulator</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_attribute_methods</span></tt>(obj_attributes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>(name)</td>
+<td>Get an attribute value by name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_attributes</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.MarkovNode.get_modulator" title="sadit.Configure.Node.MarkovNode.get_modulator"><tt class="xref py py-obj docutils literal"><span class="pre">get_modulator</span></tt></a>(start,&nbsp;profile,&nbsp;s_id_list,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_name</span></tt>()</td>
+<td>Get the node&#8217;s name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_parent_graph</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_port</span></tt>()</td>
+<td>Get the node&#8217;s port.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_sequence</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic</span></tt>(norm_desc,&nbsp;dst_nodes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic_dynamic</span></tt>(norm_desc,&nbsp;dst_nodes)</td>
+<td>initialize normal traffic that is time varying</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic_static</span></tt>(norm_desc,&nbsp;dst_nodes)</td>
+<td>Initialize the normal traffic</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(name,&nbsp;value)</td>
+<td>Set an attribute value by name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_name</span></tt>(node_name)</td>
+<td>Set the node&#8217;s name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_parent_graph</span></tt>(parent_graph)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_sequence</span></tt>(seq)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.MarkovNode.sync" title="sadit.Configure.Node.MarkovNode.sync"><tt class="xref py py-obj docutils literal"><span class="pre">sync</span></tt></a>()</td>
+<td>sync to the dot property</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_string</span></tt>()</td>
+<td>Returns a string representation of the node in dot language.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sadit.Configure.Node.MarkovNode.add_modulator">
+<tt class="descname">add_modulator</tt><big>(</big><em>start</em>, <em>profile</em>, <em>generator_list</em>, <em>markov_desc=None</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MarkovNode.add_modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MarkovNode.add_modulator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.MarkovNode.get_modulator">
+<tt class="descname">get_modulator</tt><big>(</big><em>start</em>, <em>profile</em>, <em>s_id_list</em>, <em>markov_desc</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MarkovNode.get_modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MarkovNode.get_modulator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.MarkovNode.s_id">
+<tt class="descname">s_id</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MarkovNode.s_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MarkovNode.s_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>generator source identifier</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.MarkovNode.sync">
+<tt class="descname">sync</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#MarkovNode.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.MarkovNode.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>sync to the dot property</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sadit.Configure.Node.NNode">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Node.</tt><tt class="descname">NNode</tt><big>(</big><em>ipdests</em>, <em>node_seq</em>, <em>**argv</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">pydot.Node</span></tt></p>
+<p>Normal Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ipdests</strong> : list of str</p>
+<blockquote>
+<div><p>ip table for the node</p>
+</div></blockquote>
+<p><strong>node_seq</strong> : int</p>
+<blockquote class="last">
+<div><p>id of the node</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="40%" />
+<col width="46%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ipdests</td>
+<td>list of str</td>
+<td>ip table for the node</td>
+</tr>
+<tr class="row-even"><td>node_seq</td>
+<td>int</td>
+<td>id of the node</td>
+</tr>
+<tr class="row-odd"><td>mod_num</td>
+<td>int</td>
+<td>number of modulators</td>
+</tr>
+<tr class="row-even"><td>obj_dict</td>
+<td>dict</td>
+<td>used to generate str</td>
+</tr>
+<tr class="row-odd"><td>norm_desc</td>
+<td>dict</td>
+<td>descriptor for normal traffic</td>
+</tr>
+<tr class="row-even"><td>modulator</td>
+<td>list of modulator classes</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>generator</td>
+<td>list of generator classes</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.add_interface_addr" title="sadit.Configure.Node.NNode.add_interface_addr"><tt class="xref py py-obj docutils literal"><span class="pre">add_interface_addr</span></tt></a>(addr)</td>
+<td>addr should be the CIDR format. e.g. 10.0.7.0/24</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.add_modulator" title="sadit.Configure.Node.NNode.add_modulator"><tt class="xref py py-obj docutils literal"><span class="pre">add_modulator</span></tt></a>(start,&nbsp;profile,&nbsp;generator)</td>
+<td>generator is a Generator Object</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_style</span></tt>(style)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.clear_modulator" title="sadit.Configure.Node.NNode.clear_modulator"><tt class="xref py py-obj docutils literal"><span class="pre">clear_modulator</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">create_attribute_methods</span></tt>(obj_attributes)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>(name)</td>
+<td>Get an attribute value by name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_attributes</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_name</span></tt>()</td>
+<td>Get the node&#8217;s name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_parent_graph</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_port</span></tt>()</td>
+<td>Get the node&#8217;s port.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_sequence</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.init_traffic" title="sadit.Configure.Node.NNode.init_traffic"><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic</span></tt></a>(norm_desc,&nbsp;dst_nodes)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.init_traffic_dynamic" title="sadit.Configure.Node.NNode.init_traffic_dynamic"><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic_dynamic</span></tt></a>(norm_desc,&nbsp;dst_nodes)</td>
+<td>initialize normal traffic that is time varying</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.init_traffic_static" title="sadit.Configure.Node.NNode.init_traffic_static"><tt class="xref py py-obj docutils literal"><span class="pre">init_traffic_static</span></tt></a>(norm_desc,&nbsp;dst_nodes)</td>
+<td>Initialize the normal traffic</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(name,&nbsp;value)</td>
+<td>Set an attribute value by name.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_name</span></tt>(node_name)</td>
+<td>Set the node&#8217;s name.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_parent_graph</span></tt>(parent_graph)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">set_sequence</span></tt>(seq)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Node.NNode.sync" title="sadit.Configure.Node.NNode.sync"><tt class="xref py py-obj docutils literal"><span class="pre">sync</span></tt></a>()</td>
+<td>sync to the dot property</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_string</span></tt>()</td>
+<td>Returns a string representation of the node in dot language.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.add_interface_addr">
+<tt class="descname">add_interface_addr</tt><big>(</big><em>addr</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.add_interface_addr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.add_interface_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>addr should be the CIDR format. e.g. 10.0.7.0/24</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.add_modulator">
+<tt class="descname">add_modulator</tt><big>(</big><em>start</em>, <em>profile</em>, <em>generator</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.add_modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.add_modulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>generator is a Generator Object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.clear_modulator">
+<tt class="descname">clear_modulator</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.clear_modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.clear_modulator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.init_traffic">
+<tt class="descname">init_traffic</tt><big>(</big><em>norm_desc</em>, <em>dst_nodes</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.init_traffic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.init_traffic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.init_traffic_dynamic">
+<tt class="descname">init_traffic_dynamic</tt><big>(</big><em>norm_desc</em>, <em>dst_nodes</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.init_traffic_dynamic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.init_traffic_dynamic" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialize normal traffic that is time varying</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.init_traffic_static">
+<tt class="descname">init_traffic_static</tt><big>(</big><em>norm_desc</em>, <em>dst_nodes</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.init_traffic_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.init_traffic_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the normal traffic</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.NNode.m_id">
+<tt class="descname">m_id</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.m_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.m_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>modulator identifier</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Node.NNode.s_id">
+<tt class="descname">s_id</tt><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.s_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.s_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>generator source identifier</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sadit.Configure.Node.NNode.sync">
+<tt class="descname">sync</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#NNode.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.NNode.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>sync to the dot property</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="sadit.Configure.Node.check_pipe_para">
+<tt class="descclassname">sadit.Configure.Node.</tt><tt class="descname">check_pipe_para</tt><big>(</big><em>para</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Node.html#check_pipe_para"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Node.check_pipe_para" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>para</strong> : list or str</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>if para is list, return itself, if para is str starts with &#8220;&lt; &#8221; and</dt>
+<dd><p class="first last">follows by a file name, load the parameters in the txt</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong> :</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>para <span class="classifier-delimiter">:</span> <span class="classifier">lsit</span></dt>
+<dd><p class="first last">a list of parameters</p>
+</dd>
+</dl>
+</div></blockquote>
+<p class="last"><strong>&#8212;&#8212;&#8212;&#8212;&#8211;</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">Edge</span></tt> Module</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sadit.Configure.Network"><tt class="docutils literal"><span class="pre">Network</span></tt> Module</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sadit.Configure.Node"><tt class="docutils literal"><span class="pre">Node</span></tt> Module</a><ul>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/generated/sadit.Configure.Dot.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="sadit.html" >sadit Package</a> &raquo;</li>
+          <li><a href="sadit.Configure.html" >Configure Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

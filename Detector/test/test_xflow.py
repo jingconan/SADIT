@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-import sys
-sys.path.append("..")
-sys.path.append("../..")
-from Detector import *
+from __future__ import print_function, division, absolute_import
+from ..Detector import *
 
 def test_xflow_2003():
     ANO_ANA_DATA_FILE = './test_AnoAna.txt'
@@ -68,7 +66,7 @@ if __name__ == "__main__":
     start_t = time.clock()
     test_xflow_2003()
     end_t = time.clock()
-    print 'total running time is: %f'%(end_t - start_t)
+    print('total running time is: %f'%(end_t - start_t))
 
 
 

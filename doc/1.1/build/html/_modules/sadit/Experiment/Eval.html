@@ -1,0 +1,519 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Experiment.Eval &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Experiment.Eval</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; Evaluate the performance of detector</span>
+<span class="sd">get the statistical quantify for the hypotheis test</span>
+<span class="sd">like False Alarm Rate.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">Detector.DataParser</span> <span class="kn">import</span> <span class="n">RawParseData</span>
+<span class="kn">from</span> <span class="nn">Detect</span> <span class="kn">import</span> <span class="n">Detect</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">update_not_none</span>
+<span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<div class="viewcode-block" id="roc"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.roc">[docs]</a><span class="k">def</span> <span class="nf">roc</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">tpv</span><span class="p">,</span> <span class="n">fnv</span><span class="p">,</span> <span class="n">tnv</span><span class="p">,</span> <span class="n">fpv</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">tpr</span> <span class="o">=</span> <span class="p">[</span> <span class="n">tp</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">tp</span><span class="p">,</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tpv</span><span class="p">,</span> <span class="n">fnv</span><span class="p">)]</span>
+    <span class="c"># calculate the false positive rate</span>
+    <span class="n">fpr</span> <span class="o">=</span> <span class="p">[</span> <span class="n">fp</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">fp</span> <span class="o">+</span> <span class="n">tn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fp</span><span class="p">,</span> <span class="n">tn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fpv</span><span class="p">,</span> <span class="n">tnv</span><span class="p">)]</span>
+    <span class="k">print</span> <span class="s">&#39;fpr, &#39;</span><span class="p">,</span> <span class="n">fpr</span>
+    <span class="k">print</span> <span class="s">&#39;tpr, &#39;</span><span class="p">,</span> <span class="n">tpr</span>
+    <span class="k">return</span> <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span>
+</div>
+<div class="viewcode-block" id="get_quantitative"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.get_quantitative">[docs]</a><span class="k">def</span> <span class="nf">get_quantitative</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">W</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**A** is the referece, and **B** is the detected result, **W** is the whole set</span>
+<span class="sd">    calculate the true positive, false negative, true negative and false positive</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="c"># no of true positive, no of elements that belongs to B and also belongs to A</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span>
+
+    <span class="c"># no of false negative no of elements that belongs to A but doesn&#39;t belong to B</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">B</span><span class="p">)</span>
+
+    <span class="c"># no of true negative, no of element that not belongs to A and not belong to B</span>
+    <span class="n">tn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">W</span> <span class="o">-</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span>
+    <span class="c"># no of false positive, no of element that not belongs to A but belongs to B</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span> <span class="o">-</span> <span class="n">A</span><span class="p">)</span>
+
+    <span class="c"># sensitivity is the probability of a alarm given that the this flow is anormalous</span>
+    <span class="n">sensitivity</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="c"># specificity is the probability of there isn&#39;t alarm given that the flow is normal</span>
+    <span class="n">specificity</span> <span class="o">=</span> <span class="n">tn</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">tn</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tp</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">specificity</span>
+
+<span class="c">#############################################################################</span>
+<span class="c">##         Visualization Part                                           #####</span>
+<span class="c">#############################################################################</span></div>
+<div class="viewcode-block" id="vis"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.vis">[docs]</a><span class="k">def</span> <span class="nf">vis</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="n">ident_type_set</span><span class="p">,</span> <span class="n">fea_handler</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">pic_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pic_show</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">markers</span><span class="o">=</span><span class="s">&#39;&gt;^+*&#39;</span><span class="p">,</span> <span class="n">line_styles</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="s">&#39;-.&#39;</span><span class="p">,</span> <span class="s">&#39;--&#39;</span><span class="p">),</span>
+        <span class="n">subplot</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; visualize the attribute</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">subplot</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">f</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subplot</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">subplot</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">subplot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">subplot</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">legend_txt</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ident_type</span> <span class="ow">in</span> <span class="n">ident_type_set</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">rec</span><span class="p">[</span><span class="n">ident_type</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">fea</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">fea_handler</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">vis_data</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vis_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vis_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">vis_data</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vis_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vis_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vis_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Unknown visualization data, check your feature handler please&#39;</span><span class="p">)</span>
+            <span class="c"># legend_txt.append(&#39;%ith %s&#39;%(i,fea))</span>
+            <span class="n">legend_txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">ident_type</span><span class="p">,</span><span class="n">fea</span><span class="p">))</span>
+
+    <span class="c"># plt.legend(legend_txt, loc=4, numpoints=1)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">legend_txt</span><span class="p">,</span> <span class="s">&#39;best&#39;</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">ls</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">markers</span><span class="p">),</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">line_styles</span><span class="p">)):</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">set_marker</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">set_linestyle</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xlabel</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylabel</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylim</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xlim</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pic_name</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">pic_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pic_show</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="plot_roc"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.plot_roc">[docs]</a><span class="k">def</span> <span class="nf">plot_roc</span><span class="p">(</span><span class="n">markers</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; plot the ROC curve given the data &quot;&quot;&quot;</span>
+    <span class="n">fea_handler</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ROC</span><span class="o">=</span><span class="n">roc</span><span class="p">)</span>
+    <span class="n">vis</span><span class="p">(</span><span class="n">fea_handler</span><span class="o">=</span><span class="n">fea_handler</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">],</span> <span class="n">markers</span><span class="o">=</span><span class="n">markers</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_roc_curve_ident"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.plot_roc_curve_ident">[docs]</a><span class="k">def</span> <span class="nf">plot_roc_curve_ident</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;plot ROC Curve for detection with flow state(transition pair) identification&quot;&quot;&quot;</span>
+    <span class="n">plot_roc</span><span class="p">(</span>
+            <span class="c"># data_name = &#39;./difference_ab_state_num.pk&#39;,</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/compare_ident.pk&#39;</span><span class="p">,</span>
+            <span class="c"># ident_type_set = [&#39;ComponentFlowStateIdent&#39;, &#39;DerivativeFlowStateIdent&#39;],</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ComponentFlowStateIdent&#39;</span><span class="p">,</span> <span class="s">&#39;ComponentFlowPairIdent&#39;</span><span class="p">],</span>
+            <span class="c"># ident_type_set = [&#39;ComponentFlowPairIdent&#39;],</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;ROC curve of detector with component flow identification&#39;</span><span class="p">,</span>
+            <span class="c"># xlabel = &#39;false positive rate&#39;,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;true positive rate&#39;</span><span class="p">,</span>
+            <span class="c"># pic_name = &#39;./flow_ident_roc.eps&#39;,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="c"># subplot= [None, 211],</span>
+            <span class="n">subplot</span><span class="o">=</span> <span class="mi">211</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="n">plot_roc</span><span class="p">(</span>
+            <span class="c"># data_name = &#39;./difference_ab_state_num.pk&#39;,</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/compare_ident.pk&#39;</span><span class="p">,</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;DerivativeFlowStateIdent&#39;</span><span class="p">,</span> <span class="s">&#39;DerivativeFlowPairIdent&#39;</span><span class="p">],</span>
+            <span class="c"># ident_type_set = [&#39;DerivativeFlowPairIdent&#39;],</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;ROC curve of detector with derivative flow identification&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;false positive rate&#39;</span><span class="p">,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;true positive rate&#39;</span><span class="p">,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/flow_ident_roc.eps&#39;</span><span class="p">,</span>
+            <span class="c"># subplot = [None, 211],</span>
+            <span class="n">subplot</span> <span class="o">=</span> <span class="mi">212</span><span class="p">,</span>
+            <span class="c"># pic_show = True</span>
+            <span class="p">)</span></div>
+<div class="viewcode-block" id="plot_roc_curve"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.plot_roc_curve">[docs]</a><span class="k">def</span> <span class="nf">plot_roc_curve</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+    <span class="n">plot_roc</span><span class="p">(</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/diff_ab_win_num.pk&#39;</span><span class="p">,</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mf&#39;</span><span class="p">,</span> <span class="s">&#39;mb&#39;</span><span class="p">],</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;ROC curve of stochastic anomaly detector&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;false positive rate&#39;</span><span class="p">,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;true positive rate&#39;</span><span class="p">,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/flow_roc.eps&#39;</span><span class="p">,</span>
+            <span class="c"># pic_show = True</span>
+            <span class="n">markers</span><span class="o">=</span><span class="s">&#39;o+&#39;</span>
+            <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_roc_curve_seperate"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.plot_roc_curve_seperate">[docs]</a><span class="k">def</span> <span class="nf">plot_roc_curve_seperate</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+    <span class="n">plot_roc</span><span class="p">(</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/diff_ab_win_num.pk&#39;</span><span class="p">,</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mf&#39;</span><span class="p">],</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;ROC curve of stochastic anomaly detector&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;false positive rate&#39;</span><span class="p">,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;true positive rate&#39;</span><span class="p">,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/flow_roc.eps&#39;</span><span class="p">,</span>
+            <span class="c"># pic_show = True</span>
+            <span class="n">markers</span><span class="o">=</span><span class="s">&#39;o+&#39;</span><span class="p">,</span>
+            <span class="n">subplot</span> <span class="o">=</span> <span class="mi">211</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="n">plot_roc</span><span class="p">(</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/diff_ab_win_num.pk&#39;</span><span class="p">,</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mb&#39;</span><span class="p">],</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;ROC curve of stochastic anomaly detector&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;false positive rate&#39;</span><span class="p">,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;true positive rate&#39;</span><span class="p">,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/flow_roc.eps&#39;</span><span class="p">,</span>
+            <span class="c"># pic_show = True</span>
+            <span class="n">markers</span><span class="o">=</span><span class="s">&#39;o+&#39;</span><span class="p">,</span>
+            <span class="n">subplot</span> <span class="o">=</span> <span class="mi">212</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">pass</span>
+
+</div>
+<span class="k">def</span> <span class="nf">_vis_eval_diff_ab_state_num</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+    <span class="n">vis</span><span class="p">(</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span><span class="s">&#39;/compare_ident.pk&#39;</span><span class="p">,</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ComponentFlowPairIdent&#39;</span><span class="p">,</span> <span class="s">&#39;DerivativeFlowPairIdent&#39;</span><span class="p">],</span>
+            <span class="n">fea_handler</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">sensitivity</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">specificity</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+                <span class="p">),</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;sensitivity and specificity vs no. of abnormal flow transition pair&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;no. of abnormal flow transition pair&#39;</span><span class="p">,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;sensitivity and specificity&#39;</span><span class="p">,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span><span class="s">&#39;/difference_ab_tran_pair_num_sens_spec.eps&#39;</span><span class="p">,</span>
+            <span class="c"># pic_show = True</span>
+            <span class="p">)</span>
+
+
+
+    <span class="n">vis</span><span class="p">(</span>
+            <span class="n">data_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span><span class="s">&#39;/compare_ident.pk&#39;</span><span class="p">,</span>
+            <span class="n">ident_type_set</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ComponentFlowPairIdent&#39;</span><span class="p">,</span> <span class="s">&#39;DerivativeFlowPairIdent&#39;</span><span class="p">],</span>
+            <span class="n">fea_handler</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">fnr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="n">fpr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]],</span>
+                <span class="p">),</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;fnr and fpr vs no. of abnormal flow transition pair&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;no. of abnormal flow transition pair&#39;</span><span class="p">,</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;fnr and fpr&#39;</span><span class="p">,</span>
+            <span class="n">pic_name</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span><span class="s">&#39;/difference_ab_tran_pair_num_fnr_fpr.eps&#39;</span>
+            <span class="p">)</span>
+
+
+<div class="viewcode-block" id="Eval"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval">[docs]</a><span class="k">class</span> <span class="nc">Eval</span><span class="p">(</span><span class="n">Detect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;plot ROC curve for the hypothesis test&quot;&quot;&quot;</span>
+    <span class="n">OUT_STRING</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;tp: </span><span class="si">%f</span><span class="se">\t</span><span class="s"> fn: </span><span class="si">%f</span><span class="se">\t</span><span class="s"> tn: </span><span class="si">%f</span><span class="se">\t</span><span class="s"> fp: </span><span class="si">%f</span><span class="s"></span>
+<span class="s">sensitivity: </span><span class="si">%f</span><span class="se">\t</span><span class="s">specificity: </span><span class="si">%f</span><span class="s"></span>
+<span class="s">&quot;&quot;&quot;</span>
+    <span class="n">real_ab_flow_seq</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="Eval.init_parser"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.init_parser">[docs]</a>    <span class="k">def</span> <span class="nf">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Eval</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">init_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--max_search_mf_states&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;max number of abnormal model free states it will search&quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--max_search_mb_states&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;max number of abnormal model free states it will</span>
+<span class="s">                search&quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-a&#39;</span><span class="p">,</span> <span class="s">&#39;--ab_flows_data&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;file name for the abnormal flows exported by simulator</span>
+<span class="s">                itself. used as reference&quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--res_folder&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;result folder&quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--plot&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;plot the result or not&quot;&quot;&quot;</span>
+                <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Eval.get_ab_flow_seq"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.get_ab_flow_seq">[docs]</a>    <span class="k">def</span> <span class="nf">get_ab_flow_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;get the sequence of all abnormal flows, get the reference ground truth&quot;&quot;&quot;</span>
+        <span class="n">normal_flow_file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normal_flow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fea_name</span> <span class="o">=</span> <span class="n">RawParseData</span><span class="p">(</span><span class="n">normal_flow_file_name</span><span class="p">)</span>
+
+        <span class="n">ab_flow_file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;ab_flows_data&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fea_name</span> <span class="o">=</span>  <span class="n">RawParseData</span><span class="p">(</span><span class="n">ab_flow_file_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">normal_flow</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">]</span>
+
+    <span class="c"># def eval_mutiple(self):</span>
+    <span class="c">#     for ab_win_num in xrange(1, 20, 2):</span>
+    <span class="c">#         for ab_states_num in [2, 4]:</span>
+    <span class="c">#             print &#39;ab_win_num, &#39;, ab_win_num</span>
+    <span class="c">#             res = self.eval(ident_type=&#39;ComponentFlowStateIdent&#39;,</span>
+    <span class="c">#                     entropy_type=&#39;mf&#39;,</span>
+    <span class="c">#                     ab_states_num=ab_states_num,</span>
+    <span class="c">#                     ab_win_num=ab_win_num)</span>
+    <span class="c">#             print self.OUT_STRING%res</span>
+</div>
+<div class="viewcode-block" id="Eval.eval_diff_ab_win_num"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.eval_diff_ab_win_num">[docs]</a>    <span class="k">def</span> <span class="nf">eval_diff_ab_win_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;eval the results under difference abnormal window number&quot;&quot;&quot;</span>
+        <span class="n">entropy_type_vec</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mf&#39;</span><span class="p">,</span> <span class="s">&#39;mb&#39;</span><span class="p">]</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">entropy_type</span> <span class="ow">in</span> <span class="n">entropy_type_vec</span><span class="p">:</span>
+            <span class="n">rec</span><span class="p">[</span><span class="n">entropy_type</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ab_win_num</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&#39;ab_win_num, &#39;</span><span class="p">,</span> <span class="n">ab_win_num</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">ab_win_num</span><span class="o">=</span><span class="n">ab_win_num</span><span class="p">,</span> <span class="n">entropy_type</span><span class="o">=</span><span class="n">entropy_type</span><span class="p">)</span>
+                <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">OUT_STRING</span><span class="o">%</span><span class="n">res</span>
+                <span class="n">rec</span><span class="p">[</span><span class="n">entropy_type</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+        <span class="c"># import ipdb;ipdb.set_trace()</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s">&#39;/diff_ab_win_num.pk&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Eval.compare_ident_method"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.compare_ident_method">[docs]</a>    <span class="k">def</span> <span class="nf">compare_ident_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ab_win_num</span><span class="p">,</span> <span class="n">res_folder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; compare different identification method.</span>
+
+<span class="sd">        calculate the statistical measure to show the performance refer the</span>
+<span class="sd">        return value of self.eval for the metric calculated for different</span>
+<span class="sd">        identification method.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------------------</span>
+<span class="sd">        ab_win_num : int</span>
+<span class="sd">            specify the number of windows that selected as abnormal window. So</span>
+<span class="sd">            it influence the performance of the original stochasticl</span>
+<span class="sd">            detecotring before applying the flow state identification</span>
+<span class="sd">            techiniques. More specifically, it influence the largest true</span>
+<span class="sd">            positive rate the stotchastic detector can achieve.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">idents</span><span class="o">=</span> <span class="p">{</span>
+                <span class="s">&#39;ComponentFlowStateIdent&#39;</span><span class="p">:</span><span class="s">&#39;mf&#39;</span><span class="p">,</span>
+                <span class="s">&#39;DerivativeFlowStateIdent&#39;</span><span class="p">:</span><span class="s">&#39;mf&#39;</span><span class="p">,</span>
+                <span class="s">&#39;ComponentFlowPairIdent&#39;</span><span class="p">:</span><span class="s">&#39;mb&#39;</span><span class="p">,</span>
+                <span class="s">&#39;DerivativeFlowPairIdent&#39;</span><span class="p">:</span><span class="s">&#39;mb&#39;</span><span class="p">,</span>
+                <span class="p">}</span>
+        <span class="c"># max_ab_state_num = dict(mf=12, mb=144) # it influence the max ab_state_num it will search</span>
+        <span class="n">max_ab_state_num</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;max_search_mf_states&#39;</span><span class="p">],</span>
+                <span class="n">mb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;max_search_mb_states&#39;</span><span class="p">])</span> <span class="c"># it influence the max ab_state_num it will search</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idents</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="p">[</span><span class="nb">list</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">idents</span><span class="p">))]))</span>
+        <span class="k">for</span> <span class="n">ident_type</span><span class="p">,</span> <span class="n">entropy_type</span> <span class="ow">in</span> <span class="n">idents</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">print</span> <span class="s">&#39;ident_type, &#39;</span><span class="p">,</span> <span class="n">ident_type</span>
+            <span class="k">for</span> <span class="n">ab_states_num</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">max_ab_state_num</span><span class="p">[</span><span class="n">entropy_type</span><span class="p">]):</span>
+                <span class="k">print</span> <span class="s">&#39;ab_states_num, &#39;</span><span class="p">,</span> <span class="n">ab_states_num</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">ident_type</span><span class="p">,</span> <span class="n">entropy_type</span><span class="p">,</span>
+                        <span class="n">ab_states_num</span><span class="o">=</span><span class="n">ab_states_num</span><span class="p">,</span>
+                        <span class="n">ab_win_num</span><span class="o">=</span><span class="n">ab_win_num</span><span class="p">)</span>
+
+                <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">OUT_STRING</span><span class="o">%</span><span class="n">res</span>
+                <span class="n">rec</span><span class="p">[</span><span class="n">ident_type</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+        <span class="c"># import ipdb;ipdb.set_trace()</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">res_folder</span> <span class="o">+</span> <span class="s">&#39;/compare_ident.pk&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Eval.eval_hoeffding"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.eval_hoeffding">[docs]</a>    <span class="k">def</span> <span class="nf">eval_hoeffding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">false_alarm_rate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;evaluate the performance of detector under the hoeffding optimal rule&quot;&quot;&quot;</span>
+        <span class="c"># false_alarm_rate = 0.05</span>
+        <span class="n">entropy_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span><span class="o">.</span><span class="n">get_hoeffding_threshold</span><span class="p">(</span><span class="n">false_alarm_rate</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">ident_type</span><span class="o">=</span><span class="s">&#39;ComponentFlowStateIdent&#39;</span><span class="p">,</span>
+                <span class="n">entropy_type</span><span class="o">=</span><span class="s">&#39;mf&#39;</span><span class="p">,</span>
+                <span class="n">entropy_threshold</span><span class="o">=</span><span class="n">entropy_threshold</span><span class="p">,</span>
+                <span class="n">ab_states_num</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">OUT_STRING</span><span class="o">%</span><span class="n">res</span>
+</div>
+<div class="viewcode-block" id="Eval.eval"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ident_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">entropy_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">portion</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ab_states_num</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">entropy_threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ab_win_portion</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ab_win_num</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; evaluate a method</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ---------------------------</span>
+<span class="sd">        ident_type, entropy_type, portion, ab_states_num :</span>
+<span class="sd">            See StoDetector.FBAnoDetector.ident for the meaning of these</span>
+<span class="sd">            parameters</span>
+
+<span class="sd">        entropy_threshold, ab_win_portion, ab_win_num,</span>
+<span class="sd">            See StoDetector.FBAnoDetector.get_ab_flow_seq for the meaning of</span>
+<span class="sd">            these parameters</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">        ---------------------------</span>
+<span class="sd">        calculate the following metrics for a given detection</span>
+<span class="sd">            - true positive (TP),</span>
+<span class="sd">            - false negative (FN),</span>
+<span class="sd">            - true negative (TN),</span>
+<span class="sd">            - false positive (FP),</span>
+<span class="sd">            - sensitivity and specificity</span>
+<span class="sd">        1. **sensitivity** is the probability of a alarm given that the this</span>
+<span class="sd">        flow is anormalous. 2. **specificity** is the probability of there</span>
+<span class="sd">        isn&#39;t alarm given that the flow is normal</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">real_ab_flow_seq</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">real_ab_flow_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ab_flow_seq</span><span class="p">()</span>
+
+        <span class="c"># identify the sequence for abnormal flows states</span>
+        <span class="n">ab_states</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">ident_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">ab_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span><span class="o">.</span><span class="n">ident</span><span class="p">(</span><span class="n">ident_type</span><span class="p">,</span>
+                    <span class="n">entropy_type</span><span class="p">,</span> <span class="n">portion</span><span class="p">,</span> <span class="n">ab_states_num</span><span class="p">,</span>
+                    <span class="n">entropy_threshold</span><span class="p">,</span> <span class="n">ab_win_portion</span><span class="p">,</span> <span class="n">ab_win_num</span><span class="p">)</span>
+
+        <span class="c"># calculate sequence for all flows that are identified as abnormal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ab_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span><span class="o">.</span><span class="n">get_ab_flow_seq</span><span class="p">(</span><span class="n">entropy_type</span><span class="p">,</span>
+                <span class="n">entropy_threshold</span><span class="p">,</span> <span class="n">ab_win_portion</span><span class="p">,</span> <span class="n">ab_win_num</span><span class="p">,</span>
+                <span class="n">ab_states</span><span class="p">)</span>
+
+        <span class="k">print</span> <span class="s">&#39;ab_states, &#39;</span><span class="p">,</span> <span class="n">ab_states</span>
+        <span class="k">print</span> <span class="s">&#39;abnormal window indices are: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span><span class="o">.</span><span class="n">ab_win_idx</span>
+
+        <span class="k">return</span> <span class="n">get_quantitative</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_ab_flow_seq</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ab_seq</span><span class="p">,</span>
+                <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normal_flow</span><span class="p">)))</span>
+</div>
+<div class="viewcode-block" id="Eval.run"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Eval.Eval.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;DETECTOR_DESC&#39;</span><span class="p">])</span>
+        <span class="n">update_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+
+        <span class="n">rf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;res_folder&#39;</span><span class="p">]</span>
+        <span class="n">ab_win_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;ab_win_num&#39;</span><span class="p">]</span>
+
+        <span class="c"># only plot the result</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;plot&#39;</span><span class="p">]:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">plot_roc_curve</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">plot_roc_curve_ident</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">plot_roc_curve_seperate</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">rf</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">detect</span><span class="p">()</span>
+
+        <span class="c"># compare different identification method under a ab_win_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compare_ident_method</span><span class="p">(</span><span class="n">ab_win_num</span><span class="p">,</span> <span class="n">rf</span><span class="p">)</span>
+
+        <span class="c"># evaluate under different ab_win_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_diff_ab_win_num</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
+
+        <span class="c"># evaluate hoeffding test rule</span>
+        <span class="n">false_alarm_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;false_alarm_rate&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_hoeffding</span><span class="p">(</span><span class="n">false_alarm_rate</span><span class="p">)</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">settings</span>
+    <span class="n">exper</span> <span class="o">=</span> <span class="n">Eval</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+    <span class="c"># exper.configure()</span>
+    <span class="c"># exper.simulate()</span>
+    <span class="n">exper</span><span class="o">.</span><span class="n">detect</span><span class="p">()</span>
+
+    <span class="n">exper</span><span class="o">.</span><span class="n">compare_ident_method</span><span class="p">()</span>
+    <span class="n">exper</span><span class="o">.</span><span class="n">plot_roc_curve_ident</span><span class="p">()</span>
+    <span class="c"># exper._vis_eval_diff_ab_state_num()</span>
+
+    <span class="c"># exper.eval_diff_ab_win_num()</span>
+    <span class="c"># exper.plot_roc_curve()</span>
+    <span class="c"># exper.plot_roc_curve_seperate()</span>
+
+    <span class="c"># exper.eval_mutiple()</span>
+    <span class="c"># exper.eval_hoeffding()</span>
+    <span class="c"># detector.plot_entropy()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,11 +1,11 @@
+from __future__ import print_function, division, absolute_import
 from pydot import Node
-import sys; sys.path.append("..")
 from util import types, Load
-from mod_util import choose_ip_addr
-
-from Generator import get_generator
-from Modulator import Modulator, MarkovModulator, MVModulator
 from copy import deepcopy
+
+from .mod_util import choose_ip_addr
+from .Generator import get_generator
+from .Modulator import Modulator, MarkovModulator, MVModulator
 
 # def load_base_traffic(f_name):
 #     """  Load Base Traffic
@@ -34,13 +34,13 @@ from numpy import loadtxt
 def check_pipe_para(para):
     """
 
-    Parameters:
+    Parameters
     ---------------
     para : list or str
         if para is list, return itself, if para is str starts with "< " and
             follows by a file name, load the parameters in the txt
 
-    Returns:
+    Returns
         para : lsit
             a list of parameters
     --------------
@@ -51,6 +51,31 @@ def check_pipe_para(para):
     return para
 
 class NNode(Node):
+    """ Normal Node
+
+    Parameters
+    ---------------
+    ipdests : list of str
+        ip table for the node
+    node_seq : int
+        id of the node
+
+    Attributes
+    ----------------
+    ipdests : list of str
+        ip table for the node
+    node_seq : int
+        id of the node
+    mod_num : int
+        number of modulators
+    obj_dict : dict
+        used to generate str
+    norm_desc : dict
+        descriptor for normal traffic
+    modulator : list of modulator classes
+    generator : list of generator classes
+
+    """
     # node_seq = 0
     def __init__(self, ipdests, node_seq, **argv):
         assert( type(ipdests)== types.TupleType or type(ipdests)== types.ListType )
@@ -130,7 +155,7 @@ class NNode(Node):
     def init_traffic_dynamic(self, norm_desc, dst_nodes):
         """  initialize normal traffic that is time varying
 
-        Notes:
+        Notes
         ----------------------------
         """
         self.norm_desc = norm_desc
@@ -196,7 +221,7 @@ class NNode(Node):
 
 
     def clear_modulator(self):
-        self.traffic = ''
+        # self.traffic = '' # FIXME remove
         self.obj_dict['attributes']['mod_num'] = '0'
 
 import copy

@@ -1,10 +1,12 @@
-from Node import *
-from Edge import *
-from Generator import *
-from mod_util import GetIPAdress, FixQuoteBug
-
-from Address import Ipv4AddressHelper
+from __future__ import print_function, division, absolute_import
+from pydot import Dot
 from util import get_net_addr, CIDR_to_subnet_mask
+
+from .Edge import NEdge
+from .Node import NNode, MarkovNode, MVNode
+from .mod_util import GetIPAdress, FixQuoteBug
+from .Address import Ipv4AddressHelper
+
 
 node_map = {
         'NNode':NNode,
@@ -16,20 +18,30 @@ node_map = {
 ##     Main Class Definition     ###
 ####################################
 class Network(Dot):
-    ''' Network Class specifiy the topology of the network.
-    '''
+    """ Network Class specifiy the topology of the network.
+
+
+    Attributes
+    -------------
+    node_list : list
+        list of nodes
+    net_desc : dict
+        descriptor for the network
+    norm_desc : dict
+        descriptor for the normal traffic
+    Node : constructor {NNode, MarkovNode, MVNode}
+        constructor to create new Node
+    addr_helper : Ipv4AddressHelper class
+        manage Ipv4 Address
+
+    """
     def __init__(self):
         Dot.__init__(self, 'SimConf', graph_type='graph')
         self.node_list = []
-        self.NODE_NUM = 0
-        self.IPSrcSet, self.AnoSet, _ = GetIPAdress()
-        self.mv = None
+        self.NODE_NUM = 0 # FIXME check whether can remove it
+        self.IPSrcSet, self.AnoSet, _ = GetIPAdress() # FIXME Remove it
+        self.mv = None # FIXME remove it.
         # self.Node = node_init_handle
-
-        # network = '10.0.7.0'
-        # mask = '255.255.255.0'
-        # base = '0.0.0.4'
-        # self.addr_helper = Ipv4AddressHelper(network, mask, base)
 
     def _init_addr_helper(self):
         """initialize the address helper"""
@@ -39,6 +51,19 @@ class Network(Dot):
         self.addr_helper = Ipv4AddressHelper(network, mask, base)
 
     def init(self, net_desc, norm_desc):
+        """  Initialize the network
+
+        Parameters
+        ---------------
+        net_desc : dict
+            descriptor for network
+        norm_desc : dict
+            descriptor for normal traffic
+
+        Returns
+        --------------
+        None
+        """
         self.net_desc = net_desc
         self.norm_desc = norm_desc
 
@@ -117,6 +142,25 @@ class Network(Dot):
                     self.add_edge(edge)
 
     def assign_link_interface_ip(self, i, j):
+        """ assign ip address for link between node i and node j
+
+        Parameters
+        ---------------
+        i, j : int
+            Node id for two end points of the link
+
+        Returns
+        --------------
+        None
+
+        Notes
+        --------------
+        `link_to_ip_map` is a dictionary defining the ip address for each link.
+        If the link can be founded in `link_to_ip_map`, corresponding ip
+        address will be assigned, otherwise `addr_helper` will create a new
+        subnetwork for this link and assign ip addresses accordingly.
+
+        """
         # if link_to_ip_map is defined and (i,j) is inside
         if_addr = self.net_desc.get('link_to_ip_map', {}).get((i,j), None)
         if if_addr is not None:
@@ -130,7 +174,9 @@ class Network(Dot):
         self.addr_helper.NewNetwork()
 
     def write(self, fName):
-        '''write the DOT file to *fName*'''
+        """write the DOT file to *fName*
+
+        """
         for node in self.node_list:
             node.sync()
         Dot.write(self, fName)
@@ -138,5 +184,15 @@ class Network(Dot):
         FixQuoteBug(fName)
 
     def InjectAnomaly(self, A):
-        '''Inject Anomaly into the network. A is the one type Anomaly'''
+        """ Inject Anomaly into the network. A is the one type Anomaly
+
+        Parameters
+        ---------------------
+        A : subclass of Anomaly
+
+        Returns
+        ----------------------
+        None
+
+        """
         A.run(self)

@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Detector.PCA &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Detector.PCA</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; a small class for Principal Component Analysis</span>
+<span class="sd">Usage:</span>
+<span class="sd">    p = PCA( A, fraction=0.90 )</span>
+<span class="sd">In:</span>
+<span class="sd">    A: an array of e.g. 1000 observations x 20 variables, 1000 rows x 20 columns</span>
+<span class="sd">    fraction: use principal components that account for e.g.</span>
+<span class="sd">        90 % of the total variance</span>
+
+<span class="sd">Out:</span>
+<span class="sd">    p.U, p.d, p.Vt: from numpy.linalg.svd, A = U . d . Vt</span>
+<span class="sd">    p.dinv: 1/d or 0, see NR</span>
+<span class="sd">    p.eigen: the eigenvalues of A*A, in decreasing order (p.d**2).</span>
+<span class="sd">        eigen[j] / eigen.sum() is variable j&#39;s fraction of the total variance;</span>
+<span class="sd">        look at the first few eigen[] to see how many PCs get to 90 %, 95 % ...</span>
+<span class="sd">    p.npc: number of principal components,</span>
+<span class="sd">        e.g. 2 if the top 2 eigenvalues are &gt;= `fraction` of the total.</span>
+<span class="sd">        It&#39;s ok to change this; methods use the current value.</span>
+
+<span class="sd">Methods:</span>
+<span class="sd">    The methods of class PCA transform vectors or arrays of e.g.</span>
+<span class="sd">    20 variables, 2 principal components and 1000 observations,</span>
+<span class="sd">    using partial matrices U&#39; d&#39; Vt&#39;, parts of the full U d Vt:</span>
+<span class="sd">    A ~ U&#39; . d&#39; . Vt&#39; where e.g.</span>
+<span class="sd">        U&#39; is 1000 x 2</span>
+<span class="sd">        d&#39; is diag([ d0, d1 ]), the 2 largest singular values</span>
+<span class="sd">        Vt&#39; is 2 x 20.  Dropping the primes,</span>
+
+<span class="sd">    d . Vt      2 principal vars = p.vars_pc( 20 vars )</span>
+<span class="sd">    U           1000 obs = p.pc_obs( 2 principal vars )</span>
+<span class="sd">    U . d . Vt  1000 obs, p.obs( 20 vars ) = pc_obs( vars_pc( vars ))</span>
+<span class="sd">        fast approximate A . vars, using the `npc` principal components</span>
+
+<span class="sd">    Ut              2 pcs = p.obs_pc( 1000 obs )</span>
+<span class="sd">    V . dinv        20 vars = p.pc_vars( 2 principal vars )</span>
+<span class="sd">    V . dinv . Ut   20 vars, p.vars( 1000 obs ) = pc_vars( obs_pc( obs )),</span>
+<span class="sd">        fast approximate Ainverse . obs: vars that give ~ those obs.</span>
+
+
+<span class="sd">Notes:</span>
+<span class="sd">    PCA does not center or scale A; you usually want to first</span>
+<span class="sd">        A -= A.mean(A, axis=0)</span>
+<span class="sd">        A /= A.std(A, axis=0)</span>
+<span class="sd">    with the little class Center or the like, below.</span>
+
+<span class="sd">See also:</span>
+<span class="sd">    http://en.wikipedia.org/wiki/Principal_component_analysis</span>
+<span class="sd">    http://en.wikipedia.org/wiki/Singular_value_decomposition</span>
+<span class="sd">    Press et al., Numerical Recipes (2 or 3 ed), SVD</span>
+<span class="sd">    PCA micro-tutorial</span>
+<span class="sd">    iris-pca .py .png</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">dot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span>
+    <span class="c"># import bz.numpyutil as nu</span>
+    <span class="c"># dot = nu.pdot</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;2010-04-14 apr&quot;</span>
+<span class="n">__author_email__</span> <span class="o">=</span> <span class="s">&quot;denis-bz-py at t-online dot de&quot;</span>
+
+<span class="c">#...............................................................................</span>
+<div class="viewcode-block" id="PCA"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA">[docs]</a><span class="k">class</span> <span class="nc">PCA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.90</span> <span class="p">):</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">fraction</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+            <span class="c"># A = U . diag(d) . Vt, O( m n^2 ), lapack_lite --</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="bp">False</span> <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="p">)</span>  <span class="c"># sorted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eigen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">**</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sumvariance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eigen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sumvariance</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sumvariance</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">sumvariance</span><span class="p">,</span> <span class="n">fraction</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dinv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">1</span><span class="o">/</span><span class="n">d</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-6</span>  <span class="k">else</span> <span class="mi">0</span>
+                                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="p">])</span>
+
+<div class="viewcode-block" id="PCA.pc"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.pc">[docs]</a>    <span class="k">def</span> <span class="nf">pc</span><span class="p">(</span> <span class="bp">self</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; e.g. 1000 x 2 U[:, :npc] * d[:npc], to plot etc. &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">npc</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+
+    <span class="c"># These 1-line methods may not be worth the bother;</span>
+    <span class="c"># then use U d Vt directly --</span>
+</div>
+<div class="viewcode-block" id="PCA.vars_pc"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.vars_pc">[docs]</a>    <span class="k">def</span> <span class="nf">vars_pc</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span> <span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">npc</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">Vt</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c"># 20 vars -&gt; 2 principal</span>
+</div>
+<div class="viewcode-block" id="PCA.pc_vars"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.pc_vars">[docs]</a>    <span class="k">def</span> <span class="nf">pc_vars</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">p</span> <span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">npc</span>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">Vt</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dinv</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="p">)</span> <span class="o">.</span><span class="n">T</span>  <span class="c"># 2 PC -&gt; 20 vars</span>
+</div>
+<div class="viewcode-block" id="PCA.pc_obs"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.pc_obs">[docs]</a>    <span class="k">def</span> <span class="nf">pc_obs</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">p</span> <span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">npc</span>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span> <span class="p">)</span>  <span class="c"># 2 principal -&gt; 1000 obs</span>
+</div>
+<div class="viewcode-block" id="PCA.obs_pc"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.obs_pc">[docs]</a>    <span class="k">def</span> <span class="nf">obs_pc</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">obs</span> <span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">npc</span>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">obs</span> <span class="p">)</span> <span class="o">.</span><span class="n">T</span>  <span class="c"># 1000 obs -&gt; 2 principal</span>
+</div>
+<div class="viewcode-block" id="PCA.obs"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.obs">[docs]</a>    <span class="k">def</span> <span class="nf">obs</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span> <span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_obs</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">vars_pc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">)</span>  <span class="c"># 20 vars -&gt; 2 principal -&gt; 1000 obs</span>
+</div>
+<div class="viewcode-block" id="PCA.vars"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.PCA.vars">[docs]</a>    <span class="k">def</span> <span class="nf">vars</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">obs</span> <span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_vars</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs_pc</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="p">)</span>  <span class="c"># 1000 obs -&gt; 2 principal -&gt; 20 vars</span>
+
+</div></div>
+<div class="viewcode-block" id="Center"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.Center">[docs]</a><span class="k">class</span> <span class="nc">Center</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; A -= A.mean() /= A.std(), inplace -- use A.copy() if need be</span>
+<span class="sd">        uncenter(x) == original A . x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+        <span class="c"># mttiw</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span> <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Center -= A.mean:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span>
+        <span class="n">A</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span>
+        <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="n">std</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="mf">1.</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;Center /= A.std:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">std</span>
+            <span class="n">A</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">std</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span>
+
+<div class="viewcode-block" id="Center.uncenter"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.PCA.Center.uncenter">[docs]</a>    <span class="k">def</span> <span class="nf">uncenter</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x</span> <span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="p">)</span>
+
+
+<span class="c">#...............................................................................</span></div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+
+    <span class="n">csv</span> <span class="o">=</span> <span class="s">&quot;iris4.csv&quot;</span>  <span class="c"># wikipedia Iris_flower_data_set</span>
+        <span class="c"># 5.1,3.5,1.4,0.2  # ,Iris-setosa ...</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">fraction</span> <span class="o">=</span> <span class="o">.</span><span class="mi">90</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">exec</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="p">)</span>  <span class="c"># N= ...</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span>  <span class="c"># .1f</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span> <span class="n">csv</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&quot;,&quot;</span> <span class="p">)</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span> <span class="p">)</span>  <span class="c"># gen correlated ?</span>
+
+    <span class="k">print</span> <span class="s">&quot;csv: </span><span class="si">%s</span><span class="s">  N: </span><span class="si">%d</span><span class="s">  K: </span><span class="si">%d</span><span class="s">  fraction: </span><span class="si">%.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">fraction</span><span class="p">)</span>
+    <span class="n">Center</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;A:&quot;</span><span class="p">,</span> <span class="n">A</span>
+
+    <span class="k">print</span> <span class="s">&quot;PCA ...&quot;</span> <span class="p">,</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="n">fraction</span> <span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;npc:&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">npc</span>
+    <span class="k">print</span> <span class="s">&quot;% variance:&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">sumvariance</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">print</span> <span class="s">&quot;Vt[0], weights that give PC 0:&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">Vt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&quot;A . Vt[0]:&quot;</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">Vt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;pc:&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">pc</span><span class="p">()</span>
+
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">obs &lt;-&gt; pc &lt;-&gt; x: with fraction=1, diffs should be ~ 0&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+    <span class="c"># x = np.ones(( 3, K ))</span>
+    <span class="k">print</span> <span class="s">&quot;x:&quot;</span><span class="p">,</span> <span class="n">x</span>
+    <span class="n">pc</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">vars_pc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c"># d&#39; Vt&#39; x</span>
+    <span class="k">print</span> <span class="s">&quot;vars_pc(x):&quot;</span><span class="p">,</span> <span class="n">pc</span>
+    <span class="k">print</span> <span class="s">&quot;back to ~ x:&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">pc_vars</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
+
+    <span class="n">Ax</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span> <span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="p">)</span>
+    <span class="n">pcx</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">obs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c"># U&#39; d&#39; Vt&#39; x</span>
+    <span class="k">print</span> <span class="s">&quot;Ax:&quot;</span><span class="p">,</span> <span class="n">Ax</span>
+    <span class="k">print</span> <span class="s">&quot;A&#39;x:&quot;</span><span class="p">,</span> <span class="n">pcx</span>
+    <span class="k">print</span> <span class="s">&quot;max |Ax - A&#39;x|: </span><span class="si">%.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="n">Ax</span> <span class="o">-</span> <span class="n">pcx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="p">)</span>
+
+    <span class="n">b</span> <span class="o">=</span> <span class="n">Ax</span>  <span class="c"># ~ back to original x, Ainv A x</span>
+    <span class="n">back</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">vars</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;~ back again:&quot;</span><span class="p">,</span> <span class="n">back</span>
+    <span class="k">print</span> <span class="s">&quot;max |back - x|: </span><span class="si">%.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="n">back</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="p">)</span>
+
+<span class="c"># end pca.py</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

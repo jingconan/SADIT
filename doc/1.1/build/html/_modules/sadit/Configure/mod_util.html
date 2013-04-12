@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Configure.mod_util &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Configure.mod_util</h1><div class="highlight"><pre>
+<span class="c">##############################################</span>
+<span class="c">####    Utility Function for Configure #######</span>
+<span class="c">##############################################</span>
+<div class="viewcode-block" id="LoadValidIP"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.LoadValidIP">[docs]</a><span class="k">def</span> <span class="nf">LoadValidIP</span><span class="p">(</span><span class="n">fileName</span><span class="p">):</span>
+    <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="c"># print content</span>
+    <span class="k">return</span> <span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GetIPAdress"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.GetIPAdress">[docs]</a><span class="k">def</span> <span class="nf">GetIPAdress</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Select normal IP address and abnormal IP address,</span>
+<span class="sd">    the distance  between normal IP address and abnormal IP</span>
+<span class="sd">    address is very large</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">IPMat</span> <span class="o">=</span> <span class="n">GetIPMat</span><span class="p">()</span> <span class="c">#  Get All IPs</span>
+    <span class="n">DF</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">256</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="c"># Calculate the center and distance to centers</span>
+    <span class="n">center</span><span class="p">,</span> <span class="n">dis</span> <span class="o">=</span> <span class="n">CalIPCenter</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">DF</span><span class="p">)</span>
+    <span class="n">sortIdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">dis</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c"># Portion of selected points</span>
+    <span class="n">IPNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dis</span><span class="p">)</span>
+    <span class="n">corePts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">sortIdx</span><span class="p">[</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">IPNum</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">))</span> <span class="p">]</span> <span class="p">);</span>
+    <span class="n">anoPts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">sortIdx</span><span class="p">[</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">IPNum</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">ratio</span><span class="p">)),</span> <span class="n">IPNum</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span> <span class="p">)</span>
+
+    <span class="n">graphSize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">corePts</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">anoPts</span><span class="p">)</span> <span class="c"># Size of the Graph</span>
+
+    <span class="n">IPSrcSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">corePts</span><span class="p">:</span>
+        <span class="n">IPSrcSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+    <span class="n">AnoSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">anoPts</span><span class="p">:</span>
+        <span class="n">AnoSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">.</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">IPSrcSet</span><span class="p">,</span> <span class="n">AnoSet</span><span class="p">,</span> <span class="n">graphSize</span>
+</div>
+<div class="viewcode-block" id="CalIPCenter"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.CalIPCenter">[docs]</a><span class="k">def</span> <span class="nf">CalIPCenter</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">DF</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;*IPMat* is a Mx4 numpy matrix contains M ip addresses.</span>
+<span class="sd">    *DF* is a user defined distance function&#39;&#39;&#39;</span>
+    <span class="n">IPNum</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">IPMat</span><span class="p">)</span>
+    <span class="n">IPCenter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">IPNum</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">IPNum</span><span class="p">):</span>
+        <span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">IPCenter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">IPCenter</span><span class="p">,</span> <span class="n">dis</span>
+
+</div>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span><span class="p">,</span> <span class="n">plot</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;no matplotlib&#39;</span>
+
+<div class="viewcode-block" id="PlotPts"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.PlotPts">[docs]</a><span class="k">def</span> <span class="nf">PlotPts</span><span class="p">(</span><span class="n">IPMat</span><span class="p">,</span> <span class="n">corePts</span><span class="p">,</span> <span class="n">anoPts</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="n">figure</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">corePts</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;bo&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">anoPts</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">IPMat</span><span class="p">[</span><span class="n">pt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;ro&#39;</span><span class="p">)</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;go&#39;</span><span class="p">)</span>
+</div>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;numpy hasn&#39;t been installed&quot;</span>
+<div class="viewcode-block" id="GetIPMat"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.GetIPMat">[docs]</a><span class="k">def</span> <span class="nf">GetIPMat</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;load valid ip adrees from setting.IPS_FILE&#39;&#39;&#39;</span>
+    <span class="n">IP</span> <span class="o">=</span> <span class="n">LoadValidIP</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">IPS_FILE</span><span class="p">)</span>
+    <span class="n">IPNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">IP</span><span class="p">)</span>
+    <span class="n">IPMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="n">IPNum</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">IP</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">ipInt</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">val</span><span class="p">]</span>
+        <span class="n">IPMat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ipInt</span>
+    <span class="k">return</span> <span class="n">IPMat</span>
+
+<span class="c"># def GetIPMat():</span>
+<span class="c">#     &#39;&#39;&#39;load valid ip adrees from setting.IPS_FILE&#39;&#39;&#39;</span>
+<span class="c">#     IP = LoadValidIP(settings.IPS_FILE)</span>
+<span class="c">#     return [ [int(x) for x in ip.split(&#39;.&#39;)] for ip in IP]</span>
+
+
+
+</div>
+<div class="viewcode-block" id="P2F_RAW"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.P2F_RAW">[docs]</a><span class="k">def</span> <span class="nf">P2F_RAW</span><span class="p">(</span><span class="n">flowRate</span><span class="p">,</span> <span class="n">flowDuration</span><span class="p">,</span> <span class="n">pktRate</span><span class="p">):</span> <span class="c"># Change Prameter to FS Format for rawflow</span>
+    <span class="k">pass</span>
+<span class="c"># interval =</span>
+    <span class="c"># flowlets # Number of Flowlets in Flow</span>
+    <span class="c"># bytes # Number of Flowlets in each flow</span>
+    <span class="c"># interval # Interval between flowlets.</span>
+    <span class="c"># pkts # Number of packets in each emitted flow</span>
+
+
+<span class="c"># def F2P_RAW(flowlets, bytes, interval, pkts ):</span>
+<span class="c">#     pktRate = bytes * pkts / interval</span>
+<span class="c">#     flowDuration = flowlets * interval</span>
+<span class="c">#     flowRate = 1.0 / flowDuration</span>
+
+
+
+<span class="c"># import re</span></div>
+<div class="viewcode-block" id="FixQuoteBug"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.FixQuoteBug">[docs]</a><span class="k">def</span> <span class="nf">FixQuoteBug</span><span class="p">(</span><span class="n">fileName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; There is a bug in pydot. when link attribute is &lt; 1, pydot will automatically add quote</span>
+<span class="sd">    to value which is not desirable. This function try to fix that problem. delete</span>
+<span class="sd">    all the quotes in the link attribute&quot;&quot;&quot;</span>
+    <span class="c"># fid = open(fileName, &#39;r&#39;)</span>
+    <span class="c"># content = fid.read()</span>
+    <span class="c"># content = re.sub(&#39;delay=&quot;[\d.]*&quot;&#39;, &#39;delay=&#39;+str(delay), content)</span>
+    <span class="c"># fid.close()</span>
+    <span class="c"># fid = open(fileName, &#39;w&#39;)</span>
+    <span class="c"># fid.write(content)</span>
+    <span class="c"># fid.close()</span>
+    <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s">&#39;--&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span> <span class="c"># if it is link attribute line</span>
+            <span class="n">newline</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s">&#39;&quot;&#39;</span><span class="p">])</span>
+            <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">newline</span>
+    <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+    <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+
+</div>
+<div class="viewcode-block" id="ParseArg"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.ParseArg">[docs]</a><span class="k">def</span> <span class="nf">ParseArg</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="c"># print &#39;---before--&#39;</span>
+    <span class="c"># print string</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&quot;&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="c"># print string</span>
+    <span class="c"># print &#39;---after--&#39;</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+        <span class="n">sr</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">attr</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">sr</span>
+            <span class="n">attr</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">attr</span>
+
+<span class="c"># Both Modulator and Source are described by Attr</span></div>
+<div class="viewcode-block" id="Attr"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.Attr">[docs]</a><span class="k">class</span> <span class="nc">Attr</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Sub Class of String. __str__ method was overloaded, providing an easy way to</span>
+<span class="sd">    get DOT format attribute string.&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attr</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attr</span> <span class="o">=</span> <span class="n">ParseArg</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">attr</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attr</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s">&#39;name&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&#39;&quot;&#39;</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+</div>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+<div class="viewcode-block" id="choose_ip_addr"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.choose_ip_addr">[docs]</a><span class="k">def</span> <span class="nf">choose_ip_addr</span><span class="p">(</span><span class="n">ip_addr_set</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ip_addr_set</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ip_addr_set</span><span class="p">[</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+
+</div>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<div class="viewcode-block" id="RandDist"><a class="viewcode-back" href="../../../generated/sadit.Configure.mod_util.html#sadit.Configure.mod_util.RandDist">[docs]</a><span class="k">def</span> <span class="nf">RandDist</span><span class="p">(</span><span class="n">dist</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Generate Random Variable According to Certain Kind of</span>
+<span class="sd">    Distribution&#39;&#39;&#39;</span>
+
+    <span class="c"># TODO Finish A Complete Version</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">p</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">rv</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">m</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

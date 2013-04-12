@@ -5,7 +5,7 @@ the anomaly detectors.
 """
 import sys
 sys.path.insert(0, "..")
-from Configure import gen_anomaly_dot
+from Configure import gen_dot
 import settings
 from util import Namespace
 import argparse
@@ -119,7 +119,7 @@ class ImalseSettings(object):
                 # srv_node_list = net_settings.server_id_set,
 
         self.dot_file = settings.ROOT + '/' + self.args.dot_file
-        gen_anomaly_dot(
+        gen_dot(
                 traf_pattern.ANO_LIST,
                 self.get_net_desc(),
                 traf_pattern.NORM_DESC,

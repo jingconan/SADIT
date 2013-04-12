@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Experiment.Detect &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Experiment.Detect</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot; Default experimenet, will simply detect the flow data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">BaseExper</span> <span class="kn">import</span> <span class="n">BaseExper</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c"># import settings</span>
+<span class="kn">from</span> <span class="nn">Detector</span> <span class="kn">import</span> <span class="n">detect</span>
+<span class="c"># from util import load_para, update_not_none</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">update_not_none</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">Detector.API</span> <span class="kn">import</span> <span class="n">print_detector_help</span>
+<div class="viewcode-block" id="Detect"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Detect.Detect">[docs]</a><span class="k">class</span> <span class="nc">Detect</span><span class="p">(</span><span class="n">BaseExper</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c"># super(Detect, self).__init__(argv, parser)</span>
+        <span class="n">BaseExper</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">parser</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">help</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="p">:</span>
+                <span class="n">print_detector_help</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">config</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You must specifiy --config option, run with -h option to see help&#39;</span><span class="p">)</span>
+            <span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Detect.init_parser"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Detect.Detect.init_parser">[docs]</a>    <span class="k">def</span> <span class="nf">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Detect</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">init_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-h&#39;</span><span class="p">,</span> <span class="s">&#39;--help&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;&quot;&quot;print help message&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--data&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;&quot;&quot;--data [filename] will simply detect the flow file,</span>
+<span class="s">                simulator will not run in this case&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c"># parser.add_argument(&#39;-c&#39;, &#39;--config&#39;, default=None,</span>
+        <span class="c">#         type=load_para,</span>
+        <span class="c">#         help=&quot;&quot;&quot;config file with default arguments for detector&quot;&quot;&quot;)</span>
+
+        <span class="kn">from</span> <span class="nn">Detector.API</span> <span class="kn">import</span> <span class="n">detector_map</span><span class="p">,</span> <span class="n">data_map</span>
+        <span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">get_help_docs</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-m&#39;</span><span class="p">,</span> <span class="s">&#39;--method&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;&quot;&quot;--method [method] will specify the method to use. Avaliable options are:</span>
+<span class="s">                [</span><span class="si">%s</span><span class="s">]. If you want to compare the results of several methods, simple use / as seperator,</span>
+<span class="s">                for example [</span><span class="si">%s</span><span class="s">] &quot;&quot;&quot;</span> <span class="o">%</span><span class="p">(</span><span class="s">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_help_docs</span><span class="p">(</span><span class="n">detector_map</span><span class="p">)),</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">detector_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--data_type&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;fs&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;&quot;&quot;--specify the type of the data you use, the availiable</span>
+<span class="s">                option are: [</span><span class="si">%s</span><span class="s">] &quot;&quot;&quot;</span> <span class="o">%</span><span class="p">(</span><span class="s">&#39; | &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_help_docs</span><span class="p">(</span><span class="n">data_map</span><span class="p">)))</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--feature_option&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">eval</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot; specify the feature option. feature option is a</span>
+<span class="s">                dictionary describing the quantization level for each feature.</span>
+<span class="s">                You need at least specify &#39;cluster&#39; and &#39;dist_to_center&#39;. Note</span>
+<span class="s">                that, the value of &#39;cluster&#39; is the cluster number. The</span>
+<span class="s">                avaliability of other features depend on the data handler.</span>
+<span class="s">                &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--export_flows&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot; specify the file name of exported abnormal flows. Default is not export</span>
+<span class="s">                &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="c"># parser.add_argument(&#39;--entropy_threshold&#39;, default=None,</span>
+        <span class="c">#         help = &quot;&quot;&quot; the threshold for entropy,</span>
+        <span class="c">#         &quot;&quot;&quot;)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--pic_name&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/res.eps&#39;</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;picture name for the detection result&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--pic_show&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;whether to show the picture after finishing running&quot;&quot;&quot;</span><span class="p">)</span>
+
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--csv&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;the path of the file to save plots a text output&quot;&quot;&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Detect.detect"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Detect.Detect.detect">[docs]</a>    <span class="k">def</span> <span class="nf">detect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span>
+        <span class="n">res_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;DETECTOR_DESC&#39;</span><span class="p">])</span>
+        <span class="n">update_not_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+        <span class="c"># import ipdb;ipdb.set_trace()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detector</span> <span class="o">=</span> <span class="n">detect</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span>
+                <span class="n">res_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span>
+</div>
+<div class="viewcode-block" id="Detect.run"><a class="viewcode-back" href="../../../generated/sadit.Experiment.html#sadit.Experiment.Detect.Detect.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># args = self.args</span>
+        <span class="n">detector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect</span><span class="p">()</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;detector type, &#39;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">detector</span><span class="p">))</span>
+
+        <span class="c"># if args.export_flows:</span>
+        <span class="k">if</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;export_flows&#39;</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;--&gt; export the abnormal flows&#39;</span><span class="p">)</span>
+            <span class="n">detector</span><span class="o">.</span><span class="n">export_abnormal_flow</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;export_flows&#39;</span><span class="p">],</span>
+                    <span class="n">entropy_threshold</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;entropy_threshold&#39;</span><span class="p">],</span>
+                    <span class="n">ab_win_portion</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;ab_win_portion&#39;</span><span class="p">],</span>
+                    <span class="n">ab_win_num</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;ab_win_num&#39;</span><span class="p">],</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;pic_show&#39;</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;--&gt; plot the result&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;pic_name&#39;</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;--&gt; export result to </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;pic_name&#39;</span><span class="p">]))</span>
+
+        <span class="n">detector</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pic_show</span><span class="o">=</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;pic_show&#39;</span><span class="p">],</span>
+                <span class="n">pic_name</span><span class="o">=</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;pic_name&#39;</span><span class="p">],</span>
+                <span class="n">csv</span><span class="o">=</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;csv&#39;</span><span class="p">],</span>
+                <span class="p">)</span>
+
+        <span class="c"># if args.csv:</span>
+            <span class="c"># detector.save_plot_as_csv(args.csv)</span>
+                <span class="c"># far=args.hoeff_far)</span>
+
+
+<span class="c"># class DetectExper(Detect):</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

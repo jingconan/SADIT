@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-import sys
-sys.path.insert(0, '../../')
-from Detector.DataHandler import HardDiskFileHandler
-from Detector.SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector, SVMTemporalHandler
+from __future__ import print_function, division, absolute_import
+from ..Detector.DataHandler import HardDiskFileHandler
+from ..Detector.SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector, SVMTemporalHandler
 import settings
 
 def test_SVMFlowByFlowDetector():

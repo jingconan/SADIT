@@ -3,7 +3,7 @@
 
 """
 from BaseExper import BaseExper
-from Configure import gen_anomaly_dot
+from Configure import gen_dot
 from os import chdir as cd
 from os import system as sh
 
@@ -39,7 +39,7 @@ class Sim(BaseExper):
                 help="""output dot file""")
 
     def configure(self):
-        gen_anomaly_dot(self.ano_list, self.net_desc, self.norm_desc,
+        gen_dot(self.ano_list, self.net_desc, self.norm_desc,
                 self.dot_file)
 
     def simulate(self):

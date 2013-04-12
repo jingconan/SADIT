@@ -1,7 +1,8 @@
 """
 This file defines useful APIs for other modules or program to use
 """
-from __future__ import print_function, division
+# from __future__ import print_function, division
+from __future__ import print_function, division, absolute_import
 #######################################################
 ###        Import Detectors                        ####
 #######################################################
@@ -12,11 +13,11 @@ from __future__ import print_function, division
 # from RobustDetector import RobustDetector
 
 # from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
-from StoDetector import *
-from RobustDetector import *
-from SVMDetector import *
+from .StoDetector import *
+from .RobustDetector import *
+from .SVMDetector import *
 
-from ART.ART import ARTDetector
+from .ART.ART import ARTDetector
 
 # detector_map defines correspondence between detector
 # options with detector name
@@ -40,7 +41,7 @@ detector_map = {
 
 # usually one detector corresponds to one handler
 # handlers do some data preprocessing for detector.
-from DataHandler import *
+from .DataHandler import *
 data_handler_handle_map = {
         'robust': QuantizeDataHandler,
         # 'auto': QuantizeDataHandler,
@@ -61,7 +62,7 @@ data_handler_handle_map = {
         # 'expect':QuantizeGeneralizedEMHandler,
         }
 
-from Data import *
+from .Data import *
 data_map = {
         'fs': PreloadHardDiskFile,
         'pcap2netflow': PreloadHardDiskFile_pcap2netflow,
@@ -82,7 +83,7 @@ def detect(f_name, desc, res_args=[]):
     - *desc* is a parameter dictionary
     """
     # win_size = desc['win_size']
-    fea_option = desc['fea_option']
+    # fea_option = desc['fea_option']
     data_file = data_map[ desc['data_type'] ](f_name)
     # data_handler = data_handler_handle_map[desc['detector_type']](data_file, fea_option)
     data_handler = data_handler_handle_map[desc['method']](data_file, desc)

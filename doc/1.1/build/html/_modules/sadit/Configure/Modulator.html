@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Configure.Modulator &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Configure.Modulator</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;..&quot;</span><span class="p">)</span>
+<span class="c"># from util import *</span>
+<span class="c"># from mod_util import *</span>
+<span class="kn">from</span> <span class="nn">mod_util</span> <span class="kn">import</span> <span class="n">Attr</span>
+<div class="viewcode-block" id="Modulator"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.Modulator">[docs]</a><span class="k">class</span> <span class="nc">Modulator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; * name</span>
+<span class="sd">        * start</span>
+<span class="sd">        * profile</span>
+<span class="sd">        * generator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span> <span class="n">Attr</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Modulator.profile"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.Modulator.profile">[docs]</a>    <span class="k">def</span> <span class="nf">profile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;profile&#39;</span><span class="p">]</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Modulator.start"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.Modulator.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;start&#39;</span><span class="p">]</span> <span class="p">)</span>
+</div></div>
+<span class="kn">from</span> <span class="nn">Behaviour</span> <span class="kn">import</span> <span class="n">MarkovBehaviour</span>
+<div class="viewcode-block" id="MarkovModulator"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.MarkovModulator">[docs]</a><span class="k">class</span> <span class="nc">MarkovModulator</span><span class="p">(</span><span class="n">Modulator</span><span class="p">,</span> <span class="n">MarkovBehaviour</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * name</span>
+<span class="sd">        * start</span>
+<span class="sd">        * profile</span>
+<span class="sd">        * generator_states: a list of generator names, representing the states</span>
+<span class="sd">        * P: transition probability</span>
+<span class="sd">        * interval: mean of interval time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">generator_states</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">):</span>
+        <span class="n">Modulator</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">)</span>
+        <span class="n">MarkovBehaviour</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">generator_states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c"># self.generator_states = generator_states</span>
+        <span class="c"># self._gen_modulator_list()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">behave_with_profile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+
+
+    <span class="c"># def sync(self):</span>
+        <span class="c"># self._gen_modulator_list()</span>
+        <span class="c"># self.behave_with_profile(self.start, self.profile)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_list</span><span class="p">])</span>
+
+<div class="viewcode-block" id="MarkovModulator.stage"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.MarkovModulator.stage">[docs]</a>    <span class="k">def</span> <span class="nf">stage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;for one markov stage&quot;&quot;&quot;</span>
+        <span class="n">r_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_para</span><span class="p">[</span><span class="s">&#39;r_start&#39;</span><span class="p">]</span>
+        <span class="n">r_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_para</span><span class="p">[</span><span class="s">&#39;r_end&#39;</span><span class="p">]</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="n">Modulator</span><span class="p">(</span>
+                <span class="c"># name=self.desc[&#39;name&#39;] + &#39;_&#39; + str(self.mmseq),</span>
+                <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">r_start</span><span class="p">,</span>
+                <span class="n">profile</span><span class="o">=</span><span class="p">(</span> <span class="p">(</span><span class="n">r_end</span><span class="o">-</span><span class="n">r_start</span><span class="p">,),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="p">)</span> <span class="p">,</span>
+                <span class="n">generator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">],</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+</div></div>
+<span class="kn">from</span> <span class="nn">Behaviour</span> <span class="kn">import</span> <span class="n">MVBehaviour</span>
+<div class="viewcode-block" id="MVModulator"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.MVModulator">[docs]</a><span class="k">class</span> <span class="nc">MVModulator</span><span class="p">(</span><span class="n">Modulator</span><span class="p">,</span> <span class="n">MVBehaviour</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modulator defines the behaviour of generator within a range of time.</span>
+<span class="sd">    implement the stage function.</span>
+<span class="sd">    joint_dist should be numpy array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joint_dist</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">generator_states</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">):</span>
+        <span class="n">Modulator</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">desc</span><span class="p">)</span>
+        <span class="n">MVBehaviour</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joint_dist</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">generator_states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">behave_with_profile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MVModulator.stage"><a class="viewcode-back" href="../../../generated/sadit.Configure.Modulator.html#sadit.Configure.Modulator.MVModulator.stage">[docs]</a>    <span class="k">def</span> <span class="nf">stage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;for one stage&quot;&quot;&quot;</span>
+        <span class="n">r_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_para</span><span class="p">[</span><span class="s">&#39;r_start&#39;</span><span class="p">]</span>
+        <span class="n">r_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_para</span><span class="p">[</span><span class="s">&#39;r_end&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">srv_num</span><span class="p">):</span> <span class="c"># for each destination</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gen</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="n">Modulator</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span>
+                    <span class="n">start</span><span class="o">=</span><span class="n">r_start</span><span class="p">,</span>
+                    <span class="n">profile</span><span class="o">=</span><span class="p">(</span> <span class="p">(</span><span class="n">r_end</span><span class="o">-</span><span class="n">r_start</span><span class="p">,),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="p">)</span> <span class="p">,</span>
+                    <span class="n">generator</span><span class="o">=</span><span class="n">gen</span><span class="p">,</span>
+                    <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

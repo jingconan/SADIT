@@ -1,10 +1,6 @@
 """ Module level utility functions
 """
-# try:
-#     import matplotlib.pyplot as plt
-# except ImportError:
-#     print 'no matplotlib'
-#     plt = False
+from __future__ import print_function, division, absolute_import
 from util import plt
 
 def find_seg(flag):

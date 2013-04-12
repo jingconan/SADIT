@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">SADIT 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction">
+<span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>SADIT is a byproduct of research project <strong>A Coordinated Approach to
+Cyber-Situation Awarness Based on Traffic Anomaly Detection</strong>.  It is the
+acronym of <strong>S</strong>ystematic <strong>A</strong>nomaly <strong>D</strong>etection of <strong>I</strong>nternet
+<strong>T</strong>raffic.  The motivation of SADIT is to make the comparison and the
+validation of internet anomaly deteciton algorithmes super easy.  It provides
+a collection of Internet Anomaly Detection algorithms proposed by several
+researchers. Now it contains:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Stochastic Anomaly Detector using Large Deviation Theory</li>
+<li>Deterministic Temporal Anomaly Detector using Support Vector Machine</li>
+<li>Deterministic Flow by Flow Detector using Support Vector Machine</li>
+<li>Anomaly Detection Techniques using ART theory</li>
+</ol>
+</div></blockquote>
+<p>SADIT is not limited to the four algorithms listed above, its utimate goal is to
+become a standard collection of a variety of internet anomaly detection
+algorithms.</p>
+<p>It also provides an easy-to-use tool to generate labeled flow records, which are
+helpful in validatation and comparison of methods.</p>
+<p>If you are a researcher interested in Internet Anomaly Detection, we strongly
+encourage you to implement your algorithms following the APIs and data format of
+SADIT so that you can easily compare your methods with exisiting algorithms in
+SADIT. Your help will be highly appreciated if you can contribute your own
+algorithm to the algorithm libray of SADIT. Feel free to contact me if you have
+any question.</p>
+<div class="section" id="what-s-new">
+<h2>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
+<p>the version 1.0 is a result of big refactor of version 0.0. The refactor makes the code more
+scalable and less buggy.</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Paradigm of Object-oriented programming</strong>: The <strong>Configure</strong> module and <strong>Detector</strong> module have been rewritten under
+object-oriented paradigm. In version 0.0, all modules depends on the global
+settings file setting.py, which make the code more vulunerable to bugs. In this verison only
+few scripts depend on settings.py. Classes are widely used to reduce the need to
+pass parameters around. In case that parameters passing is required, well-defined structures are used.</li>
+<li><strong>Experiment</strong>: A new folder ROOT/Experiment appears to contain different
+experiments. You can write your own scripts of Experiment and put them in
+this folder.</li>
+<li><strong>Better Sensitivity Anaysis</strong>: In the version 0.0, sensitivity anaysis is
+done by change the global settings.py file and rerun the simulation. Since
+settings.py is a typical python module,changing it during the run is really not
+a good idea. In this version, special Experiment is designed to support
+sensitivity analysis.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p><strong>SADIT</strong> consists of  two parts. The first part is a collection of anomalies
+detection algorithms. The second part is labeled flow record generator. The
+follow sections will describe the two parts accordingly.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#what-s-new">What&#8217;s New</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/introduction.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">SADIT 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

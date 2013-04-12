@@ -1,4 +1,5 @@
-from pydot import *
+from __future__ import print_function, division, absolute_import
+from pydot import Edge, Node, quote_if_necessary
 
 class NEdge(Edge):
     def __init__(self, src, dst, attr):

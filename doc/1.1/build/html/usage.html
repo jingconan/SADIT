@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="index.html" />
+    <link rel="next" title="sadit.Configure.Network" href="sadit.Configure.Network.html" />
+    <link rel="prev" title="Download" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sadit.Configure.Network.html" title="sadit.Configure.Network"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Download"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">SADIT 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
+<strong>settings.py</strong> to the absolute path of the source directory. Then type</p>
+<div class="highlight-python"><pre>$ ./run.py -h</pre>
+</div>
+<p>in the command line. The help document will come out</p>
+<p>usage: run.py [-e EXPERIMENT] [&#8211;profile PROFILE] [-hm HELP_METHOD] [-h]</p>
+<p>sadit</p>
+<dl class="docutils">
+<dt>optional arguments:</dt>
+<dd><table class="first docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-e <var>EXPERIMENT</var></span>, <span class="option">--experiment <var>EXPERIMENT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>print ./run.py -e &lt;exper&gt; -h for help of a experiment
+Avaliable experiments are [Eval | Compare |
+MarkovExper | DetectExper | AttriSensExper | IIDExper
+| DetectArgSearch | MarkovSens | MultiSrvExperiment |
+ImalseSettings]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--profile <var>PROFILE</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>profile the program</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>-hm HELP_METHOD, &#8211;help_method HELP_METHOD</dt>
+<dd>print the detailed help message for a method.
+Avaliable method [mf | art | mb | mfmb | svm_fbf |
+svm_temp]</dd>
+</dl>
+<table class="last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
+<td>print help message and exit</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p><em>&#8211;experiment</em> specify the experiment you want to execute. An <strong>experiment</strong>
+is actually a subcommand that has certain functionality.</p>
+<dl class="docutils">
+<dt>Avaliable experiments are as follows:</dt>
+<dd><ul class="first last simple">
+<li><strong>DetectExper</strong>: detect the flow record data specified by <em>-d</em> option</li>
+<li><strong>IIDExper</strong>: generate flow records with I.I.D model and test the
+algorithm with these flow records.</li>
+<li><strong>MarkovExper</strong>: generate flow records with Markov model and test the
+algorithm with these flow records</li>
+<li><strong>AttrSensExper</strong>: change the degree of anomaly in <strong>IIDExper</strong>, run the
+algorithm accordingly and show results in the same figure.</li>
+<li><strong>MarkovSens</strong>: change the degree of anomaly in <strong>MarkovExper</strong>, run
+the algorithm accordingly and show results in the same figure.</li>
+<li><strong>Eval</strong>: Evaluation of the detection algorithmm(calculate fpr, fnr and
+plot the ROC curve)</li>
+<li><strong>DetectArgSearch</strong>: runs detection algortihms with all combinations of
+parameters and outputs the results to a folder, helps to select the
+optimal parameters.</li>
+<li><strong>Compare</strong>: run several detection algorithms and save the intermediate
+results. Can also load results load computed before and show comparison figure.</li>
+</ul>
+</dd>
+<dt>To see the help message of an  experiment, just type ::</dt>
+<dd>$ ./run.py -e &lt;exper&gt; -h</dd>
+<dt>to get the help message of an experiment, just type ::</dt>
+<dd>$ ./run.py -hm &lt;detector&gt;</dd>
+</dl>
+<p>Whenever you are not sure about the options you can set, just add <em>-h</em> to the end
+of command and execute it and help message will be printed correspondingly.</p>
+<dl class="docutils">
+<dt>You can change parameters in two ways:</dt>
+<dd><ul class="first last simple">
+<li><strong>ROOT/settings.py</strong> contains some default
+parameters(<strong>ROOT/setting_arg_search.py</strong> contains the default parameters
+for <strong>DetectArgSearch</strong> experiment). When you don&#8217;t specify parameters in
+the commandline, these default values will be used. Of course, you can
+change these parameters by editing the files.</li>
+<li>You can set the parameters of experiments as well as detectors through
+command line.</li>
+</ul>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Download</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sadit.Configure.Network.html"
+                        title="next chapter">sadit.Configure.Network</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/usage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sadit.Configure.Network.html" title="sadit.Configure.Network"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Download"
+             >previous</a> |</li>
+        <li><a href="index.html">SADIT 1.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

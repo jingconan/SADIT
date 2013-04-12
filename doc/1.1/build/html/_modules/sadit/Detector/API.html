@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Detector.API &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Detector.API</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file defines useful APIs for other modules or program to use</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
+<span class="c">#######################################################</span>
+<span class="c">###        Import Detectors                        ####</span>
+<span class="c">#######################################################</span>
+<span class="c"># from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector</span>
+<span class="c"># from StoDetector import TwoWindowAnoDetector, PeriodStoDetector</span>
+<span class="c"># from StoDetector import AutoSelectStoDetector</span>
+<span class="c"># from StoDetector import ExpectedStoDetector</span>
+<span class="c"># from RobustDetector import RobustDetector</span>
+
+<span class="c"># from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector</span>
+<span class="kn">from</span> <span class="nn">StoDetector</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">RobustDetector</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SVMDetector</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">ART.ART</span> <span class="kn">import</span> <span class="n">ARTDetector</span>
+
+<span class="c"># detector_map defines correspondence between detector</span>
+<span class="c"># options with detector name</span>
+<span class="n">detector_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c"># &#39;auto&#39;: AutoSelectStoDetector,</span>
+        <span class="c"># &#39;2w&#39;: TwoWindowAnoDetector,</span>
+        <span class="s">&#39;two_win&#39;</span><span class="p">:</span> <span class="n">TwoWindowAnoDetector</span><span class="p">,</span>
+        <span class="c"># &#39;ada&#39;:AdaStoDetector,</span>
+        <span class="s">&#39;period&#39;</span><span class="p">:</span> <span class="n">PeriodStoDetector</span><span class="p">,</span>
+        <span class="s">&#39;speriod&#39;</span><span class="p">:</span> <span class="n">PeriodStaticDetector</span><span class="p">,</span>
+        <span class="s">&#39;mf&#39;</span><span class="p">:</span> <span class="n">ModelFreeAnoDetector</span><span class="p">,</span>
+        <span class="s">&#39;mb&#39;</span><span class="p">:</span> <span class="n">ModelBaseAnoDetector</span><span class="p">,</span>
+        <span class="s">&#39;mfmb&#39;</span><span class="p">:</span> <span class="n">FBAnoDetector</span><span class="p">,</span>
+        <span class="s">&#39;svm_fbf&#39;</span><span class="p">:</span> <span class="n">SVMFlowByFlowDetector</span><span class="p">,</span>
+        <span class="s">&#39;svm_temp&#39;</span><span class="p">:</span> <span class="n">SVMTemporalDetector</span><span class="p">,</span>
+        <span class="s">&#39;art&#39;</span><span class="p">:</span> <span class="n">ARTDetector</span><span class="p">,</span>
+        <span class="s">&#39;gen_fb_mf&#39;</span><span class="p">:</span><span class="n">FBAnoDetector</span><span class="p">,</span> <span class="c"># feature is model free emperical measure</span>
+        <span class="s">&#39;gen_fb_mb&#39;</span><span class="p">:</span><span class="n">FBAnoDetector</span><span class="p">,</span> <span class="c"># feature is model based emperical measure</span>
+        <span class="s">&#39;robust&#39;</span><span class="p">:</span> <span class="n">RobustDetector</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<span class="c"># usually one detector corresponds to one handler</span>
+<span class="c"># handlers do some data preprocessing for detector.</span>
+<span class="kn">from</span> <span class="nn">DataHandler</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">data_handler_handle_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;robust&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="c"># &#39;auto&#39;: QuantizeDataHandler,</span>
+        <span class="s">&#39;mf&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="s">&#39;mb&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="s">&#39;mfmb&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="c"># &#39;2w&#39;: QuantizeDataHandler,</span>
+        <span class="s">&#39;two_win&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="c"># &#39;ada&#39;: QuantizeDataHandler,</span>
+        <span class="s">&#39;period&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="s">&#39;speriod&#39;</span><span class="p">:</span> <span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="s">&#39;svm_temp&#39;</span><span class="p">:</span> <span class="n">SVMTemporalHandler</span><span class="p">,</span>
+        <span class="s">&#39;svm_fbf&#39;</span><span class="p">:</span><span class="n">QuantizeDataHandler</span><span class="p">,</span>
+        <span class="s">&#39;art&#39;</span><span class="p">:</span> <span class="n">FakeDataHandler</span><span class="p">,</span>
+
+        <span class="s">&#39;gen_fb_mf&#39;</span><span class="p">:</span><span class="n">ModelFreeFeaGeneralizedEMHandler</span><span class="p">,</span> <span class="c"># feature is model free emperical measure</span>
+        <span class="s">&#39;gen_fb_mb&#39;</span><span class="p">:</span><span class="n">ModelBasedFeaGeneralizedEMHandler</span><span class="p">,</span> <span class="c"># feature is model based emperical measure</span>
+        <span class="c"># &#39;expect&#39;:QuantizeGeneralizedEMHandler,</span>
+        <span class="p">}</span>
+
+<span class="kn">from</span> <span class="nn">Data</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">data_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;fs&#39;</span><span class="p">:</span> <span class="n">PreloadHardDiskFile</span><span class="p">,</span>
+        <span class="s">&#39;pcap2netflow&#39;</span><span class="p">:</span> <span class="n">PreloadHardDiskFile_pcap2netflow</span><span class="p">,</span>
+        <span class="s">&#39;xflow&#39;</span><span class="p">:</span> <span class="n">PreloadHardDiskFile_xflow</span><span class="p">,</span>
+        <span class="s">&#39;SQLFile_SperottoIPOM2009&#39;</span><span class="p">:</span> <span class="n">SQLFile_SperottoIPOM2009</span><span class="p">,</span>
+        <span class="s">&#39;flow_exporter&#39;</span><span class="p">:</span> <span class="n">PreloadHardDiskFile_FlowExporter</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="print_detector_help"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.API.print_detector_help">[docs]</a><span class="k">def</span> <span class="nf">print_detector_help</span><span class="p">(</span><span class="n">type_</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;print help message of detector with type_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">detector_map</span><span class="p">[</span> <span class="n">type_</span> <span class="p">]({})</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">set_args</span><span class="p">([</span><span class="s">&#39;-h&#39;</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="detect"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.API.detect">[docs]</a><span class="k">def</span> <span class="nf">detect</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">res_args</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;An function for convenience</span>
+<span class="sd">    - *f_name* the name or a list of name for the flow file.</span>
+<span class="sd">    - *desc* is a parameter dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># win_size = desc[&#39;win_size&#39;]</span>
+    <span class="n">fea_option</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;fea_option&#39;</span><span class="p">]</span>
+    <span class="n">data_file</span> <span class="o">=</span> <span class="n">data_map</span><span class="p">[</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;data_type&#39;</span><span class="p">]</span> <span class="p">](</span><span class="n">f_name</span><span class="p">)</span>
+    <span class="c"># data_handler = data_handler_handle_map[desc[&#39;detector_type&#39;]](data_file, fea_option)</span>
+    <span class="n">data_handler</span> <span class="o">=</span> <span class="n">data_handler_handle_map</span><span class="p">[</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]](</span><span class="n">data_file</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">detector_map</span><span class="p">[</span> <span class="n">desc</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span> <span class="p">](</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="n">res_args</span><span class="p">)</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">data_handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">detector</span>
+</div>
+<div class="viewcode-block" id="detector_plot_dump"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.API.detector_plot_dump">[docs]</a><span class="k">def</span> <span class="nf">detector_plot_dump</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;don&#39;t actually detect, only plot precalculated data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">detector_map</span><span class="p">[</span><span class="n">type_</span><span class="p">](</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">set_args</span><span class="p">([])</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">plot_dump</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="test_detect"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.API.test_detect">[docs]</a><span class="k">def</span> <span class="nf">test_detect</span><span class="p">():</span>
+    <span class="n">ANO_ANA_DATA_FILE</span> <span class="o">=</span> <span class="s">&#39;./test_AnoAna.txt&#39;</span>
+    <span class="n">DETECTOR_DESC</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">interval</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">win_size</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+            <span class="n">win_type</span><span class="o">=</span><span class="s">&#39;time&#39;</span><span class="p">,</span> <span class="c"># &#39;time&#39;|&#39;flow&#39;</span>
+            <span class="n">fr_win_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="c"># window size for estimation of flow rate</span>
+            <span class="n">false_alarm_rate</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+            <span class="n">unified_nominal_pdf</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="c"># used in sensitivities analysis</span>
+            <span class="n">fea_option</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;dist_to_center&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;flow_size&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;cluster&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span>
+            <span class="n">ano_ana_data_file</span> <span class="o">=</span> <span class="n">ANO_ANA_DATA_FILE</span><span class="p">,</span>
+            <span class="n">detector_type</span> <span class="o">=</span> <span class="s">&#39;mfmb&#39;</span><span class="p">,</span>
+            <span class="n">data_handler</span> <span class="o">=</span> <span class="s">&#39;fs&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">DETECTOR_DESC</span>
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">detect</span><span class="p">(</span><span class="s">&#39;../Simulator/n0_flow.txt&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">plot_entropy</span><span class="p">()</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">test_detect</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -3,7 +3,7 @@
 '''
 This module implement a typical K-means Clustering.
 '''
-from __future__ import print_function
+from __future__ import print_function, division, absolute_import
 from random import sample
 
 

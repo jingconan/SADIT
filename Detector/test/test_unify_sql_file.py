@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from DataFile import HardDiskFileHandler
+from __future__ import print_function, division, absolute_import
+from ..DataFile import HardDiskFileHandler
 if __name__ == "__main__":
     from AnomalyDetector import FBAnoDetector
     ANO_ANA_DATA_FILE = '~/Share/AnoAna.txt'

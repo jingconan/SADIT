@@ -1,4 +1,5 @@
 """Anomalous Flow State or Flow Transition Pair Identification"""
+from __future__ import print_function, division, absolute_import
 from math import log
 # from util import abstract_method
 def abstract_method(): raise Exception("abstract_method")

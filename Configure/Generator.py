@@ -1,9 +1,5 @@
-from __future__ import print_function, division
-import sys
-sys.path.append("..")
-# from util import *
-# from mod_util import *
-from mod_util import Attr
+from __future__ import print_function, division, absolute_import
+from .mod_util import Attr
 
 class Generator(object):
     pass

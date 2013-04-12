@@ -2,38 +2,29 @@
 """
 This file contains all the stochastic detection techniques
 """
+from __future__ import print_function, division, absolute_import
 __author__ = "Jing Conan Wang"
 __email__ = "wangjing@bu.edu"
 __status__ = "Development"
 
 import os
 from util import plt
+
+from util import DataEndException, FetchNoDataException, abstract_method
+from util import save_csv
+
+import cPickle as pickle
+from math import log
+
 # try:
 #     import matplotlib.pyplot as plt
 # except ImportError:
 #     plt = False
 # import csv
 
-
-from DetectorLib import I1, I2
-from util import DataEndException, FetchNoDataException, abstract_method
-from util import save_csv
-from mod_util import plot_points
-
-import cPickle as pickle
-from math import log
-# import argparse
-# from Base import BaseDetector
-from Base import WindowDetector
-
-# def run_until_data_end(func, parameters):
-#     for para in parameters:
-#         try:
-#             yield func(*para)
-#         except FetchNoDataException:
-#             break #FIXME
-#         except DataEndException as e:
-#             raise e
+from .DetectorLib import I1, I2
+from .mod_util import plot_points
+from .Base import WindowDetector
 
 class StoDetector (WindowDetector):
     """ Abstract Base Class for stochastic anomaly detector.
@@ -167,8 +158,8 @@ class StoDetector (WindowDetector):
             i += 1
             if max_detect_num and i > max_detect_num:
                 break
-            if rg_type == 'time' : print 'time: %f' %(time)
-            else: print 'flow: %s' %(time)
+            if rg_type == 'time' : print('time: %f' %(time))
+            else: print('flow: %s' %(time))
 
             try:
                 self.rg = [time, time+win_size] # For two window method
@@ -176,9 +167,9 @@ class StoDetector (WindowDetector):
                 entropy = self.I(em, norm_em=self.norm_em)
                 self.record( entropy=entropy, winT = time, threshold = 0, em=em)
             except FetchNoDataException:
-                print 'there is no data to detect in this window'
+                print('there is no data to detect in this window')
             except DataEndException:
-                print 'reach data end, break'
+                print('reach data end, break')
                 break
 
             time += interval
@@ -416,7 +407,7 @@ class ModelBaseAnoDetector(StoDetector):
         return Pmb, mpmb
 
 
-from Ident import *
+from .Ident import *
 class FBAnoDetector(StoDetector):
     """model free and model based together, will be faster then run model free
     and model based approaches separately since some intemediate results are reused.
@@ -676,12 +667,12 @@ class SlowDriftStaticDetector(FBAnoDetector):
 
     def cal_norm_em(self, **kwargs):
         self.desc.update(kwargs)
-        start = self.desc['start']
-        delta_t = self.desc['delta_t']
+        # start = self.desc['start']
+        # delta_t = self.desc['delta_t']
         win_type = self.desc['win_type']
         normal_rg = self.desc['normal_rg']
 
-        rg = [start, start + delta_t]
+        # rg = [start, start + delta_t]
         norm_win_em = self.get_em(rg=normal_rg,rg_type=win_type)
         return norm_win_em
 
@@ -702,7 +693,7 @@ class PeriodStaticDetector(FBAnoDetector):
     def cal_norm_em(self, **kwargs):
         self.desc.update(kwargs)
         start = self.desc['start']
-        win_size = self.desc['win_size']
+        # win_size = self.desc['win_size']
         win_type = self.desc['win_type']
         period = self.desc['period']
         delta_t = self.desc['delta_t']
@@ -784,8 +775,8 @@ class TwoWindowAnoDetector(DynamicStoDetector):
 
         return norm_win_em
 
-import numpy as np
-from DataHandler import CombinedEM
+# import numpy as np
+from .DataHandler import CombinedEM
 
 class PeriodStoDetector(DynamicStoDetector):
     """Stochastic Detector Designed to Detect Anomaly when the
@@ -885,8 +876,8 @@ class DummyShiftWindowDetector(DynamicStoDetector):
 if __name__ == "__main__":
     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]
     res = find_seg(flag)
-    print 'res, ', res
+    print('res, ', res)
     for a, b, f in res:
-        print flag[a:b]
-        print 'flag, ', f
+        print(flag[a:b])
+        print('flag, ', f)
 

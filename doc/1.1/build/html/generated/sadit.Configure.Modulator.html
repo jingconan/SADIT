@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modulator Module &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../index.html" />
+    <link rel="up" title="Configure Package" href="sadit.Configure.html" />
+    <link rel="prev" title="mod_util Module" href="sadit.Configure.mod_util.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sadit.Configure.mod_util.html" title="mod_util Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="sadit.html" >sadit Package</a> &raquo;</li>
+          <li><a href="sadit.Configure.html" accesskey="U">Configure Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-sadit.Configure.Modulator">
+<span id="modulator-module"></span><h1><tt class="xref py py-mod docutils literal"><span class="pre">Modulator</span></tt> Module<a class="headerlink" href="#module-sadit.Configure.Modulator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="sadit.Configure.Modulator.MVModulator">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Modulator.</tt><tt class="descname">MVModulator</tt><big>(</big><em>joint_dist</em>, <em>interval</em>, <em>generator_states</em>, <em>**desc</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#MVModulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.MVModulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sadit.Configure.Modulator.Modulator" title="sadit.Configure.Modulator.Modulator"><tt class="xref py py-class docutils literal"><span class="pre">sadit.Configure.Modulator.Modulator</span></tt></a>, <a class="reference internal" href="sadit.Configure.Behaviour.html#sadit.Configure.Behaviour.MVBehaviour" title="sadit.Configure.Behaviour.MVBehaviour"><tt class="xref py py-class docutils literal"><span class="pre">sadit.Configure.Behaviour.MVBehaviour</span></tt></a></p>
+<p>Modulator defines the behaviour of generator within a range of time.
+implement the stage function.
+joint_dist should be numpy array</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">behave</span></tt>(start,&nbsp;end)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">behave_with_profile</span></tt>(start,&nbsp;profile)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_interval</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_new_state</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_sample</span></tt>()</td>
+<td>generate a sample according to joint distribution</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sadit.Configure.Modulator.MVModulator.stage" title="sadit.Configure.Modulator.MVModulator.stage"><tt class="xref py py-obj docutils literal"><span class="pre">stage</span></tt></a>()</td>
+<td>for one stage</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sadit.Configure.Modulator.MVModulator.stage">
+<tt class="descname">stage</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#MVModulator.stage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.MVModulator.stage" title="Permalink to this definition">¶</a></dt>
+<dd><p>for one stage</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sadit.Configure.Modulator.MarkovModulator">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Modulator.</tt><tt class="descname">MarkovModulator</tt><big>(</big><em>interval</em>, <em>P</em>, <em>generator_states</em>, <em>**desc</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#MarkovModulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.MarkovModulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sadit.Configure.Modulator.Modulator" title="sadit.Configure.Modulator.Modulator"><tt class="xref py py-class docutils literal"><span class="pre">sadit.Configure.Modulator.Modulator</span></tt></a>, <a class="reference internal" href="sadit.Configure.Behaviour.html#sadit.Configure.Behaviour.MarkovBehaviour" title="sadit.Configure.Behaviour.MarkovBehaviour"><tt class="xref py py-class docutils literal"><span class="pre">sadit.Configure.Behaviour.MarkovBehaviour</span></tt></a></p>
+<ul class="simple">
+<li>name</li>
+<li>start</li>
+<li>profile</li>
+<li>generator_states: a list of generator names, representing the states</li>
+<li>P: transition probability</li>
+<li>interval: mean of interval time.</li>
+</ul>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">behave</span></tt>(start,&nbsp;end)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">behave_with_profile</span></tt>(start,&nbsp;profile)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_interval</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_new_state</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#sadit.Configure.Modulator.MarkovModulator.stage" title="sadit.Configure.Modulator.MarkovModulator.stage"><tt class="xref py py-obj docutils literal"><span class="pre">stage</span></tt></a>()</td>
+<td>for one markov stage</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sadit.Configure.Modulator.MarkovModulator.stage">
+<tt class="descname">stage</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#MarkovModulator.stage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.MarkovModulator.stage" title="Permalink to this definition">¶</a></dt>
+<dd><p>for one markov stage</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sadit.Configure.Modulator.Modulator">
+<em class="property">class </em><tt class="descclassname">sadit.Configure.Modulator.</tt><tt class="descname">Modulator</tt><big>(</big><em>**desc</em><big>)</big><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#Modulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.Modulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<ul class="simple">
+<li>name</li>
+<li>start</li>
+<li>profile</li>
+<li>generator</li>
+</ul>
+<dl class="attribute">
+<dt id="sadit.Configure.Modulator.Modulator.profile">
+<tt class="descname">profile</tt><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#Modulator.profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.Modulator.profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sadit.Configure.Modulator.Modulator.start">
+<tt class="descname">start</tt><a class="reference internal" href="../_modules/sadit/Configure/Modulator.html#Modulator.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sadit.Configure.Modulator.Modulator.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sadit.Configure.mod_util.html"
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">mod_util</span></tt> Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/generated/sadit.Configure.Modulator.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sadit.Configure.mod_util.html" title="mod_util Module"
+             >previous</a> |</li>
+        <li><a href="../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="sadit.html" >sadit Package</a> &raquo;</li>
+          <li><a href="sadit.Configure.html" >Configure Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

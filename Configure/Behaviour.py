@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 """This file defines the behaviour of """
-import sys
-sys.path.append("..")
+from __future__ import print_function, division, absolute_import
 from util import TO_CLS, abstract_method
 from random import randint
-from mod_util import RandDist
+from .mod_util import RandDist
 
 class Behaviour(object):
     def stage(): abstract_method()
     def behave(): abstract_method()
 
-from random import expovariate as exponential
+# from random import expovariate as exponential
 class MarkovBehaviour(Behaviour):
     """Markov behaviour is a kinf of behaviour that can """
     def __init__(self, interval, P, states):
@@ -50,7 +49,7 @@ class MarkovBehaviour(Behaviour):
 try:
     import numpy as np
 except:
-    print '[Warning] MultiServer Detector requires numpy'
+    print('[Warning] MultiServer Detector requires numpy')
 
 class MVBehaviour(MarkovBehaviour):
     """
@@ -103,5 +102,5 @@ class MVBehaviour(MarkovBehaviour):
         for r in self.record:
             freq[r] += 1
         freq /= np.sum(freq)
-        print 'freq, ', freq
+        # print 'freq, ', freq
 

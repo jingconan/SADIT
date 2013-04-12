@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Detector.SVMDetector &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Detector.SVMDetector</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file is the flow by flow svm detector</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="n">SVM_FOLDER</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/tools/libsvm-3.12&#39;</span>
+
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">from</span> <span class="nn">mod_util</span> <span class="kn">import</span> <span class="n">plot_points</span>
+<span class="kn">from</span> <span class="nn">Base</span> <span class="kn">import</span> <span class="n">BaseDetector</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">save_csv</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">plt</span> <span class="o">=</span> <span class="bp">False</span>
+
+
+<div class="viewcode-block" id="write_svm_data_file"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.write_svm_data_file">[docs]</a><span class="k">def</span> <span class="nf">write_svm_data_file</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">fea</span><span class="p">,</span> <span class="n">f_name</span><span class="p">):</span>
+    <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">fea</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">fea_v</span> <span class="o">=</span> <span class="n">fea</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">fea_v</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fea_v</span><span class="p">))</span> <span class="p">]</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMDetector"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector">[docs]</a><span class="k">class</span> <span class="nc">SVMDetector</span><span class="p">(</span><span class="n">BaseDetector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;base class for SVM Detector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+        <span class="c"># self.__dict__.update(desc)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="SVMDetector.rg_type"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.rg_type">[docs]</a>    <span class="k">def</span> <span class="nf">rg_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;win_type&#39;</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.init_parser"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.init_parser">[docs]</a>    <span class="k">def</span> <span class="nf">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--svm_type&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">-s svm_type : set type of SVM (default 0)</span>
+<span class="s">    0 -- C-SVC</span>
+<span class="s">    1 -- nu-SVC</span>
+<span class="s">    2 -- one-class SVM</span>
+<span class="s">    3 -- epsilon-SVR</span>
+<span class="s">    4 -- nu-SVR</span>
+<span class="s">                &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--kernel_type&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;2&#39;</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    0 -- linear: u&#39;*v</span>
+<span class="s">    1 -- polynomial: (gamma*u&#39;*v + coef0)^degree</span>
+<span class="s">    2 -- radial basis function: exp(-gamma*|u-v|^2)</span>
+<span class="s">    3 -- sigmoid: tanh(gamma*u&#39;*v + coef0)</span>
+<span class="s">                &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--pca_var_pic&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;the picture name for pca component variable&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--pca_th&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;the threshold for pca&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--gamma&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;0.01&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;set gamma in kernel function&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--nu&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;0.01&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;set the parameter nu of nu-SVM, one-class SVM and nu-SVR&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--degree&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;degreee for polynomial kernel&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--svm_dat_file&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/test.dat&#39;</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;svm data file path&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--svm_model_file&#39;</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/test.model&#39;</span><span class="p">,</span>
+                <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;svm model file path&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--svm_pred_file&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/test.pred&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;svm predict file path&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--scale_para_file&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">ROOT</span> <span class="o">+</span> <span class="s">&#39;/Share/scale.sf&#39;</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;svm&quot;</span><span class="p">)</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SVMDetector.norm_fea"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.norm_fea">[docs]</a>    <span class="k">def</span> <span class="nf">norm_fea</span><span class="p">(</span><span class="n">fea</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;normalize the feature to [0, 1]&quot;&quot;&quot;</span>
+        <span class="n">zip_fea</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">fea</span><span class="p">)</span>
+        <span class="n">new_zip_fea</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">zf</span> <span class="ow">in</span> <span class="n">zip_fea</span><span class="p">:</span>
+            <span class="n">max_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">zf</span><span class="p">)</span>
+            <span class="n">min_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">zf</span><span class="p">)</span>
+            <span class="n">rg</span> <span class="o">=</span> <span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span>
+            <span class="k">if</span> <span class="n">rg</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">new_zip_fea</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zf</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="c"># print &#39;max_val, &#39;, max_val</span>
+            <span class="c"># print &#39;min_val, &#39;, min_val</span>
+            <span class="c"># import pdb;pdb.set_trace()</span>
+            <span class="n">new_zip_fea</span><span class="o">.</span><span class="n">append</span><span class="p">([(</span><span class="n">f</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span><span class="n">rg</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">zf</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">new_zip_fea</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.pca"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.pca">[docs]</a>    <span class="k">def</span> <span class="nf">pca</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fea_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">NUMPY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fea_list</span>
+
+        <span class="n">pc</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">fea_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;pca_th&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;pca_var_pic&#39;</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pc</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="s">&#39;b-+&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;variance of each component at pca&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pca_var_pic</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+        <span class="c"># return np.dot(np.dot( pc.U[:, 0:pc.npc],  np.diag(pc.d[0:pc.npc]) ), pc.Vt[0:pc.npc, :])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fea_list</span><span class="p">),</span> <span class="n">pc</span><span class="o">.</span><span class="n">Vt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pc</span><span class="o">.</span><span class="n">npc</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="SVMDetector.scale"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;start to scale ...&#39;</span>
+        <span class="n">scale_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.scale&#39;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">SVM_FOLDER</span> <span class="o">+</span> <span class="s">&#39;/svm-scale&#39;</span><span class="p">,</span>
+            <span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;scale_para_file&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">],</span>
+            <span class="s">&#39;&gt;&#39;</span><span class="p">,</span>
+            <span class="n">scale_file</span>
+            <span class="p">]),</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_file</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.train"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;start to train...&#39;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="n">SVM_FOLDER</span> <span class="o">+</span> <span class="s">&#39;/svm-train&#39;</span><span class="p">,</span>
+            <span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">,</span>
+            <span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;kernel_type&#39;</span><span class="p">]),</span>
+            <span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;degree&#39;</span><span class="p">]),</span>
+            <span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;nu&#39;</span><span class="p">]),</span>
+            <span class="s">&#39;-g&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_model_file&#39;</span><span class="p">]])</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.predict"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;start to predict...&#39;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="n">SVM_FOLDER</span> <span class="o">+</span> <span class="s">&#39;/svm-predict&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_model_file&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_pred_file&#39;</span><span class="p">]])</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.load_pred"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.load_pred">[docs]</a>    <span class="k">def</span> <span class="nf">load_pred</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_pred_file&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.stat"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.stat">[docs]</a>    <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pred_num</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">val</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred</span> <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">val</span><span class="p">])</span>
+            <span class="n">pred_num</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ano_val</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">pred_num</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pred_num</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">print</span> <span class="s">&#39;total flows&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">),</span> <span class="s">&#39;alarm num, &#39;</span><span class="p">,</span> <span class="n">pred_num</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ano_val</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="SVMDetector.save_plot_as_csv"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.save_plot_as_csv">[docs]</a>    <span class="k">def</span> <span class="nf">save_plot_as_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span>
+        <span class="n">save_csv</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;mf&#39;</span><span class="p">,</span> <span class="s">&#39;mb&#39;</span><span class="p">],</span> <span class="n">mf</span><span class="p">,</span> <span class="n">mb</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.plot"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_pred</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.plot_dump"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.plot_dump">[docs]</a>    <span class="k">def</span> <span class="nf">plot_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;load the dumped results and plot it</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">))</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c"># self.desc.update(data)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_pred</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.get_start_time"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.get_start_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_file</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_fea_slice</span><span class="p">(</span><span class="n">fea</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="SVMDetector.dump"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMDetector.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_name</span><span class="p">):</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pred&#39;</span><span class="p">,</span> <span class="s">&#39;ano_val&#39;</span><span class="p">,</span> <span class="s">&#39;args&#39;</span><span class="p">,</span> <span class="s">&#39;detect_num&#39;</span><span class="p">,</span> <span class="s">&#39;interval&#39;</span><span class="p">,</span> <span class="s">&#39;desc&#39;</span><span class="p">]</span>
+        <span class="c"># record_data = dict()</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">var</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="c"># pickle.dump(self.__dict__, open(data_name, &#39;w&#39;) )</span>
+
+</div></div>
+<div class="viewcode-block" id="SVMFlowByFlowDetector"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector">[docs]</a><span class="k">class</span> <span class="nc">SVMFlowByFlowDetector</span><span class="p">(</span><span class="n">SVMDetector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;SVM Flow By Flow Anomaly Detector Method&quot;&quot;&quot;</span>
+    <span class="c"># MAX_FLOW_ONE_TIME = 1e4 # max number of flow it will compare each time</span>
+
+<div class="viewcode-block" id="SVMFlowByFlowDetector.init_parser"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector.init_parser">[docs]</a>    <span class="k">def</span> <span class="nf">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SVMFlowByFlowDetector</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">init_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--sample_ratio&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="s">&quot;sample the flows to reduce computation cost, sample ratio of the flows&quot;</span><span class="p">)</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SVMFlowByFlowDetector.sample"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">fea</span><span class="p">,</span> <span class="n">ratio</span><span class="p">):</span>
+        <span class="n">flow_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fea</span><span class="p">)</span>
+        <span class="n">sample_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">flow_num</span><span class="p">)</span>
+        <span class="n">interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">flow_num</span> <span class="o">/</span> <span class="n">sample_num</span><span class="p">)</span>
+        <span class="n">sample_fea</span> <span class="o">=</span> <span class="p">[</span><span class="n">fea</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">flow_num</span><span class="p">,</span> <span class="n">interval</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">sample_fea</span>
+</div>
+<div class="viewcode-block" id="SVMFlowByFlowDetector.get_start_time"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector.get_start_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_file</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_fea_slice</span><span class="p">(</span><span class="n">fea</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;sample_ratio&#39;</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="SVMFlowByFlowDetector.write_dat"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector.write_dat">[docs]</a>    <span class="k">def</span> <span class="nf">write_dat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">fea</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_fea_slice</span><span class="p">()</span>
+        <span class="c"># fea = [f[1:] for f in fea] # ignore cluster label</span>
+        <span class="n">fea</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fea</span><span class="p">]</span> <span class="c"># ignore cluster label</span>
+        <span class="c"># zip_fea = data.quantize_fea()</span>
+        <span class="c"># fea = zip(*zip_fea)</span>
+        <span class="c"># fea_str = data.data.get_fea_slice([&#39;flow_size&#39;])</span>
+        <span class="c"># fea = [[float(s[0])] for s in fea_str]</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="c"># label = [0] * len(fea)</span>
+        <span class="c"># write_svm_data_file(label, fea, self.svm_dat_file)</span>
+
+        <span class="c">#### SAMPLE FEATURE TO REDUCE COMPUTATION TIME ####</span>
+        <span class="n">sample_fea</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">fea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;sample_ratio&#39;</span><span class="p">])</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="n">sample_fea</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_fea</span><span class="p">(</span><span class="n">sample_fea</span><span class="p">)</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="c"># sample_fea = self.pca(sample_fea)</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample_fea</span><span class="p">)</span>
+        <span class="n">write_svm_data_file</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">sample_fea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="SVMFlowByFlowDetector.detect"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector.detect">[docs]</a>    <span class="k">def</span> <span class="nf">detect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_file</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_dat</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_pred</span><span class="p">()</span>
+
+        <span class="n">fea_slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_start_time</span><span class="p">()</span>
+        <span class="n">min_t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fea_slice</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">-</span><span class="n">min_t</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fea_slice</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="s">&#39;pred&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="s">&#39;interval&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;interval&#39;</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="SVMFlowByFlowDetector.plot_pred"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMFlowByFlowDetector.plot_pred">[docs]</a>    <span class="k">def</span> <span class="nf">plot_pred</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xlim_</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ylim_</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">csv</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c"># self.stat()</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="s">&#39;start_time&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="s">&#39;pred&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">record_data</span><span class="p">[</span><span class="s">&#39;interval&#39;</span><span class="p">]</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">start_time</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ano_val</span><span class="p">:</span>
+                <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_time</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">start_time</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ano_val</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">start_time</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ano_val</span><span class="p">]</span>
+        <span class="c"># plt.plot(start_time, self.pred, &#39;+&#39;)</span>
+        <span class="c"># threshold = [0] * len(start_time)</span>
+        <span class="k">if</span> <span class="n">csv</span><span class="p">:</span>
+            <span class="n">save_csv</span><span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">plot_points</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                <span class="c"># threshold,</span>
+                <span class="n">xlim_</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">start_time</span><span class="p">)],</span> <span class="n">ylim_</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
+                <span class="n">ano_marker</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r+&#39;</span><span class="p">],</span> <span class="n">threshold_marker</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c"># plt.plot(x, y, &#39;+r&#39;)</span>
+        <span class="c"># plt.axis([0, 2000, 0, 1.1])</span>
+        <span class="c"># if pic_show: plt.show()</span>
+        <span class="c"># if pic_name: plt.savefig(pic_name)</span>
+</div></div>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">DataEndException</span><span class="p">,</span> <span class="n">FetchNoDataException</span>
+<span class="kn">from</span> <span class="nn">PCA</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+    <span class="n">NUMPY</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">NUMPY</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="kn">from</span> <span class="nn">Base</span> <span class="kn">import</span> <span class="n">WindowDetector</span>
+<div class="viewcode-block" id="SVMTemporalDetector"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMTemporalDetector">[docs]</a><span class="k">class</span> <span class="nc">SVMTemporalDetector</span><span class="p">(</span><span class="n">SVMDetector</span><span class="p">,</span> <span class="n">WindowDetector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;SVM Temporal Difference Detector. Proposed by R.L Taylor. Implemented by</span>
+<span class="sd">    J. C. Wang &lt;wangjing@bu.ed&gt; &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SVMTemporalDetector.init_parser"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMTemporalDetector.init_parser">[docs]</a>    <span class="k">def</span> <span class="nf">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">SVMDetector</span><span class="o">.</span><span class="n">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">)</span>
+        <span class="n">WindowDetector</span><span class="o">.</span><span class="n">init_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMTemporalDetector.set_args"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMTemporalDetector.set_args">[docs]</a>    <span class="k">def</span> <span class="nf">set_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">):</span>
+        <span class="n">SVMDetector</span><span class="o">.</span><span class="n">set_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argv</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SVMTemporalDetector.write_dat"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMTemporalDetector.write_dat">[docs]</a>    <span class="k">def</span> <span class="nf">write_dat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;construct feature and write dat data for libsvm use. data is a Data Handler Class. refer</span>
+<span class="sd">        DataHandler.py for details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fea_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;max_detect_num&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;max_detect_num&#39;</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rg_type</span> <span class="o">==</span> <span class="s">&#39;time&#39;</span> <span class="p">:</span> <span class="k">print</span> <span class="s">&#39;time: </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;flow: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c"># fea = data_handler.get_svm_feature(rg=[time, time+self.win_size], rg_type=self.rg_type)</span>
+                <span class="n">fea</span> <span class="o">=</span> <span class="n">data_handler</span><span class="o">.</span><span class="n">get_svm_fea</span><span class="p">(</span><span class="n">rg</span><span class="o">=</span><span class="p">[</span><span class="n">time</span><span class="p">,</span> <span class="n">time</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;win_size&#39;</span><span class="p">]],</span> <span class="n">rg_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rg_type</span><span class="p">)</span>
+                <span class="n">fea_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fea</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">FetchNoDataException</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;there is no data to detect in this window&#39;</span>
+            <span class="k">except</span> <span class="n">DataEndException</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;reach data end, break&#39;</span>
+                <span class="k">break</span>
+
+            <span class="c"># import pdb;pdb.set_trace()</span>
+            <span class="n">time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;interval&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">fea_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_fea</span><span class="p">(</span><span class="n">fea_list</span><span class="p">)</span>
+        <span class="n">fea_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">fea_list</span><span class="p">)</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">fea_list</span><span class="p">)</span>
+        <span class="n">write_svm_data_file</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">fea_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;svm_dat_file&#39;</span><span class="p">])</span>
+
+    <span class="c"># def train(self):</span>
+    <span class="c">#     print &#39;start to train...&#39;</span>
+    <span class="c">#     subprocess.check_call([SVM_FOLDER + &#39;/svm-train&#39;,</span>
+    <span class="c">#         &#39;-s&#39;, &#39;2&#39;,</span>
+    <span class="c">#         &#39;-d&#39;, str(self.degree),</span>
+    <span class="c">#         &#39;-n&#39;, str(self.nu),</span>
+    <span class="c">#         &#39;-t&#39;, str(self.kernel_type),</span>
+    <span class="c">#         &#39;-g&#39;, str(self.gamma),</span>
+    <span class="c">#         self.svm_dat_file,</span>
+    <span class="c">#         self.svm_model_file])</span>
+</div>
+<div class="viewcode-block" id="SVMTemporalDetector.detect"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMTemporalDetector.detect">[docs]</a>    <span class="k">def</span> <span class="nf">detect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_dat</span><span class="p">(</span><span class="n">data_handler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_pred</span><span class="p">()</span>
+
+    <span class="c"># def plot_pred(self, pic_show=True, pic_name=None, *args, **kwargs):</span></div>
+<div class="viewcode-block" id="SVMTemporalDetector.plot_pred"><a class="viewcode-back" href="../../../generated/sadit.Detector.html#sadit.Detector.SVMDetector.SVMTemporalDetector.plot_pred">[docs]</a>    <span class="k">def</span> <span class="nf">plot_pred</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xlim_</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ylim_</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">csv</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c"># import matplotlib.pyplot as plt</span>
+        <span class="c"># self.stat()</span>
+        <span class="n">ano_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ano_val</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;interval&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ano_idx</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ano_idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">csv</span><span class="p">:</span>
+            <span class="n">save_csv</span><span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="n">plot_points</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                <span class="n">ano_marker</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ro&#39;</span><span class="p">],</span> <span class="n">threshold_marker</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">xlim_</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_num</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">[</span><span class="s">&#39;interval&#39;</span><span class="p">]],</span> <span class="n">ylim_</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
+                <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c"># plt.plot(x, y, &#39;+r&#39;)</span>
+        <span class="c"># import pdb;pdb.set_trace()</span>
+        <span class="c"># plt.axis([0, 5000, 0, 1.1])</span>
+        <span class="c"># plt.axis([0, 2000, 0, 1.1])</span>
+        <span class="c"># if pic_show: plt.show()</span>
+        <span class="c"># if pic_name: plt.savefig(pic_name)</span>
+
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">svm_dat_file</span><span class="o">=</span><span class="s">&#39;./test.dat&#39;</span><span class="p">,</span>
+            <span class="n">svm_model_file</span><span class="o">=</span><span class="s">&#39;./test.model&#39;</span><span class="p">,</span>
+            <span class="n">svm_pred_file</span><span class="o">=</span><span class="s">&#39;./test.pred&#39;</span><span class="p">)</span>
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">SVMFlowByFlowDetector</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">detector</span><span class="o">.</span><span class="n">detect</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
+from __future__ import print_function, division, absolute_import
 import sys
-sys.path.append("..")
-sys.path.append("../..")
 
-from Detector import *
+from ..Detector import *
 def test_SQL():
     db_info = dict(
             host = "localhost",

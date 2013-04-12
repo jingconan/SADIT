@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-import sys
-sys.path.append("..")
-sys.path.append("../..")
-from DataFile import HardDiskFileHandler
+from __future__ import print_function, division, absolute_import
+from ..DataFile import HardDiskFileHandler
 
 def test_HardDiskFileHandler():
     from Detector_basic import FBAnoDetector

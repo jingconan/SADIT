@@ -3,22 +3,23 @@
 get the statistical quantify for the hypotheis test
 like False Alarm Rate.
 """
-from Detector.DataParser import RawParseData
-from Detect import Detect
-from util import update_not_none
+from __future__ import print_function, division, absolute_import
 import copy, os
-
-import matplotlib.pyplot as plt
+from Detector.DataParser import RawParseData
+from util import update_not_none, plt
+# import matplotlib.pyplot as plt
 import cPickle as pickle
 import itertools
+
+from .Detect import Detect
 
 def roc(data):
     tpv, fnv, tnv, fpv, _, _ = data
     tpr = [ tp * 1.0 / (tp + fn) for tp, fn in zip(tpv, fnv)]
     # calculate the false positive rate
     fpr = [ fp * 1.0 / (fp + tn) for fp, tn in zip(fpv, tnv)]
-    print 'fpr, ', fpr
-    print 'tpr, ', tpr
+    print('fpr, ', fpr)
+    print('tpr, ', tpr)
     return fpr, tpr
 
 def get_quantitative(A, B, W):
@@ -261,9 +262,9 @@ sensitivity: %f\tspecificity: %f
         for entropy_type in entropy_type_vec:
             rec[entropy_type] = []
             for ab_win_num in xrange(1, 100, 2):
-                print 'ab_win_num, ', ab_win_num
+                print('ab_win_num, ', ab_win_num)
                 res = self.eval(ab_win_num=ab_win_num, entropy_type=entropy_type)
-                print self.OUT_STRING%res
+                print(self.OUT_STRING%res)
                 rec[entropy_type].append(res)
 
         # import ipdb;ipdb.set_trace()
@@ -297,14 +298,14 @@ sensitivity: %f\tspecificity: %f
                 mb=self.desc['max_search_mb_states']) # it influence the max ab_state_num it will search
         rec = dict(zip(idents.keys(), [list() for i in xrange(len(idents))]))
         for ident_type, entropy_type in idents.iteritems():
-            print 'ident_type, ', ident_type
+            print('ident_type, ', ident_type)
             for ab_states_num in xrange(max_ab_state_num[entropy_type]):
-                print 'ab_states_num, ', ab_states_num
+                print('ab_states_num, ', ab_states_num)
                 res = self.eval(ident_type, entropy_type,
                         ab_states_num=ab_states_num,
                         ab_win_num=ab_win_num)
 
-                print self.OUT_STRING%res
+                print(self.OUT_STRING%res)
                 rec[ident_type].append(res)
 
         # import ipdb;ipdb.set_trace()
@@ -318,7 +319,7 @@ sensitivity: %f\tspecificity: %f
                 entropy_type='mf',
                 entropy_threshold=entropy_threshold,
                 ab_states_num=2)
-        print self.OUT_STRING%res
+        print(self.OUT_STRING%res)
 
     def eval(self, ident_type=None, entropy_type=None, portion=None, ab_states_num=None,
             entropy_threshold=None, ab_win_portion=None, ab_win_num=None):
@@ -362,8 +363,9 @@ sensitivity: %f\tspecificity: %f
                 entropy_threshold, ab_win_portion, ab_win_num,
                 ab_states)
 
-        print 'ab_states, ', ab_states
-        print 'abnormal window indices are: ', self.detector.ab_win_idx
+        print('ab_states, ', ab_states)
+        print('abnormal window indices are: ',
+                self.detector.ab_win_idx)
 
         return get_quantitative(self.real_ab_flow_seq,
                 self.ab_seq,

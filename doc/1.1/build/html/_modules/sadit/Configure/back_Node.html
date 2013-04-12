@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sadit.Configure.back_Node &mdash; SADIT 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SADIT 1.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="sadit" href="../../sadit.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" accesskey="U">sadit</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sadit.Configure.back_Node</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">pydot</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="n">NODE_NUM</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;..&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">settings</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">mod_util</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">Generator</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Modulator</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="NNode"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.NNode">[docs]</a><span class="k">class</span> <span class="nc">NNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="c"># node_seq = 0</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipdests</span><span class="p">,</span> <span class="o">**</span><span class="n">argv</span><span class="p">):</span>
+        <span class="k">assert</span><span class="p">(</span> <span class="nb">type</span><span class="p">(</span><span class="n">ipdests</span><span class="p">)</span><span class="o">==</span> <span class="n">types</span><span class="o">.</span><span class="n">TupleType</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">ipdests</span><span class="p">)</span><span class="o">==</span> <span class="n">types</span><span class="o">.</span><span class="n">ListType</span> <span class="p">)</span>
+        <span class="k">global</span> <span class="n">NODE_NUM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_seq</span> <span class="o">=</span> <span class="n">NODE_NUM</span>
+        <span class="n">NODE_NUM</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c"># default attribute</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">autoack</span> <span class="o">=</span> <span class="s">&#39;&quot;False&quot;&#39;</span><span class="p">,</span>
+                <span class="n">ipdests</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ipdests</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;&quot;&#39;</span><span class="p">,</span>
+                <span class="n">mod_num</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span><span class="p">,</span>
+                <span class="n">traffic</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="p">)</span>
+        <span class="n">obj_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;attributes&#39;</span><span class="p">:</span> <span class="n">attr</span><span class="p">,</span>
+                <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;n&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_seq</span> <span class="p">),</span>
+                <span class="s">&#39;parent_node_list&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;port&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;sequence&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;node&#39;</span><span class="p">}</span>
+
+        <span class="n">Node</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;n&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_seq</span><span class="p">),</span> <span class="n">obj_dict</span> <span class="o">=</span> <span class="n">obj_dict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipdests</span> <span class="o">=</span> <span class="n">ipdests</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modulator</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="NNode.m_id"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.NNode.m_id">[docs]</a>    <span class="k">def</span> <span class="nf">m_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;modulator identifier&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;m&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_seq</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod_num</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="NNode.s_id"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.NNode.s_id">[docs]</a>    <span class="k">def</span> <span class="nf">s_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;generator source identifier&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;s&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_seq</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod_num</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NNode.add_modulator"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.NNode.add_modulator">[docs]</a>    <span class="k">def</span> <span class="nf">add_modulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">generator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;generator is a Generator Object&quot;&quot;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">generator</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_num</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">generator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">Modulator</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;modulator&#39;</span><span class="p">,</span>
+                <span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">generator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s_id</span><span class="p">,</span>
+                <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modulator</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+</div>
+<div class="viewcode-block" id="NNode.sync"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.NNode.sync">[docs]</a>    <span class="k">def</span> <span class="nf">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;sync to the dot property&quot;&quot;&quot;</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">]</span>
+        <span class="c"># update ipdests</span>
+        <span class="n">attr</span><span class="p">[</span><span class="s">&#39;ipdests&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ipdests</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;&quot;&#39;</span>
+        <span class="c"># update traffic</span>
+        <span class="n">attr</span><span class="p">[</span><span class="s">&#39;traffic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulator</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;&quot;&#39;</span>
+        <span class="c"># update modultaor</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modulator</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">attr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="c"># update generator</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">attr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="NNode.clear_modulator"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.NNode.clear_modulator">[docs]</a>    <span class="k">def</span> <span class="nf">clear_modulator</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traffic</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">][</span><span class="s">&#39;mod_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span>
+</div></div>
+<span class="kn">import</span> <span class="nn">copy</span>
+<div class="viewcode-block" id="MarkovNode"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.MarkovNode">[docs]</a><span class="k">class</span> <span class="nc">MarkovNode</span><span class="p">(</span><span class="n">NNode</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipdests</span><span class="p">,</span> <span class="o">**</span><span class="n">markov_desc</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">markov_desc</span> <span class="o">=</span> <span class="n">markov_desc</span>
+        <span class="n">NNode</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipdests</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_num</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_gen_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipdst</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_desc</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">]</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_desc</span><span class="p">[</span><span class="s">&#39;ipsrc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">choose_ip_addr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ipdests</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_desc</span><span class="p">[</span><span class="s">&#39;ipdst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipdst</span>
+        <span class="k">return</span> <span class="n">get_generator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_desc</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MarkovNode.s_id"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.MarkovNode.s_id">[docs]</a>    <span class="k">def</span> <span class="nf">s_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;generator source identifier&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;s&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_seq</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod_num</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_num</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MarkovNode.add_modulator"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.MarkovNode.add_modulator">[docs]</a>    <span class="k">def</span> <span class="nf">add_modulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">generator_list</span><span class="p">,</span> <span class="n">markov_desc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_num</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">s_id_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="n">generator_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">gen</span>
+            <span class="n">s_id_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">markov_desc</span><span class="p">:</span> <span class="n">markov_desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">markov_desc</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">MarkovModulator</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s">&#39;modulator&#39;</span><span class="p">,</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span>
+                <span class="n">generator_states</span> <span class="o">=</span> <span class="n">s_id_list</span><span class="p">,</span>
+                <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">markov_desc</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">modulator</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+</div>
+<div class="viewcode-block" id="MarkovNode.sync"><a class="viewcode-back" href="../../../generated/sadit.Configure.html#sadit.Configure.back_Node.MarkovNode.sync">[docs]</a>    <span class="k">def</span> <span class="nf">sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;sync to the dot property&quot;&quot;&quot;</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_dict</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">]</span>
+        <span class="c"># update ipdests</span>
+        <span class="n">attr</span><span class="p">[</span><span class="s">&#39;ipdests&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ipdests</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;&quot;&#39;</span>
+        <span class="c"># update traffic</span>
+        <span class="c"># update modultaor</span>
+        <span class="n">key_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">mod_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modulator</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">mod_list</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">key_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+                <span class="n">mod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+        <span class="c"># print &#39;*&#39; * 100</span>
+        <span class="n">attr</span><span class="p">[</span><span class="s">&#39;traffic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">key_list</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;&quot;&#39;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">key_list</span><span class="p">,</span> <span class="n">mod_list</span><span class="p">):</span>
+            <span class="n">attr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="c"># update generator</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">attr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SADIT 1.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sadit.html" >sadit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Jing Conan Wang.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

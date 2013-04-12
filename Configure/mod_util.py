@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 ##############################################
 ####    Utility Function for Configure #######
 ##############################################
@@ -47,7 +48,7 @@ def CalIPCenter(IPMat, DF):
 try:
     from matplotlib.pyplot import figure, plot
 except:
-    print 'no matplotlib'
+    print('no matplotlib')
 
 def PlotPts(IPMat, corePts, anoPts, c):
     figure()
@@ -61,7 +62,7 @@ import settings
 try:
     import numpy as np
 except:
-    print "numpy hasn't been installed"
+    print("numpy hasn't been installed")
 def GetIPMat():
     '''load valid ip adrees from setting.IPS_FILE'''
     IP = LoadValidIP(settings.IPS_FILE)
