@@ -1,13 +1,25 @@
-# from StoDetector import DynamicStoDetector
-import itertools
-from StoDetector import *
-from util import mkiter, meval, del_none_key
-import copy
-class EnsembleDetector(object):
-    def __init__(self):
+""" Robust Methods
+"""
+from __future__ import print_function, division, absolute_import
+import itertools, copy
+import numpy as np
+from util import del_none_key
+
+from . import StoDetector
+from .DetectorLib import I1, I2
+
+class RobustDetector(StoDetector.FBAnoDetector):
+    """ Robust Detector is designed for dynamic network environment
+    """
+    def __init__(self, desc):
+        StoDetector.FBAnoDetector.__init__(self, desc)
+
         self.det = dict()
         self.det_para = dict()
         self.det_type = dict()
+
+    # def init_parser(self, parser):
+        # pass
 
     def register(self, alg_name, alg, para, type_ ='dynamic'):
         """ register a algorithm
@@ -36,40 +48,21 @@ class EnsembleDetector(object):
         self.det_para[alg_name] = del_none_key(para)
         self.det_type[alg_name] = type_
 
-    def call(self, alg_name, action, *args, **kwargs):
-        pass
-
-class RobustDetector(EnsembleDetector, FBAnoDetector):
-    """ Robust Detector is designed for dynamic network environment
-    """
-    def __init__(self, desc):
-        FBAnoDetector.__init__(self, desc)
-        EnsembleDetector.__init__(self)
-
-    # def init_parser(self, parser):
-        # EnsembleDetector.init_parser(parser)
-        # FBAnoDetector.init_parser(parser)
-        # parser.add_argument('--start', default=0, type=float,
-        #         help="""start point of the period selection""")
-
-        # pass
-
     def detect(self, data_file):
         self.ref_pool = dict()
 
         register_info = self.desc['register_info']
         for method, prop in register_info.iteritems():
-            self.register(method,
-                    globals()[method](copy.deepcopy(self.desc)),
-                    prop['para'],
-                    prop['type'])
+            det = getattr(StoDetector, method)(copy.deepcopy(self.desc))
+            self.register(method, det, prop['para'], prop['type'])
+            # globals()[method](copy.deepcopy(self.desc)),
 
-        FBAnoDetector.detect(self, data_file)
+        StoDetector.FBAnoDetector.detect(self, data_file)
 
     def _loop_para(self, alg_name, history_file, int_rg):
         """ loop through the possible parameters for alg_name
 
-        Parameters:
+        Parameters
         -------------------
             alg_name : str
                 name of the algorithm
@@ -109,15 +102,15 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
     def process_history_data(self, history_file, int_rg=None):
         """ process history data using different methods and
 
-        Parameters:
+        Parameters
         ---------------------
-        history_file: class
+        history_file : data handler class
             data_handler class
         int_rg : list, optional
             Current range. It is helpful when the reference emperical measure
             is dependent on the detection place.
 
-        Notes:
+        Notes
         ---------------------
             1. store the emperical measure calculated
             2. calculate the emtropy of each emperical measure
@@ -160,11 +153,7 @@ class RobustDetector(EnsembleDetector, FBAnoDetector):
 
         res = np.min(I_rec, axis=0)
 
-        print 'I matrix: \n', I_rec
-        print 'min entropy: \n', res
-        print '--------------------'
+        print('I matrix: \n', I_rec)
+        print('min entropy: \n', res)
+        print('--------------------')
         return res
-
-
-    # def plot(self, *args, **kwargs):
-        # StoDetector.plot(self, *args, **kwargs)

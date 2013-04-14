@@ -1,0 +1,181 @@
+node n1 {
+    type router
+    model router
+    role none
+    traceflag no
+    network-config {
+	hostname n1
+	!
+	interface eth4
+	 ip address 10.0.4.1/24
+	 ipv6 address 2001:4::1/64
+	!
+	interface eth3
+	 ip address 10.0.3.1/24
+	 ipv6 address 2001:3::1/64
+	!
+	interface eth2
+	 ip address 10.0.2.1/24
+	 ipv6 address 2001:2::1/64
+	!
+	interface eth1
+	 ip address 10.0.1.1/24
+	 ipv6 address 2001:1::1/64
+	!
+	interface eth0
+	 ip address 10.0.0.1/24
+	 ipv6 address 2001:0::1/64
+	!
+    }
+    canvas c1
+    iconcoords {323.0 205.0}
+    labelcoords {323.0 233.0}
+    interface-peer {eth0 n2}
+    interface-peer {eth1 n3}
+    interface-peer {eth2 n4}
+    interface-peer {eth3 n5}
+    interface-peer {eth4 n6}
+}
+
+node n2 {
+    type router
+    model host
+    role server
+    traceflag yes
+    network-config {
+	hostname n2
+	!
+	interface eth0
+	 ip address 10.0.0.10/24
+	 ipv6 address 2001:0::10/64
+	!
+    }
+    canvas c1
+    iconcoords {305.0 133.0}
+    labelcoords {305.0 165.0}
+    interface-peer {eth0 n1}
+}
+
+node n3 {
+    type router
+    model PC
+    role client
+    traceflag no
+    network-config {
+	hostname n3
+	!
+	interface eth0
+	 ip address 10.0.1.20/24
+	 ipv6 address 2001:1::20/64
+	!
+    }
+    canvas c1
+    iconcoords {182.0 248.0}
+    labelcoords {182.0 280.0}
+    interface-peer {eth0 n1}
+}
+
+node n4 {
+    type router
+    model PC
+    role client
+    traceflag no
+    network-config {
+	hostname n4
+	!
+	interface eth0
+	 ip address 10.0.2.20/24
+	 ipv6 address 2001:2::20/64
+	!
+    }
+    canvas c1
+    iconcoords {423.0 285.0}
+    labelcoords {423.0 317.0}
+    interface-peer {eth0 n1}
+}
+
+node n5 {
+    type router
+    model PC
+    role client
+    traceflag no
+    network-config {
+	hostname n5
+	!
+	interface eth0
+	 ip address 10.0.3.20/24
+	 ipv6 address 2001:3::20/64
+	!
+    }
+    canvas c1
+    iconcoords {520.0 245.0}
+    labelcoords {520.0 277.0}
+    interface-peer {eth0 n1}
+}
+
+node n6 {
+    type router
+    model PC
+    role botmaster
+    traceflag no
+    network-config {
+	hostname n6
+	!
+	interface eth0
+	 ip address 10.0.4.20/24
+	 ipv6 address 2001:4::20/64
+	!
+    }
+    canvas c1
+    iconcoords {591.0 174.0}
+    labelcoords {591.0 206.0}
+    interface-peer {eth0 n1}
+}
+
+link l1 {
+    nodes {n2 n1}
+    bandwidth 0
+}
+
+link l2 {
+    nodes {n1 n3}
+    bandwidth 0
+}
+
+link l3 {
+    nodes {n1 n4}
+    bandwidth 0
+}
+
+link l4 {
+    nodes {n1 n5}
+    bandwidth 0
+}
+
+link l5 {
+    color Blue
+    traceflag yes
+    delay 160
+    nodes {n1 n6}
+    bandwidth 10000000
+}
+
+canvas c1 {
+    name {Canvas1}
+}
+
+option global {
+    interface_names no
+    ip_addresses yes
+    ipv6_addresses no
+    node_labels yes
+    link_labels yes
+    ipsec_configs yes
+    exec_errors yes
+    show_api no
+    background_images no
+    annotations yes
+    grid yes
+    traffic_start 0
+}
+

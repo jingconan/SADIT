@@ -14,7 +14,8 @@ class BaseExper(object):
 
     def init_parser(self, parser):
         parser.add_argument('-c', '--config', default=None,
-                type=lambda x: load_para(x, Namespace),
+                # type=lambda x: load_para(x, Namespace),
+                type=lambda x: load_para(x),
                 help="""config""")
 
     def run(self):

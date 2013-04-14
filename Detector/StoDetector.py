@@ -8,19 +8,11 @@ __email__ = "wangjing@bu.edu"
 __status__ = "Development"
 
 import os
-from util import plt
-
-from util import DataEndException, FetchNoDataException, abstract_method
-from util import save_csv
-
 import cPickle as pickle
 from math import log
 
-# try:
-#     import matplotlib.pyplot as plt
-# except ImportError:
-#     plt = False
-# import csv
+from util import DataEndException, FetchNoDataException, abstract_method
+from util import save_csv, plt
 
 from .DetectorLib import I1, I2
 from .mod_util import plot_points
@@ -103,7 +95,7 @@ class StoDetector (WindowDetector):
         abstract_method()
 
     def get_flow_num(self, rg, rg_type):
-        sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
+        sp, ep = self.data_file.data._get_where(rg, rg_type)
         return ep - sp
 
     def record(self, **kwargs):
@@ -407,7 +399,8 @@ class ModelBaseAnoDetector(StoDetector):
         return Pmb, mpmb
 
 
-from .Ident import *
+# from .Ident import *
+from . import Ident
 class FBAnoDetector(StoDetector):
     """model free and model based together, will be faster then run model free
     and model based approaches separately since some intemediate results are reused.
@@ -422,7 +415,8 @@ class FBAnoDetector(StoDetector):
         pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         return pmf, Pmb, mpmb
 
-    def plot(self, far=None, figure_=None, subplot_=(211, 212), title_=['model free', 'model based'],
+    def plot(self, far=None, figure_=None, subplot_=(211, 212),
+            title_=['model free', 'model based'],
             pic_name=None, pic_show=False, csv=None,
             *args, **kwargs):
         if not plt: self.save_plot_as_csv()
@@ -629,7 +623,8 @@ class FBAnoDetector(StoDetector):
 
         nu_set = get_nu_set(em_record_set, entropy_type)
         mu = get_nu_set([self.norm_em], entropy_type)[0]
-        ident = globals()[ident_type](nu_set, mu)
+        # ident = globals()[ident_type](nu_set, mu)
+        ident = getattr(Ident, ident_type)(nu_set, mu)
         mf, mb = zip(*self.record_data['entropy'])
         ab_idx = self.find_abnormal_windows(locals()[entropy_type],
                 entropy_threshold, ab_win_portion, ab_win_num)
@@ -677,7 +672,18 @@ class SlowDriftStaticDetector(FBAnoDetector):
         return norm_win_em
 
 class PeriodStaticDetector(FBAnoDetector):
-    """Static Methods
+    """ Reference Empirical Measure is calculated by periodically selection.
+
+        Notes
+        ------------------
+        The selection is shown as follows
+
+        codeblock:: text
+
+                        +--+         +--+          +--+
+                    ----+  +---------+  +- --------+  +------
+          |<-start->|   |dt|<--period-->|
+        all the traffic within the time range with nonzero value are selected as reference traffic.
 
     """
     def init_parser(self, parser):
@@ -729,9 +735,8 @@ class PeriodStaticDetector(FBAnoDetector):
 
         return norm_win_em
 
-""" The following part contains several algorithms that select normal emperical
-measure in a novel way. They are designed to handle the case that the nominal
-traffic itself is time-varying
+"""In the following algorithm, the reference empirical measure is calculate for
+each window
 """
 class DynamicStoDetector(FBAnoDetector):
     """Base Class for All Dynamic Stochasic Detector
@@ -873,11 +878,11 @@ class DummyShiftWindowDetector(DynamicStoDetector):
 
         return norm_win_em
 
-if __name__ == "__main__":
-    flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]
-    res = find_seg(flag)
-    print('res, ', res)
-    for a, b, f in res:
-        print(flag[a:b])
-        print('flag, ', f)
+# if __name__ == "__main__":
+#     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]
+#     res = find_seg(flag)
+#     print('res, ', res)
+#     for a, b, f in res:
+#         print(flag[a:b])
+#         print('flag, ', f)
 

@@ -1,15 +1,17 @@
 #!/usr/bin/env python
+from __future__ import print_function, division, absolute_import
 """ Default experimenet, will simply detect the flow data
 """
-from BaseExper import BaseExper
-import os
+import os, copy
 # import settings
 from Detector import detect
-# from util import load_para, update_not_none
-from util import update_not_none
-import copy
-
 from Detector.API import print_detector_help
+
+from util import update_not_none
+# from util import load_para, update_not_none
+# import copy
+from .BaseExper import BaseExper
+
 class Detect(BaseExper):
     def __init__(self, argv, parser=None):
         # super(Detect, self).__init__(argv, parser)

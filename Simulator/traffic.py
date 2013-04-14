@@ -375,7 +375,14 @@ class HarpoonGeneratorNode(GeneratorNode):
                 'flow_size_var':p_var,
                 'flow_arrival_rate':p_interval
                 }
-        data = pickle.load(open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'r'))
+        try:
+            data = pickle.load(open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'r'))
+        except IOError:
+            # import sys
+            # print sys.exc_info()[0]
+            print "[warning] This type of anomaly doesn't support exporting abnormal flows"
+            return
+            # sys.exit(0)
         if data.get('anoType') == 'markov_anomaly':
             tspot = self.sim.now - self.sim.simstart
             if tspot > data['T'][0] and tspot < data['T'][1] and (ipsrc in data['ano_node_ipdests']):

@@ -1,8 +1,22 @@
 Detector Package
 ================
+..
+.. autosummary::
+..
+    Data
+    DataHandler
+    SVMDetector
+    StoDetector
+    RobustDetector
+
+
 
 :mod:`Detector` Package
 -----------------------
+
+.. toctree::
+    
+    sadit.Detector.rst
 
 .. automodule:: sadit.Detector
     :members:
@@ -25,18 +39,18 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`ClusterAlg` Module
-------------------------
-
-.. automodule:: sadit.Detector.ClusterAlg
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`Data` Module
 ------------------
 
 .. automodule:: sadit.Detector.Data
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`DataParser` Module
+------------------------
+
+.. automodule:: sadit.Detector.DataParser
     :members:
     :undoc-members:
     :show-inheritance:
@@ -49,21 +63,6 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`DataHandler_deprec` Module
---------------------------------
-
-.. automodule:: sadit.Detector.DataHandler_deprec
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`DataParser` Module
-------------------------
-
-.. automodule:: sadit.Detector.DataParser
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 :mod:`DetectorLib` Module
 -------------------------
@@ -81,37 +80,6 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`MSDetector` Module
-------------------------
-
-.. automodule:: sadit.Detector.MSDetector
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`PCA` Module
------------------
-
-.. automodule:: sadit.Detector.PCA
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`RobustDetector` Module
-----------------------------
-
-.. automodule:: sadit.Detector.RobustDetector
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`SQLDataFile` Module
--------------------------
-
-.. automodule:: sadit.Detector.SQLDataFile
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 :mod:`SVMDetector` Module
 -------------------------
@@ -124,7 +92,25 @@ Detector Package
 :mod:`StoDetector` Module
 -------------------------
 
+.. currentmodule:: sadit.Detector.StoDetector
+
+.. autosummary::
+
+    FBAnoDetector
+    SlowDriftStaticDetector
+    PeriodStoDetector
+    PeriodStaticDetector
+    SlowDriftStaticDetector
+
 .. automodule:: sadit.Detector.StoDetector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`RobustDetector` Module
+----------------------------
+
+.. automodule:: sadit.Detector.RobustDetector
     :members:
     :undoc-members:
     :show-inheritance:
@@ -133,6 +119,14 @@ Detector Package
 ----------------------
 
 .. automodule:: sadit.Detector.mod_util
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`ClusterAlg` Module
+------------------------
+
+.. automodule:: sadit.Detector.ClusterAlg
     :members:
     :undoc-members:
     :show-inheritance:

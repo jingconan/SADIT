@@ -1,18 +1,9 @@
+""" This file defines useful APIs for other modules or program to use
 """
-This file defines useful APIs for other modules or program to use
-"""
-# from __future__ import print_function, division
 from __future__ import print_function, division, absolute_import
 #######################################################
 ###        Import Detectors                        ####
 #######################################################
-# from StoDetector import ModelFreeAnoDetector, ModelBaseAnoDetector, FBAnoDetector
-# from StoDetector import TwoWindowAnoDetector, PeriodStoDetector
-# from StoDetector import AutoSelectStoDetector
-# from StoDetector import ExpectedStoDetector
-# from RobustDetector import RobustDetector
-
-# from SVMDetector import SVMFlowByFlowDetector, SVMTemporalDetector
 from .StoDetector import *
 from .RobustDetector import *
 from .SVMDetector import *
@@ -72,7 +63,7 @@ data_map = {
         }
 
 def print_detector_help(type_):
-    """print help message of detector with type_
+    """print help message of detector with `type_`
     """
     detector = detector_map[ type_ ]({})
     detector.set_args(['-h'])
@@ -100,7 +91,7 @@ def detector_plot_dump(data_name, type_, desc, *args, **kwargs):
     detector.set_args([])
     detector.plot_dump(data_name, *args, **kwargs)
 
-def test_detect():
+def _test_detect():
     ANO_ANA_DATA_FILE = './test_AnoAna.txt'
     DETECTOR_DESC = dict(
             interval=20,
@@ -119,4 +110,4 @@ def test_detect():
     detector.plot_entropy()
 
 if __name__ == "__main__":
-    test_detect()
+    _test_detect()

@@ -1,0 +1,58 @@
+#########################################
+## These are the change made for Imalse
+## [2012-08-18 22:28:41]
+#########################################
+editor.tcl
+--------------------
+revise the popupConfigDialog 
+from line 2430 to line 2478. Add menu to configure the role and the traceflag
+
+
+cfgparse.tcl
+---------------------
+revise from line 544 to line 549. export role and trace flag to the imn file, so
+that it can be loaded next time
+            role {
+                lappend $object "role {$value}"
+            }
+            traceflag {
+                lappend $object "traceflag {$value}"
+            }
+	
+
+linkcfg.tcl
+----------------------
+line 277 to 294
+add
+proc getLinkTraceFlag { link } {
+proc setLinkTraceFlag { link value } {
+
+nodecfg.tcl
+------------------------
+add the following functions
+getNodeRole
+setNodeRole
+getNodeTraceFlag
+setNodeTraceFlag
+
+
+util.tc
+-------------------------
+add the following functions
+getid
+getLinkNodes
+echoPuts
+getRoleNode
+getTraceLinks
+getTraceNodes
+exportImalse
+
+
+initgui.tcl
+-----------------------
+Add
+# start Imalse
+set def_router_role none
+set def_router_traceflag no
+set defLinkTraceFlag no
+# end Imalse
