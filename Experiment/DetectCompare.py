@@ -52,7 +52,7 @@ class DetectCompare(Detect):
             print('detector type, ', type(detector))
             detector.dump(self.desc['dump_folder'] + '/dump_' + method + '.txt')
 
-        with open(self.desc['dump_folder '] + '/dump_method_list.txt', 'w') as f:
+        with open(self.desc['dump_folder'] + '/dump_method_list.txt', 'w') as f:
             pickle.dump(self.desc['comp_methods'], f)
 
 
