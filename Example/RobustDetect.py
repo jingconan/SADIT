@@ -7,6 +7,7 @@ import numpy as np
 # ANO_ANA_DATA_FILE = ROOT + '/Share/AnoAna.txt'
 ANO_ANA_DATA_FILE = './Share/AnoAna.txt'
 DETECTOR_DESC = dict(
+        method = 'robust',
         # method = 'mfmb',
         # data = './Simulator/n0_flow.txt',
         interval=1000,
@@ -20,6 +21,7 @@ DETECTOR_DESC = dict(
         ano_ana_data_file = ANO_ANA_DATA_FILE,
         # normal_rg = [100000, 500000],
         normal_rg = [300000, 500000],
+        # ref_data = 'Simulator/n0_flow.txt',
         # normal_rg = None,
         detector_type = 'mfmb',
         max_detect_num = None,
@@ -52,7 +54,7 @@ DETECTOR_DESC = dict(
                     'period':np.array([24]) * 3600,
                     # 'period':np.array([24, 12, 6, 48]) * 3600,
                     # 'start':np.array([0]) * 3600,
-                    'start': [300000],
+                    'start': [30],
                     # 'start':np.linspace(3e5, 24, 3) * 3600,
                     # 'delta_t':[10000, 20000],
                     'delta_t':[1000],

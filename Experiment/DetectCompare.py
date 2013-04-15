@@ -2,8 +2,8 @@
 """ Compare different method and plot the temporal
 results in the same window.
 """
-from __future__ import print_function, division
-from Detect import Detect
+from __future__ import print_function, division, absolute_import
+from .Detect import Detect
 # import copy
 import os
 import matplotlib.pyplot as plt
@@ -19,10 +19,10 @@ class DetectCompare(Detect):
 
     def init_parser(self, parser):
         super(DetectCompare, self).init_parser(parser)
-        parser.add_argument('--comp_methods', default=None, type=lambda x:x.split(','),
+        parser.add_argument('-p', '--comp_methods', default=None, type=lambda x:x.split(','),
                 help="""method list that will be compared""")
 
-        parser.add_argument('--dump_folder', default=self.ROOT+'/Share/',
+        parser.add_argument('-f','--dump_folder', default=self.ROOT+'/Share/',
                 help="""folder that will store the dump file for each detector""")
 
         # parser.add_argument('--plot_dump', default=None,
@@ -32,7 +32,10 @@ class DetectCompare(Detect):
                 help="""flag of whether plot_dump""")
 
     def run(self):
-        if self.args.plot_dump:
+        # res_args = self.res_args
+
+        # if self.args.plot_dump:
+        if self.desc['plot_dump']:
             # self.plot_dump(self.args.plot_dump)
             self.plot_dump(self.args.dump_folder)
             return
@@ -41,22 +44,24 @@ class DetectCompare(Detect):
         if not os.path.exists(d):
             os.makedirs(d)
 
-        for method in self.args.comp_methods:
+        # for method in self.args.comp_methods:
+        for method in self.desc['comp_methods']:
             print('method: ', method)
-            self.args.method = method
+            self.desc['method'] = method
             detector = self.detect()
             print('detector type, ', type(detector))
-            detector.dump(self.args.dump_folder + '/dump_' + method + '.txt')
+            detector.dump(self.desc['dump_folder'] + '/dump_' + method + '.txt')
 
-        with open(self.args.dump_folder + '/dump_method_list.txt', 'w') as f:
-            pickle.dump(self.args.comp_methods, f)
+        with open(self.desc['dump_folder '] + '/dump_method_list.txt', 'w') as f:
+            pickle.dump(self.desc['comp_methods'], f)
 
 
     def plot_dump(self, dump_folder):
-        if self.args.comp_methods:
-            method_list = self.args.comp_methods
+        if self.desc.get('comp_methods'):
+            method_list = self.desc.get('comp_methods')
         else:
             method_list = pickle.load(open(dump_folder + '/dump_method_list.txt', 'r'))
+
         fig = plt.figure()
         sp = len(method_list) * 100
         double_fig_methods = ['mfmb', 'robust']
@@ -83,7 +88,7 @@ class DetectCompare(Detect):
                 # detector.plot(figure_=fig, subplot_=sp+1, title_=method)
                 sp += 1
 
-        if self.args.pic_name:
-            plt.savefig(self.args.pic_name)
-        if self.args.pic_show:
+        if self.desc.get('pic_name'):
+            plt.savefig(self.desc.get('pic_name'))
+        if self.desc.get('pic_show'):
             plt.show()

@@ -40,9 +40,6 @@ class StoDetector (WindowDetector):
         self.desc = desc
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
 
-    def __call__(self, *args, **kwargs):
-        return self.detect(*args, **kwargs)
-
     def get_em(self, rg, rg_type):
         """abstract method. Get empirical measure,
 
@@ -94,9 +91,9 @@ class StoDetector (WindowDetector):
         """
         abstract_method()
 
-    def get_flow_num(self, rg, rg_type):
-        sp, ep = self.data_file.data._get_where(rg, rg_type)
-        return ep - sp
+    # def get_flow_num(self, rg, rg_type):
+    #     sp, ep = self.data_file.data._get_where(rg, rg_type)
+    #     return ep - sp
 
     def record(self, **kwargs):
         for k, v in kwargs.iteritems():
@@ -110,10 +107,10 @@ class StoDetector (WindowDetector):
         nominal_rg = self.desc['normal_rg']
         # import pdb;pdb.set_trace()
         rg_type = self.desc['win_type']
-        return self.get_em(rg=nominal_rg, rg_type=rg_type)
+        return self.ref_file.get_em(rg=nominal_rg, rg_type=rg_type)
 
     # def detect(self, data_file, nominal_rg = [0, 1000], rg_type='time',  max_detect_num=None):
-    def detect(self, data_file):
+    def detect(self, data_file, ref_file):
         """ main function to detect.
 
         it will slide the window, get the emperical measure and get the
@@ -136,6 +133,9 @@ class StoDetector (WindowDetector):
         max_detect_num = self.desc['max_detect_num']
 
         self.data_file = data_file
+        self.ref_file = data_file if ref_file is None else ref_file
+        # import ipdb;ipdb.set_trace()
+        # self.ref_file = ref_file
         # self.norm_em = self.get_em(rg=nominal_rg, rg_type=rg_type)
         self.norm_em = self.cal_norm_em()
         # self.desc['norm_em'] = self.norm_em
@@ -155,7 +155,7 @@ class StoDetector (WindowDetector):
 
             try:
                 self.rg = [time, time+win_size] # For two window method
-                em = self.get_em(rg=[time, time+win_size], rg_type=rg_type)
+                em = self.data_file.get_em(rg=[time, time+win_size], rg_type=rg_type)
                 entropy = self.I(em, norm_em=self.norm_em)
                 self.record( entropy=entropy, winT = time, threshold = 0, em=em)
             except FetchNoDataException:
@@ -380,11 +380,11 @@ class ModelFreeAnoDetector(StoDetector):
     def I(self, em, norm_em):
         return I1(em, norm_em)
 
-    def get_em(self, rg, rg_type):
-        """get empirical measure"""
-        pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
+    # def get_em(self, rg, rg_type):
+    #     """get empirical measure"""
+    #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
         # return pmf, Pmb, mpmb
-        return pmf
+    #     return pmf
 
 class ModelBaseAnoDetector(StoDetector):
     """ Model based approach, use Markovian Assumption
@@ -394,9 +394,9 @@ class ModelBaseAnoDetector(StoDetector):
         Pmb, mpmb = norm_em
         return I2(d_Pmb, d_mpmb, Pmb, mpmb)
 
-    def get_em(self, rg, rg_type):
-        pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
-        return Pmb, mpmb
+    # def get_em(self, rg, rg_type):
+    #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
+    #     return Pmb, mpmb
 
 
 # from .Ident import *
@@ -410,10 +410,10 @@ class FBAnoDetector(StoDetector):
         pmf, Pmb, mpmb = norm_em
         return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
 
-    def get_em(self, rg, rg_type):
-        """get empirical measure"""
-        pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
-        return pmf, Pmb, mpmb
+    # def get_em(self, rg, rg_type):
+    #     """get empirical measure"""
+    #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
+    #     return pmf, Pmb, mpmb
 
     def plot(self, far=None, figure_=None, subplot_=(211, 212),
             title_=['model free', 'model based'],
@@ -652,89 +652,6 @@ class FBAnoDetector(StoDetector):
 
     #     return ano_flow_seq
 
-class SlowDriftStaticDetector(FBAnoDetector):
-    def init_parser(self, parser):
-        parser.add_argument('--start', default=0, type=float,
-                help="""start point of the normal traffic""")
-        parser.add_argument('--delta_t', default=10.0, type=float,
-                help="""delta_t is a small time range during which the normal
-                behavior is considered unchanged""")
-
-    def cal_norm_em(self, **kwargs):
-        self.desc.update(kwargs)
-        # start = self.desc['start']
-        # delta_t = self.desc['delta_t']
-        win_type = self.desc['win_type']
-        normal_rg = self.desc['normal_rg']
-
-        # rg = [start, start + delta_t]
-        norm_win_em = self.get_em(rg=normal_rg,rg_type=win_type)
-        return norm_win_em
-
-class PeriodStaticDetector(FBAnoDetector):
-    """ Reference Empirical Measure is calculated by periodically selection.
-
-        Notes
-        ------------------
-        The selection is shown as follows
-
-        codeblock:: text
-
-                        +--+         +--+          +--+
-                    ----+  +---------+  +- --------+  +------
-          |<-start->|   |dt|<--period-->|
-        all the traffic within the time range with nonzero value are selected as reference traffic.
-
-    """
-    def init_parser(self, parser):
-        super(PeriodStaticDetector, self).init_parser(parser)
-        parser.add_argument('--start', default=0, type=float,
-                help="""start point of the period selection""")
-        parser.add_argument('--period', default=1000.0, type=float,
-                help="""the period of underlying traffic""")
-        parser.add_argument('--delta_t', default=10.0, type=float,
-                help="""delta_t is a small time range during which the normal
-                behavior is considered unchanged""")
-
-    def cal_norm_em(self, **kwargs):
-        self.desc.update(kwargs)
-        start = self.desc['start']
-        # win_size = self.desc['win_size']
-        win_type = self.desc['win_type']
-        period = self.desc['period']
-        delta_t = self.desc['delta_t']
-
-        rg = [start, start + delta_t]
-
-        norm_win_em = CombinedEM(None)
-        norm_rg_ref = self.desc.get('normal_rg')
-        if norm_rg_ref is None: norm_rg_ref = [0, float('inf')]
-
-        j = (norm_rg_ref[0] - rg[0]) / period
-        if period >= (norm_rg_ref[1] - norm_rg_ref[0]):
-            raise Exception('period is too large')
-
-        i = 0
-        while True:
-            i += 1
-            j += 1
-            try:
-                norm_rg = [rg[0] + j * period, rg[1] + j * period]
-                if norm_rg[1] > norm_rg_ref[1]:
-                    break
-                norm_win_em += self.get_em(
-                        rg=norm_rg,
-                        rg_type=win_type)
-            except FetchNoDataException:
-                break #FIXME
-            except DataEndException:
-                break
-
-        norm_win_em = norm_win_em / i
-        norm_win_em = norm_win_em.data
-
-        return norm_win_em
-
 """In the following algorithm, the reference empirical measure is calculate for
 each window
 """
@@ -774,14 +691,14 @@ class TwoWindowAnoDetector(DynamicStoDetector):
         # st = self.rg[0] - norm_win_size if (self.rg[0] > norm_win_size ) else 0
         if self.rg[0] > norm_win_size:
             norm_rg = [self.rg[0] - norm_win_size, self.rg[0]]
-            norm_win_em = self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+            norm_win_em = self.ref_file.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
         else:
             norm_win_em = norm_em
 
         return norm_win_em
 
 # import numpy as np
-from .DataHandler import CombinedEM
+# from .DataHandler import CombinedEM
 
 class PeriodStoDetector(DynamicStoDetector):
     """Stochastic Detector Designed to Detect Anomaly when the
@@ -799,14 +716,15 @@ class PeriodStoDetector(DynamicStoDetector):
             return StoDetector.cal_norm_em(self)
 
         norm_em = self.desc.get('norm_em', None)
-        norm_win_em = CombinedEM(norm_em)
+        norm_win_em = norm_em
+        # norm_win_em = CombinedEM(norm_em)
         norm_rg_ref = self.desc['normal_rg']
         period = self.desc['period']
 
         i = -1 if norm_em is None else 0
         j = (norm_rg_ref[0] - rg[0]) / period
         if period >= (norm_rg_ref[1] - norm_rg_ref[0]):
-            raise Exception('period is too largw')
+            raise Exception('period is too large')
 
         while True:
             i += 1
@@ -816,7 +734,7 @@ class PeriodStoDetector(DynamicStoDetector):
                 norm_rg = [rg[0] + j * period, rg[1] + j * period] #FIXME need to look back
                 if norm_rg[1] > norm_rg_ref[1]:
                     break
-                norm_win_em = norm_win_em + self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+                norm_win_em = norm_win_em + self.ref_file.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
             except FetchNoDataException:
                 break
             except DataEndException:
@@ -874,15 +792,85 @@ class DummyShiftWindowDetector(DynamicStoDetector):
         assert(self.rg[1] - self.rg[0] == win_size)
         norm_rg = [self.rg[0] - shift * win_size, self.rg[1] - shift * win_size]
         # import pdb;pdb.set_trace()
-        norm_win_em = self.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
+        norm_win_em = self.ref_file.get_em(rg=norm_rg, rg_type=self.desc['win_type'])
 
         return norm_win_em
 
-# if __name__ == "__main__":
-#     flag = [1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1]
-#     res = find_seg(flag)
-#     print('res, ', res)
-#     for a, b, f in res:
-#         print(flag[a:b])
-#         print('flag, ', f)
 
+"""  Static Detectors. They are weak detectors that will be used by Robust
+Detector
+"""
+
+class SlowDriftStaticDetector(FBAnoDetector):
+    def init_parser(self, parser):
+        parser.add_argument('--start', default=0, type=float,
+                help="""start point of the normal traffic""")
+        parser.add_argument('--delta_t', default=10.0, type=float,
+                help="""delta_t is a small time range during which the normal
+                behavior is considered unchanged""")
+
+    def cal_norm_em(self, **kwargs):
+        self.desc.update(kwargs)
+        start = self.desc['start']
+        delta_t = self.desc['delta_t']
+        win_type = self.desc['win_type']
+        rg = [start, start + delta_t]
+        norm_win_em = self.ref_file.get_em(rg, win_type)
+        return norm_win_em
+
+import numpy as np
+class PeriodStaticDetector(FBAnoDetector):
+    """ Reference Empirical Measure is calculated by periodically selection.
+
+        Notes
+        ------------------
+        The selection is shown as follows
+
+        codeblock:: text
+
+                        +--+         +--+          +--+
+                    ----+  +---------+  +- --------+  +------
+          |<-start->|   |dt|<--period-->|
+        all the traffic within the time range with nonzero value are selected as reference traffic.
+
+    """
+    def init_parser(self, parser):
+        super(PeriodStaticDetector, self).init_parser(parser)
+        parser.add_argument('--start', default=0, type=float,
+                help="""start point of the period selection""")
+        parser.add_argument('--period', default=1000.0, type=float,
+                help="""the period of underlying traffic""")
+        parser.add_argument('--delta_t', default=10.0, type=float,
+                help="""delta_t is a small time range during which the normal
+                behavior is considered unchanged""")
+
+    def _combine(self, win_ems):
+        em_sum = [sum(v for v in d if v is not None) for d in zip(*win_ems)]
+        num = [sum(1 for v in d if v is not None) for d in zip(*win_ems)]
+        # import ipdb;ipdb.set_trace()
+        return [em / n for em, n in zip(em_sum, num)]
+
+    def cal_norm_em(self, **kwargs):
+        self.desc.update(kwargs)
+
+        start = self.desc['start']
+        win_type = self.desc['win_type']
+        period = self.desc['period']
+        delta_t = self.desc['delta_t']
+
+        win_ems = []
+        nrg = self.desc.get('normal_rg')
+        nrg = nrg if nrg is not None else [0, float('inf')]
+        time = nrg[0] + start + delta_t
+        while time < nrg[1]:
+            time += period
+            try:
+                delta_rg = [time - delta_t, time]
+                delta_em = self.ref_file.get_em(delta_rg, win_type)
+                win_ems.append([np.array(e) for e in delta_em])
+            except FetchNoDataException:
+                win_ems.appends(None)
+            except DataEndException:
+                break
+
+        return self._combine(win_ems)

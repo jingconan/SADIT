@@ -6,7 +6,9 @@ import numpy as np
 from util import del_none_key
 
 from . import StoDetector
+# from .StoDetector import FBAnoDetector, FetchNoDataException, DataEndException
 from .DetectorLib import I1, I2
+
 
 class RobustDetector(StoDetector.FBAnoDetector):
     """ Robust Detector is designed for dynamic network environment
@@ -48,7 +50,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
         self.det_para[alg_name] = del_none_key(para)
         self.det_type[alg_name] = type_
 
-    def detect(self, data_file):
+    def detect(self, data_file, ref_file):
         self.ref_pool = dict()
 
         register_info = self.desc['register_info']
@@ -57,9 +59,9 @@ class RobustDetector(StoDetector.FBAnoDetector):
             self.register(method, det, prop['para'], prop['type'])
             # globals()[method](copy.deepcopy(self.desc)),
 
-        StoDetector.FBAnoDetector.detect(self, data_file)
+        StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
 
-    def _loop_para(self, alg_name, history_file, int_rg):
+    def _loop_para(self, alg_name, ref_file, int_rg):
         """ loop through the possible parameters for alg_name
 
         Parameters
@@ -87,7 +89,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
         """
         d_obj = self.det[alg_name]
         d_obj.rg = int_rg
-        d_obj.data_file = history_file
+        d_obj.ref_file = ref_file
 
         para_dict = self.det_para[alg_name]
         for para_list in itertools.product(*para_dict.values()):
@@ -99,8 +101,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
             else:
                 self.ref_pool[key] = d_obj.cal_norm_em(norm_em=None, **cp)
 
-    def process_history_data(self, history_file, int_rg=None):
-        """ process history data using different methods and
+    def process_data(self, file_handler, int_rg=None):
+        """ process data using different methods and
 
         Parameters
         ---------------------
@@ -121,7 +123,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         # """specify the method and the parameters will be used"""
         for alg_name in self.det.keys():
-            self._loop_para(alg_name, history_file, int_rg)
+            self._loop_para(alg_name, file_handler, int_rg)
 
 
     def I(self, em, **kwargs):
@@ -133,7 +135,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
         the output I = min(I(E, NE_i)) for i =1,...,N
 
         """
-        self.process_history_data(self.data_file, int_rg = self.rg)
+        self.process_data(self.ref_file, self.rg)
 
         d_pmf, d_Pmb, d_mpmb = em
         self.desc['em'] = em
@@ -141,6 +143,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
         h_ref_size = len(self.ref_pool)
         I_rec = np.zeros((h_ref_size, 2))
         i = -1
+        import ipdb;ipdb.set_trace()
         # calculate the model free and model based entropy for each referece
         # emperical measure
         for _, norm_em in self.ref_pool.iteritems():

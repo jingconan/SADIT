@@ -23,5 +23,11 @@ class Visualizer(object):
 
     pass
 
-v = Visualizer('../Simulator/n0_flow.txt')
-v.vis()
+if __name__ == "__main__":
+    import sys
+    import argparse
+    parser = argparse.ArgumentParser(description='visualizer of FS data')
+    parser.add_argument('file', help='name for the fs data file')
+    args, res_args = parser.parse_known_args()
+    v = Visualizer(args.file)
+    v.vis()

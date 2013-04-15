@@ -2,29 +2,28 @@
 from __future__ import print_function, division, absolute_import
 """ Default experimenet, will simply detect the flow data
 """
-import os, copy
+import os
+# import copy
 # import settings
 from Detector import detect
 from Detector.API import print_detector_help
 
-from util import update_not_none
+# from util import update_not_none
 # from util import load_para, update_not_none
 # import copy
 from .BaseExper import BaseExper
 
 class Detect(BaseExper):
     def __init__(self, argv, parser=None):
-        # super(Detect, self).__init__(argv, parser)
-        BaseExper.__init__(self, argv, parser)
+        super(Detect, self).__init__(argv, parser)
+        # BaseExper.__init__(self, argv, parser)
 
-        if self.args.help :
+        # if self.args.help :
+        if self.desc.get('help'):
             self.parser.print_help()
-            if self.args.method:
-                print_detector_help(self.args.method)
+            if self.desc.get('method'):
+                print_detector_help(self.desc.get('method'))
 
-        if self.args.config is None:
-            print('You must specifiy --config option, run with -h option to see help')
-            import sys; sys.exit(0)
 
     def init_parser(self, parser):
         super(Detect, self).init_parser(parser)
@@ -77,17 +76,16 @@ class Detect(BaseExper):
                 help = """the path of the file to save plots a text output""")
 
     def detect(self):
-        args = self.args
-        res_args = self.res_args
-        self.desc = copy.deepcopy(args.config['DETECTOR_DESC'])
-        update_not_none(self.desc, self.args.__dict__)
+        # args = self.args
+        # res_args = self.res_args
+        # self.desc = copy.deepcopy(args.config['DETECTOR_DESC'])
+        # update_not_none(self.desc, self.args.__dict__)
         # import ipdb;ipdb.set_trace()
         self.detector = detect(os.path.abspath(self.desc['data']), self.desc,
-                res_args)
+                self.res_args)
         return self.detector
 
     def run(self):
-        # args = self.args
         detector = self.detect()
         desc = self.desc
         print('detector type, ', type(detector))

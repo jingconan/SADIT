@@ -34,18 +34,18 @@ detector_map = {
 # handlers do some data preprocessing for detector.
 from .DataHandler import *
 data_handler_handle_map = {
-        'robust': QuantizeDataHandler,
+        'robust': FBQuantizeDataHandler,
         # 'auto': QuantizeDataHandler,
-        'mf': QuantizeDataHandler,
-        'mb': QuantizeDataHandler,
-        'mfmb': QuantizeDataHandler,
+        'mf': ModelFreeQuantizeDataHandler,
+        'mb': ModelBasedQuantizeDataHandler,
+        'mfmb': FBQuantizeDataHandler,
         # '2w': QuantizeDataHandler,
-        'two_win': QuantizeDataHandler,
+        'two_win': FBQuantizeDataHandler,
         # 'ada': QuantizeDataHandler,
-        'period': QuantizeDataHandler,
+        'period': FBQuantizeDataHandler,
         'speriod': QuantizeDataHandler,
         'svm_temp': SVMTemporalHandler,
-        'svm_fbf':QuantizeDataHandler,
+        'svm_fbf':FBQuantizeDataHandler,
         'art': FakeDataHandler,
 
         'gen_fb_mf':ModelFreeFeaGeneralizedEMHandler, # feature is model free emperical measure
@@ -76,12 +76,20 @@ def detect(f_name, desc, res_args=[]):
     # win_size = desc['win_size']
     # fea_option = desc['fea_option']
     data_file = data_map[ desc['data_type'] ](f_name)
-    # data_handler = data_handler_handle_map[desc['detector_type']](data_file, fea_option)
     data_handler = data_handler_handle_map[desc['method']](data_file, desc)
+    # data_handler = data_handler_handle_map[desc['detector_type']](data_file, fea_option)
 
     detector = detector_map[ desc['method'] ](desc)
     detector.set_args(res_args)
-    detector.detect(data_handler)
+
+    rdn = desc.get('ref_data') # reference data name
+    if rdn:
+        ref_data_file = data_map[ desc['data_type'] ](rdn)
+        rdh = data_handler_handle_map[desc['method']](ref_data_file, desc) #reference data handler
+        detector.detect(data_handler, rdh)
+    else:
+        detector.detect(data_handler, data_handler)
+
     return detector
 
 def detector_plot_dump(data_name, type_, desc, *args, **kwargs):

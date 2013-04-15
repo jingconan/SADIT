@@ -1,4 +1,5 @@
-from random import randint
+# from random import randint
+from __future__ import print_function, division, absolute_import
 
 ### -- [2012-03-04 12:12:42] add binary_search
 ### -- [2012-03-26 14:01:02] add docstring for each function.
@@ -21,7 +22,7 @@ def binary_search(a, x, lo=0, hi=None):
     # import pdb;pdb.set_trace()
     if hi is None: hi = len(a)
     while lo < hi:
-        mid = (lo + hi) / 2
+        mid = (lo + hi) // 2
         midval = a[mid]
         if midval < x:
             lo = mid + 1
@@ -47,7 +48,7 @@ def Load(var):
             # If cannot properly loaded, use origianl value
             try:
                 res[k] = Load(v)
-            except Exception as e:
+            except Exception:
                 res[k] = v
         return res
     elif t == types.StringType:
@@ -90,8 +91,8 @@ def Dump2Txt(var, fname, op):
     elif op[0:2] == '2d':
         if op[2:] == 'np': m, n = var.shape
         elif op[2:] == 'list':
-            m = len(val)
-            m = len(val[0])
+            m = len(var)
+            m = len(var[0])
         else:
             raise ValueError('unknown op')
 
@@ -119,20 +120,21 @@ def CreateSettings(templateFilePath, settingsFilePath, **kwargs):
         namespace[k] = v
     PrintVar(namespace, settingsFilePath)
 
-import types
+# import types
 imports = 'types', 'sys', 'PrintVar', 'os', 'settings'
 
 try:
     import numpy as np
+    from numpy import arange, pi, linspace
 except ImportError:
-    print 'no numpy'
+    print('no numpy')
 
+import inspect
 def PrintVar(namespace, outputFile = ''):
     '''Print all variances in the namespace into .py file'''
     fid = -1
     if outputFile != '':
         fid = open(outputFile, 'w')
-    import inspect
     for k, v in namespace.iteritems():
         if k.startswith("__")==0 and k not in imports:
             # print 'type(v), ', type(v)
@@ -162,7 +164,7 @@ def PrintVar(namespace, outputFile = ''):
             else:
                 expr = '%s = %s\n' %(k, str(v))
             if fid == -1:
-                print expr,
+                print(expr,)
                 continue
             fid.write( expr )
     if fid != -1:
@@ -175,8 +177,8 @@ def PrintModelFree(mfIndi, mbIndi):
     # mbIndi = ModelBaseDetectAnoType()
     for i in xrange(len(mfIndi)):
         if not np.isnan( mfIndi[i]):
-            print '[%d]\t%f'%(i, mfIndi[i])
-    print '\n'
+            print('[%d]\t%f'%(i, mfIndi[i]))
+    print('\n')
 
 
 def PrintModelBase(mbIndi):
@@ -185,8 +187,8 @@ def PrintModelBase(mbIndi):
     for i in xrange(m):
         for j in xrange(n):
             if not np.isnan(mbIndi[i,j]):
-                print '[%d, %d]\t%f' %(i, j, mbIndi[i,j])
-    print '\n'
+                print('[%d, %d]\t%f' %(i, j, mbIndi[i,j]))
+    print('\n')
 
 
 def abstract_method():
@@ -225,7 +227,7 @@ def zeros(s):
         raise Exception('unknown size in zeros')
 
 
-import inspect
+# import inspect
 def get_help_docs(dic):
     docs = []
     for k, v in dic.iteritems():
@@ -292,8 +294,7 @@ def mkiter(e):
     else:
         return e
 
-import numpy as np
-from numpy import arange, pi, linspace
+# import numpy as np
 def meval(cmd):
     """to make arange, pi and linespace to be able to used directly in eval()"""
     return eval(cmd)
@@ -311,3 +312,41 @@ def update_not_none(d1, d2):
     for k, v in d2.iteritems():
         if v is not None:
             d1[k] = v
+
+# class List(object):
+#     """ List that support add with another List and division over a float or int.
+
+#     Examples
+#     -------------
+#     >>> a = List([1, 2, 3])
+#     >>> b = List([2, 3, 4])
+#     >>> c = a + b
+#     >>> d = a / 2
+#     """
+#     def __init__(self, d):
+#         self.d = d
+#         self.n = len(d)
+
+#     def __add__(self, val):
+#         if val is None:
+#             return self
+
+#         for i in xrange(self.n):
+#             self.d[i] = self.d[i] + val[i]
+#         return self
+
+#     def __div__(self, val):
+#         for i in xrange(self.n):
+#             self.d[i] /= val
+#         return self
+
+#     def __str__(self):
+#         return str(self.d)
+
+#     def __getitem__(self, k):
+        # return self.d[k]
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+

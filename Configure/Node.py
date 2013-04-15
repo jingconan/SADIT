@@ -166,9 +166,9 @@ class NNode(Node):
         # sv = shifts['val']
 
         shifts_val = check_pipe_para(shifts['val'])
-        print('shifts_val', shifts_val)
+        # print('shifts_val', shifts_val)
         shifts_time = check_pipe_para(shifts['time'])
-        print('shifts_time', shifts_time)
+        # print('shifts_time', shifts_time)
 
         def add_shifts_to_states(states, base_type, shift_val):
             """ sf:

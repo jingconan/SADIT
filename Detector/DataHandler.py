@@ -140,11 +140,12 @@ class QuantizeDataHandler(DataHandler):
         return fea_vec
 
     def get_em(self, rg=None, rg_type=None):
-        """get empirical measure"""
-        q_fea_vec = self.quantize_fea(rg, rg_type )
-        pmf = model_free( q_fea_vec, self.fea_QN )
-        Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
-        return pmf, Pmb, mpmb
+        abstract_method()
+        # """get empirical measure"""
+        # q_fea_vec = self.quantize_fea(rg, rg_type )
+        # pmf = model_free( q_fea_vec, self.fea_QN )
+        # Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        # return pmf, Pmb, mpmb
 
     def quantize_fea(self, rg=None, rg_type=None):
         """get quantized features for part of the flows"""
@@ -156,6 +157,29 @@ class QuantizeDataHandler(DataHandler):
     def hash_quantized_fea(self, rg, rg_type):
         q_fea_vec = self.quantize_fea(rg, rg_type)
         return get_feature_hash_list(q_fea_vec, self.fea_QN)
+
+
+class ModelFreeQuantizeDataHandler(QuantizeDataHandler):
+    def get_em(self, rg, rg_type):
+        """get model-free empirical measure"""
+        q_fea_vec = self.quantize_fea(rg, rg_type )
+        return model_free( q_fea_vec, self.fea_QN )
+
+
+class ModelBasedQuantizeDataHandler(QuantizeDataHandler):
+    def get_em(self, rg, rg_type):
+        """get model-based empirical measure"""
+        # pmf, Pmb, mpmb = super(ModelBasedQuantizeDataHandler, self).get_em(rg, rg_type)
+        q_fea_vec = self.quantize_fea(rg, rg_type )
+        return model_based( q_fea_vec, self.fea_QN )
+
+class FBQuantizeDataHandler(QuantizeDataHandler):
+    def get_em(self, rg=None, rg_type=None):
+        """get empirical measure"""
+        q_fea_vec = self.quantize_fea(rg, rg_type )
+        pmf = model_free( q_fea_vec, self.fea_QN )
+        Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        return pmf, Pmb, mpmb
 
 #######################################
 ## SVM Temporal Method Handler   ######
@@ -247,10 +271,10 @@ def regularize(val):
     min_ = np.min(val)
     return val if (max_ == min_) else (val - min_) / (max_ - min_)
 
+# FIXME depreciated
 class CombinedEM(object):
-    """combined emperical measure
+    """Combined model-free and model-based emperical measure
 
-    combines model free and model based emperical together
     list of np.array
     """
     def __init__(self, data=None):
