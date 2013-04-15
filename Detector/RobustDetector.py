@@ -143,7 +143,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
         h_ref_size = len(self.ref_pool)
         I_rec = np.zeros((h_ref_size, 2))
         i = -1
-        import ipdb;ipdb.set_trace()
+        # import ipdb;ipdb.set_trace()
         # calculate the model free and model based entropy for each referece
         # emperical measure
         for _, norm_em in self.ref_pool.iteritems():
