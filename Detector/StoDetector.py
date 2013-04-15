@@ -815,7 +815,14 @@ class SlowDriftStaticDetector(FBAnoDetector):
         delta_t = self.desc['delta_t']
         win_type = self.desc['win_type']
         rg = [start, start + delta_t]
-        norm_win_em = self.ref_file.get_em(rg, win_type)
+        print('rg', rg)
+        try:
+            norm_win_em = self.ref_file.get_em(rg, win_type)
+        except FetchNoDataException:
+            norm_win_em = None
+        except DataEndException:
+            norm_win_em = None
+
         return norm_win_em
 
 import numpy as np
