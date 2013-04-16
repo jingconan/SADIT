@@ -20,6 +20,9 @@ class RobustDetector(StoDetector.FBAnoDetector):
         self.det_para = dict()
         self.det_type = dict()
 
+        self.record_data['select_model'] = []
+        self.record_data['I_rec'] = []
+
     # def init_parser(self, parser):
         # pass
 
@@ -155,8 +158,20 @@ class RobustDetector(StoDetector.FBAnoDetector):
                 I_rec[i, :] = [I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)]
 
         res = np.min(I_rec, axis=0)
+        model = np.nanargmin(I_rec, axis=0)
+        # import ipdb;ipdb.set_trace()
+        self.record_data['select_model'].append(model)
+        self.record_data['I_rec'].append(I_rec)
 
         print('I matrix: \n', I_rec)
         print('min entropy: \n', res)
+        print('model-free model: ', model[0], ' description: ',
+                self.ref_pool.keys()[model[0]])
+        print('model-based model: ', model[1], ' description: ',
+                self.ref_pool.keys()[model[1]])
         print('--------------------')
         return res
+
+    def save_addi_info(self, **kwargs):
+        super(RobustDetector, self).save_addi_info()
+        self.record_data['ref_pool'] = self.ref_pool

@@ -18,6 +18,31 @@ from .DetectorLib import I1, I2
 from .mod_util import plot_points
 from .Base import WindowDetector
 
+
+def is_basic_type(a):
+    """ check whether a is a basic type or not
+
+    only int, string, float, dict are considered as basic type
+
+    Parameters
+    ---------------
+    a : object that needs to be checked.
+
+    Returns
+    --------------
+    res : {True, False}
+        True if a is a basic type and False otherwise.
+    """
+    if isinstance(a, int):
+        return True
+    elif isinstance(a, float):
+        return True
+    elif isinstance(a, str):
+        return True
+    elif isinstance(a, dict):
+        return True
+    return False
+
 class StoDetector (WindowDetector):
     """ Abstract Base Class for stochastic anomaly detector.
 
@@ -167,24 +192,23 @@ class StoDetector (WindowDetector):
             time += interval
 
         self.detect_num = i - 1
-        # import pdb;pdb.set_trace()
+        self.save_addi_info()
 
+        return self.record_data
+
+    def save_addi_info(self, **kwargs):
+        """  save additional information"""
         # get the threshold:
-        # if self.args.entropy_th is not None:
         if self.desc.get('entropy_th') is not None:
-            # import pdb;pdb.set_trace()
-            self.record_data['threshold'] = [self.args.entropy_th] * self.detect_num
-        # elif self.args.hoeff_far is not None:
+            self.record_data['threshold'] = [self.desc['entropy_th']] * self.detect_num
         elif self.desc.get('hoeff_far') is not None:
             self.record_data['threshold'] = self.get_hoeffding_threshold(self.desc['hoeff_far'])
         else:
             self.record_data['threshold'] = None
-        # record the parameters
-        # self.record_data['args'] = self.args
-        # self.record_data['desc'] = tuple(self.desc.items())
-        self.record_data['desc'] = self.desc
 
-        return self.record_data
+        # record the parameters
+        self.record_data['desc'] = dict((k, v) \
+                for k, v in self.desc.iteritems() if is_basic_type(v))
 
     def hoeffding_rule(self, n, false_alarm_rate):
         """ hoeffding rule with linear correction term
