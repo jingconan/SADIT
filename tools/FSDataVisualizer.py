@@ -17,14 +17,18 @@ class Visualizer(object):
 
     def vis(self):
         flow_size = [int(v) for v in self.get('flow_size')]
-        plot(flow_size)
+        start_time = [float(v) for v in self.get('start_time')]
+        min_t = min(start_time)
+        start_time = [t-min_t for t in start_time]
+        plot(start_time, flow_size)
+        xlabel('time')
+        ylabel('flow size')
         show()
         pass
 
     pass
 
 if __name__ == "__main__":
-    import sys
     import argparse
     parser = argparse.ArgumentParser(description='visualizer of FS data')
     parser.add_argument('file', help='name for the fs data file')
