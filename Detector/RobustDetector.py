@@ -88,7 +88,7 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         """
         d_obj = self.det[alg_name]
-        d_obj.rg = int_rg
+        # d_obj.rg = int_rg
         d_obj.ref_file = ref_file
 
         para_dict = self.det_para[alg_name]

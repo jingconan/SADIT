@@ -3,7 +3,8 @@ from __future__ import print_function, division, absolute_import
 """ Default experimenet, will simply detect the flow data
 """
 import os
-# import copy
+import copy
+from util import update_not_none
 # import settings
 from Detector import detect
 from Detector.API import print_detector_help
@@ -17,6 +18,9 @@ class Detect(BaseExper):
     def __init__(self, argv, parser=None):
         super(Detect, self).__init__(argv, parser)
         # BaseExper.__init__(self, argv, parser)
+
+        self.desc = copy.deepcopy(self.args.config['DETECTOR_DESC'])
+        update_not_none(self.desc, self.args.__dict__)
 
         # if self.args.help :
         if self.desc.get('help'):

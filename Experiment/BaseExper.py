@@ -1,10 +1,10 @@
 import argparse
 import settings
-import copy
+# import copy
 # from util import abstract_method, load_para, Namespace
 from util import abstract_method
 from util import load_para
-from util import update_not_none
+# from util import update_not_none
 
 class BaseExper(object):
     ROOT = settings.ROOT
@@ -19,8 +19,6 @@ class BaseExper(object):
         if self.args.config is None:
             print('You must specifiy --config option, run with -h option to see help')
             import sys; sys.exit(0)
-        self.desc = copy.deepcopy(self.args.config['DETECTOR_DESC'])
-        update_not_none(self.desc, self.args.__dict__)
 
     def init_parser(self, parser):
         parser.add_argument('-c', '--config', default=None,
