@@ -26,8 +26,6 @@ class Visualizer(object):
         show()
         pass
 
-    pass
-
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='visualizer of FS data')

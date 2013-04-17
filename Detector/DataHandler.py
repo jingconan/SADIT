@@ -42,12 +42,29 @@ def long_to_dotted(ip):
 from .DetectorLib import get_feature_hash_list
 from itertools import izip
 class QuantizeDataHandler(DataHandler):
-    """Quantize the feature in the Data
+    """ Cluster and IP address and Quantize the feature in the Data
+
+    Parameters
+    ----------------
+    fea_option : dict
+        specified the quantized level for each feature
+
+
+    Examples
+    ---------------
+    >>> from .Data import PreloadHardDiskFile
+    >>> data = PreloadHardDiskFile('Test/n0_flow.txt')
+    >>> fea_option = dict(cluster=2, dist_to_center=2, flow_size=2)
+    >>> dh = QuantizeDataHandler(data, dict(fea_option=fea_option))
+    finish get ip address
+    start KMedians ...
+    >>> flows = dh.quantize_fea([0, 100], 'flow')
+    >>> print(len(flows))
+    3
+    >>> print(len(flows[0]))
+    100
     """
     def __init__(self, data, desc):
-        """
-        - fea_option: specified the quantized level for each feature
-        """
         super(QuantizeDataHandler, self).__init__(data, desc)
         self._init_data(data)
         fea_option = desc['fea_option']
@@ -483,3 +500,9 @@ class ModelBasedFeaGeneralizedEMHandler(GeneralizedEMHandler):
         N = len(self.em_list[0].mb[0].flatten())
         return model_based([flatten(em.mb[0]) for em in self.em_list],
                 [self.g_quan_N]*N)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
