@@ -60,10 +60,31 @@ class PreloadHardDiskFile(Data):
         return self.zip_fea_vec[fidx]
 
     def _get_where(self, rg=None, rg_type=None):
-        """get the absolute position of flows records that within the range.
-        some times this function is called by outside function thus break
-        the interoperability"""
-        if not rg: return 0, self.flow_num-1
+        """ get the absolute position of flows records that within the range.
+
+        Find all flows such that its belong to [rg[0], rg[1]). The interval
+        is closed in the starting point and open in the ending pont.
+
+        Parameters
+        ------------------
+        rg : list or tuple or None
+            range of the the data. If rg == None, simply return position
+            (0, flow_num])
+        rg_type : {'flow', 'time'}
+            specify the type of the range.
+
+        Returns
+        -------------------
+        sp, ep : ints
+            flows with index such that sp <= idx < ed belongs to the range
+
+        NOTES
+        ------------------
+        This should be a protected method. However, it is called by some
+        outside function thus break the interoperability
+        """
+        # if not rg: return 0, self.flow_num-1
+        if not rg: return 0, self.flow_num
         if rg_type == 'flow':
             sp, ep = rg
             if sp >= self.flow_num: raise DataEndException()
