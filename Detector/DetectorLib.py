@@ -8,49 +8,159 @@ import sys
 sys.path.append("..")
 from util import np, Counter
 import operator
-import math
+# import math
 import itertools
 
-def shannon_entropy(prob):
-    """calculate shannon entropy
+# def shannon_entropy(prob):
+#     """calculate shannon entropy
+#     """
+#     return sum(-1 * p * math.log(p) for p in prob if (p > 0 and p < 1))
+
+def adjust_pv(prob, eps):
+    """ adjust probability vector so that each value >= eps
+
+    Parameters
+    ---------------
+    prob : list or tuple
+        probability vector
+    eps : float
+        threshold
+
+    Returns
+    --------------
+    prob : list
+        adjusted probability vector
     """
-    return sum(-1 * p * math.log(p) for p in prob if (p > 0 and p < 1))
+    a = len(prob)
+    zei = [i for i, v in zip(xrange(a), prob) if abs(v) < eps] # zero element indices
+    if a == len(zei): # all elements are zero
+        return [eps] * a
+    zei_sum = sum(prob[i] for i in zei)
+    adjustment = (eps * len(zei) - zei_sum) * 1.0 / (a - len(zei))
+    prob2 = [v - adjustment for v in prob]
+    for idx in zei:
+        prob2[idx] = eps
+    if min(prob2) < 0:
+        print '[warning] EPS is too large in adjust_pv'
+        import pdb;pdb.set_trace()
+        # return adjust_pv(prob2, eps / 2.0)
+    return prob2
+
 
 # The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
-import copy
-def I2(P1, mp1, P2, mp2):
+
+# def adjust2d(prob, eps):
+    # return [ for p1 in prob]
+
+EPS = 1e-20
+from math import log
+def I1(nu, mu):
+    """  Calculate the empirical measure of two probability vector nu and mu
+
+    Parameters
+    ---------------
+    nu, mu : list or tuple
+        two probability vector
+
+    Returns
+    --------------
+    res : float
+        the cross entropy
+
+    Notes
+    -------------
+    The cross-entropy of probability vector **nu** with respect to **mu** is
+    defined as
+
+    .. math::
+
+        H(nu|mu) = \sum_i  nu(i) \log(nu(i)/mu(i)))
+
+    One problem that needs to be addressed is that mu may contains 0 element.
+
+    Examples
+    --------------
+    >>> print I1([0.3, 0.7, 0, 0], [0, 0, 0.3, 0.7])
+    3.82203525552
+
+    """
+    assert(len(nu) == len(mu))
+    a = len(nu)
+
+    # adjust the
+    mu = adjust_pv(mu, EPS)
+    # print('mu', mu)
+    nu = adjust_pv(nu, EPS)
+    # print('nu', nu)
+
+    H = lambda x, y:x * log( x * 1.0 / y )
+    return sum(H(a, b) for a, b in zip(nu, mu))
+
+
+# import copy
+def I2(J1, pi1, J2, pi2):
+    """  calculate cross entropy for model-based empirical measure
+
+    Empirical Measure (EM) consists of 1. state probability, 2 joint
+    probability.
+
+    Parameters
+    ---------------
+    mp1, mp2 : list or tuple
+        state probability for empirical measure 1 and 2, respectively
+
+    P1, P2 : list of list
+        for empirical measure 1 and 2, respectively
+        the sum of all elements in P1 should be one
+
+    Returns
+    --------------
+    y : float
+        cross entropy
+
+    Notes
+    --------------
+    Need to deal with the case when transition probability or state
+    probability has zero element.
+
+    We first need to caculate the stochastic matrix
+    P(i, j) = J(i, j) / pi[i]
+
+    Examples
+    ----------------
+    >>> pi1 = [0.3, 0.7]
+    >>> J1 = [[0.2, 0.1], [0.3, 0.4]]
+    >>> pi2 = [0.7, 0.3]
+    >>> J2 = [[0.2, 0.1], [0.3, 0.4]]
+    >>> print I2(J1, pi1, J2, pi2)
+    -0.338919144155
+    >>> print I2(J1, pi1, J2, [0.3, 0.7])
+    0.0
+
+    """
     # assert( abs(np.sum(mp1)  - 1.0 ) < 1e-3 and abs(np.sum(mp2) - 1.0 ) < 1e-3)
     # a, b = np.shape(P1)
-    a = len(P1)
-    b = len(P1[0])
-    P1Con = copy.deepcopy(P1)
-    P2Con = copy.deepcopy(P2)
-    for i in range(a):
-        for j in range(b):
-            if mp1[i] != 0:
-                # P1Con[i, j] /= mp1[i]
-                P1Con[i][j] /= mp1[i]
-            if mp2[i] != 0:
-                P2Con[i][j] /= mp2[i]
+    a = len(J1)
+    b = len(J1[0])
+    pi1 = adjust_pv(pi1, EPS)
+    pi2 = adjust_pv(pi2 , EPS)
+    def cal_tran_mat(J, pi, EPS):
+        PCon = [adjust_pv(p, EPS) for p in J]
+        for i in range(a):
+            for j in range(b):
+                PCon[i][j] /= pi[i]
+        return PCon
+
+    P1Con = cal_tran_mat(J1, pi1, EPS)
+    P2Con = cal_tran_mat(J2, pi2, EPS)
+
     # Compute Expectation of Each Relative Entropy
     y = 0
     for i in range(a):
         # y += mp1[i] * I1(P1Con[i, :], P2Con[i, :])
-        y += mp1[i] * I1(P1Con[i], P2Con[i])
+        y += pi1[i] * I1(P1Con[i], P2Con[i])
     return y
-
-from math import log
-def I1(nu, mu):
-    # a, = np.shape(nu)
-    a = len(nu)
-    # F = lambda x, y:x * np.log( x * 1.0 / y )
-    F = lambda x, y:x * log( x * 1.0 / y )
-    non_zero_idx_set = [i for i in xrange(a) if mu[i] !=0 and nu[i]!=0]
-
-    # FIXME find better to make sure e is nonnegative
-    e =  sum( F(nu[i], mu[i]) for i in non_zero_idx_set ) #  ele in non_zero_idx_set for both nu and mu should sum to 1 to make e nonnegative.
-    return abs(e)
 
 def quantize_state(x, nx, rg):
     """quantize state
@@ -338,3 +448,7 @@ def SL(data, st, ed):
 
 def get_range(data):
     return [ (min(x), max(x)) for x in data ]
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
