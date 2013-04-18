@@ -22,7 +22,8 @@ class DetectCompare(Detect):
         parser.add_argument('-p', '--comp_methods', default=None, type=lambda x:x.split(','),
                 help="""method list that will be compared""")
 
-        parser.add_argument('-f','--dump_folder', default=self.ROOT+'/Share/',
+        # parser.add_argument('-f','--dump_folder', default=self.ROOT+'/Share/',
+        parser.add_argument('-f','--dump_folder',
                 help="""folder that will store the dump file for each detector""")
 
         # parser.add_argument('--plot_dump', default=None,
@@ -37,10 +38,10 @@ class DetectCompare(Detect):
         # if self.args.plot_dump:
         if self.desc['plot_dump']:
             # self.plot_dump(self.args.plot_dump)
-            self.plot_dump(self.args.dump_folder)
+            self.plot_dump(self.desc['dump_folder'])
             return
 
-        d = os.path.abspath(self.args.dump_folder)
+        d = os.path.abspath(self.desc['dump_folder'])
         if not os.path.exists(d):
             os.makedirs(d)
 
@@ -50,6 +51,7 @@ class DetectCompare(Detect):
             self.desc['method'] = method
             detector = self.detect()
             print('detector type, ', type(detector))
+            # import ipdb;ipdb.set_trace()
             detector.dump(self.desc['dump_folder'] + '/dump_' + method + '.txt')
 
         with open(self.desc['dump_folder'] + '/dump_method_list.txt', 'w') as f:
