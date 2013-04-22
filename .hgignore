@@ -2,9 +2,9 @@ syntax: glob
 *.dat
 *.pyc
 *.dot
-*flow.txt
+Simulator/*flow.txt
 *.eps
-res/
+res/*
 res/*.eps
 res/*.txt
 Share/**
@@ -17,3 +17,8 @@ anomalyTimeData.txt
 clusters.txt
 coords.txt
 anomolies.txt
+doc/1.1/build/html/*
+doc/sphinx/build/
+*/.UNDO/*
+*/.ropeproject/*
+*/build/*

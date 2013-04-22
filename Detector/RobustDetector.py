@@ -26,7 +26,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
     # def init_parser(self, parser):
         # pass
 
-    def register(self, alg_name, alg, para, type_ ='dynamic'):
+    def register(self, alg_name, alg, para, type ='dynamic',
+            para_type='izip'):
         """ register a algorithm
 
         Parameters
@@ -50,16 +51,23 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         """
         self.det[alg_name] = alg
-        self.det_para[alg_name] = del_none_key(para)
-        self.det_type[alg_name] = type_
+
+        # store det_para
+        para = del_none_key(para)
+        self.det_para[alg_name] = (para.keys(), \
+                getattr(itertools, para_type)(*para.values()))
+
+        self.det_type[alg_name] = type
 
     def detect(self, data_file, ref_file):
         self.ref_pool = dict()
 
         register_info = self.desc['register_info']
         for method, prop in register_info.iteritems():
+            # import ipdb;ipdb.set_trace()
             det = getattr(StoDetector, method)(copy.deepcopy(self.desc))
-            self.register(method, det, prop['para'], prop['type'])
+            # self.register(method, det, prop['para'], prop['type'])
+            self.register(method, det, **prop)
             # globals()[method](copy.deepcopy(self.desc)),
 
         StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
@@ -94,10 +102,12 @@ class RobustDetector(StoDetector.FBAnoDetector):
         # d_obj.rg = int_rg
         d_obj.ref_file = ref_file
 
-        para_dict = self.det_para[alg_name]
-        for para_list in itertools.product(*para_dict.values()):
-            cp = dict(zip(para_dict.keys(), para_list))
-            # print('cp, ', cp)
+        # para_dict = self.det_para[alg_name]
+        para_names, para_values_gen = self.det_para[alg_name]
+        # for para_list in itertools.product(*para_dict.values()):
+        # FIXME temparlily use izip
+        for para_values in para_values_gen:
+            cp = dict(zip(para_names, para_values))
             key = (alg_name, str(cp))
             if self.det_type[alg_name] == 'static' and (self.ref_pool.get(key, None) is not None):
                 continue
