@@ -210,7 +210,8 @@ class Anomaly(object):
         ano_node = self.ano_node
         # generator = ano_node.generator
         start, end = ano_t
-        mod_start = eval(mod['start'])
+        # mod_start = eval(mod['start'])
+        mod_start = mod['start']
         mod_profile = mod['profile']
         # s_id = mod['generator'] # get id for source generator
 

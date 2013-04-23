@@ -226,8 +226,7 @@ class NNode(Node):
 
 import copy
 class MarkovNode(NNode):
-    def __init__(self, ipdests, node_seq, **markov_desc):
-        self.markov_desc = markov_desc
+    def __init__(self, ipdests, node_seq):
         NNode.__init__(self, ipdests, node_seq)
         self.gen_num = 0
 
@@ -242,7 +241,8 @@ class MarkovNode(NNode):
         """generator source identifier"""
         return 's' + str(self.node_seq) + '_' + str(self.mod_num) + '_' + str(self.gen_num)
 
-    def add_modulator(self, start, profile, generator_list, markov_desc=None):
+    def add_modulator(self, start, profile, generator_list,
+            node_para=None):
         self.mod_num += 1
         s_id_list = []
         for gen in generator_list:
@@ -251,22 +251,18 @@ class MarkovNode(NNode):
             self.generator[self.s_id] = gen
             s_id_list.append(self.s_id)
 
-        if not markov_desc: markov_desc = self.markov_desc
+
+        if node_para is None:
+            node_para = self.norm_desc['node_para']
         # import pdb;pdb.set_trace()
-        m = self.get_modulator(start, profile, s_id_list, markov_desc)
+        m = self.get_modulator(start, profile, s_id_list, node_para)
 
         self.modulator[self.m_id] = m
 
-    def get_modulator(self, start, profile, s_id_list, markov_desc):
-        # print 'markov_desc', markov_desc
-        m = MarkovModulator(
-                name='modulator',
-                start = str(start),
-                generator_states = s_id_list,
-                profile=profile,
-                **markov_desc
-                )
-        return m
+    def get_modulator(self, start, profile, s_id_list,
+            node_para):
+        return MarkovModulator('modulator', float(start), profile,
+                s_id_list, node_para)
 
     def sync(self):
         """sync to the dot property"""

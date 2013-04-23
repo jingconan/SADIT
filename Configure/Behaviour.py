@@ -1,57 +1,113 @@
 #!/usr/bin/env python
 """This file defines the behaviour of """
 from __future__ import print_function, division, absolute_import
-from util import TO_CLS, abstract_method
+from util import abstract_method
 from random import randint
 from .mod_util import RandDist
 
 class Behaviour(object):
-    def stage(): abstract_method()
     def behave(): abstract_method()
 
-# from random import expovariate as exponential
-class MarkovBehaviour(Behaviour):
-    """Markov behaviour is a kinf of behaviour that can """
-    def __init__(self, interval, P, states):
+from random import expovariate as exponential
+# class MarkovBehaviour(Behaviour):
+class DTMCBehaviour(Behaviour):
+    """ Discrete Time Markov Chain
+    """
+    def __init__(self, P, states, interval):
         Behaviour.__init__(self)
-        exec TO_CLS('interval', 'P', 'states')
+
+        self.interval = interval
+        self.P = P
+        self.states = states
+
         sn = len(states)
         self.cs = randint(0, sn-1) # cs: current state
-        self.run_para = None
-
-    def stage(self):
-        abstract_method()
 
     def get_new_state(self):
-        # return RandDist(self.P[self.cs])
-        return RandDist(self.P) # FIXME use stationary prob
+        return RandDist(self.P[self.cs])
+        # return RandDist(self.P) # FIXME use stationary prob
 
     def get_interval(self):
-        # return exponential(1.0 / self.interval)
         return self.interval
 
-    def behave_with_profile(self, start, profile):
+    def behave_with_profile(self, start, profile, func):
         for dur, num in zip(*profile):
+            # print('dur', type(dur))
+            # print('start', type(start))
             end = start + dur
             for i in xrange(num):
-                self.behave(start, end)
+                self.behave(start, end, func)
             start = end
 
-    def behave(self, start, end):
+    def behave(self, start, end, func):
         t = start
         while t <= end:
             self.cs = self.get_new_state()
             inter = self.get_interval()
-            self.run_para = dict(r_start=t, r_end=t+inter)
-            self.stage()
+            func(r_start=t, r_end=t+inter, state=self.states[self.cs])
             t += inter
+
+
+def get_embed_MC(P):
+    """  Calculate Embedded Markov Chain of a Continuous Time M.C>
+
+    Parameters
+    ---------------
+    P : nxn matrix
+        number with position (i, j) is the rate of possion process that
+        transition (i, j) will happen
+
+    Returns
+    --------------
+    EP : nxn matrix
+        transition matrix of embedded MC
+    v : nx1 list
+        v[i] is the rate of leave state i
+        v[i] = sum(P[i][j] for j noteq i)
+
+    Examples
+    ---------------
+    >>> P = [[1, 2], [4, 3]]
+    >>> EP, v = get_embed_MC(P)
+    >>> EP
+    [[0, 1.0], [1.0, 0]]
+    >>> v
+    [2, 4]
+    """
+    n = len(P)
+    v = [sum(pl) - pl[i] for i, pl in zip(range(n), P)]
+    EP = [[0] * n for i in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i == j : continue
+            EP[i][j] = P[i][j] * 1.0 / v[i]
+    return EP, v
+
+class CTMCBehaviour(DTMCBehaviour):
+    """ Continuous Time Markoc Chain
+
+    Parameters
+    ---------------
+    Returns
+    --------------
+    """
+    def __init__(self, P, states):
+        super(CTMCBehaviour, self).__init__(0, P, states)
+        self.embed_P, self.v = get_embed_MC(P)
+
+    def get_new_state(self):
+        return RandDist(self.embed_P[self.cs])
+
+    def get_interval(self):
+        return exponential(1.0 / self.v[self.cs])
 
 try:
     import numpy as np
 except:
     print('[Warning] MultiServer Detector requires numpy')
 
-class MVBehaviour(MarkovBehaviour):
+# class MVBehaviour(MarkovBehaviour):
+class MVBehaviour(DTMCBehaviour):
     """
     Description:
         - will make choice every other t time.
@@ -104,3 +160,6 @@ class MVBehaviour(MarkovBehaviour):
         freq /= np.sum(freq)
         # print 'freq, ', freq
 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

@@ -13,12 +13,9 @@ class MarkovAnomaly(Anomaly):
         return [ self.ano_node.generator[s] for s in mod.states ]
 
     def add_ano_seg(self, start, ap, generator_list):
-        self.ano_node.add_modulator(
-                start=str(start),
-                profile=ap,
-                generator_list = generator_list,
-                markov_desc = self.ano_desc['ano_markov_desc'],
-                )
+        self.ano_node.add_modulator(start, ap, generator_list,
+                self.ano_desc['node_para'])
+        # import ipdb;ipdb.set_trace()
 
     def export_ano_flow_para(self):
         import settings

@@ -50,16 +50,13 @@ NET_DESC = dict(
         srv_list = srv_node_list,
         link_attr_default = link_attr_default,
         node_type = 'MarkovNode',
-        node_para = {
-                'P': (0.8, 0.2),
-                'interval':300,
-            },
         )
 
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 3600 * 24 # simulation time
+# sim_t = 3600 * 24 # simulation time
+sim_t = 3600 # simulation time
 start = 0 # start time
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
@@ -85,6 +82,8 @@ NORM_DESC = dict(
         sim_t = sim_t,
         node_para = {
                     'states': [gen_desc_L, gen_desc_H],
+                    'P': [[0.08, 0.02], [0.03, 0.02]], # P is arrival rate of each transition
+                    'type':'CTMC' # {'DTMC', 'CTMC'}
                     },
         profile = DEFAULT_PROFILE,
         src_nodes = range(g_size),
@@ -98,8 +97,10 @@ ANO_DESC = {
         'anoType':'markov_anomaly',
         'ano_node_seq':2,
         'T':(20000, 21000),
-        'ano_markov_desc':{'P':(0.2, 0.8), #FIXME make it consistant with change
-            'interval':200},
+        'ano_markov_desc':{
+            'P':[[0.02, 0.08], [0.03, 0.02]], #FIXME make it consistant with change
+            'interval':200,
+            },
         # 'change':{'flow_size_var':6},
         'srv_id':0,
         }
