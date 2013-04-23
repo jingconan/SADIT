@@ -23,16 +23,20 @@ class Detect(BaseExper):
         update_not_none(self.desc, self.args.__dict__)
 
         # if self.args.help :
-        if self.desc.get('help'):
-            self.parser.print_help()
-            if self.desc.get('method'):
-                print_detector_help(self.desc.get('method'))
+        # if self.desc.get('help'):
+
+    def print_help(self):
+        self.parser.print_help()
+        print('-' * 70)
+        hm = self.args.method
+        if hm:
+            print_detector_help(hm)
+        else:
+            print('run with -m <method> -h to see the help of each method')
 
 
     def init_parser(self, parser):
         super(Detect, self).init_parser(parser)
-        parser.add_argument('-h', '--help', default=False, action='store_true',
-                help="""print help message""")
 
         parser.add_argument('-d', '--data', default=None,
                 help="""--data [filename] will simply detect the flow file,
@@ -45,10 +49,17 @@ class Detect(BaseExper):
         from Detector.API import detector_map, data_map
         from util import get_help_docs
         parser.add_argument('-m', '--method', default=None,
-                help="""--method [method] will specify the method to use. Avaliable options are:
-                [%s]. If you want to compare the results of several methods, simple use / as seperator,
-                for example [%s] """ %(' | '.join(get_help_docs(detector_map)), '/'.join(detector_map.keys()))
+                help="""--method [method] will specify the method to use.
+                Avaliable options are: [%s]. If you want to compare the
+                results of several methods, simple use / as seperator, for
+                example [%s] """ %(' | '.join(get_help_docs(detector_map)),
+                '/'.join(detector_map.keys()))
                 )
+
+
+        parser.add_argument('--help_method', default=None,
+                help="""print the detailed help message for a method. Avaliable method [%s]"""
+                %(' | '.join(detector_map.keys())))
 
         parser.add_argument('--data_type', default='fs',
                 help="""--specify the type of the data you use, the availiable

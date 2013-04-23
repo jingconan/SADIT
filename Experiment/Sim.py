@@ -23,9 +23,9 @@ class Sim(BaseExper):
     def __init__(self, argv):
         super(Sim, self).__init__(argv)
 
-        if self.args.config is None:
-            self.parser.print_help()
-            import sys; sys.exit(0)
+        # if self.args.config is None:
+        #     self.parser.print_help()
+        #     import sys; sys.exit(0)
 
         self.ano_list = self.args.config['ANO_LIST']
         # self.net_desc = self.args.config['NET_DESC']

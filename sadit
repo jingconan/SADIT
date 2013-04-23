@@ -10,9 +10,10 @@ import os
 # import inspect
 
 # Get experiment options
-exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/') if f_name.lower().endswith('py') and not f_name.startswith('__')]
+exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/') \
+        if f_name.lower().endswith('py') and not f_name.startswith('__')]
 
-from Detector.API import detector_map
+# from Detector.API import detector_map
 
 parser = argparse.ArgumentParser(description='sadit', add_help=False)
 # parser = argparse.ArgumentParser(description='sadit')
@@ -35,9 +36,9 @@ parser.add_argument('experiment', default=None, nargs='?',
 parser.add_argument('--profile', default=None,
         help= """profile the program """)
 
-parser.add_argument('-hm', '--help_method', default=None,
-        help="""print the detailed help message for a method. Avaliable method [%s]"""
-        %(' | '.join(detector_map.keys())))
+# parser.add_argument('-hm', '--help_method', default=None,
+#         help="""print the detailed help message for a method. Avaliable method [%s]"""
+        # %(' | '.join(detector_map.keys())))
 # parser.add_argument('-he', '--help_exper', default=None,
         # help="""print the detailed help message for an experiment. Avaliable experiments are [%s]"""
         # %(' | '.join(exper_ops)))
@@ -71,10 +72,10 @@ if args.help:
     # print_exper_help(args.help_exper)
     # sys.exit()
 
-if args.help_method:
-    from Detector.API import print_detector_help
-    print_detector_help(args.help_method)
-    sys.exit()
+# if args.help_method:
+#     from Detector.API import print_detector_help
+#     print_detector_help(args.help_method)
+#     sys.exit()
 
 def main(args, res_args):
     """ Execute the experiment """
