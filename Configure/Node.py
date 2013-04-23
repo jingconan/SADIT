@@ -5,7 +5,8 @@ from copy import deepcopy
 
 from .mod_util import choose_ip_addr
 from .Generator import get_generator
-from .Modulator import Modulator, MarkovModulator, MVModulator
+from .Modulator import Modulator, MarkovModulator
+# from .Modulator import MVModulator
 
 # def load_base_traffic(f_name):
 #     """  Load Base Traffic
@@ -292,67 +293,66 @@ class MarkovNode(NNode):
             if v: attr[k] = str(v)
 
 
-class MVNode(MarkovNode):
-    """Node for Multi Variable Node"""
-    def __init__(self, ipdests, node_seq):
-        MarkovNode.__init__(self, ipdests, node_seq)
+# class MVNode(MarkovNode):
+#     """Node for Multi Variable Node"""
+#     def __init__(self, ipdests, node_seq):
+#         MarkovNode.__init__(self, ipdests, node_seq)
 
-    @property
-    def joint_dist(self): return self.norm_desc['joint_dist']
+#     @property
+#     def joint_dist(self): return self.norm_desc['joint_dist']
 
-    @property
-    def start(self): return self.norm_desc['start']
+#     @property
+#     def start(self): return self.norm_desc['start']
 
-    @property
-    def profile(self): return self.norm_desc['profile']
+#     @property
+#     def profile(self): return self.norm_desc['profile']
 
-    @property
-    def para_list(self): return self.norm_desc['node_para']['states']
+#     @property
+#     def para_list(self): return self.norm_desc['node_para']['states']
 
-    @property
-    def interval(self): return self.norm_desc['interval']
+#     @property
+#     def interval(self): return self.norm_desc['interval']
 
-    def init_traffic(self, norm_desc, dst_nodes):
+#     def init_traffic(self, norm_desc, dst_nodes):
         # print 'MVNode init_traffic'
-        self.norm_desc = norm_desc
+#         self.norm_desc = norm_desc
         # FIXME why add None cause the problem?
         # self.generator_list = [ [None] + self._get_generator_list(node, self.para_list) for node in dst_nodes ]
-        self.generator_list = [ self._get_generator_list(node, self.para_list) for node in dst_nodes ]
-        self.add_modulator(self.start,
-                self.profile,
-                self.generator_list,
-                self.joint_dist,
-                )
+#         self.generator_list = [ self._get_generator_list(node, self.para_list) for node in dst_nodes ]
+#         self.add_modulator(self.start,
+#                 self.profile,
+#                 self.generator_list,
+#                 self.joint_dist,
+#                 )
 
-    def add_modulator(self, start, profile, generator_list, joint_dist=None):
-        if joint_dist is None : joint_dist = self.joint_dist
-        self.mod_num += 1
-        s_id_list = self.gen_to_id(generator_list)
-        m = self.get_modulator(start, profile, s_id_list, joint_dist) #FIX  A BUG here at [2012-04-25 12:02:11]
-        self.modulator[self.m_id] = m
-        # print self.modulator
+#     def add_modulator(self, start, profile, generator_list, joint_dist=None):
+#         if joint_dist is None : joint_dist = self.joint_dist
+#         self.mod_num += 1
+#         s_id_list = self.gen_to_id(generator_list)
+#         m = self.get_modulator(start, profile, s_id_list, joint_dist) #FIX  A BUG here at [2012-04-25 12:02:11]
+#         self.modulator[self.m_id] = m
 
-    def get_modulator(self, start, profile, s_id_list, joint_dist):
-        m = MVModulator(
-                name='modulator',
-                start = str(start),
-                interval = self.interval,
-                generator_states = s_id_list,
-                profile = profile,
-                joint_dist = joint_dist,
-                )
-        return m
+#     def get_modulator(self, start, profile, s_id_list, joint_dist):
+#         m = MVModulator(
+#                 name='modulator',
+#                 start = str(start),
+#                 interval = self.interval,
+#                 generator_states = s_id_list,
+#                 profile = profile,
+#                 joint_dist = joint_dist,
+#                 )
+#         return m
 
-    def gen_to_id(self, generator_list):
-        s_id_list = []
-        for gl in generator_list:
-            row = []
-            for g in gl:
-                self.gen_num += 1
-                self.generator[self.s_id] = g
-                if not g:
-                    row.append(None)
-                else:
-                    row.append(self.s_id)
-            s_id_list.append(row)
-        return s_id_list
+#     def gen_to_id(self, generator_list):
+#         s_id_list = []
+#         for gl in generator_list:
+#             row = []
+#             for g in gl:
+#                 self.gen_num += 1
+#                 self.generator[self.s_id] = g
+#                 if not g:
+#                     row.append(None)
+#                 else:
+#                     row.append(self.s_id)
+#             s_id_list.append(row)
+#         return s_id_list

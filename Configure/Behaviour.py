@@ -41,9 +41,11 @@ class DTMCBehaviour(Behaviour):
 
     def behave(self, start, end, func):
         t = start
-        while t <= end:
+        while True:
             self.cs = self.get_new_state()
             inter = self.get_interval()
+            if t + inter > end:
+                break
             func(r_start=t, r_end=t+inter, state=self.states[self.cs])
             t += inter
 
@@ -92,72 +94,73 @@ class CTMCBehaviour(DTMCBehaviour):
     --------------
     """
     def __init__(self, P, states):
-        super(CTMCBehaviour, self).__init__(0, P, states)
+        super(CTMCBehaviour, self).__init__(P, states, 0)
         self.embed_P, self.v = get_embed_MC(P)
 
     def get_new_state(self):
         return RandDist(self.embed_P[self.cs])
 
     def get_interval(self):
-        return exponential(1.0 / self.v[self.cs])
+        val = exponential(self.v[self.cs])
+        return val
 
-try:
-    import numpy as np
-except:
-    print('[Warning] MultiServer Detector requires numpy')
+# try:
+#     import numpy as np
+# except:
+#     print('[Warning] MultiServer Detector requires numpy')
 
 # class MVBehaviour(MarkovBehaviour):
-class MVBehaviour(DTMCBehaviour):
-    """
-    Description:
-        - will make choice every other t time.
-        - the generators is selected according to multi-variate distribution
+# class MVBehaviour(DTMCBehaviour):
+#     """
+#     Description:
+#         - will make choice every other t time.
+#         - the generators is selected according to multi-variate distribution
 
-    Required Variables:
-        - states: states for all possible value. it is a list of list,
-            the first dimension is the id of servers, the second dimension is the possible
-            for type of generator for a specific server.
-        - joint_dist: the joint distribution for indicator variable to each server.
+#     Required Variables:
+#         - states: states for all possible value. it is a list of list,
+#             the first dimension is the id of servers, the second dimension is the possible
+#             for type of generator for a specific server.
+#         - joint_dist: the joint distribution for indicator variable to each server.
 
-    The traffic is generated according to multi-variable distribution
-    if there are m servers, then the joint distribution will be m dimension
-    matrix. For each component, there are n possible values. So we need m*n
-    possible generators
-    """
-    def __init__(self, joint_dist, interval, generator_states):
-        self.joint_dist = joint_dist
-        self.states = generator_states
-        self.interval = interval
-        self.record = []
+#     The traffic is generated according to multi-variable distribution
+#     if there are m servers, then the joint distribution will be m dimension
+#     matrix. For each component, there are n possible values. So we need m*n
+#     possible generators
+#     """
+#     def __init__(self, joint_dist, interval, generator_states):
+#         self.joint_dist = joint_dist
+#         self.states = generator_states
+#         self.interval = interval
+#         self.record = []
 
-    @property
-    def dim(self): return self.joint_dist.shape
+#     @property
+#     def dim(self): return self.joint_dist.shape
 
-    @property
-    def srv_num(self): return len(self.dim)
+#     @property
+#     def srv_num(self): return len(self.dim)
 
-    def get_sample(self):
-        """generate a sample according to joint distribution"""
+#     def get_sample(self):
+#         """generate a sample according to joint distribution"""
         # assert(np.sum(self.joint_dist) == 1 )
-        assert( abs( np.sum(self.joint_dist) - 1) < 1e-3)
-        x = RandDist( self.joint_dist.ravel() )
-        idx = np.unravel_index(x, self.dim)
-        return idx
+#         assert( abs( np.sum(self.joint_dist) - 1) < 1e-3)
+#         x = RandDist( self.joint_dist.ravel() )
+#         idx = np.unravel_index(x, self.dim)
+#         return idx
 
-    def get_new_state(self):
-        ns = self.get_sample()
-        self.record.append(ns)
-        return ns
+#     def get_new_state(self):
+#         ns = self.get_sample()
+#         self.record.append(ns)
+#         return ns
 
-    def get_interval(self):
-        return self.interval
+#     def get_interval(self):
+#         return self.interval
         # return exponential(1.0 / self.interval)
 
-    def _sample_freq(self):
-        freq = np.zeros(self.dim)
-        for r in self.record:
-            freq[r] += 1
-        freq /= np.sum(freq)
+#     def _sample_freq(self):
+#         freq = np.zeros(self.dim)
+#         for r in self.record:
+#             freq[r] += 1
+#         freq /= np.sum(freq)
         # print 'freq, ', freq
 
 if __name__ == "__main__":

@@ -82,7 +82,7 @@ NORM_DESC = dict(
         sim_t = sim_t,
         node_para = {
                     'states': [gen_desc_L, gen_desc_H],
-                    'P': [[0.08, 0.02], [0.03, 0.02]], # P is arrival rate of each transition
+                    'P': [[0.08, 0.01], [0.01, 0.02]], # P is arrival rate of each transition
                     'type':'CTMC' # {'DTMC', 'CTMC'}
                     },
         profile = DEFAULT_PROFILE,
@@ -96,10 +96,10 @@ NORM_DESC = dict(
 ANO_DESC = {
         'anoType':'markov_anomaly',
         'ano_node_seq':2,
-        'T':(20000, 21000),
-        'ano_markov_desc':{
-            'P':[[0.02, 0.08], [0.03, 0.02]], #FIXME make it consistant with change
-            'interval':200,
+        'T':(2000, 3000),
+        'node_para':{
+            'P':[[0.01, 0.08], [0.02, 0.01]], #FIXME make it consistant with change
+            'type':'CTMC' # {'DTMC', 'CTMC'}
             },
         # 'change':{'flow_size_var':6},
         'srv_id':0,

@@ -3,7 +3,8 @@ from pydot import Dot
 from util import get_net_addr, CIDR_to_subnet_mask
 
 from .Edge import NEdge
-from .Node import NNode, MarkovNode, MVNode
+from .Node import NNode, MarkovNode
+# from .Node import MVNode
 from .mod_util import GetIPAdress, FixQuoteBug
 from .Address import Ipv4AddressHelper
 
@@ -11,7 +12,7 @@ from .Address import Ipv4AddressHelper
 node_map = {
         'NNode':NNode,
         'MarkovNode':MarkovNode,
-        'MVNode':MVNode,
+        # 'MVNode':MVNode,
         }
 
 ####################################

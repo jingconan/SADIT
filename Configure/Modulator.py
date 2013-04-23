@@ -83,31 +83,31 @@ class MarkovModulator(Modulator):
                 )
         self.mod_list.append(mod)
 
-from .Behaviour import MVBehaviour
-class MVModulator(Modulator, MVBehaviour):
-    """
-    Modulator defines the behaviour of generator within a range of time.
-    implement the stage function.
-    joint_dist should be numpy array
-    """
-    def __init__(self, joint_dist, interval, generator_states, **desc):
-        Modulator.__init__(self, **desc)
-        MVBehaviour.__init__(self, joint_dist, interval, generator_states)
-        self.mod_list = []
-        self.behave_with_profile(self.start, self.profile)
+# from .Behaviour import MVBehaviour
+# class MVModulator(Modulator, MVBehaviour):
+#     """
+#     Modulator defines the behaviour of generator within a range of time.
+#     implement the stage function.
+#     joint_dist should be numpy array
+#     """
+#     def __init__(self, joint_dist, interval, generator_states, **desc):
+#         Modulator.__init__(self, **desc)
+#         MVBehaviour.__init__(self, joint_dist, interval, generator_states)
+#         self.mod_list = []
+#         self.behave_with_profile(self.start, self.profile)
 
-    def stage(self):
-        """for one stage"""
-        r_start = self.run_para['r_start']
-        r_end = self.run_para['r_end']
-        for i in xrange(self.srv_num): # for each destination
-            gen = self.states[i][self.cs[i]]
-            if not gen:
-                continue
-            mod = Modulator(
-                    name=self.desc['name'],
-                    start=r_start,
-                    profile=( (r_end-r_start,), (1,) ) ,
-                    generator=gen,
-                    )
-            self.mod_list.append(mod)
+#     def stage(self):
+#         """for one stage"""
+#         r_start = self.run_para['r_start']
+#         r_end = self.run_para['r_end']
+#         for i in xrange(self.srv_num): # for each destination
+#             gen = self.states[i][self.cs[i]]
+#             if not gen:
+#                 continue
+#             mod = Modulator(
+#                     name=self.desc['name'],
+#                     start=r_start,
+#                     profile=( (r_end-r_start,), (1,) ) ,
+#                     generator=gen,
+#                     )
+#             self.mod_list.append(mod)
