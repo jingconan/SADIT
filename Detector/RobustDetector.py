@@ -3,11 +3,45 @@
 from __future__ import print_function, division, absolute_import
 import itertools, copy
 import numpy as np
+import cPickle as pk
 from sadit.util import del_none_key
 
 from . import StoDetector
 # from .StoDetector import FBAnoDetector, FetchNoDataException, DataEndException
 from .DetectorLib import I1, I2
+from .PLIdentify import PL_identify
+
+
+def cal_I_rec(ref_pool, fb_em, enable=None):
+    d_pmf, d_Pmb, d_mpmb = fb_em
+
+    n = len(ref_pool)
+    if not enable: enable = [True] * n
+    I_rec = np.zeros((n, 2))
+    i = -1
+    for _, norm_em in ref_pool.iteritems():
+        i += 1
+        if norm_em is None:
+            I_rec[i, :] = [float('inf'), float('inf')]
+            continue
+
+        pmf, Pmb, mpmb = norm_em
+        if not enable[0][i]:
+            I_rec[i, 0] = float('inf')
+        else:
+            I_rec[i, 0] = I1(d_pmf, pmf)
+
+        if not enable[0][i]:
+            I_rec[i, 1] = float('inf')
+        else:
+            I_rec[i, 1] = I2(d_Pmb, d_mpmb, Pmb, mpmb)
+
+        # if not enable[i] or norm_em is None:
+        #     I_rec[i, :] = [float('inf'), float('inf')]
+        # else:
+        #     pmf, Pmb, mpmb = norm_em
+        #     I_rec[i, :] = [I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)]
+    return I_rec
 
 class PLManager(object):
     """ Probability Law Manager
@@ -128,15 +162,34 @@ class PLManager(object):
 
         return self.ref_pool
 
+    def select(self, I_rec, lamb):
+        n = len(I_rec) # window size
+        m = I_rec[0].shape[0] # no. of PLs
+        mf_D = np.zeros((m, n))
+        mb_D = np.zeros((m, n))
+        for j in xrange(n):
+            for i in xrange(m):
+                mf_D[i, j] = I_rec[j][i, 0]
+                mb_D[i, j] = I_rec[j][i, 1]
+        # import ipdb;ipdb.set_trace()
+        return PL_identify(mf_D, lamb), PL_identify(mb_D, lamb)
 
 class RobustDetector(StoDetector.FBAnoDetector):
     """ Robust Detector is designed for dynamic network environment
     """
     def __init__(self, desc):
         StoDetector.FBAnoDetector.__init__(self, desc)
+        self._init_record()
 
+    def _init_record(self):
+        self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
         self.record_data['select_model'] = []
         self.record_data['I_rec'] = []
+
+    def init_parser(self, parser):
+        super(RobustDetector, self).init_parser(parser)
+        parser.add_argument('--ref_scheck', default=None, type=str,
+                help="""the reference data self check dump file""")
 
     def detect(self, data_file, ref_file):
         register_info = self.desc['register_info']
@@ -147,6 +200,21 @@ class RobustDetector(StoDetector.FBAnoDetector):
             det = getattr(StoDetector, method)(copy.deepcopy(self.desc))
             self.plm.register(method, det, **prop)
 
+        self.ref_pool = self.plm.process_data()
+
+        #FIXME Need to clean these code later
+        if self.desc['ref_scheck']:
+            data = pk.load(open(self.desc['ref_scheck'], 'r'))
+            ref_I_rec = data['I_rec']
+        else:
+            self.PL_enable = None
+            StoDetector.FBAnoDetector.detect(self, ref_file, ref_file)
+            ref_I_rec = self.record_data['I_rec']
+            self.dump('./_PLManager_check.pk')
+            self._init_record()
+
+        lamb = 1.5
+        self.PL_enable = self.plm.select(ref_I_rec, lamb)
         StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
 
     def I(self, em, **kwargs):
@@ -159,24 +227,27 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         """
         # self.process_data(self.ref_file, self.rg)
-        self.ref_pool = self.plm.process_data(self.rg)
+        # self.ref_pool = self.plm.process_data(self.rg, self.PL_selection)
 
         d_pmf, d_Pmb, d_mpmb = em
         self.desc['em'] = em
 
-        h_ref_size = len(self.ref_pool)
-        I_rec = np.zeros((h_ref_size, 2))
-        i = -1
+        I_rec = cal_I_rec(self.ref_pool, em, self.PL_enable)
+
+
+        # h_ref_size = len(self.ref_pool)
+        # I_rec = np.zeros((h_ref_size, 2))
+        # i = -1
         # import ipdb;ipdb.set_trace()
         # calculate the model free and model based entropy for each referece
         # emperical measure
-        for _, norm_em in self.ref_pool.iteritems():
-            i += 1
-            if norm_em is None:
-                I_rec[i, :] = [float('inf'), float('inf')]
-            else:
-                pmf, Pmb, mpmb = norm_em
-                I_rec[i, :] = [I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)]
+        # for _, norm_em in self.ref_pool.iteritems():
+        #     i += 1
+        #     if norm_em is None:
+        #         I_rec[i, :] = [float('inf'), float('inf')]
+        #     else:
+        #         pmf, Pmb, mpmb = norm_em
+        #         I_rec[i, :] = [I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)]
 
         res = np.min(I_rec, axis=0)
         model = np.nanargmin(I_rec, axis=0)
