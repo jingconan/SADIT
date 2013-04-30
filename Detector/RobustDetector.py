@@ -9,22 +9,25 @@ from . import StoDetector
 # from .StoDetector import FBAnoDetector, FetchNoDataException, DataEndException
 from .DetectorLib import I1, I2
 
+class PLManager(object):
+    """ Probability Law Manager
 
-class RobustDetector(StoDetector.FBAnoDetector):
-    """ Robust Detector is designed for dynamic network environment
+    Parameters
+    ---------------
+        ref_file: data handler class
+            data_handler class
+    Returns
+    --------------
     """
-    def __init__(self, desc):
-        StoDetector.FBAnoDetector.__init__(self, desc)
 
+    def __init__(self, ref_file):
+        self.ref_file = ref_file
         self.det = dict()
         self.det_para = dict()
         self.det_type = dict()
+        self.det_flag = dict()
 
-        self.record_data['select_model'] = []
-        self.record_data['I_rec'] = []
-
-    # def init_parser(self, parser):
-        # pass
+        self.ref_pool = dict()
 
     def register(self, alg_name, alg, para, type ='dynamic',
             para_type='izip'):
@@ -41,6 +44,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
             of parameters will be tried
         type_ : {'static', 'dynamic'}
             'static' :
+        para_type : {'izip', 'product'}
+            define how to generate parameter combinations
 
         Returns
         --------------------
@@ -59,28 +64,13 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         self.det_type[alg_name] = type
 
-    def detect(self, data_file, ref_file):
-        self.ref_pool = dict()
-
-        register_info = self.desc['register_info']
-        for method, prop in register_info.iteritems():
-            # import ipdb;ipdb.set_trace()
-            det = getattr(StoDetector, method)(copy.deepcopy(self.desc))
-            # self.register(method, det, prop['para'], prop['type'])
-            self.register(method, det, **prop)
-            # globals()[method](copy.deepcopy(self.desc)),
-
-        StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
-
-    def _loop_para(self, alg_name, ref_file, int_rg):
+    def _loop_para(self, alg_name, int_rg):
         """ loop through the possible parameters for alg_name
 
         Parameters
         -------------------
             alg_name : str
                 name of the algorithm
-            history_file : class
-                data_handler class
             int_rg : list
                 range of data that will be used to calculated emperical measure
 
@@ -99,29 +89,21 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         """
         d_obj = self.det[alg_name]
-        # d_obj.rg = int_rg
-        d_obj.ref_file = ref_file
+        d_obj.rg = int_rg
+        d_obj.ref_file = self.ref_file
 
-        # para_dict = self.det_para[alg_name]
         para_names, para_values_gen = self.det_para[alg_name]
-        # for para_list in itertools.product(*para_dict.values()):
-        # FIXME temparlily use izip
         for para_values in para_values_gen:
-            cp = dict(zip(para_names, para_values))
-            key = (alg_name, str(cp))
-            if self.det_type[alg_name] == 'static' and \
-                    (self.ref_pool.get(key, None) is not None):
-                continue
-            else:
-                self.ref_pool[key] = d_obj.cal_norm_em(norm_em=None, **cp)
+            cp = dict(zip(para_names, para_values)) # parameters
+            key = (alg_name, str(cp)) # key
+            self.ref_pool[key] = d_obj.cal_norm_em(norm_em=None, **cp)
 
-    def process_data(self, file_handler, int_rg=None):
+    def process_data(self, int_rg=None):
         """ process data using different methods and
 
         Parameters
         ---------------------
-        history_file : data handler class
-            data_handler class
+
         int_rg : list, optional
             Current range. It is helpful when the reference emperical measure
             is dependent on the detection place.
@@ -132,13 +114,40 @@ class RobustDetector(StoDetector.FBAnoDetector):
             2. calculate the emtropy of each emperical measure
 
         """
-        win_size = self.desc['win_size']
-        if int_rg is None: int_rg = [0, win_size]
+        # win_size = self.desc['win_size']
+        # if int_rg is None: int_rg = [0, win_size]
 
         # """specify the method and the parameters will be used"""
         for alg_name in self.det.keys():
-            self._loop_para(alg_name, file_handler, int_rg)
+            if self.det_type[alg_name] == 'static' and \
+                self.det_flag.get(alg_name):
+                    continue
 
+            self.det_flag[alg_name] = True
+            self._loop_para(alg_name, int_rg)
+
+        return self.ref_pool
+
+
+class RobustDetector(StoDetector.FBAnoDetector):
+    """ Robust Detector is designed for dynamic network environment
+    """
+    def __init__(self, desc):
+        StoDetector.FBAnoDetector.__init__(self, desc)
+
+        self.record_data['select_model'] = []
+        self.record_data['I_rec'] = []
+
+    def detect(self, data_file, ref_file):
+        register_info = self.desc['register_info']
+
+        self.plm = PLManager(ref_file)
+
+        for method, prop in register_info.iteritems():
+            det = getattr(StoDetector, method)(copy.deepcopy(self.desc))
+            self.plm.register(method, det, **prop)
+
+        StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
 
     def I(self, em, **kwargs):
         """ calculate
@@ -149,7 +158,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
         the output I = min(I(E, NE_i)) for i =1,...,N
 
         """
-        self.process_data(self.ref_file, self.rg)
+        # self.process_data(self.ref_file, self.rg)
+        self.ref_pool = self.plm.process_data(self.rg)
 
         d_pmf, d_Pmb, d_mpmb = em
         self.desc['em'] = em
