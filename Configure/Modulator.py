@@ -1,6 +1,4 @@
 from __future__ import print_function, division, absolute_import
-# from util import *
-# from mod_util import *
 from .mod_util import Attr
 class Modulator(object):
     """ * name

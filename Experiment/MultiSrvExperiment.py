@@ -52,7 +52,7 @@ class MultiSrvExperiment(Detect):
                                     [0.01, 0.01, 0.01, 0.01],
                                     [0.01, 0.01, 0.01, 0.01],
                                     ])
-        from util import get_diff_jpdf
+        from sadit.util import get_diff_jpdf
         self.ano_joint_dist =  get_diff_jpdf(self.joint_dist, 4)
         assert( not np.array_equal(self.ano_joint_dist, self.joint_dist) )
         # self.joint_dist = np.array([

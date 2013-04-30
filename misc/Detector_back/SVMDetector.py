@@ -141,7 +141,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         if pic_show: plt.show()
         if pic_name: plt.savefig(pic_name)
 
-from util import DataEndException, FetchNoDataException
+from sadit.util import DataEndException, FetchNoDataException
 class SVMTemporalDetector(SVMDetector):
     """SVM Temporal Difference Detector. Proposed by R.L Taylor. Implemented by
     J. C. Wang <wangjing@bu.ed> """

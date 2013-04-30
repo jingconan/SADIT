@@ -1,10 +1,6 @@
 import argparse
-import settings
-# import copy
-# from util import abstract_method, load_para, Namespace
-from util import abstract_method
-from util import load_para
-# from util import update_not_none
+from sadit import settings
+from sadit.util import abstract_method, load_para
 
 class BaseExper(object):
     ROOT = settings.ROOT

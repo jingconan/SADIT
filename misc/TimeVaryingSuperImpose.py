@@ -10,8 +10,8 @@ import sys
 sys.path.insert(0, '..')
 import os
 
-from util import mkiter, meval
-from Detector.DataParser import RawParseData
+from sadit.util import mkiter, meval
+from sadit.Detector.DataParser import RawParseData
 
 # FORMAT of FS output file
 FS_FORMAT = dict(start_time=3, end_time=4, src_ip=5, sc_port=6, flow_size=13, )

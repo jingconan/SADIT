@@ -9,8 +9,8 @@ __email__ = "wangjing@bu.edu"
 
 from .ClusterAlg import KMedians
 from .DetectorLib import vector_quantize_states, model_based, model_free
-from util import DF, NOT_QUAN, QUAN
-from util import abstract_method, FetchNoDataException, DataEndException
+from sadit.util import DF, NOT_QUAN, QUAN
+from sadit.util import abstract_method, FetchNoDataException, DataEndException
 
 # from DataHandler_deprec import DataFile
 ##############################################################
@@ -201,7 +201,7 @@ class FBQuantizeDataHandler(QuantizeDataHandler):
 #######################################
 ## SVM Temporal Method Handler   ######
 #######################################
-from util import Counter
+from sadit.util import Counter
 # try:
 #     from collections import Counter
 # except ImportError:
@@ -280,7 +280,7 @@ class FakeDataHandler(object):
         self.data = data
 
 
-from util import np
+from sadit.util import np
 from .DetectorLib import quantize_state
 
 def regularize(val):

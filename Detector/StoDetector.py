@@ -11,8 +11,8 @@ import os
 import cPickle as pickle
 from math import log
 
-from util import DataEndException, FetchNoDataException, abstract_method
-from util import save_csv, plt
+from sadit.util import DataEndException, FetchNoDataException, abstract_method
+from sadit.util import save_csv, plt
 
 from .DetectorLib import I1, I2
 from .mod_util import plot_points

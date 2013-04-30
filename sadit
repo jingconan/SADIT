@@ -2,13 +2,9 @@
 #!/usr/bin/env python -B
 from __future__ import print_function, division
 import settings
-import sys
+import sys, os, argparse
 sys.path.insert(0, settings.ROOT)
-
-import argparse
-import os
-# import inspect
-
+sys.path.insert(0, settings.ROOT + '/..')
 # Get experiment options
 exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/') \
         if f_name.lower().endswith('py') and not f_name.startswith('__')]
@@ -80,7 +76,8 @@ if args.help:
 def main(args, res_args):
     """ Execute the experiment """
     if args.experiment not in exper_ops:
-        raise Exception('invalid experiment, experiments must be defined in ./Experiment/ folder')
+        raise Exception('invalid experiment, '
+                'experiments must be defined in ./Experiment/ folder')
         # exec_exper(args, res_args)
     exec('from Experiment.%s import %s'%(args.experiment, args.experiment))
     exper = locals()[args.experiment](res_args)

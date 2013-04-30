@@ -4,7 +4,7 @@ Topology Editor, generate the flow records and test with
 the anomaly detectors.
 """
 from __future__ import print_function, division, absolute_import
-from util import load_para
+from sadit.util import load_para
 
 zeros = lambda s:[[0 for i in xrange(s[1])] for j in xrange(s[0])]
 def get_inet_adj_mat(fname):

@@ -7,7 +7,7 @@ __email__ = "wangjing@bu.edu"
 import _mysql
 from socket import inet_ntoa
 from struct import pack
-from util import DataEndException
+from sadit.util import DataEndException
 from .Data import Data
 from .DataHandler import QuantizeDataHandler
 

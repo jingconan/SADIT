@@ -5,8 +5,8 @@ like False Alarm Rate.
 """
 from __future__ import print_function, division, absolute_import
 import copy, os
-from Detector.DataParser import RawParseData
-from util import update_not_none, plt
+from saditDetector.DataParser import RawParseData
+from sadit.util import update_not_none, plt
 # import matplotlib.pyplot as plt
 import cPickle as pickle
 import itertools

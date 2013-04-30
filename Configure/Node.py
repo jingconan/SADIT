@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 from pydot import Node
-from util import types, Load
+from sadit.util import types, Load
 from copy import deepcopy
 
 from .mod_util import choose_ip_addr

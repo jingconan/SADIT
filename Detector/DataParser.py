@@ -93,7 +93,7 @@ def ParseData(fileName):
     return flow
 
 import re
-from util import argsort
+from sadit.util import argsort
 def RawParseData(fileName):
     """ Parse the file without convert them.
 

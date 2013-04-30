@@ -3,7 +3,7 @@ from unittest import TestCase, main
 import sys
 sys.path.append("..")
 from Configure import *
-from util import *
+from sadit.util import *
 from Configure.mod_util import *
 
 class Configure(TestCase):

@@ -3,7 +3,7 @@
 from __future__ import print_function, division, absolute_import
 import itertools, copy
 import numpy as np
-from util import del_none_key
+from sadit.util import del_none_key
 
 from . import StoDetector
 # from .StoDetector import FBAnoDetector, FetchNoDataException, DataEndException
@@ -109,7 +109,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
         for para_values in para_values_gen:
             cp = dict(zip(para_names, para_values))
             key = (alg_name, str(cp))
-            if self.det_type[alg_name] == 'static' and (self.ref_pool.get(key, None) is not None):
+            if self.det_type[alg_name] == 'static' and \
+                    (self.ref_pool.get(key, None) is not None):
                 continue
             else:
                 self.ref_pool[key] = d_obj.cal_norm_em(norm_em=None, **cp)

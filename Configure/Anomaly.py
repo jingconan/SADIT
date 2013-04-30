@@ -11,7 +11,7 @@
 # import numpy as np
 from __future__ import print_function, division, absolute_import
 import settings
-from util import Load
+from sadit.util import Load
 from .mod_util import choose_ip_addr
 import cPickle as pickle
 
@@ -71,11 +71,11 @@ def insert_break_pt(b, dur, num):
     >>> dur = (20, 20, 10)
     >>> num = (1, 2, 1)
     >>> new_dur, new_num, bk_pt = insert_break_pt(b, dur, num)
-    >>> print new_dur
+    >>> print(new_dur)
     [20, 15, 5, 10]
-    >>> print new_num
+    >>> print(new_num)
     [1, 2, 2, 1]
-    >>> print bk_pt
+    >>> print(bk_pt)
     2
     """
     t = [0] + list(cumsum( dur ))

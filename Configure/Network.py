@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 from pydot import Dot
-from util import get_net_addr, CIDR_to_subnet_mask
+from sadit.util import get_net_addr, CIDR_to_subnet_mask
 
 from .Edge import NEdge
 from .Node import NNode, MarkovNode

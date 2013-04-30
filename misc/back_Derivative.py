@@ -6,7 +6,7 @@
 import copy
 import sys
 sys.path.append("..")
-import util
+import sadit.util
 import settings
 import cPickle as pickle
 

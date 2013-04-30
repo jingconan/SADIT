@@ -6,7 +6,7 @@
 ### -- [2012-03-01 22:05:29] get_flow_rate, test with flowSize, dur, flowRate
 import sys
 sys.path.append("..")
-from util import np, Counter
+from sadit.util import np, Counter
 import operator
 # import math
 import itertools
@@ -312,7 +312,7 @@ def get_feature_hash_list(F, level):
         return get_feature_hash_list(F, level)
 
 
-from util import zeros
+from sadit.util import zeros
 def model_based_deprec(q_fea_vec, fea_QN):
     '''estimate the transition probability. It has same input parameter with model_free.
 

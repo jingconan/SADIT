@@ -6,7 +6,7 @@ NODE_NUM = 0
 import sys
 sys.path.append("..")
 import settings
-from util import *
+from sadit.util import *
 from mod_util import *
 
 from Generator import *

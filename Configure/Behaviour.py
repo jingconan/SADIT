@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """This file defines the behaviour of """
 from __future__ import print_function, division, absolute_import
-from util import abstract_method
+from sadit.util import abstract_method
 from random import randint
 from .mod_util import RandDist
 

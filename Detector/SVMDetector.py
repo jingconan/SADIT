@@ -10,7 +10,7 @@ import argparse
 
 from mod_util import plot_points
 from Base import BaseDetector
-from util import save_csv
+from sadit.util import save_csv
 
 try:
     import matplotlib.pyplot as plt
@@ -278,7 +278,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         # if pic_show: plt.show()
         # if pic_name: plt.savefig(pic_name)
 
-from util import DataEndException, FetchNoDataException
+from sadit.util import DataEndException, FetchNoDataException
 from PCA import PCA
 try:
     import numpy as np

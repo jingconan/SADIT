@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
-from util import abstract_method
-from util import Find, DataEndException
+from sadit.util import abstract_method
+from sadit.util import Find, DataEndException
 class Data(object):
     """abstract base class for data. Data class deals with any implementation
     details of the data. it can be a file, a sql data base, and so on, as long
@@ -275,8 +275,7 @@ class PreloadHardDiskFile_FlowExporter(PreloadHardDiskFile):
 ####  more information (trace 8)                        ######
 ##############################################################
 
-# from util import _mysql
-from util import mysql
+from sadit.util import mysql
 # try:
 #     import _mysql
 # except ImportError as e:
@@ -373,7 +372,7 @@ def argsort(seq):
     # http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
     return sorted(range(len(seq)), key=seq.__getitem__)
 
-from util import argsort
+from sadit.util import argsort
 
 class PreloadHardDiskFile_xflow(PreloadHardDiskFile):
     attr_mapping = { # define the synonym

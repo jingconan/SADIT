@@ -17,7 +17,7 @@ except:
     VIS = False
 
 from DetectorLib import I1, I2
-from util import DataEndException, FetchNoDataException,  abstract_method
+from sadit.util import DataEndException, FetchNoDataException,  abstract_method
 
 import cPickle as pickle
 from math import log

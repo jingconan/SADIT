@@ -9,8 +9,8 @@ __email__ = "wangjing@bu.edu"
 # import sys; sys.path.append("..")
 from ClusterAlg import KMeans, KMedians
 from DetectorLib import vector_quantize_states, model_based, model_free
-from util import DF, NOT_QUAN, QUAN
-from util import abstract_method, FetchNoDataException
+from sadit.util import DF, NOT_QUAN, QUAN
+from sadit.util import abstract_method, FetchNoDataException
 
 from DataHandler_deprec import DataFile
 ##############################################################
