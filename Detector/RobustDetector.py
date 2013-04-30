@@ -16,7 +16,10 @@ def cal_I_rec(ref_pool, fb_em, enable=None):
     d_pmf, d_Pmb, d_mpmb = fb_em
 
     n = len(ref_pool)
-    if not enable: enable = [True] * n
+    # if not enable:
+    enable = [[True] * n if e is None else e for e in enable]
+    # import ipdb;ipdb.set_trace()
+
     I_rec = np.zeros((n, 2))
     i = -1
     for _, norm_em in ref_pool.iteritems():
@@ -191,6 +194,9 @@ class RobustDetector(StoDetector.FBAnoDetector):
         parser.add_argument('--ref_scheck', default=None, type=str,
                 help="""the reference data self check dump file""")
 
+        # parser.add_argument('--ref_scheck_op', type=str,
+                # help="""the reference data operation""")
+
     def detect(self, data_file, ref_file):
         register_info = self.desc['register_info']
 
@@ -203,18 +209,21 @@ class RobustDetector(StoDetector.FBAnoDetector):
         self.ref_pool = self.plm.process_data()
 
         #FIXME Need to clean these code later
-        if self.desc['ref_scheck']:
-            data = pk.load(open(self.desc['ref_scheck'], 'r'))
-            ref_I_rec = data['I_rec']
-        else:
+        rs_file = self.desc['dump_folder'] + '/PLManager_scheck.pk'
+        if self.desc['ref_scheck'] == 'dump':
             self.PL_enable = None
             StoDetector.FBAnoDetector.detect(self, ref_file, ref_file)
             ref_I_rec = self.record_data['I_rec']
-            self.dump('./_PLManager_check.pk')
+            self.dump(rs_file)
             self._init_record()
+        else:
+            data = pk.load(open(rs_file, 'r'))
+            ref_I_rec = data['I_rec']
 
-        lamb = 1.5
+        lamb = 15
         self.PL_enable = self.plm.select(ref_I_rec, lamb)
+        if self.PL_enable[0] is None or self.PL_enable[1] is None:
+            raise Exception('lamb is too small')
         StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
 
     def I(self, em, **kwargs):
