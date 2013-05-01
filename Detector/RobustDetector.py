@@ -17,7 +17,8 @@ def cal_I_rec(ref_pool, fb_em, enable=None):
 
     n = len(ref_pool)
     # if not enable:
-    enable = [[True] * n if e is None else e for e in enable]
+    # enable = [[True] * n if e is None else e for e in enable]
+    enable = [[True] * n for i in [1, 2]]
     # import ipdb;ipdb.set_trace()
 
     I_rec = np.zeros((n, 2))
