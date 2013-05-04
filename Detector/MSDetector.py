@@ -5,7 +5,9 @@ Multi Sever DetectorLib
 it can detect anomaly for multi server. some anomaly which is
 not detectale in one server case may be able to detected
 in this case.
+
 """
+# NOTE This file is depreciated
 
 import sys
 sys.path.append("..")

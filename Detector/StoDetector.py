@@ -135,7 +135,7 @@ class StoDetector (WindowDetector):
         return self.ref_file.get_em(rg=nominal_rg, rg_type=rg_type)
 
     # def detect(self, data_file, nominal_rg = [0, 1000], rg_type='time',  max_detect_num=None):
-    def detect(self, data_file, ref_file):
+    def detect(self, data_file, ref_file=None):
         """ main function to detect.
 
         it will slide the window, get the emperical measure and get the
@@ -414,9 +414,10 @@ class ModelBaseAnoDetector(StoDetector):
     """ Model based approach, use Markovian Assumption
     """
     def I(self, em, norm_em):
-        d_Pmb, d_mpmb = em
-        Pmb, mpmb = norm_em
-        return I2(d_Pmb, d_mpmb, Pmb, mpmb)
+        return I2(em, norm_em)
+        # d_Pmb, d_mpmb = em
+        # Pmb, mpmb = norm_em
+        # return I2(d_Pmb, d_mpmb, Pmb, mpmb)
 
     # def get_em(self, rg, rg_type):
     #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
@@ -430,9 +431,11 @@ class FBAnoDetector(StoDetector):
     and model based approaches separately since some intemediate results are reused.
     """
     def I(self, em, norm_em):
-        d_pmf, d_Pmb, d_mpmb = em
-        pmf, Pmb, mpmb = norm_em
-        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
+        # d_pmf, d_Pmb, d_mpmb = em
+        # pmf, Pmb, mpmb = norm_em
+        d_pmf, d_Pmb = em
+        pmf, Pmb = norm_em
+        return I1(d_pmf, pmf), I2(d_Pmb, Pmb)
 
     # def get_em(self, rg, rg_type):
     #     """get empirical measure"""
@@ -683,10 +686,12 @@ class DynamicStoDetector(FBAnoDetector):
     """Base Class for All Dynamic Stochasic Detector
     """
     def I(self, em, **kwargs):
-        d_pmf, d_Pmb, d_mpmb = em
+        # d_pmf, d_Pmb, d_mpmb = em
+        d_pmf, d_Pmb = em
         self.desc['em'] = em
-        pmf, Pmb, mpmb = self.cal_norm_em(**kwargs)
-        return I1(d_pmf, pmf), I2(d_Pmb, d_mpmb, Pmb, mpmb)
+        # pmf, Pmb, mpmb = self.cal_norm_em(**kwargs)
+        pmf, Pmb = self.cal_norm_em(**kwargs)
+        return I1(d_pmf, pmf), I2(d_Pmb, Pmb)
 
     def cal_norm_em(self, **kwargs):
         self.desc.update(kwargs)

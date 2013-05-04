@@ -88,7 +88,8 @@ def detect(f_name, desc, res_args=[]):
         rdh = data_handler_handle_map[desc['method']](ref_data_file, desc) #reference data handler
         detector.detect(data_handler, rdh)
     else:
-        detector.detect(data_handler, data_handler)
+        detector.detect(data_handler)
+        # detector.detect(data_handler, data_handler)
 
     return detector
 

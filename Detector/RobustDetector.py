@@ -2,18 +2,16 @@
 """
 from __future__ import print_function, division, absolute_import
 import itertools, copy
-import numpy as np
 import cPickle as pk
-from sadit.util import del_none_key
+from sadit.util import del_none_key, np
 
 from . import StoDetector
-# from .StoDetector import FBAnoDetector, FetchNoDataException, DataEndException
 from .DetectorLib import I1, I2
 from .PLIdentify import PL_identify
 
-
 def cal_I_rec(ref_pool, fb_em, enable=None):
-    d_pmf, d_Pmb, d_mpmb = fb_em
+    # d_pmf, d_Pmb, d_mpmb = fb_em
+    d_pmf, d_Pmb = fb_em
 
     n = len(ref_pool)
     # if not enable:
@@ -29,7 +27,8 @@ def cal_I_rec(ref_pool, fb_em, enable=None):
             I_rec[i, :] = [float('inf'), float('inf')]
             continue
 
-        pmf, Pmb, mpmb = norm_em
+        # pmf, Pmb, mpmb = norm_em
+        pmf, Pmb = norm_em
         if not enable[0][i]:
             I_rec[i, 0] = float('inf')
         else:
@@ -38,7 +37,8 @@ def cal_I_rec(ref_pool, fb_em, enable=None):
         if not enable[0][i]:
             I_rec[i, 1] = float('inf')
         else:
-            I_rec[i, 1] = I2(d_Pmb, d_mpmb, Pmb, mpmb)
+            # I_rec[i, 1] = I2(d_Pmb, d_mpmb, Pmb, mpmb)
+            I_rec[i, 1] = I2(d_Pmb, Pmb)
 
         # if not enable[i] or norm_em is None:
         #     I_rec[i, :] = [float('inf'), float('inf')]

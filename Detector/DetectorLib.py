@@ -112,7 +112,8 @@ def I1(nu, mu):
     H = lambda x, y:x * log( x * 1.0 / y )
     return sum(H(a, b) for a, b in zip(nu, mu))
 
-def I2(J1, pi1, J2, pi2):
+# def I2(J1, pi1, J2, pi2):
+def I2(J1, J2):
     """  calculate cross entropy for model-based empirical measure
 
     Empirical Measure (EM) consists of 1. state probability, 2 joint
@@ -144,7 +145,7 @@ def I2(J1, pi1, J2, pi2):
     ----------------
     >>> J1 = [[0.2, 0.1], [0.3, 0.4]]
     >>> J2 = [[0.3, 0.1], [0.2, 0.4]]
-    >>> print I2(J1, None,  J2, None)
+    >>> print I2(J1, J2)
     0.0189456566673
     """
     J1 = np.array(J1) #FIXME use np here
@@ -243,8 +244,8 @@ def model_based(q_fea_vec, fea_QN):
     for i in xrange(fl-1):
         P[ m_list[i] ][ m_list[i+1] ] += 1
     P /= (fl - 1 )
-    return P, None
-    # return P
+    # return P, None
+    return P
 
 def model_free(q_fea_vec, fea_QN):
     """ estimate the probability distribution for model free case. It has same input parameters with model_based

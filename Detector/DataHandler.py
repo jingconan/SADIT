@@ -190,8 +190,10 @@ class FBQuantizeDataHandler(QuantizeDataHandler):
         """get empirical measure"""
         q_fea_vec = self.quantize_fea(rg, rg_type )
         pmf = model_free( q_fea_vec, self.fea_QN )
-        Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
-        return pmf, Pmb, mpmb
+        # Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
+        Pmb = model_based( q_fea_vec, self.fea_QN )
+        return pmf, Pmb
+        # return pmf, Pmb, mpmb
 
 #######################################
 ## SVM Temporal Method Handler   ######
