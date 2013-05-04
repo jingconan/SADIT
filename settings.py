@@ -19,3 +19,7 @@ EXPORT_ABNORMAL_FLOW = True
 
 # name of the file to store parameters.
 EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
+
+
+SVM_FOLDER = ROOT + '/tools/libsvm-3.12'
+

@@ -1,8 +1,8 @@
 """
 This file is the flow by flow svm detector
 """
-import settings
-SVM_FOLDER = settings.ROOT + '/tools/libsvm-3.12'
+from sadit import settings
+SVM_FOLDER = settings.SVM_FOLDER
 
 import subprocess
 import cPickle as pickle
@@ -10,13 +10,7 @@ import argparse
 
 from mod_util import plot_points
 from Base import BaseDetector
-from sadit.util import save_csv
-
-try:
-    import matplotlib.pyplot as plt
-except:
-    plt = False
-
+from sadit.util import save_csv, plt
 
 def write_svm_data_file(label, fea, f_name):
     fid = open(f_name, 'w')
@@ -97,7 +91,7 @@ class SVMDetector(BaseDetector):
         return zip(*new_zip_fea)
 
     def pca(self, fea_list):
-        if not NUMPY:
+        if not np:
             return fea_list
 
         pc = PCA(fea_list, self.desc['pca_th'])
@@ -278,14 +272,8 @@ class SVMFlowByFlowDetector(SVMDetector):
         # if pic_show: plt.show()
         # if pic_name: plt.savefig(pic_name)
 
-from sadit.util import DataEndException, FetchNoDataException
+from sadit.util import DataEndException, FetchNoDataException, np
 from PCA import PCA
-try:
-    import numpy as np
-    NUMPY = True
-except:
-    NUMPY = False
-
 from Base import WindowDetector
 class SVMTemporalDetector(SVMDetector, WindowDetector):
     """SVM Temporal Difference Detector. Proposed by R.L Taylor. Implemented by
