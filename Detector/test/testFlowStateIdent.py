@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 import unittest
-from ..Ident import *
+from sadit.Detector.Ident import ComponentFlowStateIdent, ComponentFlowPairIdent
 class FlowStateIdentTestCase(unittest.TestCase):
     def setUp(self):
         pass
