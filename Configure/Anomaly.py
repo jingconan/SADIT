@@ -210,13 +210,14 @@ class Anomaly(object):
         ano_node = self.ano_node
         # generator = ano_node.generator
         start, end = ano_t
-        # mod_start = eval(mod['start'])
-        mod_start = mod['start']
+        mod_start = eval(mod['start'])
+        # mod_start = mod['start']
         mod_profile = mod['profile']
         # s_id = mod['generator'] # get id for source generator
 
         # check whether this modular should be infect or not
         # only infect this modular with it has intersection with *ano_t*
+        import ipdb;ipdb.set_trace()
         mod_end = mod_start + sum(mod_profile[0])
         if not interval_intersect(ano_t, [mod_start, mod_end]):
             return
