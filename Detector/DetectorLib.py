@@ -1,20 +1,9 @@
 #!/usr/bin/env python
 """A library of utility function that will be used by detectors
 """
-### -- Created at [2012-03-01 14:55:21]
-### -- [2012-03-01 17:13:27] support multi feature
-### -- [2012-03-01 22:05:29] get_flow_rate, test with flowSize, dur, flowRate
-import sys
-sys.path.append("..")
 from sadit.util import np, Counter
 import operator
-# import math
 import itertools
-
-# def shannon_entropy(prob):
-#     """calculate shannon entropy
-#     """
-#     return sum(-1 * p * math.log(p) for p in prob if (p > 0 and p < 1))
 
 def adjust_pv(prob, eps):
     """ adjust probability vector so that each value >= eps
@@ -30,7 +19,14 @@ def adjust_pv(prob, eps):
     --------------
     prob : list
         adjusted probability vector
+
+    Examples
+    -------------------
+    >>> adjust_pv([0, 0, 1], 0.01)
+    [0.01, 0.01, 0.98]
+
     """
+    assert(abs(sum(prob) - 1) < 1e-3)
     a = len(prob)
     zei = [i for i, v in zip(xrange(a), prob) if abs(v) < eps] # zero element indices
     if a == len(zei): # all elements are zero
@@ -47,11 +43,7 @@ def adjust_pv(prob, eps):
     return prob2
 
 
-# The Distance Function
 DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
-
-# def adjust2d(prob, eps):
-    # return [ for p1 in prob]
 
 EPS = 1e-20
 from math import log
@@ -82,23 +74,22 @@ def I1(nu, mu):
     Examples
     --------------
     >>> print I1([0.3, 0.7, 0, 0], [0, 0, 0.3, 0.7])
-    3.82203525552
+    45.4408375578
 
     """
     assert(len(nu) == len(mu))
     a = len(nu)
 
-    # adjust the
     mu = adjust_pv(mu, EPS)
-    # print('mu', mu)
     nu = adjust_pv(nu, EPS)
-    # print('nu', nu)
 
     H = lambda x, y:x * log( x * 1.0 / y )
     return sum(H(a, b) for a, b in zip(nu, mu))
 
+def adjust_mat(P):
+    shape = P.shape
+    return np.array(adjust_pv(P.ravel(), EPS)).reshape(shape)
 
-# import copy
 def I2(J1, pi1, J2, pi2):
     """  calculate cross entropy for model-based empirical measure
 
@@ -129,68 +120,61 @@ def I2(J1, pi1, J2, pi2):
 
     Examples
     ----------------
-    >>> pi1 = [0.3, 0.7]
     >>> J1 = [[0.2, 0.1], [0.3, 0.4]]
-    >>> pi2 = [0.7, 0.3]
-    >>> J2 = [[0.2, 0.1], [0.3, 0.4]]
-    >>> print I2(J1, pi1, J2, pi2)
-    -0.338919144155
-    >>> print I2(J1, pi1, J2, [0.3, 0.7])
-    0.0
-
+    >>> J2 = [[0.3, 0.1], [0.2, 0.4]]
+    >>> print I2(J1, None,  J2, None)
+    0.0189456566673
     """
-    # assert( abs(np.sum(mp1)  - 1.0 ) < 1e-3 and abs(np.sum(mp2) - 1.0 ) < 1e-3)
-    # a, b = np.shape(P1)
-    a = len(J1)
-    b = len(J1[0])
-    pi1 = adjust_pv(pi1, EPS)
-    pi2 = adjust_pv(pi2 , EPS)
-    def cal_tran_mat(J, pi, EPS):
-        PCon = [adjust_pv(p, EPS) for p in J]
-        for i in range(a):
-            for j in range(b):
-                PCon[i][j] /= pi[i]
-        return PCon
+    J1 = np.array(J1) #FIXME use np here
+    J2 = np.array(J2)
+    n, _ = J1.shape
+    assert(n == _)
 
-    P1Con = cal_tran_mat(J1, pi1, EPS)
-    P2Con = cal_tran_mat(J2, pi2, EPS)
+    J1 = adjust_mat(J1)
+    J2 = adjust_mat(J2)
+
+    pi1 = np.sum(J1, axis=1)
+    P1Con = J1 / np.dot( pi1.reshape(-1, 1), np.ones((1, n)) )
+
+    pi2 = np.sum(J2, axis=1)
+    P2Con = J2 / np.dot( pi2.reshape(-1, 1), np.ones((1, n)) )
 
     # Compute Expectation of Each Relative Entropy
     y = 0
-    for i in range(a):
+    for i in range(n):
         # y += mp1[i] * I1(P1Con[i, :], P2Con[i, :])
         y += pi1[i] * I1(P1Con[i], P2Con[i])
+
+    if y < 0: import ipdb;ipdb.set_trace()
     return y
 
+# def quantize_state(x, nx, rg):
+#     minVal, maxVal = rg
+#     if minVal == maxVal:
+#         print '[warning] range size 0, rg: ', rg
+#         return x, [0]*len(x)
+
+#     stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
+#     g = []
+#     for ele in x:
+#         seq = int( (ele - minVal ) / stepSize + 0.5)
+#         if seq >= nx-1:
+#             seq = nx -1
+#         g.append(seq)
+#     return g
+
 def quantize_state(x, nx, rg):
-    """quantize state
+    """ fast quantize_state that use numpy library
 
-    Input:
-        - *x* is a list of elements that need to be quantized
-        - *nx* is the quantized level. the quantized value can be [0, ...,
-          nx-1]
-        - *rg* is the range for the feature
-    Output:
-        - quantized level
-    """
+    Parameters
+    ------------------
+    x : is a list of elements that need to be quantized
+    nx : is the quantized level. the quantized value can be [0, ..., nx-1]
+    rg : is the range for the feature
 
-    minVal, maxVal = rg
-    if minVal == maxVal:
-        print '[warning] range size 0, rg: ', rg
-        return x, [0]*len(x)
-
-    stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
-    g = []
-    for ele in x:
-        seq = int( (ele - minVal ) / stepSize + 0.5)
-        if seq >= nx-1:
-            seq = nx -1
-        g.append(seq)
-    # return res, g
-    return g
-
-def np_quantize_state(x, nx, rg):
-    """fast quantize_state that use numpy library
+    Returns
+    ------------------
+    quan : quantized level
     """
     x = np.array(x)
     minVal, maxVal = rg
@@ -198,56 +182,51 @@ def np_quantize_state(x, nx, rg):
         print('[warning] range size 0, rg: ', rg)
         return x, [0]*len(x)
 
-    # stepSize = (maxVal - minVal) * 1.0 / (nx - 1 )
-    # return np.round( (x - minVal) * 1.0 / stepSize)
-    # import ipdb;ipdb.set_trace()
     stepSize = (maxVal - minVal) * 1.0 / nx
     quan = np.floor( (x - minVal) / stepSize )
-    quan[quan == nx] = nx-1
+    quan[quan == nx] = nx-1 # Fix for the largest value.
     return quan
 
-if np:
-    quantize_state = np_quantize_state
+# if np:
+    # quantize_state = np_quantize_state
 
-def get_dist_to_center(data, cluster, centerPt, DF):
-    i = -1
-    dis = []
-    for x in data:
-        i += 1
-        cl = cluster[i]
-        dis.append( DF( x, centerPt[cl] ) )
+# def get_dist_to_center(data, cluster, centerPt, DF):
+#     i = -1
+#     dis = []
+#     for x in data:
+#         i += 1
+#         cl = cluster[i]
+#         dis.append( DF( x, centerPt[cl] ) )
 
-    return dis
+#     return dis
 
-def trans_data(flow):
-    uniqueIP = set()
-    srcIP = []
-    srcIPVec = []
-    flowSize = []
-    time = []
-    endTime = []
-    # i = 0
-    for f in flow:
-        uniqueIP.add( f['srcIP'] )
-        srcIP.append( f['srcIP'] )
-        srcIPVec.append( f['srcIPVec'] )
-        flowSize.append( f['flowSize'] )
-        time.append( f['t'] )
-        endTime.append( f['endT'] )
+# def trans_data(flow):
+#     uniqueIP = set()
+#     srcIP = []
+#     srcIPVec = []
+#     flowSize = []
+#     time = []
+#     endTime = []
+#     for f in flow:
+#         uniqueIP.add( f['srcIP'] )
+#         srcIP.append( f['srcIP'] )
+#         srcIPVec.append( f['srcIPVec'] )
+#         flowSize.append( f['flowSize'] )
+#         time.append( f['t'] )
+#         endTime.append( f['endT'] )
 
-    # return uniqueIP, srcIP, srcIPVec, flowSize
-    sortIdx = np.argsort(time)
-    sortedSrcIP = []
-    sortedFlowSize = []
-    sortedTime = []
-    sortedDur = []
-    for idx in sortIdx:
-        sortedSrcIP.append(srcIPVec[idx])
-        sortedFlowSize.append(flowSize[idx])
-        sortedTime.append(time[idx])
-        sortedDur.append( endTime[idx] - time[idx] )
+#     sortIdx = np.argsort(time)
+#     sortedSrcIP = []
+#     sortedFlowSize = []
+#     sortedTime = []
+#     sortedDur = []
+#     for idx in sortIdx:
+#         sortedSrcIP.append(srcIPVec[idx])
+#         sortedFlowSize.append(flowSize[idx])
+#         sortedTime.append(time[idx])
+#         sortedDur.append( endTime[idx] - time[idx] )
 
-    return sortedSrcIP, sortedFlowSize, sortedTime, sortedDur
+#     return sortedSrcIP, sortedFlowSize, sortedTime, sortedDur
 
         # show()
 
@@ -268,29 +247,31 @@ def trans_data(flow):
             # value += digit[i+1] * reduce(operator.mul, level[0:i+1])
         # return value
 
-basis_cache = dict() # ugly global cache of basis to accelerate the program
-def get_feature_hash_list_old(F, level):
-    ''' For each list of feature and corresponding quantized level.
-    Get the hash value correspondingly
-    '''
-    import pdb;pdb.set_trace()
-    if isinstance(level, list):
-        level = tuple(level)
-    basis = basis_cache.get(level, None)
-    if basis is None:
-        basis = [1]
-        for i in xrange( len(level) - 1 ):
-            basis.append( basis[-1] * level[i] )
+# basis_cache = dict() # ugly global cache of basis to accelerate the program
+# def get_feature_hash_list_old(F, level):
+#     ''' For each list of feature and corresponding quantized level.
+#     Get the hash value correspondingly
+#     '''
+#     import pdb;pdb.set_trace()
+#     if isinstance(level, list):
+#         level = tuple(level)
+#     basis = basis_cache.get(level, None)
+#     if basis is None:
+#         basis = [1]
+#         for i in xrange( len(level) - 1 ):
+#             basis.append( basis[-1] * level[i] )
 
-    return [ sum( d*b for d, b in zip(digits, basis) ) for digits in zip(*F) ]
+#     return [ sum( d*b for d, b in zip(digits, basis) ) for digits in zip(*F) ]
 
 cache_ = dict()
-# import itertools
 def get_feature_hash_list(F, level):
-    """
+    """ calculate the
 
     Parameters:
     ---------------
+    F : list
+
+
     Returns:
     --------------
     Examples
@@ -343,13 +324,19 @@ def model_based_deprec(q_fea_vec, fea_QN):
 
 
 def model_based(q_fea_vec, fea_QN):
-    '''estimate the transition probability. It has same input parameter with model_free.
+    """ Estimate the transition probability.
 
-    - q_fea_vec :q_fea_vec is a list of list containing all the quantized feature in a window. len(q_fea_vec)
-               equals to the number of feature types. len(q_fea_vec[0]) equals to the number of flows in this
-               window.
-    - fea_QN : this is a list storing the quantized number for each feature.
-    '''
+    It has same input parameter with model_free.
+
+    Parameters
+    -------------
+    q_fea_vec : list of list
+        q_fea_vec is a list of list containing all the quantized feature in a
+        window. len(q_fea_vec) equals to the number of feature types.
+        len(q_fea_vec[0]) equals to the number of flows in this window.
+    fea_QN : list
+        this is a list storing the quantized number for each feature.
+    """
     if len(q_fea_vec[0]) < 2:
         # print('these is only one sample in the range, cannot calculate ' \
                 # 'model based emperical measure')
