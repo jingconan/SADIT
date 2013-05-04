@@ -217,7 +217,6 @@ class Anomaly(object):
 
         # check whether this modular should be infect or not
         # only infect this modular with it has intersection with *ano_t*
-        import ipdb;ipdb.set_trace()
         mod_end = mod_start + sum(mod_profile[0])
         if not interval_intersect(ano_t, [mod_start, mod_end]):
             return
