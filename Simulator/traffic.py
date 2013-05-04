@@ -12,8 +12,9 @@ import re
 import logging
 import random
 
-sys.path.append("..")
-import settings
+# sys.path.append("..")
+# import settings
+from sadit import settings
 import cPickle as pickle
 
 haveIPAddrGen = False
@@ -358,6 +359,7 @@ class HarpoonGeneratorNode(GeneratorNode):
             raise InvalidFlowConfiguration('Unrecognized tcp model for harpoon:'+str(tcpmodel))
 
         self.anoFlag = False
+        # import ipdb;ipdb.set_trace()
         if settings.EXPORT_ABNORMAL_FLOW:
             self.set_ano_flag(flowsize, flowstart, ipsrc)
 
