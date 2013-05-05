@@ -233,7 +233,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
             self.PL_enable = self.plm.select(ref_I_rec, lamb)
             if self.PL_enable[0] is None or self.PL_enable[1] is None:
-                raise Exception('lamb is too small')
+                raise Exception('lamb is too small, probably you have too '
+                        'little candidates')
         StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
 
     def I(self, em, **kwargs):
