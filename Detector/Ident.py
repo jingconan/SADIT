@@ -23,7 +23,7 @@ class FlowStateIdent(object):
     """
     def __init__(self, nu_set, mu):
         """P1, P2 are two lists contain the probability distribution """
-        assert(isinstance(mu, list) or isinstance(mu, tuple))
+        # assert(isinstance(mu, list) or isinstance(mu, tuple))
         self.nu_set = nu_set
         self.mu = mu
         self._init()

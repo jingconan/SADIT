@@ -598,31 +598,31 @@ class FBAnoDetector(StoDetector):
 
         """
         em_record_set = self.record_data['em']
-        def tran_to_joint(tp, mar):
-            """
+        # def tran_to_joint(tp, mar):
+        #     """
 
-            Parameters:
-            ---------------
-                tp : list of list
-                    transition probability
-                mar : list
-                    margin probability
+        #     Parameters:
+        #     ---------------
+        #         tp : list of list
+        #             transition probability
+        #         mar : list
+        #             margin probability
 
-            Returns:
-            --------------
-                res : list
-                    joint probability distribution
+        #     Returns:
+        #     --------------
+        #         res : list
+        #             joint probability distribution
 
 
-            Notes:
-            --------------
-                joint_prob[a][b] = tp[a][b] * mar[p]
+        #     Notes:
+        #     --------------
+        #         joint_prob[a][b] = tp[a][b] * mar[p]
 
-            """
-            res = []
-            for tp, m in zip(tp,mar):
-                res.append([m*p for p in tp])
-            return res
+        #     """
+        #     res = []
+        #     for tp, m in zip(tp,mar):
+        #         res.append([m*p for p in tp])
+        #     return res
 
         def get_nu_set(em_record_set, entropy_type):
             """  get empirical measure according to entropy_type
@@ -643,10 +643,14 @@ class FBAnoDetector(StoDetector):
             if entropy_type == 'mf':
                 return [em[0] for em in em_record_set]
             elif entropy_type == 'mb':
-                return [tran_to_joint(em[1], em[2]) for em in em_record_set]
+                # return [tran_to_joint(em[1], em[2]) for em in em_record_set]
+                return [em[1] for em in em_record_set]
 
         nu_set = get_nu_set(em_record_set, entropy_type)
+        print('nu_set', type(nu_set))
+
         mu = get_nu_set([self.norm_em], entropy_type)[0]
+        print('nu', type(mu))
         # ident = globals()[ident_type](nu_set, mu)
         ident = getattr(Ident, ident_type)(nu_set, mu)
         mf, mb = zip(*self.record_data['entropy'])
