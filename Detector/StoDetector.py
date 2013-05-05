@@ -8,11 +8,11 @@ __email__ = "wangjing@bu.edu"
 __status__ = "Development"
 
 import os
-import cPickle as pickle
 from math import log
 
 from sadit.util import DataEndException, FetchNoDataException, abstract_method
 from sadit.util import save_csv, plt
+from sadit.util import zdump, zload
 
 from .DetectorLib import I1, I2
 from .mod_util import plot_points
@@ -299,15 +299,12 @@ class StoDetector (WindowDetector):
 
     def dump(self, data_name):
         # import ipdb;ipdb.set_trace()
-        pickle.dump( self.record_data, open(data_name, 'w') )
-        # pickle.dump(self.__dict__, open(data_name, 'w') )
+        zdump(self.record_data, data_name)
 
     def plot_dump(self, data_name, *args, **kwargs):
         """plot dumped data
         """
-        self.record_data = pickle.load(open(data_name, 'r'))
-        # data = pickle.load(open(data_name, 'r'))
-        # self.__dict__.update(data)
+        self.record_data = zload(data_name)
         self.plot(*args, **kwargs)
 
     @staticmethod
