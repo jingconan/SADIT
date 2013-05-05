@@ -5,12 +5,12 @@ from sadit import settings
 SVM_FOLDER = settings.SVM_FOLDER
 
 import subprocess
-import cPickle as pickle
 import argparse
 
 from mod_util import plot_points
 from Base import BaseDetector
 from sadit.util import save_csv, plt
+from sadit.util import zdump, zload
 
 def write_svm_data_file(label, fea, f_name):
     fid = open(f_name, 'w')
@@ -164,8 +164,7 @@ class SVMDetector(BaseDetector):
     def plot_dump(self, data_name, *args, **kwargs):
         """load the dumped results and plot it
         """
-        data = pickle.load(open(data_name, 'r'))
-        # import pdb;pdb.set_trace()
+        data = zload(data_name)
         self.__dict__.update(data)
         # self.desc.update(data)
         self.record_data = data
@@ -179,10 +178,7 @@ class SVMDetector(BaseDetector):
         # record_data = dict()
         for v in var:
             self.record_data[v] = self.__dict__.get(v, None)
-        pickle.dump( self.record_data, open(data_name, 'w') )
-
-        # pickle.dump(self.__dict__, open(data_name, 'w') )
-
+        zdump(self.record_data, data_name)
 
 class SVMFlowByFlowDetector(SVMDetector):
     """SVM Flow By Flow Anomaly Detector Method"""
