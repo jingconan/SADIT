@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """ A library of utility function that will be used by detectors
 """
+from __future__ import print_function, division, absolute_import
 from sadit.util import np, Counter
 import operator
 import itertools
@@ -37,7 +38,7 @@ def adjust_pv(prob, eps):
     for idx in zei:
         prob2[idx] = eps
     if min(prob2) < 0:
-        print '[warning] EPS is too large in adjust_pv'
+        print( '[warning] EPS is too large in adjust_pv')
         import pdb;pdb.set_trace()
         # return adjust_pv(prob2, eps / 2.0)
     return prob2

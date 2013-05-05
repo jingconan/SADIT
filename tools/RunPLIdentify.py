@@ -56,4 +56,4 @@ if __name__ == "__main__":
     plt.legend(['orginal', 'selected'])
     print('select [%d] PLs out of [%d] PLs'%(sum(x), len(x)))
     plt.show()
-    import ipdb;ipdb.set_trace()
+    # import ipdb;ipdb.set_trace()

@@ -22,6 +22,21 @@ except ImportError:
 
 try:
     import _mysql as mysql
-except ImportError as e:
+except ImportError:
     mysql = None
     print('--> [warning] cannot import sql related function, reading for sql server is not supported')
+
+
+#########################################
+## Adaption for Python3
+#########################################
+
+try:
+    import Queue as queue # replace with 'import queue' if using Python 3
+except ImportError:
+    import queue
+
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip

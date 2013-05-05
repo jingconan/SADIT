@@ -37,7 +37,7 @@ def long_to_dotted(ip):
     return [int(val) for val in ip_addr.rsplit('.')]
 
 from .DetectorLib import get_feature_hash_list
-from itertools import izip
+from sadit.util import izip
 class QuantizeDataHandler(DataHandler):
     """ Cluster and IP address and Quantize the feature in the Data
 

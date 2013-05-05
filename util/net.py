@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 def get_net(ipaddress, netmask):
     """get network address from the ipaddres and netmask
     >>> get_net('10.7.2.1', '255.255.255.0')
@@ -48,7 +49,8 @@ def len2mask(len):
     """
     mask = ''
     if not isinstance(len, int) or len < 0 or len > 32:
-        print "Illegal subnet length: %s (which is a %s)" % (str(len), type(len).__name__)
+        print ("Illegal subnet length: %s (which is a %s)" % (str(len),
+                type(len).__name__))
         return None
 
     for t in range(4):

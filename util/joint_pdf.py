@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function, division, absolute_import
 """
 the goal of this file is to provide a lib of joint probability transformation.
 During the transformation, the marginal distribution is unchanged.
@@ -17,7 +18,7 @@ try:
     from numpy.ma import log
     import numpy as np
 except ImportError:
-    print 'numpy cannot be imported'
+    print('numpy cannot be imported')
 
 def H(x, y):
     """Cross Entropy Function"""
@@ -38,7 +39,7 @@ def eq_cons(x, A, epsilon):
 try:
    from scipy.optimize import fmin_slsqp
 except:
-   print 'no scipy'
+   print('no scipy')
 
 def get_diff_jpdf_with_ini(A, P0, epsilon):
     """Get joint distribution with same marginal distribution with A
@@ -58,16 +59,16 @@ def get_diff_jpdf(A, epsilon):
 
 
 def test_p2():
-    print '-' * 40
+    print ('-' * 40)
     A = array([
         [0.1, 0.1, 0.1],
         [0.1, 0.1, 0.1],
         [0.1, 0.1, 0.2],
         ])
     out = get_diff_jpdf_with_ini(A, A, 0.7)
-    print 'out, ', out
-    print 'sum, ', np.sum(out)
-    print '-' * 40
+    print('out, ', out)
+    print('sum, ', np.sum(out))
+    print('-' * 40)
 
 if __name__ == "__main__":
     test_p2()

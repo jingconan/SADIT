@@ -2,7 +2,8 @@
 """
 from __future__ import print_function, division, absolute_import
 import itertools, copy
-import cPickle as pk
+# import cPickle as pk
+from sadit.util import zload
 from sadit.util import del_none_key, np
 
 from . import StoDetector
@@ -228,7 +229,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
                 self.dump(rs_file)
                 self._init_record()
             else:
-                with open(rs_file, 'r') as f: data = pk.load(f)
+                # with open(rs_file, 'r') as f: data = pk.load(f)
+                data = zload(rs_file)
                 ref_I_rec = data['I_rec']
 
             self.PL_enable = self.plm.select(ref_I_rec, lamb)

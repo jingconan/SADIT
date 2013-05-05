@@ -1,14 +1,15 @@
 """
 This file is the flow by flow svm detector
 """
+from __future__ import print_function, division, absolute_import
 from sadit import settings
 SVM_FOLDER = settings.SVM_FOLDER
 
 import subprocess
 import argparse
 
-from mod_util import plot_points
-from Base import BaseDetector
+from .mod_util import plot_points
+from .Base import BaseDetector
 from sadit.util import save_csv, plt
 from sadit.util import zdump, zload
 
@@ -107,7 +108,7 @@ class SVMDetector(BaseDetector):
 
 
     def scale(self):
-        print 'start to scale ...'
+        print ('start to scale ...')
         scale_file = self.desc['svm_dat_file'] + '.scale'
         subprocess.check_call(' '.join([SVM_FOLDER + '/svm-scale',
             '-s', self.desc['scale_para_file'],
@@ -118,7 +119,7 @@ class SVMDetector(BaseDetector):
         self.desc['svm_dat_file'] = scale_file
 
     def train(self):
-        print 'start to train...'
+        print( 'start to train...')
         subprocess.check_call([SVM_FOLDER + '/svm-train',
             '-s', '2',
             '-t', str(self.desc['kernel_type']),
@@ -129,7 +130,7 @@ class SVMDetector(BaseDetector):
             self.desc['svm_model_file']])
 
     def predict(self):
-        print 'start to predict...'
+        print ('start to predict...')
         subprocess.check_call([SVM_FOLDER + '/svm-predict',
             self.desc['svm_dat_file'],
             self.desc['svm_model_file'],
@@ -150,7 +151,8 @@ class SVMDetector(BaseDetector):
             num = len([val for p in self.pred if p == val])
             pred_num[val] = num
         self.ano_val = 1 if pred_num[1] < pred_num[-1] else -1
-        print 'total flows', len(self.pred), 'alarm num, ', pred_num[self.ano_val]
+        print( 'total flows', len(self.pred), 'alarm num, ',
+            pred_num[self.ano_val])
 
 
     def save_plot_as_csv(self, f_name):
@@ -269,8 +271,8 @@ class SVMFlowByFlowDetector(SVMDetector):
         # if pic_name: plt.savefig(pic_name)
 
 from sadit.util import DataEndException, FetchNoDataException, np
-from PCA import PCA
-from Base import WindowDetector
+from .PCA import PCA
+from .Base import WindowDetector
 class SVMTemporalDetector(SVMDetector, WindowDetector):
     """SVM Temporal Difference Detector. Proposed by R.L Taylor. Implemented by
     J. C. Wang <wangjing@bu.ed> """
@@ -293,17 +295,17 @@ class SVMTemporalDetector(SVMDetector, WindowDetector):
             i += 1
             if self.desc.get('max_detect_num') and i > self.desc.get('max_detect_num'):
                 break
-            if self.rg_type == 'time' : print 'time: %f' %(time)
-            else: print 'flow: %s' %(time)
+            if self.rg_type == 'time' : print ('time: %f' %(time))
+            else: print( 'flow: %s' %(time))
 
             try:
                 # fea = data_handler.get_svm_feature(rg=[time, time+self.win_size], rg_type=self.rg_type)
                 fea = data_handler.get_svm_fea(rg=[time, time+self.desc['win_size']], rg_type=self.rg_type)
                 fea_list.append(fea)
             except FetchNoDataException:
-                print 'there is no data to detect in this window'
+                print( 'there is no data to detect in this window')
             except DataEndException:
-                print 'reach data end, break'
+                print( 'reach data end, break')
                 break
 
             # import pdb;pdb.set_trace()
