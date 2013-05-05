@@ -346,6 +346,23 @@ def update_not_none(d1, d2):
 #     def __getitem__(self, k):
         # return self.d[k]
 
+##############################
+# Data Storage and Load
+###############################
+import cPickle as pickle
+import gzip
+proto = pickle.HIGHEST_PROTOCOL
+def zdump(obj, f_name):
+    f = gzip.open(f_name,'wb', proto)
+    pickle.dump(obj,f)
+    f.close()
+
+def zload(f_name):
+    f = gzip.open(f_name,'rb', proto)
+    obj = pickle.load(f)
+    f.close()
+    return obj
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

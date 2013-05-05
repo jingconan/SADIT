@@ -15,7 +15,7 @@ import random
 # sys.path.append("..")
 # import settings
 from sadit import settings
-import cPickle as pickle
+from sadit.util import zload
 
 haveIPAddrGen = False
 try:
@@ -378,7 +378,7 @@ class HarpoonGeneratorNode(GeneratorNode):
                 'flow_arrival_rate':p_interval
                 }
         try:
-            data = pickle.load(open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'r'))
+            data = zload(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE)
         except IOError:
             # import sys
             # print sys.exc_info()[0]

@@ -10,10 +10,10 @@
 
 # import numpy as np
 from __future__ import print_function, division, absolute_import
-import settings
+from sadit import settings
 from sadit.util import Load
+from sadit.util import zdump, zload
 from .mod_util import choose_ip_addr
-import cPickle as pickle
 
 # from numpy import cumsum, diff
 def cumsum(it):
@@ -308,7 +308,7 @@ class Anomaly(object):
         new_generator = new_generator_list[0]
         ano_flow_para = copy.deepcopy(new_generator.para)
         ano_flow_para['ano_type'] = self.ano_desc['anoType']
-        pickle.dump(ano_flow_para, open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')) # For export abnormal flows
+        zdump(ano_flow_para, settings.EXPORT_ABNORMAL_FLOW_PARA_FILE) # For export abnormal flows
 
     def run(self, net):
         """inject itself into the network
