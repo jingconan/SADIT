@@ -5,10 +5,9 @@ like False Alarm Rate.
 """
 from __future__ import print_function, division, absolute_import
 import copy, os
-from saditDetector.DataParser import RawParseData
+from sadit.Detector.DataParser import RawParseData
 from sadit.util import update_not_none, plt
-# import matplotlib.pyplot as plt
-import cPickle as pickle
+from sadit.util import zdump, zload
 import itertools
 
 from .Detect import Detect
@@ -57,8 +56,7 @@ def vis(data_name, ident_type_set, fea_handler, title, xlabel=None, ylabel=None,
     """ visualize the attribute
 
     """
-    with open(data_name, 'r') as f:
-        rec = pickle.load(f)
+    rec = zload(data_name)
 
     if subplot is None:
         f = plt.figure(1); f.clf()
@@ -268,7 +266,7 @@ sensitivity: %f\tspecificity: %f
                 rec[entropy_type].append(res)
 
         # import ipdb;ipdb.set_trace()
-        pickle.dump(rec, open(folder + '/diff_ab_win_num.pk', 'w'))
+        zdump(rec, folder + '/diff_ab_win_num.pk')
 
     def compare_ident_method(self, ab_win_num, res_folder):
         """ compare different identification method.
@@ -309,7 +307,7 @@ sensitivity: %f\tspecificity: %f
                 rec[ident_type].append(res)
 
         # import ipdb;ipdb.set_trace()
-        pickle.dump(rec, open(res_folder + '/compare_ident.pk', 'w'))
+        zdump(rec, res_folder + '/compare_ident.pk')
 
     def eval_hoeffding(self, false_alarm_rate):
         """evaluate the performance of detector under the hoeffding optimal rule"""
