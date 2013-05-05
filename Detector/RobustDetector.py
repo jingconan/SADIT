@@ -239,7 +239,8 @@ class RobustDetector(StoDetector.FBAnoDetector):
         # self.process_data(self.ref_file, self.rg)
         # self.ref_pool = self.plm.process_data(self.rg, self.PL_selection)
 
-        d_pmf, d_Pmb, d_mpmb = em
+        # d_pmf, d_Pmb, d_mpmb = em
+        d_pmf, d_Pmb= em
         self.desc['em'] = em
 
         I_rec = cal_I_rec(self.ref_pool, em, self.PL_enable)
