@@ -8,7 +8,7 @@ from .Detect import Detect
 import os
 import matplotlib.pyplot as plt
 from Detector import detector_plot_dump
-import cPickle as pickle
+from sadit.util import zdump, zload
 
 class DetectCompare(Detect):
     """ Compare Different methods and plot the result in
@@ -54,15 +54,16 @@ class DetectCompare(Detect):
             # import ipdb;ipdb.set_trace()
             detector.dump(self.desc['dump_folder'] + '/dump_' + method + '.txt')
 
-        with open(self.desc['dump_folder'] + '/dump_method_list.txt', 'w') as f:
-            pickle.dump(self.desc['comp_methods'], f)
+        ml_f_name = self.desc['dump_folder'] + '/dump_method_list.txt'
+        zdump(self.desc['comp_methods'], ml_f_name)
 
 
     def plot_dump(self, dump_folder):
         if self.desc.get('comp_methods'):
             method_list = self.desc.get('comp_methods')
         else:
-            method_list = pickle.load(open(dump_folder + '/dump_method_list.txt', 'r'))
+            ml_f_name = self.desc['dump_folder'] + '/dump_method_list.txt'
+            method_list = zload(ml_f_name)
 
         fig = plt.figure()
         sp = len(method_list) * 100
