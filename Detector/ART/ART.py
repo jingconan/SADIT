@@ -1,19 +1,12 @@
 #!/usr/bin/env python
-# from subprocess import call
 from subprocess import check_call as call
-import sys
-sys.path.insert(0, '../..')
-from Detector.mod_util import plot_points
-import cPickle as pickle
 import os
-import settings
+from sadit.util import zdump, zload
+from sadit.util import plt
+from sadit import settings
+from sadit.Detector.mod_util import plot_points
 
-try:
-    import matplotlib.pyplot as plt
-except:
-    plt = False
 class ARTDetector(object):
-    # ROOT = '/home/wangjing/Dropbox/Research/sadit'
     ROOT = settings.ROOT
     HOME = ROOT + '/Detector/ART'
     inter_csv_data = HOME + '/output.csv'
@@ -70,13 +63,12 @@ class ARTDetector(object):
                 *args, **kwargs)
 
     def dump(self, data_name):
-        pickle.dump( self.record_data, open(data_name, 'w') )
-        # pickle.dump(self.__dict__, open(data_name, 'w') )
+        zdump(self.record_data, data_name)
 
     def plot_dump(self, data_name, *args, **kwargs):
         """plot dumped data
         """
-        self.record_data = pickle.load(open(data_name, 'r'))
+        self.record_data = zload(data_name)
         self.ano_t = self.record_data['ano_t']
         self.plot(*args, **kwargs)
 
