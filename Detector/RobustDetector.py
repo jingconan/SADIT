@@ -9,6 +9,7 @@ from sadit.util import del_none_key, np
 from . import StoDetector
 from .DetectorLib import I1, I2
 from .PLIdentify import PL_identify
+from .PLRefine import HeuristicRefinePL
 
 def cal_I_rec(ref_pool, fb_PL, enable=None):
     """ calculate model-free and model-based fitness value with each reference
@@ -170,17 +171,34 @@ class PLManager(object):
 
         return self.ref_pool
 
+    # def select(self, I_rec, lamb):
+    #     n = len(I_rec) # window size
+    #     m = I_rec[0].shape[0] # no. of PLs
+    #     mf_D = np.zeros((m, n))
+    #     mb_D = np.zeros((m, n))
+    #     for j in xrange(n):
+    #         for i in xrange(m):
+    #             mf_D[i, j] = I_rec[j][i, 0]
+    #             mb_D[i, j] = I_rec[j][i, 1]
+    #     return PL_identify(mf_D, lamb), PL_identify(mb_D, lamb)
+
     def select(self, I_rec, lamb):
-        n = len(I_rec) # window size
-        m = I_rec[0].shape[0] # no. of PLs
+        # n = len(I_rec) # window size
+        # m = I_rec[0].shape[0] # no. of PLs
+        n = I_rec[0].shape[0] # no. of candidnate PLs
+        m = len(I_rec) # no. of windows
         mf_D = np.zeros((m, n))
         mb_D = np.zeros((m, n))
         for j in xrange(n):
             for i in xrange(m):
-                mf_D[i, j] = I_rec[j][i, 0]
-                mb_D[i, j] = I_rec[j][i, 1]
-        # import ipdb;ipdb.set_trace()
-        return PL_identify(mf_D, lamb), PL_identify(mb_D, lamb)
+                mf_D[i, j] = I_rec[i][j, 0]
+                mb_D[i, j] = I_rec[i][j, 1]
+
+        gam = 50
+        r = 0.5
+        epsi = 0.001
+        return HeuristicRefinePL(mf_D, lamb, gam, r, epsi), \
+                PL_identify(mb_D, lamb, gam, r, epsi)
 
 class RobustDetector(StoDetector.FBAnoDetector):
     """ Robust Detector is designed for dynamic network environment

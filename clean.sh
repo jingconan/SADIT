@@ -7,6 +7,7 @@ rm ./Share/BlindTest/*
 # rm *.txt
 rm res.dat
 
+find . -iname "__pycache__" -exec rm -r '{}' ';'
 find . -iname "*.pyc" -exec rm '{}' ';'
 find . -iname "tags" -exec rm '{}' ';'
 # dat=`date +%y-%m-%d_%H_%M_%S`
