@@ -1,10 +1,17 @@
 from __future__ import print_function, division, absolute_import
 from .mod_util import Attr
+
 class Modulator(object):
-    """ * name
-        * start
-        * profile
-        * generator
+    """ A Helper class that make generator of pydot modulator string easier.
+
+    Attributes
+    -----------------
+    name : str, 'modulator'
+        redundant attribute, can be only 'modulator'
+    start : str
+        start time
+    profile : tuple of tuple
+        See Anomaly.get_profile_with_ano
     """
     def __init__(self, **desc):
         self.desc = desc
@@ -25,25 +32,26 @@ class Modulator(object):
 
 from .Behaviour import DTMCBehaviour, CTMCBehaviour
 class MarkovModulator(Modulator):
-    """
+    """ Markov Modulator
 
-    Parameters:
-        name : str
-            name of modular. now it is useless
-        start : float
-            start time
-        profile : tuple of tuple
-            profile
-        generator_states : a list of generator names
-            representing the states
-        node_para : dict
-            * type : {'DTMC', 'CTMC'}
-            * P : nxn matrix
-                Pij is transition probability from i to j when type=='DTMC',
-                Pij is rate of possion process that transition i to j will
-                happen
-            * interval : float
-                mean of interval time. useful for only 'DTMC'
+    Parameters
+    -------------------
+    name : str
+        name of modular. now it is useless
+    start : float
+        start time
+    profile : tuple of tuple
+        profile
+    generator_states : a list of generator names
+        representing the states
+    node_para : dict
+        * type : {'DTMC', 'CTMC'}
+        * P : nxn matrix
+            Pij is transition probability from i to j when type=='DTMC',
+            Pij is rate of possion process that transition i to j will
+            happen when type=='CTMC'
+        * interval : float
+            mean of interval time. useful for only 'DTMC'
 
     """
     def __init__(self, name, start, profile, generator_states, node_para):
@@ -72,7 +80,7 @@ class MarkovModulator(Modulator):
         return ' '.join([str(mod) for mod in self.mod_list])
 
     def stage(self, r_start, r_end, state):
-        """for one markov stage"""
+        """ One markov stage. A new modulator will be added for each stage """
         mod = Modulator(
                 name=self.name,
                 start=r_start,

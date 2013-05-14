@@ -4,16 +4,13 @@ from __future__ import print_function, division, absolute_import
 ##############################################
 # import re
 def FixQuoteBug(fileName):
-    """ There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote
+    """ Fix A Quote related Bug Caused by `pydot`
+
+    There is a bug in pydot. when link attribute is < 1, pydot will automatically add quote
     to value which is not desirable. This function try to fix that problem. delete
-    all the quotes in the link attribute"""
-    # fid = open(fileName, 'r')
-    # content = fid.read()
-    # content = re.sub('delay="[\d.]*"', 'delay='+str(delay), content)
-    # fid.close()
-    # fid = open(fileName, 'w')
-    # fid.write(content)
-    # fid.close()
+    all the quotes in the link attribute
+
+    """
     with open(fileName, 'r') as fid:
         lines = fid.readlines()
     fid.close()
@@ -65,7 +62,7 @@ class Attr():
 
 from random import randint
 def choose_ip_addr(ip_addr_set):
-    """ choose ip addrss """
+    """ choose ip address """
     n = len(ip_addr_set)
     return ip_addr_set[randint(0, n-1)]
 
