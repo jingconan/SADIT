@@ -71,7 +71,7 @@ ANO_DESC = {
         'anoType':'anomaly',
         'ano_node_seq':2,
         'T':(1000, 1500),
-        'change':{'flow_size_mean':'x1.3'},
+        'change':{'flow_size_mean':'x2'},
         'srv_id':0,
         }
 

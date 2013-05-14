@@ -6,15 +6,15 @@ from sadit import settings
 import copy
 
 class MarkovAnomaly(Anomaly):
-    def del_orig_mod_gen(self, m_id, mod):
-        del self.ano_node.modulator[m_id]
+    def del_mod(self, node, m_id, mod):
+        del node.modulator[m_id]
         for s_id in mod.states:
-            del self.ano_node.generator[s_id]
+            del node.generator[s_id]
 
     def get_generator_list(self, mod):
         return [ self.ano_node.generator[s] for s in mod.states ]
 
-    def add_ano_seg(self, start, ap, generator_list):
+    def add_ano_mod(self, start, ap, generator_list):
         self.ano_node.add_modulator(start, ap, generator_list,
                 self.ano_desc['node_para'])
         # import ipdb;ipdb.set_trace()

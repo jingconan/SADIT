@@ -1,18 +1,8 @@
 #!/usr/bin/env python
-
-### -- [2012-03-04 14:56:03] FlowRate and FlowSize anomaly parameter has be changed as
-### -- ratio instead of absolute value
-##-- [2012-04-08 22:31:20] Add GenAnomalyDot
-##-- [2012-04-09 18:31:22] refactoring the whole file
-## -- [2012-04-10 01:14:07] FLOW_RATE can work
-##-- [2012-04-10 17:16:27] add _infect_modulator, make anomaly more general
-
-
-# import numpy as np
 from __future__ import print_function, division, absolute_import
 from sadit import settings
 from sadit.util import Load
-from sadit.util import zdump, zload
+from sadit.util import zdump
 from .mod_util import choose_ip_addr
 
 # from numpy import cumsum, diff
@@ -103,18 +93,18 @@ class BadConfigError(Exception):
 
 import copy
 class Anomaly(object):
-    """ basis class for anomaly. Its subclass will provide run() method
+    """ base class for anomaly. Its subclass will provide run() method
 
     Parameters
     ----------------
-    ano_desc: dict
+    ano_desc : dict
         - **ano_node_seq** : int
             id of the target node
-        - **T** : list of floats
+        - **T** : two-element list of floats
             start, end time for the anomaly
         - **change** : dict
             a dictionary specify how the attributes of the existing modules are
-            changed. the value is a string, if the first char is '=', it means
+            changed. the value is a string. If the first char is '=', it means
             change the attribute to the value behind '='. If the first char is
             '+', it means add the attribute by the value behind '+'. Likewise
             if the first char is 'x', it means multiply the attribute by the
@@ -126,12 +116,13 @@ class Anomaly(object):
                 'flow_arrival_rate':'=6',
                 'flow_size_var=+3'
                 }
-            It means change the flow_size_mean to two times of the orginal value, change flow_arrival_rate
-            to be 6 and add the flow_size_var by 3.
+            means to change the `flow_size_mean` to two times of the orginal
+            value, change `flow_arrival_rate`
+            to be 6 and add the `flow_size_var` by 3.
 
     Attributes
     -----------------
-    ano_desc : desc
+    ano_desc : dict
         descriptor for anomaly
     ano_node : class of Node
         anomaly node
@@ -231,7 +222,7 @@ class Anomaly(object):
 
         if len(ap[0]) > 0:
             # self.new_generator = generator[s_id].get_new_gen(self.ano_desc['change'])
-            self.add_ano_seg(start, ap, generator_list)
+            self.add_ano_mod(start, ap, generator_list)
 
             # export para to help to export ano flo
 
@@ -241,10 +232,10 @@ class Anomaly(object):
         # delete original modulator
         # del ano_node.modulator[m_id]
         # del ano_node.generator[s_id]
-        self.del_orig_mod_gen(m_id, mod)
+        self.del_mod(self.ano_node, m_id, mod)
 
-    def add_ano_seg(self, start, ap, generator_list):
-        """  add anomaly segment
+    def add_ano_mod(self, start, ap, generator_list):
+        """  add abnormal traffic modulator
 
         Parameters
         ---------------
@@ -267,7 +258,7 @@ class Anomaly(object):
 
         self.export_ano_flow_para(new_generator_list)
 
-    def del_orig_mod_gen(self, m_id, mod):
+    def del_mod(self, node, m_id, mod):
         """  Delete the original modulator and generator
 
         Parameters
@@ -279,9 +270,9 @@ class Anomaly(object):
             modulator
 
         """
-        del self.ano_node.modulator[m_id]
+        del node.modulator[m_id]
         s_id = mod['generator'] # get id for source generator
-        del self.ano_node.generator[s_id]
+        del node.generator[s_id]
 
     def get_generator_list(self, mod):
         s_id = mod['generator']
