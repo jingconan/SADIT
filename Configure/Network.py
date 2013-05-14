@@ -5,7 +5,7 @@ from sadit.util import get_net_addr, CIDR_to_subnet_mask
 from .Edge import NEdge
 from .Node import NNode, MarkovNode
 # from .Node import MVNode
-from .mod_util import GetIPAdress, FixQuoteBug
+from .mod_util import FixQuoteBug
 from .Address import Ipv4AddressHelper
 
 
@@ -40,7 +40,6 @@ class Network(Dot):
         Dot.__init__(self, 'SimConf', graph_type='graph')
         self.node_list = []
         self.NODE_NUM = 0 # FIXME check whether can remove it
-        self.IPSrcSet, self.AnoSet, _ = GetIPAdress() # FIXME Remove it
         self.mv = None # FIXME remove it.
         # self.Node = node_init_handle
 
