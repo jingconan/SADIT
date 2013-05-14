@@ -1,20 +1,37 @@
 #!/usr/bin/env python
-"""This file defines the behaviour of """
+"""This file defines the behaviour"""
 from __future__ import print_function, division, absolute_import
-from sadit.util import abstract_method
+# from sadit.util import abstract_method
 from random import randint
 from .mod_util import RandDist
 
-class Behaviour(object):
-    def behave(): abstract_method()
+# class Behaviour(object):
+#     """  Abstract Class For Behaviour """
+#     def behave(self):
+#         """  the Behaviour
+#         """
+#         abstract_method()
 
 from random import expovariate as exponential
-# class MarkovBehaviour(Behaviour):
-class DTMCBehaviour(Behaviour):
+class DTMCBehaviour(object):
     """ Discrete Time Markov Chain
+
+    Parameters
+    ------------------
+    P : list of list
+        transition probability
+    states : list of any type
+        list of states
+    interval : float
+        interval between two transitions
+
+    Attributes
+    --------------------
+    cs : int
+        current state
     """
     def __init__(self, P, states, interval):
-        Behaviour.__init__(self)
+        # Behaviour.__init__(self)
 
         self.interval = interval
         self.P = P
@@ -24,22 +41,53 @@ class DTMCBehaviour(Behaviour):
         self.cs = randint(0, sn-1) # cs: current state
 
     def get_new_state(self):
+        """  Generate next state accoding to transition probability """
         return RandDist(self.P[self.cs])
         # return RandDist(self.P) # FIXME use stationary prob
 
     def get_interval(self):
+        """  accessor for self.interval """
         return self.interval
 
     def behave_with_profile(self, start, profile, func):
+        """  behave according to profile
+
+        Parameters
+        ---------------
+        start : float
+            start time
+        profile : tuple of tuple
+            has the same meaning as `profile` in fs. The first tuple are the
+            the durations, the second tupleself are the number of runs.
+            specify
+
+        Returns
+        --------------
+        None
+
+        """
         for dur, num in zip(*profile):
-            # print('dur', type(dur))
-            # print('start', type(start))
             end = start + dur
             for i in xrange(num):
                 self.behave(start, end, func)
             start = end
 
     def behave(self, start, end, func):
+        """  call func during `start` and `end`.
+
+        Parameters
+        ---------------
+        start, end : float
+            start and end time
+        func : function handle
+            the function will be called during each stage. it should has the
+            prototype:
+                func(r_start, r_end, state)
+
+        Returns
+        --------------
+        None
+        """
         t = start
         while True:
             self.cs = self.get_new_state()
@@ -89,18 +137,31 @@ class CTMCBehaviour(DTMCBehaviour):
     """ Continuous Time Markoc Chain
 
     Parameters
-    ---------------
-    Returns
-    --------------
+    ------------------
+    P : list of list
+        rate matrix
+    states : list of any type
+        list of states
+
+    Attributes
+    --------------------
+    cs : int
+        current state
     """
     def __init__(self, P, states):
         super(CTMCBehaviour, self).__init__(P, states, 0)
         self.embed_P, self.v = get_embed_MC(P)
 
     def get_new_state(self):
+        """  generate new state accoding to transition probability of embedded
+        markov chain
+        """
         return RandDist(self.embed_P[self.cs])
 
     def get_interval(self):
+        """  generate interval between two consequent transitions accoding to
+        expontial distribution
+        """
         val = exponential(self.v[self.cs])
         return val
 

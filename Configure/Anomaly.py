@@ -133,8 +133,9 @@ class Anomaly(object):
         self.ano_node = None
 
     def get_profile_with_ano(self, mod_start, mod_profile, ano_t):
-        """ According to anomaly time, break the traffic profile into two profiles
-        with normal traffic and one profile with abnormal traffic.
+        """ Break the traffic profile into three consecutive profiles according to anomaly
+        time `ano_t`. The first and and the third profiles are with normal
+        traffic and the second profile is with abnormal traffic.
 
         Parameters
         ----------------
@@ -154,6 +155,7 @@ class Anomaly(object):
         one modulator can only have one behaviour. In order to simulate the
         change of behaviour of the modulator, the abnormal haviour will be
         generator by new modulators.
+
         """
         start, end = ano_t
         # start -= mod_start
@@ -276,6 +278,18 @@ class Anomaly(object):
         del node.generator[s_id]
 
     def get_generator_list(self, mod):
+        """  get generator list of the mod
+
+        Parameters
+        ---------------
+        mod : dict
+            the modulator
+
+        Returns
+        --------------
+        res : list of generators
+
+        """
         s_id = mod['generator']
         return [ self.ano_node.generator[s_id] ]
 
@@ -285,7 +299,7 @@ class Anomaly(object):
         Parameters
         -----------------
         new_generator_list : a list of generators
-            the abnormal generated inserted duing the anomaly
+            the abnormal traffic generators
 
         Returns
         ------------------
@@ -293,7 +307,8 @@ class Anomaly(object):
 
         Notes
         -------------------
-        Will dump the parameter data to the **settings.EXPORT_ABNORMAL_FLOW_PARA_FILE**
+        Will dump the parameter data to the
+        **settings.EXPORT_ABNORMAL_FLOW_PARA_FILE**
 
         """
         assert(len(new_generator_list) == 1)
