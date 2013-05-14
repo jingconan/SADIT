@@ -11,9 +11,6 @@
 # absolute path of this folder
 ROOT = '/home/wangjing/Dropbox/Research/sadit'
 
-# LIST of Valid IP Address
-IPS_FILE = ROOT + '/Configure/ips.txt'
-
 # If EXPORT_ABNORMAL_FLOW = True, abnormal flows will be exported by simulator
 EXPORT_ABNORMAL_FLOW = True
 
