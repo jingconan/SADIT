@@ -6,18 +6,37 @@ class Generator(object):
 
 import copy
 class HarpoonG(Generator):
-    """Harpoon Generator, described by
-       1. flow_size_mean 2. flow_size_var, 3 flow_arrival_rate
-       flow size is normally distributed
-       flow arrival is possion distributed
-       flow duration is determined by the network condition.
-       """
+    """ Harpoon Generator, described by
+           1. flow_size_mean
+           2. flow_size_var,
+           3 flow_arrival_rate
+       `flow size` is normally distributed; `flow arrival` is possion
+       distributed; `flow duration` is determined by the network condition.
+
+    Parameters
+    ---------------
+    ipsrc : str
+        source ip address
+    ipdst : str
+        destination ip address
+    flow_size_mean : float
+        flow size subjects to normal distribution. It is the mean or the
+        normal distribution
+    flow_size_var : float
+        variance of the flow size distirbution
+    flow_arrival_rate : float
+        flow arrivals are poission process. It is the rate.
+    TYPE : str, 'harpoon' or 'mv'
+        type of the modulator
+
+    """
+
     def __init__(self, **para):
         self.para = para
         self.sync()
 
     def sync(self):
-        # import pdb;pdb.set_trace()
+        """  sync the parameters to self.gen_desc """
         self.gen_desc = dict(
                 ipsrc = self.para['ipsrc'],
                 ipdst = self.para['ipdst'],
@@ -37,6 +56,19 @@ class HarpoonG(Generator):
         return self.gen_desc[name]
 
     def get_new_gen(self, change_para=None):
+        """  Generate a new generator accoding to `change_para`
+
+        Parameters
+        ---------------
+        change_para : dict
+            See `Anomaly` for the format of `change_para`
+
+        Returns
+        --------------
+        new : generator class
+            a new generator class
+
+        """
         new = copy.deepcopy(self)
         if change_para is None:
             return new
@@ -63,6 +95,7 @@ class HarpoonG(Generator):
 
 class MVGenerator(HarpoonG):
     def sync(self):
+        """  sync the parameters to self.gen_desc """
         self.para['TYPE'] = 'harpoon'
         self.gen_desc = dict(
                 ipsrc = self.para['ipsrc'],
@@ -78,6 +111,9 @@ gmap = {
         'harpoon':HarpoonG,
         'mv':MVGenerator,
         }
+
 def get_generator(gen_desc):
+    """  generate generator
+    """
     gen_class = gmap[gen_desc['TYPE']]
     return gen_class(**gen_desc)
