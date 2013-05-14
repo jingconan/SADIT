@@ -259,13 +259,14 @@ class Anomaly(object):
         self.export_ano_flow_para(new_generator_list)
 
     def del_mod(self, node, m_id, mod):
-        """  Delete the original modulator and generator
+        """  Delete the modulator and generator in `node`
 
         Parameters
         -------------
+        node : node class
+            the modulator `m_id` of `node` will be deleted.
         m_id : str
             the id of modulator
-
         mod : class
             modulator
 
