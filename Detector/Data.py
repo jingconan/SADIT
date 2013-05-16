@@ -4,27 +4,48 @@ from sadit.util import Find, DataEndException
 class Data(object):
     """abstract base class for data. Data class deals with any implementation
     details of the data. it can be a file, a sql data base, and so on, as long
-    as it support the pure virtual methods defined here.
+    as it supports the pure virtual methods defined here.
     """
     def get_fea_slice(self, rg=None, rg_type=None):
         """ get a slice of feature
-        - **rg** is the range for the slice
-        - **rg_type** is the type for range, it can be ['flow'|'time']
+
+        Parameters
+        ---------------
+        rg : list of two floats
+            is the range for the slice
+        rg_type : str,  {'flow', 'time'}
+            type for range
+
         """
         abstract_method()
 
     def get_max(self, fea, rg=None, rg_type=None):
         """ get the max value of feature during a range
-        - **fea** is a list of feature name
-        - **rg** is the range
-        - **rg_type** is the range type
-        the output is the a list of element which contains the max
-        value of the feature in **fea**
+
+        Parameters
+        ----------------------
+        fea : list of string
+            a list of feature name
+        rg : list of floats
+            the range
+        rg_type : str, {'flow', 'time'}
+            is the range type
+
+        Returns
+        ------------------------
+        res : list of floats
+            a list of element which contains the max value of the feature in
+            **fea**
         """
         abstract_method()
+
     def get_min(self, fea, rg=None, rg_time=None):
         """ get min value of feature within a range. see **get_max** for
         the meaning of the parameters
+
+        Parameters
+        -----------------
+        See `get_main()`
         """
         abstract_method()
 
