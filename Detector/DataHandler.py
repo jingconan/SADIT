@@ -215,12 +215,6 @@ from sadit.util import Counter
 class SVMTemporalHandler(QuantizeDataHandler):
     """Data Hanlder for SVM Temporal Detector approach. It use a set of features
     which will be defined here"""
-    handler = {
-            'src_ip': lambda x:[v[0] for v in x],
-            'start_time': lambda x: [float(v[0]) for v in x],
-            'flow_size': lambda x: [float(v[0]) for v in x],
-            }
-
     def __init__(self, data, desc=None):
         QuantizeDataHandler.__init__(self, data, desc)
         # self._init_data(data)
@@ -229,7 +223,9 @@ class SVMTemporalHandler(QuantizeDataHandler):
 
     def update_unique_src_ip(self):
         """be carefule to update unique src ip when using a new file"""
-        self.unique_src_ip = list(set(self.get('src_ip')))
+        src_ip = self.data.get_rows('src_ip')
+        src_ip = [tuple(ip) for ip in src_ip]
+        self.unique_src_ip = list(set())
 
     def _init_data(self, data):
         self.data = data
@@ -252,8 +248,6 @@ class SVMTemporalHandler(QuantizeDataHandler):
         lf_src_ip = [src_ip[i] for i in xrange(n) if flow_size[i] > self.large_flow_thres]
         ct = Counter(lf_src_ip)
         fea_large_flow = [ct[ip] for ip in self.unique_src_ip]
-        # print 'fea_large_flow, ', fea_large_flow
-        # print 'fea_total_flow, ', fea_total_flow
         return fea_total_flow + fea_large_flow
 
     def get_svm_fea(self, rg=None, rg_type=None):

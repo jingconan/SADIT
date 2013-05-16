@@ -200,7 +200,7 @@ class SVMFlowByFlowDetector(SVMDetector):
         return sample_fea
 
     def get_start_time(self):
-        start_time = self.data_file.data.get_fea_slice(fea=['start_time'])
+        start_time = self.data_file.data.get_rows('start_time')
         return self.sample(start_time, self.desc['sample_ratio'])
 
     def write_dat(self, data):
@@ -234,8 +234,8 @@ class SVMFlowByFlowDetector(SVMDetector):
         self.load_pred()
 
         fea_slice = self.get_start_time()
-        min_t = float(fea_slice[0][0])
-        start_time = [float(v[0])-min_t for v in fea_slice]
+        min_t = fea_slice[0]
+        start_time = [v - min_t for v in fea_slice]
         self.record_data['start_time'] = start_time
         self.record_data['pred'] = self.pred
         self.record_data['interval'] = self.desc['interval']
