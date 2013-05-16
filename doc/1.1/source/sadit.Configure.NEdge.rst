@@ -1,7 +1,7 @@
-sadit.Configure.NEdge
-=========================
+..  sadit.Configure.NEdge
+..  =========================
 
-.. currentmodule:: sadit
+..  currentmodule:: sadit
 
-.. autoclass:: Configure.Edge.NEdge
-    :members:
+..  autoclass:: Configure.Edge.NEdge
+..   :members:

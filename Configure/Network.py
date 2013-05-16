@@ -15,6 +15,49 @@ node_map = {
         # 'MVNode':MVNode,
         }
 
+check_table = {
+        'ms':1e-3,
+        'kbps':1e3,
+        'mbps':1e6,
+        }
+def convert_unit(val):
+    """convert unit of delay and capacity to second and bps, respectively
+    """
+    val = val.lower()
+    for k,v in check_table.iteritems():
+        if k in val:
+            return float(val.rsplit(k)[0]) * v
+
+def link_attr_list_to_map(l):
+    """ convert link attribute with list format to map format
+
+    Parameters
+    ---------------
+    l : list of strings or dict
+        if `l` is a dict, return it directly. If `l` is a list, l[0] is the
+        string representation of 'delay' and l[1] is the string
+        representation of 'capcacity'.
+
+    Returns
+    --------------
+    m : dict
+        - 'delay' : float
+        - 'capacity' : int
+        - 'weight' : str
+            now it is set as '10'
+    """
+    if isinstance(l, dict): # dirty code for backword compatibility
+        return l
+    attr_name = ['delay', 'capacity']
+    # han specify the format of the attribute
+    han = { 'delay':float,
+            'capacity':int
+            }
+    nl = [str(han[n](convert_unit(v))) for n, v in zip(attr_name, l)]
+    m = dict(zip(attr_name, nl))
+    m['weight'] = '10'
+    return m
+
 ####################################
 ##     Main Class Definition     ###
 ####################################
@@ -39,9 +82,6 @@ class Network(Dot):
     def __init__(self):
         Dot.__init__(self, 'SimConf', graph_type='graph')
         self.node_list = []
-        self.NODE_NUM = 0 # FIXME check whether can remove it
-        self.mv = None # FIXME remove it.
-        # self.Node = node_init_handle
 
     def _init_addr_helper(self):
         """initialize the address helper"""
@@ -69,67 +109,42 @@ class Network(Dot):
 
         self._init_addr_helper()
         self.Node = node_map[net_desc['node_type']]
-        self._topo(self.net_desc['topo'])
-        self._config_traffic()
+        self.create_topology(self.net_desc['topo'])
+        self.config_traffic(self.norm_desc['src_nodes'],
+                self.norm_desc['dst_nodes'])
 
 
-    # def _config_traffic(self):
-    #     """config the traffic of network"""
-    #     nn = len(self.node_list)
-    #     srv_node_list = [self.node_list[i] for i in xrange(nn) if i in self.net_desc['srv_list'] ]
-    #     for i in xrange(nn):
-    #         if i in self.net_desc['srv_list']:
-    #             continue
-    #         self.node_list[i].init_traffic(self.norm_desc, srv_node_list)
+    def config_traffic(self, src_nodes, dst_nodes):
+        """ config the traffic of network, initialize traffic from any node in
+        `src_nodes` to any node in `dst_Nodes`.
 
-    def _config_traffic(self):
-        """ config the traffic of network, initialize traffic from
-        *self.norm_desc['src_nodes']* to *self.norm_desc['dst_Nodes']*
+        Parameters
+        ------------------
+        src_nodes : list of ints
+            sequences of source nodes
+        dst_nodes : list of ints
+            sequence of destination nodes
         """
-        dst_node_list = [self.node_list[i] for i in self.norm_desc['dst_nodes']]
-        for i in self.norm_desc['src_nodes']:
+        dst_node_list = [self.node_list[i] for i in dst_nodes]
+        for i in src_nodes:
             self.node_list[i].init_traffic(self.norm_desc, dst_node_list)
 
-    def _topo(self, topo):
-        """initialize the topology of the network"""
-        # n, _ = topo.shape
+    def create_topology(self, topo):
+        """initialize the topology of the network
+
+        Parameters
+        -----------------
+        topo : list of list
+            adjacent matrix of the graph. There is a edge from node *i* to
+            node *j* if topo[i][j] == 1.
+
+        """
         n = len(topo)
         assert(n == len(topo[0]) )
-        self.NodeList = []
         for i in xrange(n):
-            # FIXME Add start, end to the parameter list
-            # node = self.Node([self.IPSrcSet[i]], i, **self.net_desc['node_para'])
-            # node = self.Node([], i, **self.net_desc['node_para'])
-            node = self.Node([], i)
+            node = self.Node([], i) # Create node without specifying the ipdests
             self.node_list.append(node)
             self.add_node(node)
-            # if self.mv: mv.MHarpoon(node)
-
-        def link_attr_list_to_map(l):
-            if isinstance(l, dict): # dirty code for backword compatibility
-                return l
-            attr_name = ['delay', 'capacity']
-            # han specify the format of the attribute
-            han = { 'delay':float,
-                    'capacity':int
-                    }
-            check_table = {
-                    'ms':1e-3,
-                    'kbps':1e3,
-                    'mbps':1e6,
-                    }
-            def convert_unit(val):
-                """convert unit of delay and capacity to second and bps, respectively
-                """
-                val = val.lower()
-                for k,v in check_table.iteritems():
-                    if k in val:
-                        return float(val.rsplit(k)[0]) * v
-
-            nl = [str(han[n](convert_unit(v))) for n, v in zip(attr_name, l)]
-            m = dict(zip(attr_name, nl))
-            m['weight'] = '10'
-            return m
 
         for i in xrange(n):
             for j in xrange(n):
@@ -174,17 +189,17 @@ class Network(Dot):
         self.addr_helper.Assign(node_container)
         self.addr_helper.NewNetwork()
 
-    def write(self, fName):
+    def write(self, f_name):
         """write the DOT file to *fName*
 
         """
         for node in self.node_list:
             node.sync()
-        Dot.write(self, fName)
+        Dot.write(self, f_name)
         # FixQuoteBug(fName, float(self.net_desc['link_attr']['delay']))
-        FixQuoteBug(fName)
+        FixQuoteBug(f_name)
 
-    def InjectAnomaly(self, A):
+    def inject_anomaly(self, A):
         """ Inject Anomaly into the network. A is the one type Anomaly
 
         Parameters

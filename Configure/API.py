@@ -47,7 +47,7 @@ def gen_dot(ano_list, net_desc, normal_desc, output_f_name):
         ano_type = ano_desc['anoType'].lower()
         AnoClass = ano_map[ano_type]
         A = AnoClass(ano_desc)
-        net.InjectAnomaly( A )
+        net.inject_anomaly( A )
 
     net.write(output_f_name)
 

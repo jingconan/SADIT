@@ -1,23 +1,31 @@
-:mod:`Edge` Module
-------------------
+..  :mod:`Edge` Module
+..  ------------------
 
-.. automodule:: sadit.Configure.Edge
-    :members:
-    :undoc-members:
-    :show-inheritance:
+..  automodule:: sadit.Configure.Edge
+..   :members:
+..   :undoc-members:
+..   :show-inheritance:
 
 :mod:`Network` Module
 ---------------------
 
 .. automodule:: sadit.Configure.Network
-    :members:
-    :undoc-members:
+    :members: 
     :show-inheritance:
 
 :mod:`Node` Module
 ------------------
 
-.. automodule:: sadit.Configure.Node
+..  automodule:: sadit.Configure.Node
+..   :members:
+..   :undoc-members:
+..   :show-inheritance:
+
+.. autoclass:: sadit.Configure.Node.NNode
     :members:
-    :undoc-members:
-    :show-inheritance:
+
+.. autoclass:: sadit.Configure.Node.MarkovNode
+    :members:
+
+
+
