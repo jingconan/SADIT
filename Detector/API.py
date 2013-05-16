@@ -56,7 +56,7 @@ data_handler_handle_map = {
 from .Data import *
 data_map = {
         'fs': PreloadHardDiskFile,
-        'pcap2netflow': PreloadHardDiskFile_pcap2netflow,
+        # 'pcap2netflow': PreloadHardDiskFile_pcap2netflow,
         'xflow': PreloadHardDiskFile_xflow,
         'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
         'flow_exporter': PreloadHardDiskFile_FlowExporter,

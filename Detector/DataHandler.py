@@ -75,25 +75,31 @@ class QuantizeDataHandler(DataHandler):
     def _init_data(self, data):
         self.data = data
 
-    def _to_dotted(self, ip):
-        if isinstance(ip, str):
-            return tuple( [int(v) for v in ip.rsplit('.')] )
-        elif isinstance(ip, long):
-            return long_to_dotted(int(ip))
+    # def _to_dotted(self, ip):
+    #     if isinstance(ip, str):
+    #         return tuple( [int(v) for v in ip.rsplit('.')] )
+    #     elif isinstance(ip, long):
+    #         return long_to_dotted(int(ip))
 
     def _cluster_src_ip(self, cluster_num):
-        src_ip_int_vec_tmp = self.data.get_fea_slice(['src_ip']) #FIXME, need to only use the training data
-        src_ip_str_vec = [x[0] for x in src_ip_int_vec_tmp]
-        print('finish get ip address')
-        unique_src_IP_str_vec_set = list( set( src_ip_str_vec ) )
-        unique_src_IP_vec_set = [self._to_dotted(ip) for ip in unique_src_IP_str_vec_set]
-        # print 'start kmeans...'
+        src_ip_int_vec_tmp = self.data.get_rows('src_ip')
+        src_ip_vec = [tuple(x) for x in src_ip_int_vec_tmp]
+        unique_ip = list( set( src_ip_vec ) )
         # unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
-        unique_src_cluster, center_pt = KMedians(unique_src_IP_vec_set, cluster_num, DF)
-        self.cluster_map = dict(zip(unique_src_IP_str_vec_set, unique_src_cluster))
+        unique_src_cluster, center_pt = KMedians(unique_ip, cluster_num, DF)
+        self.cluster_map = dict(zip(unique_ip, unique_src_cluster))
         # self.center_map = dict(zip(unique_src_IP_vec_set, center_pt))
-        dist_to_center = [DF( unique_src_IP_vec_set[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_src_IP_vec_set))]
-        self.dist_to_center_map = dict(zip(unique_src_IP_str_vec_set, dist_to_center))
+        dist_to_center = [DF( unique_ip[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_ip))]
+        self.dist_to_center_map = dict(zip(unique_ip, dist_to_center))
+
+    def get_min_max(self, feas):
+        min_vec = []
+        max_vec = []
+        for fea in feas:
+            dat = self.data.get_rows(fea)
+            min_vec.append(min(dat))
+            max_vec.append(max(dat))
+        return min_vec, max_vec
 
     def _set_fea_range(self):
         """set the global range for the feature list, used for quantization"""
@@ -101,8 +107,9 @@ class QuantizeDataHandler(DataHandler):
         min_dist_to_center = min(self.dist_to_center_map.values())
         max_dist_to_center = max(self.dist_to_center_map.values())
 
-        min_vec = self.data.get_min(self.direct_fea_list)
-        max_vec = self.data.get_max(self.direct_fea_list)
+        # min_vec = self.data.get_min(self.direct_fea_list)
+        # max_vec = self.data.get_max(self.direct_fea_list)
+        min_vec, max_vec = self.get_min_max(self.direct_fea_list)
 
         self.global_fea_range = [
                 [0, min_dist_to_center] + min_vec,
@@ -120,16 +127,16 @@ class QuantizeDataHandler(DataHandler):
         cluster center to the feature list.
         """
         # get direct feature
-        direct_fea_vec = self.data.get_fea_slice(self.direct_fea_list, rg, rg_type)
-        if not direct_fea_vec:
+        direct_fea_vec = self.data.get_rows(self.direct_fea_list, rg, rg_type)
+        if direct_fea_vec is None:
             raise FetchNoDataException("Didn't find any data in this range")
 
         # calculate indirect feature
-        src_ip_tmp = self.data.get_fea_slice(['src_ip'], rg, rg_type)
-        src_ip = [x[0] for x in src_ip_tmp]
+        src_ip = self.data.get_rows('src_ip', rg, rg_type)
         fea_vec = []
         for ip, direct_fea in izip(src_ip, direct_fea_vec):
-            fea_vec.append( [self.cluster_map[ip], self.dist_to_center_map[ip]] + [float(x) for x in direct_fea])
+            fea_vec.append( [self.cluster_map[tuple(ip)],
+                self.dist_to_center_map[tuple(ip)]] + [float(x) for x in direct_fea])
 
         # for i in xrange(len(src_ip)):
             # ip = src_ip[i]
@@ -227,11 +234,6 @@ class SVMTemporalHandler(QuantizeDataHandler):
     def _init_data(self, data):
         self.data = data
 
-    def get(self, fea, rg=None, rg_type=None):
-        """receive feature name as input"""
-        raw = self.data.get_fea_slice([fea], rg, rg_type)
-        return self.handler[fea](raw)
-
     def get_svm_fea_deprec(self, rg=None, rg_type=None):
         """ suppose m is the number of unique source ip address in this data.
         the feature is 2mx1,
@@ -239,9 +241,10 @@ class SVMTemporalHandler(QuantizeDataHandler):
         each source ip address,
         - the second m feature is the frequence of larges
         flows whose size is > self.large_flow_thres with each source ip address"""
-        src_ip = self.get('src_ip', rg, rg_type)
-        flow_size = self.get('flow_size', rg, rg_type)
+        src_ip = self.data.get_rows('src_ip', rg, rg_type)
+        flow_size = self.data.get_rows('flow_size', rg, rg_type)
         n = len(src_ip)
+        src_ip = [tuple(ip) for ip in src_ip]
         ct = Counter(src_ip)
         fea_total_flow = [ct[ip] for ip in self.unique_src_ip]
 

@@ -267,7 +267,7 @@ class StoDetector (WindowDetector):
         if rg_type == 'time':
             # import pdb;pdb.set_trace()
             st = self.record_data['winT'][win_idx]
-            sp, ep = self.data_file.data._get_where([st, st+win_size], rg_type)
+            sp, ep = self.data_file.data.get_where([st, st+win_size], rg_type)
         elif rg_type == 'flow':
             sp = interval * win_idx
             ep = interval * (win_idx+1)

@@ -125,5 +125,21 @@ def RawParseData(fileName):
     return sort_flow, FORMAT.keys()
 
 
+def ParseRecords(f_name, FORMAT):
+    flow = []
+    with open(f_name, 'r') as fid:
+        while True:
+            line = fid.readline()
+            if not line:
+                break
+            if line == '\n': # Ignore Blank Line
+                continue
+            item = re.split('[ :\->]', line) #FIXME need to be changed if want to use port information
+            f = tuple(h(item[pos]) for k, pos, h in FORMAT)
+            flow.append(f)
+    return flow
+
+
+
 if __name__ == "__main__":
     ParseData('./data/data3a.txt')
