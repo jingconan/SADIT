@@ -8,7 +8,7 @@ from sadit.util import del_none_key, np
 
 from . import StoDetector
 from .DetectorLib import I1, I2
-from .PLIdentify import PL_identify
+# from .PLIdentify import PL_identify
 from .PLRefine import HeuristicRefinePL
 
 def cal_I_rec(ref_pool, fb_PL, enable=None):
@@ -198,7 +198,7 @@ class PLManager(object):
         r = 0.5
         epsi = 0.001
         return HeuristicRefinePL(mf_D, lamb, gam, r, epsi), \
-                PL_identify(mb_D, lamb, gam, r, epsi)
+                HeuristicRefinePL(mb_D, lamb, gam, r, epsi)
 
 class RobustDetector(StoDetector.FBAnoDetector):
     """ Robust Detector is designed for dynamic network environment
