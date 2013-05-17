@@ -1,10 +1,7 @@
 #!/usr/bin/env sh
 rm ./Share/conf.dot
 rm ./Share/*.txt
-rm ./Simulator/*.txt
-rm -r ./Share/sens_*
-rm ./Share/BlindTest/*
-# rm *.txt
+# rm ./Simulator/*.txt
 rm res.dat
 
 find . -iname "__pycache__" -exec rm -r '{}' ';'

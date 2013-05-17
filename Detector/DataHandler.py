@@ -92,14 +92,14 @@ class QuantizeDataHandler(DataHandler):
         dist_to_center = [DF( unique_ip[i], center_pt[ unique_src_cluster[i] ]) for i in xrange(len(unique_ip))]
         self.dist_to_center_map = dict(zip(unique_ip, dist_to_center))
 
-    def get_min_max(self, feas):
-        min_vec = []
-        max_vec = []
-        for fea in feas:
-            dat = self.data.get_rows(fea)
-            min_vec.append(min(dat))
-            max_vec.append(max(dat))
-        return min_vec, max_vec
+    # def get_min_max(self, feas):
+    #     min_vec = []
+    #     max_vec = []
+    #     for fea in feas:
+    #         dat = self.data.get_rows(fea)
+    #         min_vec.append(min(dat))
+    #         max_vec.append(max(dat))
+    #     return min_vec, max_vec
 
     def _set_fea_range(self):
         """set the global range for the feature list, used for quantization"""
@@ -109,7 +109,7 @@ class QuantizeDataHandler(DataHandler):
 
         # min_vec = self.data.get_min(self.direct_fea_list)
         # max_vec = self.data.get_max(self.direct_fea_list)
-        min_vec, max_vec = self.get_min_max(self.direct_fea_list)
+        min_vec, max_vec = self.data.get_min_max(self.direct_fea_list)
 
         self.global_fea_range = [
                 [0, min_dist_to_center] + min_vec,
