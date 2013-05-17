@@ -55,11 +55,11 @@ data_handler_handle_map = {
 
 from .Data import *
 data_map = {
-        'fs': PreloadHardDiskFile,
-        # 'pcap2netflow': PreloadHardDiskFile_pcap2netflow,
-        'xflow': PreloadHardDiskFile_xflow,
+        'fs': HDF_FS,
+        'pcap2netflow': HDF_Pcap2netflow,
+        'flow_exporter': HDF_FlowExporter,
+        'xflow': HDF_Xflow,
         'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
-        'flow_exporter': PreloadHardDiskFile_FlowExporter,
         }
 
 def print_detector_help(type_):
