@@ -22,8 +22,10 @@ except ImportError:
 
 try:
     import _mysql as mysql
+    from MySQLdb.constants import FIELD_TYPE
 except ImportError:
     mysql = None
+    FIELD_TYPE = None
     print('--> [warning] cannot import sql related function, reading for sql server is not supported')
 
 

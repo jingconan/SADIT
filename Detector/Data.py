@@ -6,11 +6,13 @@ class Data(object):
     details of the data. it can be a file, a sql data base, and so on, as long
     as it supports the pure virtual methods defined here.
     """
-    def get_rows(self, rg=None, rg_type=None):
+    def get_rows(self, fields=None, rg=None, rg_type=None):
         """ get a slice of feature
 
         Parameters
         ---------------
+        fields : string or list of string
+            the fields we need to get
         rg : list of two floats
             is the range for the slice
         rg_type : str,  {'flow', 'time'}
@@ -147,7 +149,7 @@ class HDF_FS(PreloadHardDiskFile):
             ('src_port', 6, np.int16),
             ('dst_ip', 8, IP),
             ('dst_port', 9, np.int16),
-            ('protocol', 10, np.str_),
+            ('prot', 10, np.str_),
             ('node', 12, np.str_),
             ('duration', 13, np.float64),
             ('flow_size', 14, np.float64),
@@ -159,7 +161,7 @@ class HDF_FS(PreloadHardDiskFile):
         ('src_port', np.int16, 1),
         ('dst_ip', np.int16, (4,)),
         ('dst_port', np.int16, 1),
-        ('protocol', np.str_, 5),
+        ('prot', np.str_, 5),
         ('node', np.str_ , 5),
         ('duration', np.float64, 1),
         ('flow_size', np.float64, 1),
@@ -224,13 +226,12 @@ class HDF_Pcap2netflow(PreloadHardDiskFile):
 
 
 class HDF_FlowExporter(PreloadHardDiskFile):
-
     RE = '[ \n]'
     FORMAT = [
             ('start_time', 0, np.float64),
             ('src_ip', 1, IP),
             ('dst_ip', 2, IP),
-            ('protocol', 3, np.str_),
+            ('prot', 3, np.str_),
             ('flow_size', 4, np.float64),
             ('duration', 5, np.float64),
             ]
@@ -238,7 +239,7 @@ class HDF_FlowExporter(PreloadHardDiskFile):
             ('start_time', np.float64, 1),
             ('src_ip', np.int8, (4,)),
             ('dst_ip', np.int8, (4,)),
-            ('protocol', np.str_, 5),
+            ('prot', np.str_, 5),
             ('flow_size', np.float64, 1),
             ('duration', np.float64, 1),
         ])
@@ -267,7 +268,7 @@ def parse_complex_records(fileName, FORMAT, regular_expression):
 
 class HDF_Xflow(PreloadHardDiskFile):
     RE = ' '
-    DT = [
+    DTM = [
         ('start_time', np.float64, 1),
         ('proto', np.str_, 5),
         ('src_ip', np.int8, (4,)),
@@ -278,7 +279,8 @@ class HDF_Xflow(PreloadHardDiskFile):
         ('Sb', np.float64, 1),
         ('Sp', np.float64, 1),
         ]
-    fields = zip(*DT)[0]
+    fields = zip(*DTM)[0]
+    DT = np.dtype(DTM)
 
     port_str_to_int = lambda x: int(x[1:])
     attr_convert = lambda x: float( x.rsplit('=')[1].rsplit(',')[0] )
@@ -303,6 +305,19 @@ class HDF_Xflow(PreloadHardDiskFile):
     def parse(*argv, **kwargv):
         return parse_complex_records(*argv, **kwargv)
 
+
+class MySQLDatabase(Data):
+    CONV = {}
+    def __init__(self, cnf_file):
+        self.db = mysql.connect(read_default_file=cnf_file, conv=self.CONV)
+        print('successfully connected')
+        self._init()
+
+    def query(self, sentence):
+        self.db.query(sentence)
+        r = self.db.store_result()
+        return r.fetch_row(0)
+    pass
 ##############################################################
 ####  For simpleweb.org labled dataset, it is stored in ######
 ####  mysql server.                                     ######
@@ -310,40 +325,89 @@ class HDF_Xflow(PreloadHardDiskFile):
 ####  more information (trace 8)                        ######
 ##############################################################
 
-from sadit.util import mysql
+from sadit.util import mysql, FIELD_TYPE
 get_sec_msec = lambda x: [int(x), int( (x-int(x)) * 1e3)]
 
-class SQLFile_SperottoIPOM2009(Data):
-    """Data File wrapper for SperottoIPOM2009 format. it is store in mysql server, visit
-     http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
+def long_to_IP(n):
+    "convert long int to IP format with a tuple of four ints"
+
+    d = 256 * 256 * 256
+    q = []
+    while d > 0:
+        m,n = divmod(n,d)
+        q.append(m)
+        d = d // 256
+    return tuple(q)
+
+def convert(args, arg_num, handlers):
+    res = []
+    i = 0;
+    for n, h in zip(arg_num, handlers):
+        res.append(h(*args[i:(i+n)]))
+        i += n
+    return tuple(res)
+
+def to_secs(sec, msec):
+    return float("%s.%s"%(sec, msec))
+
+
+import itertools
+class SQLFile_SperottoIPOM2009(MySQLDatabase):
+    """Data File wrapper for SperottoIPOM2009 format.
+
+    it is store in mysql server, visit
+    http://traces.simpleweb.org/traces/netflow/netflow2/dataset_description.txt
+
+    +------------+----------------------+------+-----+---------+-------+
+    | Field      | Type                 | Null | Key | Default | Extra |
+    +------------+----------------------+------+-----+---------+-------+
+    | id         | int(10) unsigned     | NO   | PRI | 0       |       |
+    | src_ip     | bigint(20) unsigned  | NO   |     | NULL    |       |
+    | dst_ip     | bigint(20) unsigned  | NO   |     | NULL    |       |
+    | packets    | int(10) unsigned     | NO   |     | NULL    |       |
+    | octets     | int(10) unsigned     | NO   |     | NULL    |       |
+    | start_time | bigint(20) unsigned  | NO   |     | NULL    |       |
+    | start_msec | smallint(6)          | NO   |     | NULL    |       |
+    | end_time   | bigint(20) unsigned  | NO   |     | NULL    |       |
+    | end_msec   | smallint(6)          | NO   |     | NULL    |       |
+    | src_port   | smallint(5) unsigned | NO   |     | NULL    |       |
+    | dst_port   | smallint(5) unsigned | NO   |     | NULL    |       |
+    | tcp_flags  | tinyint(3) unsigned  | NO   |     | NULL    |       |
+    | prot       | tinyint(3) unsigned  | NO   |     | NULL    |       |
+    +------------+----------------------+------+-----+---------+-------+
+
     """
-    def __init__(self, spec):
-        self.db = _mysql.connect(**spec)
-        self.db = mysql.connect(**spec)
-        self._init()
+    CONV = {
+            FIELD_TYPE.INT24: int,
+            FIELD_TYPE.LONG: long,
+            FIELD_TYPE.LONGLONG: long,
+            }
+    TABLE = 'flows_test'
+
+    FORMAT = {
+            'start_time': (['start_time', 'start_msec'], to_secs),
+            'src_ip': (['src_ip'], long_to_IP),
+            'dst_ip': (['dst_ip'], long_to_IP),
+            'prot': (['prot'], str),
+            'packets': (['packets'], int),
+            }
+    fields = ['start_time', 'src_ip', 'dst_ip', 'prot', 'packets']
+
+    def _get_time(self, tp, seq):
+        time_tuple = self.query("""SELECT %s_time, %s_msec FROM flows WHERE (id = %d);"""\
+                %(tp, tp, seq))[0]
+        return float("%s.%s"%(time_tuple))
 
     def _init(self):
-        # select minimum time
-        self.db.query("""SELECT start_time, start_msec FROM flows WHERE (id = 1);""")
-        r = self.db.store_result()
-        self.min_time_tuple = r.fetch_row()[0]
-        self.min_time = float("%s.%s"%self.min_time_tuple)
+        self.min_time = self._get_time('start', 1)
+        self.row_num = self.select('MAX(id)')[0][0]
+        self.max_time = self._get_time('start', self.row_num)
 
-        self.db.query("""SELECT MAX(id) FROM flows;""")
-        r = self.db.store_result()
-        self.flow_num = int(r.fetch_row()[0][0])
-
-        self.db.query("""SELECT end_time, end_msec FROM flows WHERE (id = %d);"""%(self.flow_num))
-        r = self.db.store_result()
-
-        self.max_time_tuple = r.fetch_row()[0]
-        self.max_time = float("%s.%s"%self.max_time_tuple)
-
-    def _get_sql_where(self, rg=None, rg_type=None):
+    def get_where_SQL(self, rg=None, rg_type=None):
         if rg:
             if rg_type == 'flow':
                 SQL_SEN_WHERE = """ WHERE ( (id >= %f) AND (id < %f) )""" %tuple(rg)
-                if rg[0] > self.flow_num:
+                if rg[0] > self.row_num:
                     raise DataEndException("reach data end")
 
             elif rg_type == 'time':
@@ -361,28 +425,37 @@ class SQLFile_SperottoIPOM2009(Data):
             SQL_SEN_WHERE = ""
         return SQL_SEN_WHERE
 
-    def get_max(self, fea, rg=None, rg_type=None):
-        fea_str = ['MAX(%s)'%(f) for f in fea]
-        SQL_SEN = """SELECT %s FROM flows"""%(",".join(fea_str)) + self._get_sql_where(rg, rg_type) + ";"
-        self.db.query(SQL_SEN)
-        r = self.db.store_result().fetch_row(0)
-        return r[0]
+    def select(self, fields, rg=None, rg_type=None):
+        SQL_SEN = """SELECT %s FROM %s"""%(fields, self.TABLE) + \
+                    self.get_where_SQL(rg, rg_type) + ";"
+        # print('SQL_SEN', SQL_SEN)
+        return self.query(SQL_SEN)
 
-    def get_min(self, fea, rg=None, rg_type=None):
-        fea_str = ['MIN(%s)'%(f) for f in fea]
-        SQL_SEN = """SELECT %s FROM flows"""%(",".join(fea_str)) + self._get_sql_where(rg, rg_type) + ";"
-        self.db.query(SQL_SEN)
-        r = self.db.store_result().fetch_row(0)
-        return r[0]
-
-    def get_fea_slice(self, fea, rg=None, rg_type=None):
-        """this function is to get a chunk of feature vector.
-        The feature belongs flows within the range specified by **rg**
-        **rg_type** can be ['flow' | 'time' ].
+    def get_min_max(self, fea_list, rg=None, rg_type=None):
+        """  fea_list must be a lit
         """
-        SQL_SEN = """SELECT %s FROM flows"""%(",".join(fea)) + self._get_sql_where(rg, rg_type) + ";"
-        self.db.query(SQL_SEN)
-        result = self.db.store_result().fetch_row(0)
+        miN = self.select(','.join(['%s(%s)'%('MIN', f) for f in fea_list]))[0]
+        maX = self.select(','.join(['%s(%s)'%('MAX', f) for f in fea_list]))[0]
+        return list(miN), list(maX)
+
+    def get_rows(self, fea, rg=None, rg_type=None):
+        # get under fields
+        mod_flag = False
+        if isinstance(fea, str):
+            mod_flag = True
+            fea = [fea]
+
+        fields = list(itertools.chain(*[self.FORMAT[f][0] for f in fea]))
+        arg_num = list(len(self.FORMAT[f][0]) for f in fea)
+        handlers = list(self.FORMAT[f][1] for f in fea)
+
+        result = self.select(",".join(fields), rg, rg_type)
+        if mod_flag:
+            return [convert(r, arg_num, handlers)[0] for r in result]
+
+        return [convert(r, arg_num, handlers) for r in result]
+
+
         return result
 
 if __name__ == "__main__":

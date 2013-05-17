@@ -84,6 +84,7 @@ class QuantizeDataHandler(DataHandler):
     def _cluster_src_ip(self, cluster_num):
         src_ip_int_vec_tmp = self.data.get_rows('src_ip')
         src_ip_vec = [tuple(x) for x in src_ip_int_vec_tmp]
+
         unique_ip = list( set( src_ip_vec ) )
         # unique_src_cluster, center_pt = KMeans(unique_src_IP_vec_set, cluster_num, DF)
         unique_src_cluster, center_pt = KMedians(unique_ip, cluster_num, DF)
