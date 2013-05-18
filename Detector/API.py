@@ -59,7 +59,7 @@ data_map = {
         'pcap2netflow': HDF_Pcap2netflow,
         'flow_exporter': HDF_FlowExporter,
         'xflow': HDF_Xflow,
-        'SQLFile_SperottoIPOM2009': SQLFile_SperottoIPOM2009,
+        'Sperotto': SperottoIPOM,
         }
 
 def print_detector_help(type_):

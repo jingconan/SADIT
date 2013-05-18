@@ -198,21 +198,13 @@ class FBQuantizeDataHandler(QuantizeDataHandler):
         """get empirical measure"""
         q_fea_vec = self.quantize_fea(rg, rg_type )
         pmf = model_free( q_fea_vec, self.fea_QN )
-        # Pmb, mpmb = model_based( q_fea_vec, self.fea_QN )
         Pmb = model_based( q_fea_vec, self.fea_QN )
         return pmf, Pmb
-        # return pmf, Pmb, mpmb
 
 #######################################
 ## SVM Temporal Method Handler   ######
 #######################################
 from sadit.util import Counter
-# try:
-#     from collections import Counter
-# except ImportError:
-#     Counter = False
-
-# import operator
 class SVMTemporalHandler(QuantizeDataHandler):
     """Data Hanlder for SVM Temporal Detector approach. It use a set of features
     which will be defined here"""
@@ -274,6 +266,9 @@ class FakeDataHandler(object):
     def __init__(self, data, *args, **kwargs):
         self.data = data
 
+###################################################################
+# FIXME depreciated
+###################################################################
 
 from sadit.util import np
 from .DetectorLib import quantize_state
@@ -282,8 +277,6 @@ def regularize(val):
     max_ = np.max(val)
     min_ = np.min(val)
     return val if (max_ == min_) else (val - min_) / (max_ - min_)
-
-# FIXME depreciated
 class CombinedEM(object):
     """Combined model-free and model-based emperical measure
 
