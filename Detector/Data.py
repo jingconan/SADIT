@@ -85,7 +85,9 @@ def parse_records(f_name, FORMAT, regular_expression):
 
 IP = lambda x:tuple(int(v) for v in x.rsplit('.'))
 class PreloadHardDiskFile(Data):
-    """ abstract base class for hard disk file """
+    """ abstract base class for hard disk file The flow file into memory as a
+    whole, so it cannot deal with flow file larger than your memery
+    """
 
     RE = None
     """regular expression used to seperate each line into segments"""
@@ -222,7 +224,8 @@ def str_to_sec(ss, formats):
 
 
 class HDF_Pcap2netflow(PreloadHardDiskFile):
-    """Data generated pcap2netflow, softflowd and flowd-reader.
+    """Data generated pcap2netflow, (the
+   format of `flowd-reader <http://www.mindrot.org/projects/softflowd/>`_)
 
     for more information about pcap2netflow, please visit `pcap2netflow
         <https://bitbucket.org/hbhzwj/pcap2netflow>`_

@@ -18,13 +18,10 @@ For learning how to use SADIT, see also :ref:`user`.
 
 
 
-.. automodule:: sadit.Configure.mod_util
-
-.. autofunction:: sadit.Configure.mod_util.LoadValidIP
-
 .. toctree::
     :maxdepth: 2
 
+    intro.rst
     ./generated/sadit.rst
 
 ..

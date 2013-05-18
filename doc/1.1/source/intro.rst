@@ -19,7 +19,18 @@ in SADIT. Your help will be highly appreciated if you can contribute your own
 algorithm to the algorithm libray of SADIT. Feel free to contact me if you have
 any question.
 
-What's New
+What's New in 1.1
+==================================
+    - **More Flexible Configuration Script**: You can write the parameters in a
+      seperate config script and specify it with -c option.
+    - **Generation of Traffic For Dynamic Network**:  The distribution of flow
+      traffic and the arrival rate can change with time.
+    - **Robust Anomaly Detection Method**:  A new anomaly detection that can
+      work robustly in dynamic network environment has been added.
+    - **Faster Data Access Speed**. Use numpy.array to store data instead of list of list, which accelerate the problem by a large extend.
+    - **Better structure between classes**: 
+
+What's New in 1.0
 ==================================
 the version 1.0 is a result of big refactor of version 0.0. The refactor makes the code more
 scalable and less buggy.
@@ -36,6 +47,7 @@ scalable and less buggy.
       settings.py is a typical python module,changing it during the run is really not 
       a good idea. In this version, special Experiment is designed to support
       sensitivity analysis.
+
 
 Structure
 ================================
@@ -59,5 +71,316 @@ follow sections will describe the two parts accordingly.
     try to detect anomaly accordingly. In current version, the detector is based
     on one of our `paper <http://people.bu.edu/wangjing/html/AnomalyDetection.html>`_. Look at our `poster <http://people.bu.edu/wangjing/pdf/data_exfiltration-back.pdf>`_ for more information of our work.
 
+Collection of Anomaly Detection Algorithm
+------------------------------------
+All the detection algorithms locates in the *ROOT/Detector* folder:
+
+    - **SVMDetector.py** contains two SVM based anomaly detection algorithmes 
+      1. SVM Temporal Detector and 2. SVM Flow by Flow Detector.
+    - **StoDetector.py** contains two anomaly detection algorithms based on
+      Large Deviation Theory.
+    - **RobustDetect.py** contains a algorithm that works robustly under dynamic network environment.
+
+Labeled Flow Records Generator 
+------------------------------------
+Labeled Flow Records Generator consists of a *Configurer* and a *Simulator*.
+The *Simulator* part is essentially a revised `fs simulator
+<http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf>`_,
+developed by researchers at UW Madison. *Configurer* first generate a flow
+specification (DOT format) file with certain types of anomalies, then the
+*Simulator* will generate flow records and corresponding labels.
+
+Configurer
+++++++++++++++++++++++++++++++++++++
+*Configurer* generate the corresponding DOT file according to description of user
+behaviour. The important concepts in *Configurer* are as follows:
+
+    - **Generator**: description of a certain type of flow traffic. For
+      examples, *Harpoon* generator represents `harpoon flows
+      <http://cs.colgate.edu/~jsommers/harpoon/>`_.  
+    - **Behaviour**: description of temporal pattern. There are three types
+      behaviour:
+          - **Normal** behaviour is described by start time and duration.
+          - **I.I.D** behaviour has a list of possible states, but one state
+                       will be selected as current state every *t* seconds
+                       according to certain probability distribution.
+          - **Markov** the state in different time is not independtly and
+                       identically distributed,  but is a Markov process
+
+    - **Modulator**: combine *Behaviour* and *Generator*, basicially description
+      of generator behaviour. There are three types of modulators, corresponding
+      to three behaviours described above.
+      
+..    Two types of
+      modulator are supported: **Normal** and **Markov**. The normal modulator
+      is bascially the same with modulator in `fs simulator
+      <http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf>`_,
+      which is described by *(start, generator, profile)*.  We also implement a
+      markov modulator which has markov behaviour.
 
 
+    - **Node**: host in the network, has *modulator_list* attributes
+    - **Edge**: connecting two network nodes, has *delay*, *capacity* attributes
+    - **Network**: a collection of network nodes and edges
+    - **Anomaly**: description of the anomaly. When an anomaly is injected into
+      the network, some attributes in the network (*Node*, *Edge*) will be
+      changed.
+
+..
+    **Generator**, **Modulator** and **Behaviour** can completely decribe the
+    traffic of users. **Generator** describe the type of traffic. **Modulator**
+    describe the duration. And **Behaviour** describes the action of users take each
+    time.
+
+..  **Generator** and **Modulator** are concepts in `fs simulator.
+..  <http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf>`_. 
+..  every *t* second it will the use will choose from two *states*.
+
+Simulator
+++++++++++++++++++++++++++++++++++++
+Simulator is basically a revised version of fs simulator. We have added
+support to export anoumalous flows(add label information).
+
+
+
+
+Usage
+=====================================
+To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
+**settings.py** to the absolute path of the source directory. Then type ::
+
+To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
+**settings.py** to the absolute path of the source directory. Then type ::
+    $ ./sadit -h
+
+
+usage: sadit [--profile PROFILE] [-h] [experiment]
+
+sadit
+
+positional arguments:
+  experiment         print ./sadit <exper> -h for help of a experiment
+                     Avaliable experiments are [MultiSrvExperiment | Detect |
+                     DetectBatch | Eval | Sim | BaseExper | DetectCompare |
+                     SimDetect | Batch | GUITopoSim]
+
+optional arguments:
+  --profile PROFILE  profile the program
+  -h, --help         print help message and exit
+
+*experiment* specify the experiment you want to execute. An **experiment**
+is actually a subcommand that has certain functionality.
+
+Avaliable experiments are as follows:
+    - **Detect**: detect the flow record data specified by *-d* option
+    - **Sim**: simulate and generate flow records.
+    - **GUITopoSim** : simulate using network topogogy created by GUI
+      topology editor
+    - **SimDetect**: simulate and detect.
+    - **Eval**: Evaluation of the detection algorithmm (calculate fpr, fnr
+      and plot the ROC curve)
+    - **DetectBatch**: runs detection algortihms with all combinations of
+      parameters and outputs the results to a folder, helps to select the
+      optimal parameters.
+    - **DetectCompare**: run several detection algorithms and save the
+      intermediate results. Can also load results load computed before and
+      show comparison figure.
+
+
+To see the help message of an  experiment, just type ::
+    $ ./sadit -e <exper> -h
+
+Whenever you are not sure about the options you can set, just add *-h* to
+the end of command and execute it and help message will be printed
+correspondingly.
+
+
+
+Sample Configuration for Labeled Flow Generator
+-------------------------------------
+    - SimExample.py
+    - TimeVaringSimExample.py
+    - DTMarkovConfig.py
+    - CTMarkovConfig.py
+    - imalse/
+
+Sample Configuration for Detectors
+-------------------------------------
+    - DetectConfig.py
+    - DetectSQLConfig.py
+    - RobustDetect.py
+    - EvalConfig.py
+    - DetectBatchConfig.py
+
+
+Want to implement your algorithm?
+=====================================
+
+Use the labeled flow records generator in fs simulator
+-------------------------------------
+The generated flows will be the *ROOT/Simulator* folder. The flows end with
+*_flow.txt*, for example, n0_flow.txt is the network flows trough node 0.
+File start with *abnormal_* is the exported abnormal flows correspondingly.
+
+**A typical line is**
+    textexport n0 1348412129.925416 1348412129.925416 1348412130.070733 10.0.7.4:80->10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA
+
+**line format**
+    prefix nodename time flow_start_time flow_end_time src_ip:src_port->dst_ip:dst_port protocol payload destname unknown flowsize unknown
+
+After finishing your detection algorihms, the last thing you need to do is to
+add the corresponding class name to **detector_map** in *ROOT/Detector/API.py*.
+After that you will be able to use your detection algorithm. You can use
+**Compare** experiment to compare with other algorithm or **Eval** algorithm to
+Evaluate your algorithm. You can also implement new experiment to play with
+your new algorithm.
+
+
+Use Other flow records
+-------------------------------------
+SADIT does not only support the text output format of fs simulator, but also
+several other types of flow data. The data wrapper classes are defined in
+:mod:`sadit.Detector.Data` module and the handler classes locate in the :mod:`sadit.Detector.DataHandler` module.
+
+
+If you want use a new type of data, you need to implement a data wrapper class first.
+:mod:`sadit.Detector.Data.Data` is the base class for all data wrapper class.
+:mod:`sadit.Detector.Data.PreloadHardDiskFile` is the base class for all file-type
+data wrapper data.  :mod:`sadit.Detector.Data.MySQLDatabase` is the base class
+for all mysql database wrapper class.
+
+
+Optionally, you can implement a handler class that will manipulate the
+DataFile and and some useful quantities that may be useful to you algorithms.
+The data handler classes are defined in :mod:`sadit.Detector.DataHandler` module.
+:class:`sadit.Detector.DataHandler.QuantizeDataHandler` and its subclasses define
+`get_em()` function to get probability distribution of the flows, which is
+useful for the stochastic approaches. 
+If you just need the raw data, you can simple use :class:`sadit.Detector.DataHandler.FakeDataHandler`
+
+Then you just need to add your data_handler to **data_handler_handle_map**
+defined in *ROOT/Detector/API.py*
+
+Download 
+=====================================
+You can download sadit from `here <https://bitbucket.org/hbhzwj/sadit/get/2182e36f40d5.zip>`_.
+
+or you can user mercurial to get a complete copy with revision history ::
+
+    hg clone https://bitbucket.org/hbhzwj/sadit
+
+
+Installation
+=====================================
+
+SADIT can be installed in Linux, Mac OS X and Windows(through cygwin) with python 2.7
+
+Debain (Ubuntu, Mint, etc)
+-------------------------------------
+If you are using debain based system like Ubuntu, Mint, you are lucky. There
+is an installation script prepared for debain based system, just type ::
+    
+    sh debain.sh
+
+Mac OS X
+-------------------------------------
+For mac user, just type  ::
+    
+    sudo python setup-dep.py
+
+the **ipaddr**, **networkx**, **pydot**, **pyparsing** and **py-radix** will
+be automatically downloaded and installed.  If you just want to use the
+**Detector** part, that is already enough If you want to use **Configure** and
+**Simulator** part, then you also need to install numpy and matplotlib. Please
+go to http://www.scipy.org/NumPy and
+http://matplotlib.sourceforge.net/faq/installing_faq.html for installation
+instruction.
+
+Windows
+-------------------------------------
+SADIT can be installed on windows machine with the help of cgywin. There is a
+detailed step by step installation tutorial, click
+https://docs.google.com/open?id=0B0EiFkYoJWwbaloybWV5V1BuQVk
+
+Manually
+-------------------------------------
+If the automatical methods fail, you can try to install manually.  **SADIT**
+has been tested on python2.7.2.  SADIT depends on all softwares that
+fs-simulate depends on:
+
+    - ipaddr (2.1.1)  `Get <http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz>`_
+    - networkx (1.0) `Get <http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz>`_
+    - pydot (1.0.2) `Get <http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz>`_
+    - pyparsing (1.5.2) `Get <http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyparsing%2Ffiles%2Fpyparsing%2Fpyparsing-1.5.2%2F&ts=1332828745&use_mirror=softlayer>`_
+    - py-radix (0.5) `Get <http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz>`_
+
+besides: it requires:
+    - numpy `Get <http://numpy.scipy.org/>`_
+    - matplotlib `Get <http://matplotlib.sourceforge.net/>`_
+    - profilehooks `Get <http://mg.pov.lt/profilehooks/>`_
+
+if you are in debain based system. you can simple use ::
+
+    sudo apt-get install python-dev
+    sudo apt-get install python-numpy
+    sudo apt-get install python-matplotlib
+
+in other system, refer to corresponding website for installation
+of **numpy** and **matplotlib**
+
+
+Videos
+=====================================
+I have recorded several hand by hand video tutorials for SADIT 1.0. The usage
+of SADIT 1.1 is **a little bit different**, but I think these videos will still be
+useful. I will record new videos for latest version of SADIT when I have time.
+
+Installation
+-------------------------------------
+..  http://youtu.be/MS8jfJSPBn4
+.. raw:: html
+
+        <iframe width="560" height="315" src="http://www.youtube.com/embed/MS8jfJSPBn4" frameborder="0" allowfullscreen></iframe>
+
+Configuration After Installation
+-------------------------------------
+..  http://youtu.be/i87sXncx5KA
+.. raw:: html
+
+    <iframe width="560" height="315" src="http://www.youtube.com/embed/i87sXncx5KA" frameborder="0" allowfullscreen></iframe>
+
+Get Help Message
+-------------------------------------
+..  http://youtu.be/w-9kHeMcIZw
+.. raw:: html
+
+    <iframe width="560" height="315" src="http://www.youtube.com/embed/w-9kHeMcIZw" frameborder="0" allowfullscreen></iframe>
+
+Basic run and tune of parameters
+---------------------------------------
+..  http://youtu.be/w-9kHeMcIZ
+..  http://youtu.be/rAIJwZpIOjY
+
+.. raw:: html
+
+    <iframe width="420" height="315" src="http://www.youtube.com/embed/rAIJwZpIOjY" frameborder="0" allowfullscreen></iframe>
+
+Search for Good Parameters
+---------------------------------------
+..  http://youtu.be/0_9nAfdWt50
+.. raw:: html
+
+    <iframe width="560" height="315" src="http://www.youtube.com/embed/0_9nAfdWt50" frameborder="0" allowfullscreen></iframe>
+
+Generate Comparison Plot
+---------------------------------------
+..  http://youtu.be/zaQB0M5VpnM
+
+.. raw:: html
+
+    <iframe width="560" height="315" src="http://www.youtube.com/embed/zaQB0M5VpnM" frameborder="0" allowfullscreen></iframe>
+
+
+If you have no access to youtube, you can download the videos(all AVI format) in
+the following link(*it is hosted in Google Drive Server*).
+https://docs.google.com/open?id=0B9xGMLqrhlbdNE9UTFhSX2hUa2s

@@ -1,96 +1,117 @@
 Detector Package
 ================
-..
-.. autosummary::
-..
-    Data
-    DataHandler
-    SVMDetector
-    StoDetector
-    RobustDetector
-
-
-
-:mod:`Detector` Package
------------------------
-
 .. toctree::
     
     sadit.Detector.rst
 
-.. automodule:: sadit.Detector
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`API` Module
------------------
-
 .. automodule:: sadit.Detector.API
     :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`Base` Module
-------------------
-
-.. automodule:: sadit.Detector.Base
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 :mod:`Data` Module
 ------------------
-
 .. automodule:: sadit.Detector.Data
+
+.. autoclass:: sadit.Detector.Data.Data
     :members:
-    :undoc-members:
     :show-inheritance:
 
-:mod:`DataParser` Module
-------------------------
+`HardDisk File`
++++++++++++++++++++++++
 
-.. automodule:: sadit.Detector.DataParser
+.. autoclass:: sadit.Detector.Data.PreloadHardDiskFile
+    :members:
+    :show-inheritance:
+
+.. autoclass:: sadit.Detector.Data.HDF_FS
+    :members:
+    :show-inheritance:
+    :undoc-members:
+
+
+.. autoclass:: sadit.Detector.Data.HDF_Pcap2netflow
+    :show-inheritance:
     :members:
     :undoc-members:
+
+.. autoclass:: sadit.Detector.Data.HDF_FlowExporter
+    :members:
     :show-inheritance:
+    :undoc-members:
+
+.. autoclass:: sadit.Detector.Data.HDF_Xflow
+    :members:
+    :show-inheritance:
+    :undoc-members:
+
+ 
+`Database`
++++++++++++++++++++++++
+.. autoclass:: sadit.Detector.Data.MySQLDatabase
+    :members:
+    :show-inheritance:
+
+.. autoclass:: sadit.Detector.Data.SperottoIPOM
+    :members:
+    :show-inheritance:
+
 
 :mod:`DataHandler` Module
 -------------------------
 
 .. automodule:: sadit.Detector.DataHandler
+
+.. autosummary::
+
+    QuantizeDataHandler
+    ModelFreeQuantizeDataHandler
+    ModelBasedQuantizeDataHandler
+    FBQuantizeDataHandler
+    SVMTemporalHandler
+    FakeDataHandler
+
+.. autoclass:: sadit.Detector.DataHandler.DataHandler
     :members:
-    :undoc-members:
+    :show-inheritance:
+
+.. autoclass:: sadit.Detector.DataHandler.QuantizeDataHandler
+    :members:
+    :show-inheritance:
+
+.. autoclass:: sadit.Detector.DataHandler.ModelFreeQuantizeDataHandler
+    :members:
+    :show-inheritance:
+
+.. autoclass:: sadit.Detector.DataHandler.ModelBasedQuantizeDataHandler
+    :members:
+    :show-inheritance:
+
+
+.. autoclass:: sadit.Detector.DataHandler.FBQuantizeDataHandler
+    :members:
+    :show-inheritance:
+
+.. autoclass:: sadit.Detector.DataHandler.SVMTemporalHandler
+    :members:
+    :show-inheritance:
+
+
+.. autoclass:: sadit.Detector.DataHandler.FakeDataHandler
+    :members:
     :show-inheritance:
 
 
 :mod:`DetectorLib` Module
 -------------------------
-
 .. automodule:: sadit.Detector.DetectorLib
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`Ident` Module
--------------------
-
-.. automodule:: sadit.Detector.Ident
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-:mod:`SVMDetector` Module
--------------------------
-
-.. automodule:: sadit.Detector.SVMDetector
-    :members:
-    :undoc-members:
-    :show-inheritance:
+`Detector`
+----------------------
 
 :mod:`StoDetector` Module
--------------------------
++++++++++++++++++++++++++
 
 .. currentmodule:: sadit.Detector.StoDetector
 
@@ -107,13 +128,33 @@ Detector Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`Ident` Module
+*******************
+
+.. automodule:: sadit.Detector.Ident
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+
 :mod:`RobustDetector` Module
-----------------------------
+++++++++++++++++++++++++++++
 
 .. automodule:: sadit.Detector.RobustDetector
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+:mod:`SVMDetector` Module
++++++++++++++++++++++++++
+
+.. automodule:: sadit.Detector.SVMDetector
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 :mod:`mod_util` Module
 ----------------------
@@ -122,19 +163,3 @@ Detector Package
     :members:
     :undoc-members:
     :show-inheritance:
-
-:mod:`ClusterAlg` Module
-------------------------
-
-.. automodule:: sadit.Detector.ClusterAlg
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-Subpackages
------------
-
-.. toctree::
-
-    sadit.Detector.ART
-
