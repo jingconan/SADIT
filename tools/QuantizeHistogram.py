@@ -1,7 +1,9 @@
+#!/usr/bin/env python
 from __future__ import print_function, division, absolute_import
 import numpy as np
 from sadit.Detector.DataHandler import QuantizeDataHandler
-from sadit.Detector.Data import PreloadHardDiskFile
+from sadit.Detector.Data import HDF_FS
+from sadit.util import zload, zdump
 
 def identify_type(hist, bins, alpha1, alpha2):
     n = len(hist)
@@ -101,7 +103,9 @@ def gen_register_info(pattern, t, K, SK=None):
     # if len(p_period) > 0 or len(p_delta_t) > 0:
         # interval = SK if
         # p_start = np.arange(rg[0], max(p_period), max(p_delta_t)).tolist()
-    p_start = np.linspace(rg[0], max(p_period), SK).tolist()
+    print('p_period', p_period)
+    if p_period:
+        p_start = np.linspace(rg[0], max(p_period), SK).tolist()
 
     p_delta_t = merge_to_k(p_delta_t, K)
     p_period = merge_to_k(p_period, K)
@@ -126,17 +130,19 @@ def gen_register_info(pattern, t, K, SK=None):
 
     return ri
 
-
-
-def analyze_normal_pattern(t, qh, alpha1, alpha2):
+def analyze_normal_pattern(t, qh, alpha1, alpha2, bin_num, rg):
     """  analyze normal pattern
 
     Parameters
     ---------------
-    t : lisu
+    t : list
         start time of each flow
     qh : list of ints
         list of quantized state sequence.
+    bin_num : int
+        number of bins in histogram
+    rg : list
+        range for histogram
 
     Returns
     --------------
@@ -144,47 +150,48 @@ def analyze_normal_pattern(t, qh, alpha1, alpha2):
         each tuple is (tp, para), tp is the type of pattern. para is the
         parameters of the pattern
 
+    Notes
+    --------------
+    if pk_file_obj is not none, (hist_record, patterns) are dumped in the file
+        object
+
     """
     patterns = []
+    hist_record = []
     for q in set(qh):
         idx = np.nonzero(np.array(qh) == q)[0]
         ti = t[idx]
         dti = np.diff(ti)
-        hist, bins = np.histogram(dti, bins=30)
+        hist, bins = np.histogram(dti, bins=bin_num, range=rg)
         centers = (bins[:-1]+bins[1:])/2
         tp, para = identify_type(hist, centers, alpha1, alpha2)
         patterns.append((tp, para))
 
-    return gen_register_info(patterns, t, 3, 5)
+        hist_record.append((hist, bins))
 
-def plot_histo_gram(t, qh):
+    # if pk_file_obj: pk.dump(pk_file_obj, (hist_record, patterns))
+
+    return gen_register_info(patterns, t, 3, 5), patterns, hist_record
+
+def plot_histo_gram(f_name, rg):
     import matplotlib.pyplot as plt
     sfig = 420
     plt.figure()
-    for q in set(qh):
-        sfig += 1
-        idx = np.nonzero(np.array(qh) == q)[0]
-        ti = t[idx]
-        dti = np.diff(ti)
-        hist, bins = np.histogram(dti, bins=30)
-        tp, time = identify_type(hist, 0.2, 0.5)
-        print('time', time)
-        print('tp', tp)
+    patterns, hist_record = zload(f_name)
+    for hist, bins in hist_record:
         hist = hist[1:]
         bins = bins[1:]
         bins /= 3600
-        # nhi = hi/np.sum(hist)
         width = 0.7*(bins[1]-bins[0])
-        # plt.subplot(16, )
         plt.subplot(sfig)
         center = (bins[:-1]+bins[1:])/2
         plt.bar(center, hist, align = 'center', width = width)
-
+        plt.xlim([r/3600.0 for r in rg])
 
     plt.show()
 
-def main(f_name, desc, output):
-    data = PreloadHardDiskFile(f_name)
+def main(f_name, desc, output, hist_pk_f_name=None):
+    data = HDF_FS(f_name)
     qa = QuantizeDataHandler(data, desc)
     qh = qa.hash_quantized_fea(None, None)
     print('len(qh): ', len(qh))
@@ -193,7 +200,10 @@ def main(f_name, desc, output):
     tmin = min(t)
     t = np.array([v - tmin for v in t])
 
-    register_info = analyze_normal_pattern(t, qh, 0.1, 0.5)
+    register_info, patterns, hist_record = analyze_normal_pattern(t, qh, 0.1, 0.5, 30, [0, 20 * 3600])
+    if hist_pk_f_name:
+        zdump((patterns, hist_record), hist_pk_f_name)
+
     print('register_info', register_info)
     import json
     with open(output, 'w') as f:
@@ -219,14 +229,14 @@ if __name__ == "__main__":
             fea_option = {'dist_to_center':1, 'flow_size':8, 'cluster':1},
             )
 
-    main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizePeriod/n0_referece_normal.txt',
+    # main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizePeriod/n0_referece_normal.txt',
+    #     desc,
+    #     './flowsize.json',
+    #     './flowsize_hist.pk')
+
+    main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizeSlowDrift/n0_flow_reference.txt',
         desc,
-        './flowsize.json')
+        './flowsize_slow_drift.json',
+        './flowsize_slow_drift.pk')
     # import doctest
     # doctest.testmod()
-
-
-
-
-
-
