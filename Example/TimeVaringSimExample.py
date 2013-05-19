@@ -57,12 +57,10 @@ import numpy as np
 from numpy import loadtxt
 dis_interval = 3600
 shift1 =  {
-        # 'val' : '< ./misc/Robust_Data/traffic_val.txt',
-        # 'val' : 0.1 * loadtxt(ROOT  + '/misc/Robust_Data/traffic_val.txt'),
-        'val' : 1e3 * loadtxt(ROOT  + '/Example/traffic_val_a_week.txt'),
+        'flow_size_mean' : 1e3 * loadtxt(ROOT  + '/Example/traffic_val_a_week.txt'),
         'time' : np.array(range(168)) * 3600,
-        'base_type': 'flow_size_mean',
-        # 'base_type': 'flow_arrival_rate',
+        'base_type': ['flow_size_mean'],
+        # 'base_type': ['flow_arrival_rate'],
         }
 
 NORM_DESC = dict(

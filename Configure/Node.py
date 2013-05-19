@@ -156,6 +156,29 @@ class NNode(Node):
     def init_traffic_dynamic(self, norm_desc, dst_nodes):
         """  initialize normal traffic that is time varying
 
+        Parameters
+        ---------------------
+        norm_desc : dict
+            descriptor for normal traffic.
+            - start : str
+                start time for normal traffic
+            - sim_t : float
+                end time for normal traffic
+            - node_para : dict
+                specify the additional parameters
+                + states : list
+                    define the basedline distribution of flow size, flow
+                    arrival
+                + shifts : dict
+                    defines the change of normal traffic distributions. the
+                    parameters of traffic distribution is a function of time.
+                    shifts stores the values of those function at discrete
+                    values.
+                    * time : list
+                        discretized time
+                    * base_type : list
+
+
         Notes
         ----------------------------
         """
@@ -166,29 +189,34 @@ class NNode(Node):
         # start = Load(norm_desc['start'])
         # sv = shifts['val']
 
-        shifts_val = check_pipe_para(shifts['val'])
+        # shifts_val = check_pipe_para(shifts['val'])
         # print('shifts_val', shifts_val)
         shifts_time = check_pipe_para(shifts['time'])
         # print('shifts_time', shifts_time)
+        assert(isinstance(shifts['base_type'], list))
 
         def add_shifts_to_states(states, base_type, shift_val):
             """ sf:
                 - base_type:
                 - val:
             """
-            res = deepcopy(states)
-            for i in xrange(len(res)):
-                res[i][base_type] += '+ %f'%(shift_val)
-            return res
+            # res = deepcopy(states)
+            for i in xrange(len(states)):
+                states[i][base_type] += '+ %f'%(shift_val)
+            # return res
 
-        if len(shifts_time) != len(shifts_val):
-            raise Exception("shifts['val'] is wrong!!")
+        # if len(shifts_time) != len(shifts_val):
+        #     raise Exception("shifts['val'] is wrong!!")
 
         for node in dst_nodes:
-            for i in xrange(len(shifts_val) - 1): # each discretized interval
-                shifted_states = add_shifts_to_states(states,
-                        shifts['base_type'],
-                        shifts_val[i])
+            for i in xrange(len(shifts_time) - 1): # each discretized interval
+
+                # create shifted_states
+                shifted_states  = deepcopy(states)
+                for base_type in shifts['base_type']:
+                    add_shifts_to_states(shifted_states,
+                            base_type,
+                            shifts[base_type][i])
 
                 pf = ((shifts_time[i+1] - shifts_time[i], ), (1,))
                 gl = self._get_generator_list(node, shifted_states)
