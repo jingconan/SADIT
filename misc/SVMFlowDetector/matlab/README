@@ -1,9 +1,0 @@
-This original matlab code written by R Taylor Lockle. <rtl@bu.edu>
-for those who are familar with MATLAB.
-email from Taylor illustrating these code:
-
-Example Matlab code is attached. It requires libsvm to run (http://www.csie.ntu.edu.tw/~cjlin/libsvm/). The code is for the large flow size anomaly cases you sent to me. readtraintest.m reads the fs flows, trains the one-class SVM, and tests it. 
-
-The features for this case are sort of special. The first n elements of the feature vector are the number of occurances of each IP address within a time window, the second n elements are the number of large sized flows. 
-
-The flow-by-flow detector would be very similar, but instead of tabulating flows that occur within a window, you would just make the single flow features described in the draft of the paper.
