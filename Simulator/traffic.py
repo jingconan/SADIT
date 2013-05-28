@@ -12,8 +12,7 @@ import re
 import logging
 import random
 
-# sys.path.append("..")
-# import settings
+sys.path.append("../..")
 from sadit import settings
 from sadit.util import zload
 
