@@ -28,7 +28,8 @@ What's New in 1.1
     - **Robust Anomaly Detection Method**:  A new anomaly detection that can
       work robustly in dynamic network environment has been added.
     - **Faster Data Access Speed**. Use numpy.array to store data instead of list of list, which accelerate the problem by a large extend.
-    - **Better structure between classes**: 
+    - **Check Data and Reference data can be different files**.
+    - **Better structure of classes**
 
 What's New in 1.0
 ==================================
@@ -148,9 +149,6 @@ Usage
 =====================================
 To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
 **settings.py** to the absolute path of the source directory. Then type ::
-
-To run SADIT, just go to the diretory of SADIT source code, change ROOT variable in
-**settings.py** to the absolute path of the source directory. Then type ::
     $ ./sadit -h
 
 
@@ -204,6 +202,10 @@ Sample Configuration for Labeled Flow Generator
     - CTMarkovConfig.py
     - imalse/
 
+Example Commands ::
+
+    $ ./sadit Sim -c <ConfigFilePath>
+
 Sample Configuration for Detectors
 -------------------------------------
     - DetectConfig.py
@@ -212,6 +214,14 @@ Sample Configuration for Detectors
     - EvalConfig.py
     - DetectBatchConfig.py
 
+Examples commands ::
+
+    $ ./sadit Detect -c Example/DetectConfig.py -d <data_file> -m <method_name>
+    $ ./sadit Detect -c ./Example/RobustDetect.py -d ./Simulator/n0_flow.txt -m robust --lamb=1 --pic_show
+    $ ./sadit DetectBatch -c DetectBatchConfig.py -h
+    $ ./sadit Eval -c EvalConfig.py -h
+
+Note: You may need to change the ROOT variable in the configuration files before run these commands.
 
 Want to implement your algorithm?
 =====================================
