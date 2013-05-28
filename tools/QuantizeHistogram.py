@@ -67,7 +67,25 @@ def merge_to_k(vals, K):
 
     return vals
 
-def gen_register_info(pattern, t, K, SK=None):
+def gen_register_info(pattern, time_rg, K, SK=None):
+    """  generate *register_info* string for further detection.
+
+    Parameters
+    ---------------
+    pattern : list of tuple
+        each tuple consist of (tp, para), tp can be {'Period', 'SlowDrift'},
+        Para[0] is the delta_t. if tp == 'Period', para[1] will be `period`.
+    time_rg : list
+        time range of the simulation
+    K : int
+        the maximum number of possible values for each parameters except for
+        `p_start`. Used to restrict the number of PLs.
+    SK : int
+        the maximum number of possible values for `p_start`.
+
+    Returns
+    --------------
+    """
     ri = {
             'PeriodStaticDetector' : {
                 'type' : 'static',
@@ -98,14 +116,14 @@ def gen_register_info(pattern, t, K, SK=None):
         elif tp == "SlowDrift":
             s_delta_t.append(para[0])
 
-    rg = [min(t), max(t)]
+    # rg = [min(t), max(t)]
     p_start = []
     # if len(p_period) > 0 or len(p_delta_t) > 0:
         # interval = SK if
         # p_start = np.arange(rg[0], max(p_period), max(p_delta_t)).tolist()
     print('p_period', p_period)
     if p_period:
-        p_start = np.linspace(rg[0], max(p_period), SK).tolist()
+        p_start = np.linspace(time_rg[0], max(p_period), SK).tolist()
 
     p_delta_t = merge_to_k(p_delta_t, K)
     p_period = merge_to_k(p_period, K)
@@ -119,7 +137,7 @@ def gen_register_info(pattern, t, K, SK=None):
     # s_start = []
     # if len(s_delta_t) > 0:
         # s_start = np.arange(rg[0], rg[1], max(s_delta_t)).tolist()
-    s_start = np.linspace(rg[0], rg[1], SK).tolist()
+    s_start = np.linspace(time_rg[0], time_rg[1], SK).tolist()
 
     s_delta_t = merge_to_k(s_delta_t, K)
     # import ipdb;ipdb.set_trace()
@@ -171,7 +189,7 @@ def analyze_normal_pattern(t, qh, alpha1, alpha2, bin_num, rg):
 
     # if pk_file_obj: pk.dump(pk_file_obj, (hist_record, patterns))
 
-    return gen_register_info(patterns, t, 3, 5), patterns, hist_record
+    return gen_register_info(patterns, [min(t), max(t)], 3, 5), patterns, hist_record
 
 def plot_histo_gram(f_name, rg):
     import matplotlib.pyplot as plt
@@ -234,9 +252,17 @@ if __name__ == "__main__":
     #     './flowsize.json',
     #     './flowsize_hist.pk')
 
-    main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizeSlowDrift/n0_flow_reference.txt',
+    main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizeArrivalBothPeriod0_8/n0_flow_reference.txt',
         desc,
-        './flowsize_slow_drift.json',
-        './flowsize_slow_drift.pk')
+        './flowsizeArrival.json',
+        './flowsizeArrival_hist.pk')
+
+
+
+    # main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizeSlowDrift/n0_flow_reference.txt',
+    # main('../../CyberSecurity/Robust_Method/PaperSimulation/FlowSizeArrivalBothPeriod0_8/n0_flow_reference.txt',
+        # desc,
+        # './flowsize_slow_drift.json',
+        # './flowsize_slow_drift.pk')
     # import doctest
     # doctest.testmod()
