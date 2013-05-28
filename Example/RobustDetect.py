@@ -10,18 +10,19 @@ DETECTOR_DESC = dict(
         method = 'robust',
         # method = 'mfmb',
         # data = './Simulator/n0_flow.txt',
-        interval=1000,
-        win_size=1000,
+        ref_scheck = 'dump',
+        interval=100,
+        win_size=100,
         win_type='time', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate
         false_alarm_rate = 0.001,
         unified_nominal_pdf = False, # used in sensitivities analysis
         fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':2},
         # fea_option = {'dist_to_center':1, 'flow_size':2, 'cluster':1},
+        dump_folder = ROOT + 'res/',
         ano_ana_data_file = ANO_ANA_DATA_FILE,
-        # normal_rg = [100000, 500000],
-        normal_rg = [300000, 500000],
-        # ref_data = 'Simulator/n0_flow.txt',
+        normal_rg = None,
+        ref_data = ROOT + 'Simulator/n0_flow.txt',
         # normal_rg = None,
         detector_type = 'mfmb',
         max_detect_num = None,
@@ -38,35 +39,27 @@ DETECTOR_DESC = dict(
             'FBAnoDetector' : {
                 'type' : 'static',
                 'para' : {
-                    # 'normal_rg' : [100000, 500000],
-                    'normal_rg' : [300000, 500000],
-                    # 'fea_option' : [
-                        # {'dist_to_center':1, 'flow_size':2, 'cluster':1},
-                        # {'dist_to_center':1, 'flow_size':3, 'cluster':1},
-                        # {'dist_to_center':1, 'flow_size':4, 'cluster':1},
-                        # {'dist_to_center':1, 'flow_size':5, 'cluster':1},
-                        # ]
-                    } #FIXME
+                    'normal_rg' : None,
+                    },
+                'para_type' : 'product',
                 },
             'PeriodStaticDetector' : {
                 'type' : 'static',
                 'para' :  {
-                    'period':np.array([24]) * 3600,
-                    # 'period':np.array([24, 12, 6, 48]) * 3600,
-                    # 'start':np.array([0]) * 3600,
+                    'period':[10, 100, 1000],
                     'start': [30],
-                    # 'start':np.linspace(3e5, 24, 3) * 3600,
-                    # 'delta_t':[10000, 20000],
                     'delta_t':[1000],
                     },
+                'para_type' : 'product',
                 },
             'SlowDriftStaticDetector' : {
                 'type' : 'static',
                 'para' : {
                     # 'start':np.arange(1, 168, 6) * 3600,
-                    'start':np.linspace(3e5, 5e5, 6),
-                    'delta_t':[3e3, 1e4]
+                    'start':np.linspace(1, 3000, 3),
+                    'delta_t':[100, 300]
                     },
+                'para_type' : 'product',
                 },
             },
 
