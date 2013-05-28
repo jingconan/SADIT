@@ -273,9 +273,9 @@ defined in *ROOT/Detector/API.py*
 
 Download 
 =====================================
-You can download sadit from `here <https://bitbucket.org/hbhzwj/sadit/get/2182e36f40d5.zip>`_.
+You can download sadit 1.1.0 from `here <https://bitbucket.org/hbhzwj/sadit/downloads/sadit_1.0.0.zip>`_.
 
-or you can user mercurial to get a complete copy with revision history ::
+or you can user mercurial to get the lastest copy of sadit with revision history ::
 
     hg clone https://bitbucket.org/hbhzwj/sadit
 

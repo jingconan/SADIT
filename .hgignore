@@ -19,6 +19,10 @@ coords.txt
 anomolies.txt
 doc/1.1/build/html/*
 doc/sphinx/build/
-*/.UNDO/*
-*/.ropeproject/*
+**.UNDO/*
+**.ropeproject/*
 */build/*
+**.swp
+para_comp.sh
+makefile
+test.sh
