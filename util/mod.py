@@ -9,10 +9,16 @@ except ImportError:
     print('--> [wanring], no numpy, some funcationality may be affected')
 
 try:
-    import matplotlib.pyplot as plt
+    # import matplotlib.pyplot as plt
+    import guiqwt.pyplot as plt
+    print('--> Use [guiqwt] as plot backend')
 except ImportError:
-    plt = None
-    print('--> [wanring], no matplotlib, some funcationality may be affected')
+    try:
+        import guiqwt.pyplot as plt
+        print('--> , Use [matplotlib] as plot backend')
+    except ImportError:
+        plt = None
+        print('--> [wanring], no [guiqwt] and [matplotlib], cannot visualize the result')
 
 try:
     from collections import Counter

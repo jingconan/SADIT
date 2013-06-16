@@ -468,7 +468,7 @@ class FBAnoDetector(StoDetector):
                 title_ = title_[1],
                 pic_name=None, pic_show=False,
                 *args, **kwargs)
-        if pic_name: plt.savefig(pic_name)
+        if pic_name and not plt.__name__.startswith("guiqwt"): plt.savefig(pic_name)
         if pic_show: plt.show()
 
 
