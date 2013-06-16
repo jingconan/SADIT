@@ -25,7 +25,16 @@ try:
     from MySQLdb.constants import FIELD_TYPE
 except ImportError:
     mysql = None
-    FIELD_TYPE = None
+    # FIELD_TYPE = object
+    # FIELD_TYPE = object
+
+    from Namespace import Namespace
+    FIELD_TYPE = Namespace({
+            'INT24': None,
+            'LONG': None,
+            'LONGLONG': None
+        })
+
     print('--> [warning] cannot import sql related function, reading for sql server is not supported')
 
 
