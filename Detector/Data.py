@@ -192,7 +192,7 @@ class HDF_FS(PreloadHardDiskFile):
     DT = np.dtype([
         ('start_time', np.float64, 1),
         ('end_time', np.float64, 1),
-        ('src_ip', np.int8, (4,)),
+        ('src_ip', np.uint8, (4,)),
         ('src_port', np.int16, 1),
         ('dst_ip', np.int16, (4,)),
         ('dst_port', np.int16, 1),
@@ -253,9 +253,9 @@ class HDF_Pcap2netflow(PreloadHardDiskFile):
             ]
     DT = np.dtype([
             ('start_time', np.float64, 1),
-            ('src_ip', np.int8, (4,)),
+            ('src_ip', np.uint8, (4,)),
             ('src_port', np.int16, 1),
-            ('dst_ip', np.int8, (4,)),
+            ('dst_ip', np.uint8, (4,)),
             ('dst_port', np.int16, 1),
             ('packets', np.int64, 1),
             ('octets', np.int64, 1),
@@ -279,8 +279,8 @@ class HDF_FlowExporter(PreloadHardDiskFile):
             ]
     DT = np.dtype([
             ('start_time', np.float64, 1),
-            ('src_ip', np.int8, (4,)),
-            ('dst_ip', np.int8, (4,)),
+            ('src_ip', np.uint8, (4,)),
+            ('dst_ip', np.uint8, (4,)),
             ('prot', np.str_, 5),
             ('flow_size', np.float64, 1),
             ('duration', np.float64, 1),
@@ -316,9 +316,9 @@ class HDF_Xflow(PreloadHardDiskFile):
     DTM = [
         ('start_time', np.float64, 1),
         ('proto', np.str_, 5),
-        ('src_ip', np.int8, (4,)),
+        ('src_ip', np.uint8, (4,)),
         ('direction', np.str_, 5),
-        ('server_ip', np.int8, (4,)),
+        ('server_ip', np.uint8, (4,)),
         ('Cb', np.float64, 1),
         ('Cp', np.float64, 1),
         ('Sb', np.float64, 1),
