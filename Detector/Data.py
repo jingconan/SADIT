@@ -161,6 +161,12 @@ class PreloadHardDiskFile(Data):
         sp, ep = self.get_where(rg, rg_type)
         return self.table[sp:ep][fields]
 
+    def get_index(self, flows_t):
+        """  flows_t is the timestampe of a subset of flows. This function
+        returns the index of corresponding flows.
+        """
+        return np.searchsorted(self.t, flows_t)
+
     def get_min_max(self, feas):
         min_vec = []
         max_vec = []
