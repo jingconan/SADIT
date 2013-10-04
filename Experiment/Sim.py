@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-"""  Simualtion Onlay
-
+"""  Simualtion to generate the flow data
 """
 from BaseExper import BaseExper
 from Configure import gen_dot
 from os import chdir as cd
 from os import system as sh
 import os.path
+
 
 class Sim(BaseExper):
     """
@@ -23,12 +23,7 @@ class Sim(BaseExper):
     def __init__(self, argv):
         super(Sim, self).__init__(argv)
 
-        # if self.args.config is None:
-        #     self.parser.print_help()
-        #     import sys; sys.exit(0)
-
         self.ano_list = self.args.config['ANO_LIST']
-        # self.net_desc = self.args.config['NET_DESC']
         self.net_desc = self.args.config.get('NET_DESC')
         # self.dot_file = self.args.config['OUTPUT_DOT_FILE']
         self.norm_desc = self.args.config['NORM_DESC']
@@ -38,12 +33,12 @@ class Sim(BaseExper):
     def init_parser(self, parser):
         super(Sim, self).init_parser(parser)
         parser.add_argument('--dot', default=self.ROOT + '/Share/conf.dot',
-                type = os.path.abspath,
-                help = """output dot file""")
+                            type=os.path.abspath,
+                            help="""output dot file""")
 
         parser.add_argument('--export_ano', default=True,
-                type = bool,
-                help = """[true|false]whether to export abnormal flows or not""")
+                            type=bool,
+                            help="""[true|false]whether to export abnormal flows or not""")
 
     def configure(self):
         gen_dot(self.ano_list, self.net_desc, self.norm_desc,
@@ -52,7 +47,7 @@ class Sim(BaseExper):
     def simulate(self):
         os.environ['EXPORT_ABNORMAL_FLOW'] = 'TRUE' if self.args.export_ano else 'FALSE'
         cd(self.ROOT + '/Simulator')
-        sh('python fs.py %s -t %d' %(self.dot_file, self.sim_t) )
+        sh('python fs.py %s -t %d' % (self.dot_file, self.sim_t))
         cd(self.ROOT)
 
     def run(self):

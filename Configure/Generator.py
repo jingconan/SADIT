@@ -78,7 +78,6 @@ class HarpoonG(Generator):
             if isinstance(ratio, str):
                 tp = ratio[0]
                 r = float(ratio[1:])
-                print('tp', tp)
                 if tp is '=':
                     new.para[attr.lower()] = r
                 elif tp is '+':
