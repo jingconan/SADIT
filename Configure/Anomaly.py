@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 from __future__ import print_function, division, absolute_import
-from sadit import settings
+import os
 from sadit.util import Load
 from sadit.util import zdump
 from .mod_util import choose_ip_addr
+
+
+EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE']
+
 
 # from numpy import cumsum, diff
 def cumsum(it):
@@ -308,14 +312,14 @@ class Anomaly(object):
         Notes
         -------------------
         Will dump the parameter data to the
-        **settings.EXPORT_ABNORMAL_FLOW_PARA_FILE**
+        **EXPORT_ABNORMAL_FLOW_PARA_FILE**
 
         """
         assert(len(new_generator_list) == 1)
         new_generator = new_generator_list[0]
         ano_flow_para = copy.deepcopy(new_generator.para)
         ano_flow_para['ano_type'] = self.ano_desc['anoType']
-        zdump(ano_flow_para, settings.EXPORT_ABNORMAL_FLOW_PARA_FILE) # For export abnormal flows
+        zdump(ano_flow_para, EXPORT_ABNORMAL_FLOW_PARA_FILE) # For export abnormal flows
 
     def run(self, net):
         """inject itself into the network
@@ -438,7 +442,7 @@ class AtypicalUserAnomaly(Anomaly):
         self._config_traffic()
 
     def _export_ip_addr(self):
-        fid = open(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')
+        fid = open(EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')
         fid.write( ' '.join([str(i) for i in self.ano_node.ipdests]) )
         fid.close()
 
@@ -448,7 +452,7 @@ class AtypicalUserAnomaly(Anomaly):
 
     def run(self, net):
         '''will add a node for atypical user to the network.
-        The IP address for atypical user is selected from. settings.atypical_ip_file'''
+        The IP address for atypical user is selected from. atypical_ip_file'''
         self.net = net
         self._get_ano_node()
         net.add_node(self.ano_node)

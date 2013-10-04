@@ -2,8 +2,12 @@
 from __future__ import print_function, division, absolute_import
 from .Anomaly import Anomaly
 from sadit.util import zdump
-from sadit import settings
+import os
 import copy
+
+
+EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE']
+
 
 class MarkovAnomaly(Anomaly):
     def del_mod(self, node, m_id, mod):
@@ -22,4 +26,4 @@ class MarkovAnomaly(Anomaly):
     def export_ano_flow_para(self):
         self.ano_flow_para = copy.deepcopy(self.ano_desc)
         self.ano_flow_para['ano_node_ipdests'] = self.ano_node.ipdests
-        zdump(self.ano_flow_para, settings.EXPORT_ABNORMAL_FLOW_PARA_FILE) # For export abnormal flows
+        zdump(self.ano_flow_para, EXPORT_ABNORMAL_FLOW_PARA_FILE) # For export abnormal flows

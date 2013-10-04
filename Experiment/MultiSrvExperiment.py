@@ -3,9 +3,6 @@
 test the alogirithm
 """
 import sys
-sys.path.append("..")
-import settings
-# from DetectExper import DetectExper
 import numpy as np
 from Detector import detect
 from Detect import Detect
@@ -118,9 +115,4 @@ class MultiSrvExperiment(Detect):
         detect(flow_file, settings.DETECTOR_DESC)
         # detect(flow_file, 30, self.fea_option, self.detector_type)
 
-if __name__ == "__main__":
-    exper = MultiSrvExperiment(settings)
-    exper.configure()
-    exper.simulate()
-    # exper.detect()
-    exper.ms_detect()
+

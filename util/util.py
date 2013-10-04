@@ -106,23 +106,6 @@ def Dump2Txt(var, fname, op):
     fid.close()
 
 
-# import imp
-# def CreateSettings(templateFilePath, settingsFilePath, **kwargs):
-#     '''settings.py is a file contains all the global parameters.
-#     Sometimes we need to do the sensitivity analysis and need to change the global
-#     parameter on the fly. CreateSetting will faciliate the process through generating
-#     settings.py based on a template file.
-#     file.
-#     '''
-#     settings_template = imp.load_source('settings_template', templateFilePath)
-#     namespace = settings_template.__dict__
-#     for k, v in kwargs.iteritems():
-#         namespace[k] = v
-#     PrintVar(namespace, settingsFilePath)
-
-# import types
-# imports = 'types', 'sys', 'PrintVar', 'os', 'settings'
-
 try:
     import numpy as np
     from numpy import arange, pi, linspace

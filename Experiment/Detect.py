@@ -5,7 +5,6 @@ from __future__ import print_function, division, absolute_import
 import os
 import copy
 from sadit.util import update_not_none
-# import settings
 from sadit.Detector import detect
 from sadit.Detector.API import print_detector_help
 

@@ -41,11 +41,16 @@ class Sim(BaseExper):
                 type = os.path.abspath,
                 help = """output dot file""")
 
+        parser.add_argument('--export_ano', default=True,
+                type = bool,
+                help = """[true|false]whether to export abnormal flows or not""")
+
     def configure(self):
         gen_dot(self.ano_list, self.net_desc, self.norm_desc,
                 self.dot_file)
 
     def simulate(self):
+        os.environ['EXPORT_ABNORMAL_FLOW'] = 'TRUE' if self.args.export_ano else 'FALSE'
         cd(self.ROOT + '/Simulator')
         sh('python fs.py %s -t %d' %(self.dot_file, self.sim_t) )
         cd(self.ROOT)

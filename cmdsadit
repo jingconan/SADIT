@@ -1,13 +1,22 @@
 #!/usr/bin/python -B
 #!/usr/bin/env python -B
 from __future__ import print_function, division
-import settings
-import sys, os, argparse
-sys.path.insert(0, settings.ROOT)
-sys.path.insert(0, settings.ROOT + '/..')
+import sys
+import os
+import argparse
+ROOT = os.environ.get('SADIT_ROOT')
+if ROOT is None:
+    print('please set <SADIT_ROOT> variable in bash')
+    sys.exit()
+
+os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE'] = ROOT + '/Share/ano_flow_para.txt'
+os.environ['SVM_FOLDER'] = ROOT + '/tools/libsvm-3.12'
+sys.path.insert(0, ROOT)
+sys.path.insert(0, ROOT.rstrip('sadit'))
+
 # Get experiment options
-exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/') \
-        if f_name.lower().endswith('py') and not f_name.startswith('__')]
+exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/')
+             if f_name.lower().endswith('py') and not f_name.startswith('__')]
 
 # from Detector.API import detector_map
 

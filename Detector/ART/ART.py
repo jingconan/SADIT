@@ -3,11 +3,12 @@ from subprocess import check_call as call
 import os
 from sadit.util import zdump, zload
 from sadit.util import plt
-from sadit import settings
 from sadit.Detector.mod_util import plot_points
 
+ROOT = os.environ['SADIT_ROOT']
+
 class ARTDetector(object):
-    ROOT = settings.ROOT
+    ROOT = ROOT
     HOME = ROOT + '/Detector/ART'
     inter_csv_data = HOME + '/output.csv'
     def __init__(self, desc={}):

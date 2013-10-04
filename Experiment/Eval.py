@@ -401,24 +401,3 @@ sensitivity: %f\tspecificity: %f
         # evaluate hoeffding test rule
         false_alarm_rate = self.desc['false_alarm_rate']
         self.eval_hoeffding(false_alarm_rate)
-
-
-if __name__ == "__main__":
-    import settings
-    exper = Eval(settings)
-    # exper.configure()
-    # exper.simulate()
-    exper.detect()
-
-    exper.compare_ident_method()
-    exper.plot_roc_curve_ident()
-    # exper._vis_eval_diff_ab_state_num()
-
-    # exper.eval_diff_ab_win_num()
-    # exper.plot_roc_curve()
-    # exper.plot_roc_curve_seperate()
-
-    # exper.eval_mutiple()
-    # exper.eval_hoeffding()
-    # detector.plot_entropy()
-

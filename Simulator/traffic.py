@@ -12,8 +12,12 @@ import re
 import logging
 import random
 
-sys.path.append("../..")
-from sadit import settings
+# sys.path.append("../..")
+import os
+EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE']
+EXPORT_ABNORMAL_FLOW = os.environ['EXPORT_ABNORMAL_FLOW']
+ROOT = os.environ['SADIT_ROOT']
+sys.path.insert(0, ROOT.rstrip('sadit'))
 from sadit.util import zload
 
 haveIPAddrGen = False
@@ -359,13 +363,12 @@ class HarpoonGeneratorNode(GeneratorNode):
 
         self.anoFlag = False
         # import ipdb;ipdb.set_trace()
-        if settings.EXPORT_ABNORMAL_FLOW:
+        if EXPORT_ABNORMAL_FLOW == 'TRUE':
             self.set_ano_flag(flowsize, flowstart, ipsrc)
 
     def set_ano_flag(self, flowsize, flowstart, ipsrc):
         """set whether it is a abonormal generator or normal generator. Several things that
         need to be highlighted
-            - the configure must be in settings.py
             - only support *flow_size_mean*, *flow_arrival_rate*
         """
         # assert( len(settings.ANO_LIST) == 1) # only support export for single anomaly
@@ -377,7 +380,7 @@ class HarpoonGeneratorNode(GeneratorNode):
                 'flow_arrival_rate':p_interval
                 }
         try:
-            data = zload(settings.EXPORT_ABNORMAL_FLOW_PARA_FILE)
+            data = zload(EXPORT_ABNORMAL_FLOW_PARA_FILE)
         except IOError:
             # import sys
             # print sys.exc_info()[0]

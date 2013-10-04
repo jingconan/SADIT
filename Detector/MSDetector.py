@@ -11,8 +11,6 @@ in this case.
 
 import sys
 sys.path.append("..")
-import settings
-
 from Detector import *
 
 # from settings import ROOT

@@ -2,8 +2,8 @@
 This file is the flow by flow svm detector
 """
 from __future__ import print_function, division, absolute_import
-from sadit import settings
-SVM_FOLDER = settings.SVM_FOLDER
+import os
+SVM_FOLDER = os.environ['SVM_FOLDER']
 
 import subprocess
 import argparse
