@@ -9,12 +9,12 @@ except ImportError:
     print('--> [wanring], no numpy, some funcationality may be affected')
 
 try:
-    # import matplotlib.pyplot as plt
     import guiqwt.pyplot as plt
     print('--> Use [guiqwt] as plot backend')
 except ImportError:
     try:
-        import guiqwt.pyplot as plt
+        import matplotlib.pyplot as plt
+        # import guiqwt.pyplot as plt
         print('--> Use [matplotlib] as plot backend')
     except ImportError:
         plt = None
