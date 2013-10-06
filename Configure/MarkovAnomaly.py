@@ -6,7 +6,7 @@ import os
 import copy
 
 
-EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE']
+EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ.get('EXPORT_ABNORMAL_FLOW_PARA_FILE')
 
 
 class MarkovAnomaly(Anomaly):
@@ -24,6 +24,11 @@ class MarkovAnomaly(Anomaly):
         # import ipdb;ipdb.set_trace()
 
     def export_ano_flow_para(self):
+        if EXPORT_ABNORMAL_FLOW_PARA_FILE is None:
+            raise Exception("need to set EXPORT_ABNORMAL_FLOW_PARA_FILE"
+                            "environment variable before export abnormal ip"
+                            "address")
+
         self.ano_flow_para = copy.deepcopy(self.ano_desc)
         self.ano_flow_para['ano_node_ipdests'] = self.ano_node.ipdests
         zdump(self.ano_flow_para, EXPORT_ABNORMAL_FLOW_PARA_FILE) # For export abnormal flows

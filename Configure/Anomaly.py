@@ -6,7 +6,7 @@ from sadit.util import zdump
 from .mod_util import choose_ip_addr
 
 
-EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE']
+EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ.get('EXPORT_ABNORMAL_FLOW_PARA_FILE')
 
 
 # from numpy import cumsum, diff
@@ -442,9 +442,14 @@ class AtypicalUserAnomaly(Anomaly):
         self._config_traffic()
 
     def _export_ip_addr(self):
+        if EXPORT_ABNORMAL_FLOW_PARA_FILE is None:
+            raise Exception("need to set EXPORT_ABNORMAL_FLOW_PARA_FILE"
+                            "environment variable before export abnormal ip"
+                            "address")
         fid = open(EXPORT_ABNORMAL_FLOW_PARA_FILE, 'w')
-        fid.write( ' '.join([str(i) for i in self.ano_node.ipdests]) )
+        fid.write(' '.join([str(i) for i in self.ano_node.ipdests]))
         fid.close()
+
 
     def export_ano_flow_para(self):
         """export para to help to export ano flows"""
