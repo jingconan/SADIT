@@ -3,7 +3,7 @@ This file is the flow by flow svm detector
 """
 from __future__ import print_function, division, absolute_import
 import os
-SVM_FOLDER = os.environ['SVM_FOLDER']
+SVM_FOLDER = os.environ.get('SVM_FOLDER')
 
 import subprocess
 import argparse
@@ -29,6 +29,10 @@ class SVMDetector(BaseDetector):
         # self.__dict__.update(desc)
         self.desc = desc
         self.record_data = dict()
+
+        if SVM_FOLDER is None:
+            raise Exception("You must specify SVM_FOLDER environment variable"
+                            "before using SVM Detector")
 
     @property
     def rg_type(self): return self.desc['win_type']
