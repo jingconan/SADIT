@@ -14,8 +14,8 @@ import random
 
 # sys.path.append("../..")
 import os
-EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE']
-EXPORT_ABNORMAL_FLOW = os.environ['EXPORT_ABNORMAL_FLOW']
+EXPORT_ABNORMAL_FLOW_PARA_FILE = os.environ.get('EXPORT_ABNORMAL_FLOW_PARA_FILE')
+EXPORT_ABNORMAL_FLOW = os.environ.get('EXPORT_ABNORMAL_FLOW', 'NO')
 ROOT = os.environ['SADIT_ROOT']
 sys.path.insert(0, ROOT.rstrip('sadit'))
 from sadit.util import zload
