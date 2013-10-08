@@ -134,6 +134,10 @@ class PreloadHardDiskFile(Data):
         self.min_time = min(self.t)
         self.max_time = max(self.t)
 
+    def shift_time(self, st):
+        self.table['start_time'] += st
+        self.t += st
+
     def get_where(self, rg=None, rg_type=None):
         if not rg:
             return 0, self.row_num
