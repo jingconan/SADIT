@@ -195,8 +195,8 @@ class HDF_FS(PreloadHardDiskFile):
             ('dst_port', 9, np.int16),
             ('prot', 10, np.str_),
             ('node', 12, np.str_),
-            ('duration', 13, np.float64),
             ('flow_size', 14, np.float64),
+            ('duration', 13, np.float64),
             ]
 
     DT = np.dtype([
@@ -208,8 +208,8 @@ class HDF_FS(PreloadHardDiskFile):
         ('dst_port', np.int16, 1),
         ('prot', np.str_, 5),
         ('node', np.str_ , 5),
-        ('duration', np.float64, 1),
         ('flow_size', np.float64, 1),
+        ('duration', np.float64, 1),
         ])
 
 import datetime
