@@ -204,7 +204,7 @@ class HDF_FS(PreloadHardDiskFile):
         ('end_time', np.float64, 1),
         ('src_ip', np.uint8, (4,)),
         ('src_port', np.int16, 1),
-        ('dst_ip', np.int16, (4,)),
+        ('dst_ip', np.int8, (4,)),
         ('dst_port', np.int16, 1),
         ('prot', np.str_, 5),
         ('node', np.str_ , 5),
