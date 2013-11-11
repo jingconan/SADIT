@@ -134,28 +134,43 @@ class Network(Dot):
 
         Parameters
         -----------------
-        topo : list of list
-            adjacent matrix of the graph. There is a edge from node *i* to
-            node *j* if topo[i][j] == 1.
+        topo : list of list, or numpy 2d array, or scipy sparse matrix
+            adjacent matrix of the graph.
 
         """
-        n = len(topo)
-        assert(n == len(topo[0]) )
-        for i in xrange(n):
-            node = self.Node([], i) # Create node without specifying the ipdests
+        # n = len(topo)
+        # assert(n == len(topo[0]) )
+        def size(topo):
+            return len(topo) if isinstance(topo, list) else topo.shape[0]
+
+        for i in xrange(size(topo)):
+            # Create node without specifying the ipdests
+            node = self.Node([], i)
             self.node_list.append(node)
             self.add_node(node)
 
-        for i in xrange(n):
-            for j in xrange(n):
-                if topo[i][j]:
-                    la_dft = self.net_desc['link_attr_default']
-                    link_attr_list = self.net_desc.get('link_attr', {}).get((i,j), la_dft)
-                    edge = NEdge(self.node_list[i],
-                            self.node_list[j],
-                            link_attr_list_to_map(link_attr_list))
-                    self.assign_link_interface_ip(i, j)
-                    self.add_edge(edge)
+        def nonzero(topo):
+            if isinstance(topo, list):
+                n = len(topo)
+                assert(n == len(topo[0]))
+                return [(i, j) for i in xrange(n) for j in xrange(n) if
+                        topo[i][j]]
+            else:  # numpy matrix of scipy sparse matrix
+                X, Y = topo.nonzero()
+                return zip(X.reshape(-1), Y.reshape(-1))
+
+
+        # for i in xrange(n):
+            # for j in xrange(n):
+                # if topo[i][j]:
+        for (i, j) in nonzero(topo):
+            la_dft = self.net_desc['link_attr_default']
+            link_attr_list = self.net_desc.get('link_attr', {}).get((i, j), la_dft)
+            edge = NEdge(self.node_list[i],
+                         self.node_list[j],
+                         link_attr_list_to_map(link_attr_list))
+            self.assign_link_interface_ip(i, j)
+            self.add_edge(edge)
 
     def assign_link_interface_ip(self, i, j):
         """ assign ip address for link between node i and node j
