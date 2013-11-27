@@ -84,7 +84,9 @@ def parse_records(f_name, FORMAT, regular_expression):
             flow.append(f)
     return flow
 
-IP = lambda x:tuple(int(v) for v in x.rsplit('.'))
+import pyximport; pyximport.install()
+from CythonUtil import IP
+# IP = lambda x:tuple(int(v) for v in x.rsplit('.'))
 class PreloadHardDiskFile(Data):
     """ abstract base class for hard disk file The flow file into memory as a
     whole, so it cannot deal with flow file larger than your memery
@@ -205,7 +207,7 @@ class HDF_FS(PreloadHardDiskFile):
         ('end_time', np.float64, 1),
         ('src_ip', np.uint8, (4,)),
         ('src_port', np.int16, 1),
-        ('dst_ip', np.int8, (4,)),
+        ('dst_ip', np.uint8, (4,)),
         ('dst_port', np.int16, 1),
         ('prot', np.str_, 5),
         ('node', np.str_ , 5),
