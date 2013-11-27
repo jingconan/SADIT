@@ -77,6 +77,7 @@ def parse_records(f_name, FORMAT, regular_expression):
                 break
             if line == '\n': # Ignore Blank Line
                 continue
+            line = line.strip()
             item = re.split(regular_expression, line)
             # import ipdb;ipdb.set_trace()
             f = tuple(h(item[pos]) for k, pos, h in FORMAT)
@@ -121,9 +122,9 @@ class PreloadHardDiskFile(Data):
 
     def _init(self):
         # self.fea_vec = ParseRecords(self.f_name, self.FORMAT, self.RE)
-        self.fea_vec = self.parse(self.f_name, self.FORMAT, self.RE)
+        fea_vec = self.parse(self.f_name, self.FORMAT, self.RE)
         # import ipdb;ipdb.set_trace()
-        self.table = np.array(self.fea_vec, dtype=self.DT)
+        self.table = np.array(fea_vec, dtype=self.DT)
         self.row_num = self.table.shape[0]
 
         self.t = np.array([t for t in self.get_rows('start_time')])
