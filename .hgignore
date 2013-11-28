@@ -25,3 +25,4 @@ doc/sphinx/build/
 para_comp.sh
 test.sh
 **.swp
+build/**

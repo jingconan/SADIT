@@ -16,7 +16,7 @@ except ImportError:
         import matplotlib.pyplot as plt
         # import guiqwt.pyplot as plt
         print('--> Use [matplotlib] as plot backend')
-    except ImportError:
+    except Exception:
         plt = None
         print('--> [wanring], no [guiqwt] and [matplotlib], cannot visualize the result')
 
