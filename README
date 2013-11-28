@@ -25,7 +25,11 @@ Implements anomaly detection algorithm in paper
 
 Run
 -------------
-please type the ./run.py and help documents will appear
+please type the ./cmdsadit and help documents will appear
+
+You need to specify the environment variable SADIT_ROOT before running it. 
+
+    export SADIT_ROOT=<path_of_your_sadit_installation>
 
 
 Documentation
