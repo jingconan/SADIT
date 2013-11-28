@@ -66,26 +66,9 @@ class Data(object):
         """
         abstract_method()
 
-from sadit.util import np
-import re
-def parse_records(f_name, FORMAT, regular_expression):
-    flow = []
-    with open(f_name, 'r') as fid:
-        while True:
-            line = fid.readline()
-            if not line:
-                break
-            if line == '\n': # Ignore Blank Line
-                continue
-            line = line.strip()
-            item = re.split(regular_expression, line)
-            # import ipdb;ipdb.set_trace()
-            f = tuple(h(item[pos]) for k, pos, h in FORMAT)
-            flow.append(f)
-    return flow
-
 import pyximport; pyximport.install()
-from CythonUtil import IP
+from sadit.util import np
+from CythonUtil import IP, parse_records, c_parse_records_fs
 # IP = lambda x:tuple(int(v) for v in x.rsplit('.'))
 class PreloadHardDiskFile(Data):
     """ abstract base class for hard disk file The flow file into memory as a
@@ -118,15 +101,12 @@ class PreloadHardDiskFile(Data):
         # self.fields = zip(*self.DT)[0]
         self._init()
 
-    @staticmethod
-    def parse(*argv, **kwargv):
-        return parse_records(*argv, **kwargv)
+    def parse(self):
+        fea_vec = parse_records(self.f_name, self.FORMAT, self.RE)
+        self.table = np.array(fea_vec, dtype=self.DT)
 
     def _init(self):
-        # self.fea_vec = ParseRecords(self.f_name, self.FORMAT, self.RE)
-        fea_vec = self.parse(self.f_name, self.FORMAT, self.RE)
-        # import ipdb;ipdb.set_trace()
-        self.table = np.array(fea_vec, dtype=self.DT)
+        self.parse()
         self.row_num = self.table.shape[0]
 
         self.t = np.array([t for t in self.get_rows('start_time')])
@@ -214,6 +194,10 @@ class HDF_FS(PreloadHardDiskFile):
         ('flow_size', np.float64, 1),
         ('duration', np.float64, 1),
         ])
+
+    def parse(self):
+        self.table = c_parse_records_fs(self.f_name)
+        import ipdb;ipdb.set_trace()
 
 import datetime
 import time
@@ -363,9 +347,14 @@ class HDF_Xflow(PreloadHardDiskFile):
     of items and value is the corresponding format.
     """
 
-    @staticmethod
-    def parse(*argv, **kwargv):
-        return parse_complex_records(*argv, **kwargv)
+    # @staticmethod
+    # def parse(*argv, **kwargv):
+    #     return parse_complex_records(*argv, **kwargv)
+    def parse(self):
+        fea_vec = parse_complex_records(self.f_name, self.FORMAT, self.RE)
+        self.table = np.array(fea_vec, dtype=self.DT)
+
+
 
 
 
