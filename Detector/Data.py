@@ -104,10 +104,10 @@ class PreloadHardDiskFile(Data):
     def parse(self):
         fea_vec = parse_records(self.f_name, self.FORMAT, self.RE)
         self.table = np.array(fea_vec, dtype=self.DT)
+        self.row_num = self.table.shape[0]
 
     def _init(self):
         self.parse()
-        self.row_num = self.table.shape[0]
 
         self.t = np.array([t for t in self.get_rows('start_time')])
         t_idx = np.argsort(self.t)
@@ -196,8 +196,13 @@ class HDF_FS(PreloadHardDiskFile):
         ])
 
     def parse(self):
-        self.table = c_parse_records_fs(self.f_name)
-        import ipdb;ipdb.set_trace()
+        try: # try optimized parse method written in cython first
+            self.table, self.row_num = c_parse_records_fs(self.f_name)
+        except Exception as e:
+            print('-' * 30)
+            print(e)
+            print('-' * 30)
+            super(HDF_FS, self).parse()
 
 import datetime
 import time
@@ -353,9 +358,7 @@ class HDF_Xflow(PreloadHardDiskFile):
     def parse(self):
         fea_vec = parse_complex_records(self.f_name, self.FORMAT, self.RE)
         self.table = np.array(fea_vec, dtype=self.DT)
-
-
-
+        self.row_num = self.table.shape[0]
 
 
 """  Database Related """

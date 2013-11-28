@@ -100,4 +100,4 @@ def c_parse_records_fs(const_char *f_name):
 
         # break
     # print 'hello world'
-    return flows
+    return flows, i
