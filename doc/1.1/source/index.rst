@@ -12,9 +12,9 @@ SADIT Reference
 :Release: |version|
 :Date: |today|
 
-This reference manual details functions, modules, and objects
-included in Numpy, describing what they are and what they do.
-For learning how to use SADIT, see also :ref:`user`.
+..  This reference manual details functions, modules, and objects
+..  included in Numpy, describing what they are and what they do.
+..  For learning how to use SADIT, see also :ref:`user`.
 
 
 
