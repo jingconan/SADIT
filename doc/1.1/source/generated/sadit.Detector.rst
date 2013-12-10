@@ -33,7 +33,7 @@ Detector Package
     :members:
     :undoc-members:
 
-.. autoclass:: sadit.Detector.Data.HDF_FlowExporter
+.. autoclass:: sadit.Detector.Data.MEM_FlowExporter
     :members:
     :show-inheritance:
     :undoc-members:

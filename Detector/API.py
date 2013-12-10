@@ -57,7 +57,7 @@ from .Data import *
 data_map = {
         'fs': MEM_FS,
         'pcap2netflow': MEM_Pcap2netflow,
-        'flow_exporter': HDF_FlowExporter,
+        'flow_exporter': MEM_FlowExporter,
         'xflow': HDF_Xflow,
         'Sperotto': SperottoIPOM,
         }

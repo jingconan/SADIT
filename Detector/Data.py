@@ -265,7 +265,7 @@ class MEM_Pcap2netflow(MEM_DiskFile):
 
 
 
-class HDF_FlowExporter(MEM_DiskFile):
+class MEM_FlowExporter(MEM_DiskFile):
     """  Data generated FlowExporter. It is a simple tool to convert pcap to
     flow data. It is avaliable in tools folder.
 
