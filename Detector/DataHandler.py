@@ -49,8 +49,8 @@ class QuantizeDataHandler(DataHandler):
 
     Examples
     ---------------
-    >>> from .Data import PreloadHardDiskFile
-    >>> data = PreloadHardDiskFile('Test/n0_flow.txt')
+    >>> from .Data import MEM_DiskFile
+    >>> data = MEM_DiskFile('Test/n0_flow.txt')
     >>> fea_option = dict(cluster=2, dist_to_center=2, flow_size=2)
     >>> dh = QuantizeDataHandler(data, dict(fea_option=fea_option))
     finish get ip address

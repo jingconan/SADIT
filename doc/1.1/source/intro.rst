@@ -255,7 +255,7 @@ several other types of flow data. The data wrapper classes are defined in
 
 If you want use a new type of data, you need to implement a data wrapper class first.
 :mod:`sadit.Detector.Data.Data` is the base class for all data wrapper class.
-:mod:`sadit.Detector.Data.PreloadHardDiskFile` is the base class for all file-type
+:mod:`sadit.Detector.Data.MEM_DiskFile` is the base class for all file-type
 data wrapper data.  :mod:`sadit.Detector.Data.MySQLDatabase` is the base class
 for all mysql database wrapper class.
 

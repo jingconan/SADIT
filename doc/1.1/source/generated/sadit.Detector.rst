@@ -18,7 +18,7 @@ Detector Package
 `HardDisk File`
 +++++++++++++++++++++++
 
-.. autoclass:: sadit.Detector.Data.PreloadHardDiskFile
+.. autoclass:: sadit.Detector.Data.MEM_DiskFile
     :members:
     :show-inheritance:
 

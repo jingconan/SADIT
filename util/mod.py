@@ -44,6 +44,11 @@ except ImportError:
     print('--> [warning] cannot import sql related function, reading for sql server is not supported')
 
 
+try:
+    import tables
+except ImportError:
+    tables = False
+
 #########################################
 ## Adaption for Python3
 #########################################
@@ -57,3 +62,4 @@ try:
     from itertools import izip
 except ImportError:
     izip = zip
+
