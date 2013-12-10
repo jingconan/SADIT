@@ -38,7 +38,7 @@ Detector Package
     :show-inheritance:
     :undoc-members:
 
-.. autoclass:: sadit.Detector.Data.HDF_Xflow
+.. autoclass:: sadit.Detector.Data.MEM_Xflow
     :members:
     :show-inheritance:
     :undoc-members:
