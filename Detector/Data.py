@@ -225,7 +225,7 @@ def str_to_sec(ss, formats):
             ).total_seconds()
 
 
-class HDF_Pcap2netflow(MEM_DiskFile):
+class MEM_Pcap2netflow(MEM_DiskFile):
     """Data generated pcap2netflow, (the
    format of `flowd-reader <http://www.mindrot.org/projects/softflowd/>`_)
 

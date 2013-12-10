@@ -28,7 +28,7 @@ Detector Package
     :undoc-members:
 
 
-.. autoclass:: sadit.Detector.Data.HDF_Pcap2netflow
+.. autoclass:: sadit.Detector.Data.MEM_Pcap2netflow
     :show-inheritance:
     :members:
     :undoc-members:
