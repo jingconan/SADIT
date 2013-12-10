@@ -55,7 +55,7 @@ data_handler_handle_map = {
 
 from .Data import *
 data_map = {
-        'fs': HDF_FS,
+        'fs': MEM_FS,
         'pcap2netflow': HDF_Pcap2netflow,
         'flow_exporter': HDF_FlowExporter,
         'xflow': HDF_Xflow,

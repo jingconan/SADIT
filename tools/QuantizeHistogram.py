@@ -2,7 +2,7 @@
 from __future__ import print_function, division, absolute_import
 import numpy as np
 from sadit.Detector.DataHandler import QuantizeDataHandler
-from sadit.Detector.Data import HDF_FS
+from sadit.Detector.Data import MEM_FS
 from sadit.util import zload, zdump
 
 def identify_type(hist, bins, alpha1, alpha2):
@@ -209,7 +209,7 @@ def plot_histo_gram(f_name, rg):
     plt.show()
 
 def main(f_name, desc, output, hist_pk_f_name=None):
-    data = HDF_FS(f_name)
+    data = MEM_FS(f_name)
     qa = QuantizeDataHandler(data, desc)
     qh = qa.hash_quantized_fea(None, None)
     print('len(qh): ', len(qh))

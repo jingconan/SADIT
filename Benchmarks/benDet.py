@@ -3,13 +3,13 @@ from __future__ import print_function, division
 import sys
 sys.path.insert(0, "..")
 sys.path.insert(0, "../..")
-from Detector.Data import HDF_FS
+from Detector.Data import MEM_FS
 
 
 def main():
     for i in xrange(50):
         print('i', i)
-        HDF_FS('./n0_flow.txt')
+        MEM_FS('./n0_flow.txt')
     print('done')
     pass
 

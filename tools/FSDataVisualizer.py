@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 from __future__ import print_function, division
 import sys; sys.path.append('../')
-from Detector.Data import HDF_FS
+from Detector.Data import MEM_FS
 # from pylab import *
 import matplotlib.pyplot as plt
 
-class Visualizer(HDF_FS):
+class Visualizer(MEM_FS):
     # def __init__(self, f_name):
     #     self.f_name = f_name
     #     data, self.keys = RawParseData(f_name)

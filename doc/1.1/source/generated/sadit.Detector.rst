@@ -22,7 +22,7 @@ Detector Package
     :members:
     :show-inheritance:
 
-.. autoclass:: sadit.Detector.Data.HDF_FS
+.. autoclass:: sadit.Detector.Data.MEM_FS
     :members:
     :show-inheritance:
     :undoc-members:
