@@ -63,8 +63,7 @@ Structure
 anomalies detection algorithms. The second part is labeled flow record
 generator. The follow sections will describe the two parts accordingly.
 
-Collection of Anomaly Detection Algorithm
-------------------------------------
+### Collection of Anomaly Detection Algorithm
 
 All the detection algorithms locates
 in the *ROOT/Detector* folder:
@@ -335,22 +334,28 @@ of SADIT when I have time.
 
 ### Installation
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/MS8jfJSPBn4" frameborder="0" allowfullscreen></iframe>
+http://www.youtube.com/embed/MS8jfJSPBn4" frameborder="0" allowfullscreen
+
 ### Configuration After Installation
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/i87sXncx5KA" frameborder="0" allowfullscreen></iframe>
+http://www.youtube.com/embed/i87sXncx5KA
+
 ### Get Help Message
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/w-9kHeMcIZw" frameborder="0" allowfullscreen></iframe>
+http://www.youtube.com/embed/w-9kHeMcIZw" frameborder="0" allowfullscreen
+
 ### Basic run and tune of parameters
 
-<iframe width="420" height="315" src="http://www.youtube.com/embed/rAIJwZpIOjY" frameborder="0" allowfullscreen></iframe>
+http://www.youtube.com/embed/rAIJwZpIOjY
+
 ### Search for Good Parameters
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/0_9nAfdWt50" frameborder="0" allowfullscreen></iframe>
+http://www.youtube.com/embed/0_9nAfdWt50
+
 ### Generate Comparison Plot
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/zaQB0M5VpnM" frameborder="0" allowfullscreen></iframe>
+http://www.youtube.com/embed/zaQB0M5VpnM
+
 If you have no access to youtube, you can download the videos(all AVI
 format) in the following link(*it is hosted in Google Drive Server*).
 <https://docs.google.com/open?id=0B9xGMLqrhlbdNE9UTFhSX2hUa2s>
