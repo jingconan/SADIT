@@ -134,11 +134,13 @@ Then type
 usage: sadit [--profile PROFILE] [-h] [experiment]
 
 positional arguments:
+
     experiment print ./sadit <exper> -h for help of a experiment Avaliable
     experiments are [MultiSrvExperiment | Detect | DetectBatch | Eval | Sim |
     BaseExper | DetectCompare | SimDetect | Batch | GUITopoSim]
 
 optional arguments:
+
     --profile PROFILE profile the program -h, --help print help message and
     exit
 
@@ -334,7 +336,7 @@ of SADIT when I have time.
 
 ### Installation
 
-http://www.youtube.com/embed/MS8jfJSPBn4" frameborder="0" allowfullscreen
+http://www.youtube.com/embed/MS8jfJSPBn4
 
 ### Configuration After Installation
 
@@ -342,7 +344,7 @@ http://www.youtube.com/embed/i87sXncx5KA
 
 ### Get Help Message
 
-http://www.youtube.com/embed/w-9kHeMcIZw" frameborder="0" allowfullscreen
+http://www.youtube.com/embed/w-9kHeMcIZw
 
 ### Basic run and tune of parameters
 
@@ -369,9 +371,11 @@ Please see the file called LICENSE.
 Authors
 =============
 Jing Conan Wang
-EMAIL: wangjing AT bu.edu
-Personal Webpage: http://people.bu.edu/wangjing/
-Jing Wang is a Ph.D. Student in Division of Systems Engineering, Boston
-University advised by Professor Yannis Paschalidis.  His main interests is
-Mathematica Modeling, i.e., contructing mathematical models for the real word
-and try to solve practical problems.
+
+    Jing Wang is a Ph.D. Student in Division of Systems Engineering, Boston
+    University advised by Professor Yannis Paschalidis.  His main interests is
+    Mathematica Modeling, i.e., contructing mathematical models for the real
+    word and try to solve practical problems.
+
+    **EMAIL:** wangjing AT bu.edu
+    **Personal Webpage:** http://people.bu.edu/wangjing/
