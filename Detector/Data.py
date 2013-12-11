@@ -72,7 +72,7 @@ from CythonUtil import IP, parse_records, c_parse_records_fs
 # IP = lambda x:tuple(int(v) for v in x.rsplit('.'))
 class MEM_DiskFile(Data):
     """ abstract base class for hard disk file The flow file into MEMory as a
-    whole, so it cannot deal with flow file larger than your memery
+    whole, so it cannot deal with flow file larger than your memory.
     """
 
     RE = None
@@ -359,6 +359,28 @@ class MEM_Xflow(MEM_DiskFile):
         fea_vec = parse_complex_records(self.f_name, self.FORMAT, self.RE)
         self.table = np.array(fea_vec, dtype=self.DT)
         self.row_num = self.table.shape[0]
+
+
+""" PyTables Related """
+from sadit.util import tables
+class PT_Data(MEM_DiskFile):
+    """  Pytables format. (HDF5 format).
+    Group name: data
+    table name: table
+
+    Note
+    ----------------
+        1. The **tools/convert-to-hdf.py** can be used to convert other data format to
+        hdf5 format.
+        2. Thanks to **pyTables**, the size of the hdf5 file can be larger than the
+        computer memory.
+    """
+
+    def parse(self):
+        self.file = tables.open_file(self.f_name)
+        self.table = self.file.getNode('/data', 'table')
+        self.row_num = self.table.nrows
+
 
 
 """  Database Related """

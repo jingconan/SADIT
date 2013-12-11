@@ -60,6 +60,7 @@ data_map = {
         'flow_exporter': MEM_FlowExporter,
         'xflow': MEM_Xflow,
         'Sperotto': SperottoIPOM,
+        'pt': PT_Data,
         }
 
 def print_detector_help(type_):
