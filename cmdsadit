@@ -8,6 +8,11 @@ ROOT = os.environ.get('SADIT_ROOT')
 if ROOT is None:
     print('please set <SADIT_ROOT> variable in bash')
     sys.exit()
+if not ROOT.endswith('sadit'):
+    print('please set <SADIT_ROOT> path variable correctly; '
+          'Please change the name of the <ROOT> folder to sadit. Other name '
+            'will cause import problem')
+    sys.exit()
 
 os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE'] = ROOT + '/Share/ano_flow_para.txt'
 os.environ['SVM_FOLDER'] = ROOT + '/tools/libsvm-3.12'
