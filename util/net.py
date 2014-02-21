@@ -65,6 +65,28 @@ def len2mask(len):
 
     return mask[:-1]
 
+
+try:
+    from socketIO_client import SocketIO
+except:
+    print('[warning] socketIO_client is not found. Real-time ability is disabled')
+    SocketIO = False
+
+import time
+
+class NetworkLogger(object):
+    LOGGER_ID = 'logger'
+    def __init__(self, info, logger_id):
+        self.socketIO = None
+        with SocketIO(info['url'], info['port']) as socketIO:
+            self.socketIO = socketIO
+        self.LOGGER_ID = logger_id
+
+    def log(self, obj):
+        self.socketIO.emit(self.LOGGER_ID, obj)
+        time.sleep(0.2)
+        # self.socketIO.wait(seconds=1)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

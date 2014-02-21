@@ -69,7 +69,7 @@ def print_detector_help(type_):
     detector = detector_map[ type_ ]({})
     detector.set_args(['-h'])
 
-def detect(f_name, desc, res_args=[]):
+def detect(f_name, desc, res_args=[], real_time_logger=None):
     """An function for convenience
     - *f_name* the name or a list of name for the flow file.
     - *desc* is a parameter dictionary
@@ -82,6 +82,9 @@ def detect(f_name, desc, res_args=[]):
 
     detector = detector_map[ desc['method'] ](desc)
     detector.set_args(res_args)
+    # set real-time logger
+    if real_time_logger:
+        detector.real_time_logger = real_time_logger
 
     rdn = desc.get('ref_data') # reference data name
     if rdn:
