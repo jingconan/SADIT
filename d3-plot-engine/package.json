@@ -1,0 +1,9 @@
+{
+  "name": "sadit-d3",
+  "description": "d3 interface for SADIT",
+  "author": "wangjing <hbhzwj@gmail.com>",
+  "dependencies": {
+    "socket.io": ">=0.9"
+  },
+  "engine": "node >= 0.4.1"
+}   
