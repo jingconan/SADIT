@@ -61,6 +61,7 @@ class StoDetector (WindowDetector):
         + hoeff_far
 
     """
+    real_time_logger = None
     def __init__(self, desc):
         self.desc = desc
         self.record_data = dict(entropy=[], winT=[], threshold=[], em=[])
@@ -121,6 +122,13 @@ class StoDetector (WindowDetector):
     #     return ep - sp
 
     def record(self, **kwargs):
+        if self.real_time_logger is not None:
+            log_obj = {
+                'entropy': kwargs['entropy'],
+                'type': self.__class__.__name__
+            }
+            self.real_time_logger.log(log_obj)
+
         for k, v in kwargs.iteritems():
             self.record_data[k].append(v)
 
