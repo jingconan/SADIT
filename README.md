@@ -311,6 +311,8 @@ that fs-simulate depends on:
 >     [Get](http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyparsing%2Ffiles%2Fpyparsing%2Fpyparsing-1.5.2%2F&ts=1332828745&use_mirror=softlayer)
 > -   py-radix (0.5)
 >     [Get](http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz)
+> -   Cython (0.20)
+>     [Get](http://cython.org/release/Cython-0.20.1.tar.gz)
 
 besides: it requires:
 :   -   numpy [Get](http://numpy.scipy.org/)
