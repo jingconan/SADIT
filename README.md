@@ -295,6 +295,14 @@ SADIT can be installed on windows machine with the help of cgywin. There
 is a detailed step by step installation tutorial, click
 <https://docs.google.com/open?id=0B0EiFkYoJWwbaloybWV5V1BuQVk>
 
+
+Note: for SADIT 1.1, I have only tested automatic installation script in 
+
+    - Ubuntu 12.04
+    - Linux Mint 13 Cinnamon 64-bit
+
+Those two systems are recommended
+
 ### Manually
 
 If the automatical methods fail, you can try to install manually.
