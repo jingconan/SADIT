@@ -1,34 +1,66 @@
 #!/usr/bin/env python
+from __future__ import print_function, division, absolute_import
 import os
-packages=['ipaddr-2.1.1', 'networkx-1.0', 'pydot-1.0.2',
-	'pyparsing1.5.2', 'pyradix', 'argparse-1.2.1',
-    'cython-0.20'
-	#'numpy-1.6.2',
-	]
-packages_urls = [
-	'http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz',
-	'http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz',
-	'http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz',
-	'http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz',
-	'http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz',
-	'http://argparse.googlecode.com/files/argparse-1.2.1.tar.gz',
-	'http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6.2.tar.gz',
-    'http://cython.org/release/Cython-0.20.1.tar.gz'
-]
+pkg_config = {
+    'ipaddr': ('2.1.1', 'http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz'),
+    'networkx': ('1.0', 'http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz'),
+    'pydot': ('1.0.2', 'http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz'),
+    'pyparsing': ('1.5.2', 'http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz'),
+    'pyradix': ('0.5', 'http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz'),
+    'argparse': ('1.2.1', 'http://argparse.googlecode.com/files/argparse-1.2.1.tar.gz'),
+    'numpy': ('1.6.2', 'http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6.2.tar.gz'),
+    'cython': ('0.20.1', 'http://cython.org/release/Cython-0.20.1.tar.gz'),
+}
 
-for i in xrange(len(packages)):
-	url = packages_urls[i]
-	print('installing package %s'%(packages[i]))
-	print('wget %s'%(url))
-	os.system('wget %s'%(url))
+import sys, os
+argv = sys.argv
 
-	print('tar -xzvf %s'%(url.rsplit('/')[-1]))
-	tar_file = url.rsplit('/')[-1]
-	os.system('tar -xzvf %s'%(tar_file))
+def get_f_name(url):
+    tar_file = url.rsplit('/')[-1]
+    folder_name = tar_file.rsplit('.tar.gz')[0]
+    return tar_file, folder_name
 
-	folder_name = tar_file.rsplit('.tar.gz')[0]
-	print('cd %s && python setup.py install'%(folder_name))
-	os.system('cd %s && python setup.py install'%(folder_name))
+def install(pkg_name, url):
+    print('installing package %s'%(pkg_name))
+    # tar_file = url.rsplit('/')[-1]
+    # folder_name = tar_file.rsplit('.tar.gz')[0]
+    tar_file, folder_name = get_f_name(url)
+    if not os.path.isdir(folder_name):
+        print('wget %s'%(url))
+        os.system('wget %s'%(url))
+
+        print('tar -xzvf %s'%(url.rsplit('/')[-1]))
+        os.system('tar -xzvf %s'%(tar_file))
+
+    print('cd %s && python setup.py install'%(folder_name))
+    os.system('cd %s && python setup.py install'%(folder_name))
+
+import shutil
+def clean():
+    for k, (_, url) in pkg_config.iteritems():
+        tar_file, folder_name = get_f_name(url)
+        if os.path.exists(folder_name):
+            shutil.rmtree(folder_name)
+            # os.remove(folder_name)
+        if os.path.exists(tar_file):
+            os.remove(tar_file)
+
+if len(argv) < 2:
+    pkgs = pkg_config.keys()
+else:
+    if argv[1] == '-h':
+        print('Usage: python setup-dep.py <packge_name>. Run without argument'
+                ' will install all avaliable packages. use --clean to'
+                ' clean all downloaded packages')
+        sys.exit(0)
+    elif argv[1] == '--clean':
+        clean()
+        sys.exit(0)
+
+    pkgs = argv[1:]
+
+for pkg in pkgs:
+    install(pkg_config[pkg][0], pkg_config[pkg][1])
 
 
 
