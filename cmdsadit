@@ -20,7 +20,7 @@ sys.path.insert(0, ROOT)
 sys.path.insert(0, ROOT.rstrip('sadit'))
 
 # Get experiment options
-exper_ops = [f_name[:-3] for f_name in os.listdir('./Experiment/')
+exper_ops = [f_name[:-3] for f_name in os.listdir(ROOT + '/Experiment/')
              if f_name.lower().endswith('py') and not f_name.startswith('__')]
 
 # from Detector.API import detector_map
