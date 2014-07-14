@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 from pydot import Node
-from sadit.util import types, Load
+from sadit.util import types, Load, check_pipe_para
 from copy import deepcopy
 
 from .mod_util import choose_ip_addr
@@ -27,29 +27,6 @@ from .Modulator import Modulator, MarkovModulator
 #             traffic.append(val)
 #         return time, traffic
 
-# import numpy as np
-# def loadtxt
-
-from numpy import loadtxt
-
-def check_pipe_para(para):
-    """
-
-    Parameters
-    ---------------
-    para : list or str
-        if para is list, return itself, if para is str starts with "< " and
-            follows by a file name, load the parameters in the txt
-
-    Returns
-        para : lsit
-            a list of parameters
-    --------------
-    """
-    if isinstance(para, str) and para.startswith('< '):
-        f_name = para.split('< ')[0]
-        return loadtxt(f_name)
-    return para
 
 class NNode(Node):
     """ Normal Node
@@ -140,7 +117,7 @@ class NNode(Node):
         elif norm_desc['TYPE'] == 'dynamic':
             self.init_traffic_dynamic(norm_desc, dst_nodes)
         else:
-            raise Exception("unknown tye of NORM_DESC")
+            raise Exception("unknown type of NORM_DESC")
 
     def init_traffic_static(self, norm_desc, dst_nodes):
         """  Initialize the normal traffic

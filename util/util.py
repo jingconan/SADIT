@@ -258,6 +258,26 @@ def load_para(f_name, encap=None, allow_types=(list, str, dict, float, int),
     return ss if encap is None else encap(ss)
 
 
+def check_pipe_para(para):
+    from numpy import loadtxt
+    """
+
+    Parameters
+    ---------------
+    para : list or str
+        if para is list, return itself, if para is str starts with "< " and
+            follows by a file name, load the parameters in the txt
+
+    Returns
+        para : lsit
+            a list of parameters
+    --------------
+    """
+    if isinstance(para, str) and para.startswith('< '):
+        f_name = para.split('< ')[0]
+        return loadtxt(f_name)
+    return para
+
 
 import csv
 def save_csv(f_name, names, *args):
