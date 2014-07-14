@@ -1,4 +1,6 @@
-ROOT = '/home/wangjing/Dropbox/Research/sadit'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit'
+import os
+ROOT = os.environ.get('SADIT_ROOT')
 
 
 #################################
