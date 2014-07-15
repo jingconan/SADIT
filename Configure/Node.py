@@ -173,14 +173,8 @@ class NNode(Node):
         assert(isinstance(shifts['base_type'], list))
 
         def add_shifts_to_states(states, base_type, shift_val):
-            """ sf:
-                - base_type:
-                - val:
-            """
-            # res = deepcopy(states)
             for i in xrange(len(states)):
                 states[i][base_type] += '+ %f'%(shift_val)
-            # return res
 
         # if len(shifts_time) != len(shifts_val):
         #     raise Exception("shifts['val'] is wrong!!")
