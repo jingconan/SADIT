@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function, division, absolute_import
 import numpy as np
-from sadit.Detector.DataHandler import QuantizeDataHandler
-from sadit.Detector.Data import MEM_FS
+from sadit.Detector import QuantizeDataHandler, MEM_FS
 from sadit.util import zload, zdump
 
 def identify_type(hist, bins, alpha1, alpha2):

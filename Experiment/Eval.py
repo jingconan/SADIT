@@ -5,8 +5,7 @@ like False Alarm Rate.
 """
 from __future__ import print_function, division, absolute_import
 import copy, os
-# from sadit.Detector.DataParser import RawParseData
-from sadit.Detector.Data import MEM_FS
+from sadit.Detector import MEM_FS
 from sadit.util import update_not_none, plt
 from sadit.util import zdump, zload
 import itertools

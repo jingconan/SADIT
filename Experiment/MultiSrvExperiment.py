@@ -4,7 +4,7 @@ test the alogirithm
 """
 import sys
 import numpy as np
-from Detector import detect
+from sadit.Detector import detect
 from Detect import Detect
 
 class MultiSrvExperiment(Detect):
