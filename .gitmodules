@@ -1,0 +1,3 @@
+[submodule "Detector"]
+	path = Detector
+	url = https://github.com/hbhzwj/GAD

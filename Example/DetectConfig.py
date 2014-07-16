@@ -1,9 +1,4 @@
-# EXPORT_ABNORMAL_FLOW = True
-# EXPORT_ABNORMAL_FLOW = False
-# EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
-# EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
-# EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_n0_flow.txt'
-ROOT = '/home/wangjing/Dropbox/Research/sadit/'
+ROOT = ''
 
 #################################
 ##   Parameters For Detector  ###
@@ -37,7 +32,10 @@ DETECTOR_DESC = dict(
         unified_nominal_pdf = False, # used in sensitivities analysis
         # discrete_level = DISCRETE_LEVEL,
         # cluster_number = CLUSTER_NUMBER,
-        fea_option = {'dist_to_center':2, 'flow_size':2, 'cluster':3},
+        # fea_option = {'dist_to_center':(2, []), 'flow_size':2, 'cluster':3},
+        # fea_option = {'flow_size':(2, [0, 10000]), 'duration':(3, [0, 10])},
+        fea_option = {'flow_size':(2, [0, 10000]), 'duration':(3, [0, 10])},
+        # fea_option = {'Channel':(2, [1, 3]), 'Milk':(3, [0, 1000])},
         # fea_option = {'dist_to_center':2, 'Cb':2, 'cluster':3},
         # fea_option = {'dist_to_center':2, 'octets':2, 'cluster':3},
         # fea_option = {'dist_to_center':3, 'flow_size':2, 'cluster':3},
