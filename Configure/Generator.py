@@ -47,7 +47,7 @@ class Generator(object):
             try:
                 orig_para = float(new.para[name])
             except KeyError as e:
-                raise Exception("you are changing a parameter that doesn't"
+                raise Exception("you are trying to chang a parameter that doesn't"
                                 " exist. Maybe wrong config file?")
             if isinstance(ratio, str):
                 tp = ratio[0]
