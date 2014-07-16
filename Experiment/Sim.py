@@ -5,6 +5,7 @@ from BaseExper import BaseExper
 from Configure import gen_dot
 from os import chdir as cd
 from os import system as sh
+import os
 import os.path
 
 
@@ -39,6 +40,10 @@ class Sim(BaseExper):
         parser.add_argument('--export_ano', default=True,
                             type=bool,
                             help="""[true|false]whether to export abnormal flows or not""")
+        parser.add_argument('--dir', default=None,
+                            help="""output directory""")
+
+
 
     def configure(self):
         gen_dot(self.ano_list, self.net_desc, self.norm_desc,
@@ -48,6 +53,11 @@ class Sim(BaseExper):
         os.environ['EXPORT_ABNORMAL_FLOW'] = 'TRUE' if self.args.export_ano else 'FALSE'
         cd(self.ROOT + '/Simulator')
         sh('python fs.py %s -t %d' % (self.dot_file, self.sim_t))
+        dir = self.args.dir
+        if dir:
+            if not os.path.exists(dir): os.makedirs(dir)
+            sh('cp *.txt %s' % (dir))
+
         cd(self.ROOT)
 
     def run(self):
