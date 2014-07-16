@@ -44,7 +44,11 @@ class Generator(object):
         # change the parameters
         for attr, ratio in change_para.iteritems():
             name = attr.lower()
-            orig_para = float(new.para[name])
+            try:
+                orig_para = float(new.para[name])
+            except KeyError as e:
+                raise Exception("you are changing a parameter that doesn't"
+                                " exist. Maybe wrong config file?")
             if isinstance(ratio, str):
                 tp = ratio[0]
                 r = ratio[1:]
