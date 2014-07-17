@@ -22,7 +22,8 @@ sys.path.insert(0, ROOT.rstrip('sadit'))
 
 # Get experiment options
 import Experiment
-exper_ops = [d for d in dir(Experiment) if not d.startswith('__')]
+exper_ops = [d for d in dir(Experiment) if not d.startswith('__')
+             and not d[0].isupper()]
 
 parser = argparse.ArgumentParser(description='sadit', add_help=False)
 
@@ -46,7 +47,7 @@ args, res_args = parser.parse_known_args()
 
 def get_exper(exper_name, argv):
     try:
-        exper = getattr(Experiment, exper_name)(argv)
+        exper = getattr(Experiment, exper_name.lower())(argv)
     except AttributeError:
         raise Exception('invalid experiment, available experiments %s ' % (' '.join(exper_ops)))
     return exper

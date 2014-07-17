@@ -1,5 +1,5 @@
-from .GUITopoSim import GUITopoSim
-from .Sim import Sim
+from .GUITopoSim import GUITopoSim as guitoposim
+from .Sim import Sim as sim
 try:
     from Detector.gad.Experiment import *
 except:
