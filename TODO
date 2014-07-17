@@ -1,6 +1,0 @@
-This is the todo list for SADIT
-add [2012-09-23 22:51:10] refactor name of detectors 
-    --> Each file corresponds to a DataFile
-    --> Each Detector corresponds to a DataHandler
-
-end [2012-09-24 01] Done with refactor data handler and data type
