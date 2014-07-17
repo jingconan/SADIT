@@ -27,7 +27,7 @@ exper_ops = [d for d in dir(Experiment) if not d.startswith('__')]
 parser = argparse.ArgumentParser(description='sadit', add_help=False)
 
 parser.add_argument('experiment', default=None, nargs='?',
-        help="""print ./sadit <exper> -h for help of a experiment
+        help="""print ./cmdsadit <exper> -h for help of a experiment
         Avaliable experiments are [%s]"""
         %(' | '.join(exper_ops)))
 
@@ -48,8 +48,7 @@ def get_exper(exper_name, argv):
     try:
         exper = getattr(Experiment, exper_name)(argv)
     except AttributeError:
-        raise Exception('invalid experiment, available experiments %s '
-                        % (''.join(exper_ops)))
+        raise Exception('invalid experiment, available experiments %s ' % (' '.join(exper_ops)))
     return exper
 
 def print_exper_help(exper, res_args=[]):
@@ -72,7 +71,7 @@ def main(args, res_args):
         get_exper(args.experiment, res_args).run()
     except:
         print('Probabably you forget to specify some options?'
-                ' run sadit <exper> -h for more information.')
+                ' run cmdsadit <exper> -h for more information.')
         import traceback
         tb = traceback.format_exc()
         print(tb)
