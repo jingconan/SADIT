@@ -1,3 +1,6 @@
 from .GUITopoSim import GUITopoSim
 from .Sim import Sim
-from Detector.gad.Experiment import *
+try:
+    from Detector.gad.Experiment import *
+except:
+    pass
