@@ -1,4 +1,5 @@
-ROOT = '/home/wangjing/Dropbox/Research/sadit/'
+import os
+ROOT = os.environ['SADIT_ROOT']
 
 import numpy as np
 #################################

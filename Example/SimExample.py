@@ -1,5 +1,3 @@
-ROOT = '/home/wangjing/Dropbox/Research/sadit'
-
 #################################
 ##   Network Topology ##
 #################################
