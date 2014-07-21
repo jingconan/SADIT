@@ -428,7 +428,8 @@ class HarpoonGeneratorNode(GeneratorNode):
         # owd may be None if routing is temporarily broken because of
         # a link being down and no reachability
         if not owd:
-            owd = 1.0
+            # owd = 1.0
+            owd = 0.01
 
         flet.mss = next(self.mssrv)
         p = next(self.lossraterv)
