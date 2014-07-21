@@ -93,7 +93,12 @@ ANO_DESC_TEMP = {
 ANO_LIST = []
 import copy
 # for i in [1, 2, 3, 4, 5, 6, 7]:
-for i in range(1, 50):
-    ano_desc = copy.deepcopy(ANO_DESC_TEMP)
-    ano_desc['T'] = (i * 5000, i * 5000+ 1000)
-    ANO_LIST.append(ano_desc)
+# uncomment this if want to insert some anomalies
+# for i in range(1, 50):
+#     ano_desc = copy.deepcopy(ANO_DESC_TEMP)
+#     ano_desc['T'] = (i * 5000, i * 5000+ 1000)
+#     ANO_LIST.append(ano_desc)
+
+ano_desc = copy.deepcopy(ANO_DESC_TEMP)
+ano_desc['T'] = (5000, 5000+ 1000)
+ANO_LIST.append(ano_desc)
