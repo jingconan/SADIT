@@ -1,4 +1,4 @@
-ROOT = '/home/wangjing/Dropbox/Research/sadit'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit'
 
 #################################
 ##   Network Topology ##
