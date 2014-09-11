@@ -1,7 +1,5 @@
 # ROOT = '/home/wangjing/Dropbox/Research/sadit'
-import os
-ROOT = os.environ.get('SADIT_ROOT')
-
+ROOT = '/home/jzh/software/sadit'
 
 #################################
 ##   Network Topology ##

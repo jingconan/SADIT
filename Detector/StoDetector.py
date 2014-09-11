@@ -9,6 +9,7 @@ __status__ = "Development"
 
 import os
 from math import log
+from scipy.stats import chi2 # added by Jing Zhang (jingzbu@gmail.com)
 
 from sadit.util import DataEndException, FetchNoDataException, abstract_method
 from sadit.util import save_csv, plt
@@ -236,7 +237,12 @@ class StoDetector (WindowDetector):
 
         """
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
-        return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
+        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
+
+        # return -1.0 / n * log(false_alarm_rate)     # modified by Jing Zhang (jingzbu@gmail.com)
+
+        return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, 2 * 2 * 3 - 1)  
+	# added by Jing Zhang (jingzbu@gmail.com)
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
