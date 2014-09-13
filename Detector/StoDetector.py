@@ -239,10 +239,11 @@ class StoDetector (WindowDetector):
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
 
-        # return -1.0 / n * log(false_alarm_rate)     # modified by Jing Zhang (jingzbu@gmail.com)
+        # modified by Jing Zhang (jingzbu@gmail.com)
+        # return -1.0 / n * log(false_alarm_rate)    
 
+        # added by Jing Zhang (jingzbu@gmail.com)
         return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, 2 * 2 * 3 - 1)  
-	# added by Jing Zhang (jingzbu@gmail.com)
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
@@ -421,6 +422,33 @@ class ModelFreeAnoDetector(StoDetector):
         # return pmf, Pmb, mpmb
     #     return pmf
 
+
+    # plot module added by Jing Zhang (jingzbu@gmail.com) 
+    def plot(self, far=None, figure_=None, 
+            title_='model free',
+            pic_name=None, pic_show=False, csv=None,
+            *args, **kwargs):
+        if not plt: self.save_plot_as_csv()
+
+        rt = self.record_data['winT']
+        mf = self.record_data['entropy']
+        threshold = self.record_data['threshold']
+
+        if csv:
+            save_csv(csv, ['rt', 'mf', 'threshold'], rt, mf, threshold)
+
+        if figure_ is None: figure_ = plt.figure()
+        # import ipdb;ipdb.set_trace()
+        plot_points(rt, mf, threshold,
+                figure_ = figure_,
+                xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+                title_ = title_,
+                pic_name=None, pic_show=False,
+                *args, **kwargs)
+        if pic_name and not plt.__name__.startswith("guiqwt"): plt.savefig(pic_name)
+        if pic_show: plt.show()
+
+
 class ModelBaseAnoDetector(StoDetector):
     """ Model based approach, use Markovian Assumption
     """
@@ -433,6 +461,31 @@ class ModelBaseAnoDetector(StoDetector):
     # def get_em(self, rg, rg_type):
     #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
     #     return Pmb, mpmb
+
+    # plot module added by Jing Zhang (jingzbu@gmail.com) 
+    def plot(self, far=None, figure_=None,
+            title_='model based',
+            pic_name=None, pic_show=False, csv=None,
+            *args, **kwargs):
+        if not plt: self.save_plot_as_csv()
+
+        rt = self.record_data['winT']
+        mb = self.record_data['entropy']
+        threshold = self.record_data['threshold']
+
+        if csv:
+            save_csv(csv, ['rt', 'mb', 'threshold'], rt, mb, threshold)
+
+        if figure_ is None: figure_ = plt.figure()
+        # import ipdb;ipdb.set_trace()
+        plot_points(rt, mb, threshold,
+                figure_ = figure_,
+                xlabel_=self.desc['win_type'], ylabel_= 'entropy',
+                title_ = title_,
+                pic_name=None, pic_show=False,
+                *args, **kwargs)
+        if pic_name and not plt.__name__.startswith("guiqwt"): plt.savefig(pic_name)
+        if pic_show: plt.show()
 
 
 # from .Ident import *

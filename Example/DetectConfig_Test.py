@@ -4,7 +4,7 @@ ROOT = '/home/jzh/software/sadit'
 #################################
 ANO_ANA_DATA_FILE = './Share/AnoAna.txt'
 DETECTOR_DESC = dict(
-        interval=30,
+        interval=20,
         win_size=100,
         win_type='time', # 'time'|'flow'
         fr_win_size=100, # window size for estimation of flow rate
