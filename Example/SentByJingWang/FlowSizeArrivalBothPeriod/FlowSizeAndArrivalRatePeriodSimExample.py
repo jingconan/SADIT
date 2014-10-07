@@ -1,5 +1,5 @@
 # ROOT = '/home/wangjing/Dropbox/Research/sadit'
-ROOT = '/home/jzh/software/sadit'
+ROOT = '/home/jzh/Dropbox/Git/sadit'
 
 
 #################################

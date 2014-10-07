@@ -1,7 +1,7 @@
 # ROOT = '/home/wangjing/Dropbox/Research/sadit/'
-ROOT = '~/Softwares/sadit/'
+ROOT = '/home/jzh/Dropbox/Git/sadit/'
 
-DIR = '~/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizePeriod/'
+DIR = '/home/jzh/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizePeriod/'
 
 import numpy as np
 #################################

@@ -1,7 +1,7 @@
 # ROOT = '/home/wangjing/Dropbox/Research/sadit/'
-ROOT = '~/Softwares/sadit/'
+ROOT = '/home/jzh/software/sadit/'
 
-DIR = '~/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizeSlowDrift/'
+DIR = '/home/jzh/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizeSlowDrift/'
 import numpy as np
 #################################
 ##   Parameters For Detector  ###

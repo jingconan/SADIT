@@ -1,5 +1,6 @@
 # ROOT = '/home/wangjing/Dropbox/Research/sadit'
-ROOT = '~/Softwares/sadit/'
+ROOT = '/home/jzh/software/sadit'
+
 
 #################################
 ##   Network Topology ##
