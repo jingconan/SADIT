@@ -9,10 +9,9 @@ from random import sample
 
 ## {{{ http://code.activestate.com/recipes/577661/ (r2)
 
-# from sadit.util import queue 
-# suppressed by Jing Zhang (jingzbu@gmail.com)
+from sadit.util import queue 
 
-import Queue as queue  
+# import Queue as queue  
 # added by Jing Zhang (jingzbu@gmail.com)
 
 class MedianHeap:
