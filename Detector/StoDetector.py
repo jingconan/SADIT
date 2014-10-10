@@ -244,7 +244,7 @@ class StoDetector (WindowDetector):
 
         # added by Jing Zhang (jingzbu@gmail.com)
         # the following threshold is suggested in http://arxiv.org/abs/0909.2234 
-	# return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, 2 * 2 * 3 - 1)
+        # return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, 5 * 8 * 1 - 1)
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,

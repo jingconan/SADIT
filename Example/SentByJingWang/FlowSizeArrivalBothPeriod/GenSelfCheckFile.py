@@ -2,7 +2,7 @@
 ROOT = '/home/jzh/Dropbox/Git/sadit/'
 
 DIR = \
-'/home/jzh/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizeArrivalBothPeriod/'
+'/home/jzh/Dropbox/SaditTest/PaperSimulation/FlowSizeArrivalBothPeriod/'
 
 
 import numpy as np
@@ -14,8 +14,10 @@ DETECTOR_DESC = dict(
         lamb = 5,
         ref_scheck = 'dump',
         comp_methods = ['robust'],
-        data = DIR + 'n0_flow_reference.txt',
-        ref_data = DIR + 'n0_flow_reference.txt',
+        # data = DIR + 'n0_flow_reference.txt',
+        # ref_data = DIR + 'n0_flow_reference.txt',
+        data = DIR + 'normal-data/n0_flow.txt', 
+        ref_data = DIR + 'normal-data/n0_flow.txt',
         dump_folder = DIR + 'SelfCheck/',
         normal_rg = None,
         interval = 1000,

@@ -1,7 +1,9 @@
 # ROOT = '/home/wangjing/Dropbox/Research/sadit/'
 ROOT = '/home/jzh/Dropbox/Git/sadit'
 
-DIR = '/home/jzh/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizePeriod/'
+# DIR = '/home/jzh/Research/CyberSecurity/Robust_Method/PaperSimulation/FlowSizePeriod/'
+
+DIR = '/home/jzh/Dropbox/SaditTest/PaperSimulation/FlowSizePeriod/'
 
 import numpy as np
 #################################
@@ -18,8 +20,10 @@ DETECTOR_DESC = dict(
         # data = DIR + 'n0_flow_1_ano_200000_205000.txt',
         # data = DIR + 'n0_flow_reference.txt',
         # ref_data = DIR + 'n0_flow_reference.txt',
-        data = DIR + 'n0_referece_normal.txt',
-        ref_data = DIR + 'n0_referece_normal.txt',
+        # data = DIR + 'n0_referece_normal.txt',
+        # ref_data = DIR + 'n0_referece_normal.txt',
+        data = DIR + 'normal-data/n0_flow.txt', 
+        ref_data = DIR + 'normal-data/n0_flow.txt',
         dump_folder = DIR + 'test/',
         # ref_data = DIR + 'n0_flow_50_anomalies.txt',
         normal_rg = None,

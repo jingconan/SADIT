@@ -8,7 +8,13 @@ from random import sample
 
 
 ## {{{ http://code.activestate.com/recipes/577661/ (r2)
-from sadit.util import queue
+
+# from sadit.util import queue 
+# suppressed by Jing Zhang (jingzbu@gmail.com)
+
+import Queue as queue  
+# added by Jing Zhang (jingzbu@gmail.com)
+
 class MedianHeap:
     def __init__(self, numbers = None):
         self.median = None
@@ -191,7 +197,7 @@ def test():
     # DF = lambda x,y: ((x[0]-y[0]) ** 2) * (256 ** 3) + ((x[1]-y[1]) ** 2) * (256 **2) + ((x[2]-y[2]) ** 2) * (256)+ (x[3]-y[3]) ** 2
     # DF = lambda x,y:(x[0]-y[0]) ** 2  + (x[1]-y[1]) ** 2  + (x[2]-y[2]) ** 2 + (x[3]-y[3]) ** 2
 
-    cluster, centerPt = KMeans(data, k, DF)
+    cluster, centerPt = KMedians(data, k, DF)
     print('cluster, ', cluster)
     print('centerPt, ', centerPt)
 
