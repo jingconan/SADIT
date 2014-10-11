@@ -2,14 +2,10 @@
 # Introduction
 
 
-**SADIT** is the acronym of **S**ystematic **A**nomaly **D**etection of
-**I**nternet **T**raffic. The motivation of SADIT is to make the
-comparison and the validation of the Internet anomaly detection algorithms
-super easy. It addresses this problem from the following two
-perspectives:
+**SADIT** is the acronym of **S**ystematic **A**nomaly **D**etection of **I**nternet **T**raffic. The motivation of SADIT is to make the comparison and the validation of the Internet anomaly detection algorithms super easy. It addresses this problem from the following two perspectives:
 
- 1.  Facilitate the data generation
- 2.  Provide a standard library of anomaly detection algorithms.
+ 1.  Facilitating the data generation
+ 2.  Providing a standard library of anomaly detection algorithms
 
 If you are a researcher interested in Internet Anomaly Detection, we
 strongly encourage you to implement your algorithms following the APIs
