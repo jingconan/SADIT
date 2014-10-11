@@ -10,15 +10,15 @@
 If you are a researcher interested in Internet Anomaly Detection, we
 strongly encourage you to implement your algorithms following the APIs
 and data format of SADIT so that you can easily compare your methods
-with existing algorithms in SADIT. Your help will be highly appreciated
-if you can contribute your own algorithm to the algorithm library of
+with the existing algorithms in SADIT. Your help will be highly appreciated
+if you can contribute your own algorithm(s) to the algorithms library of
 SADIT. Feel free to contact me if you have any question.
 
 What's New in 1.1
 -----------------
 
- -   **More Flexible Configuration Script**: You can write the
-     parameters in a separate configure script and specify it with -c
+ -   **More Flexible Configuration Script**: You can set the
+     parameters in a separate configuration script and specify it with `-c`
      option.
  -   **Generation of Traffic For Dynamic Network**: The distribution of
      flow traffic and the arrival rate can change with time.
