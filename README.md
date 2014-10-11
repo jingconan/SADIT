@@ -14,7 +14,7 @@ with the existing algorithms in SADIT. Your help will be highly appreciated
 if you can contribute your own algorithm(s) to the algorithms library of
 SADIT. Feel free to contact me if you have any question.
 
-## What's New in Version 1.1
+### What's New in Version 1.1
 
 
  -   **More Flexible Configuration Script**: You can set
@@ -29,7 +29,7 @@ SADIT. Feel free to contact me if you have any question.
  -   **Separable Check Data and Reference Data Files**
  -   **Better Structure of Classes**
   
-## What's New in Version 1.0
+### What's New in Version 1.0
 
 
 Version 1.0 is a result of big refactor of Version 0.0. The refactor
@@ -46,13 +46,13 @@ well-defined structures are used.
 your own experiment scripts  and put them in this folder. 
 
 - **Better Sensitivity Analysis**: In Version 0.0, sensitivity analysis is done
-by change the global settings.py file and rerun the simulation. Since
-settings.py is a typical python module,changing it during the run is
-really not a good idea. In this version, special Experiment is designed
+by changing the global `settings.py` file and rerunning the simulation. Since
+`settings.py` is a typical python module, changing it during the run is
+really not a good idea. In this version, a special experiment is designed
 to support sensitivity analysis.
 
-Structure
----------
+# Structure
+
 
 **SADIT** consists of two parts. The first part is a collection of
 anomalies detection algorithms. The second part is labeled flow record
