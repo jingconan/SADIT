@@ -14,21 +14,20 @@ with the existing algorithms in SADIT. Your help will be highly appreciated
 if you can contribute your own algorithm(s) to the algorithms library of
 SADIT. Feel free to contact me if you have any question.
 
-What's New in 1.1
------------------
+## What's New in 1.1
 
- -   **More Flexible Configuration Script**: You can set the
+
+ -   **More Flexible Configuration Script**: You can set
      parameters in a separate configuration script and specify it with `-c`
      option.
- -   **Generation of Traffic For Dynamic Network**: The distribution of
+ -   **Generation of Traffic for Dynamic Network**: The distribution of
      flow traffic and the arrival rate can change with time.
- -   **Robust Anomaly Detection Method**: A new anomaly detection that
+ -   **Robust Anomaly Detection Method**: A new anomaly detection algorithm that
      can work robustly in dynamic network environment has been added.
- -   **Faster Data Access Speed**. Use numpy.array to store data
-     instead of list of list, which accelerate the problem by a large
-     extend.
- -   **Check Data and Reference data can be different files**.
- -   **Better structure of classes**
+ -   **Faster Data Access Speed**: Using `numpy.array` to store data
+     instead of list of list, which accelerates the data processing significantly.
+ -   **Separable Check Data and Reference Data Files**
+ -   **Better Structure of Classes**
 
 What's New in 1.0
 -----------------
