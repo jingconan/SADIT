@@ -1,4 +1,10 @@
-ROOT = ''
+# EXPORT_ABNORMAL_FLOW = True
+# EXPORT_ABNORMAL_FLOW = False
+# EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
+# EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
+# EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_n0_flow.txt'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit/'
+ROOT = '/home/jzh/Dropbox/Git/sadit/'
 
 #################################
 ##   Parameters For Detector  ###
@@ -20,7 +26,7 @@ DETECTOR_DESC = dict(
         # interval=2000,
         # win_size = 10,
         # win_size=100,
-        win_size=100,
+        win_size=200,
         # win_size=2000,
         # win_size=20000,
         # win_size=200,

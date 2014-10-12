@@ -7,10 +7,10 @@ import argparse
 
 ROOT = os.environ.get('SADIT_ROOT')
 if ROOT is None:
-    print('please set <SADIT_ROOT> variable in bash')
+    print('Please set <SADIT_ROOT> variable in bash.')
     sys.exit()
 if not ROOT.endswith('sadit'):
-    print('please set <SADIT_ROOT> path variable correctly; '
+    print('Please set <SADIT_ROOT> path variable correctly. '
           'Please change the name of the <ROOT> folder to sadit. Other name '
             'will cause import problem')
     sys.exit()
@@ -28,8 +28,8 @@ exper_ops = [d for d in dir(Experiment) if not d.startswith('__')
 parser = argparse.ArgumentParser(description='sadit', add_help=False)
 
 parser.add_argument('experiment', default=None, nargs='?',
-        help="""print ./cmdsadit <exper> -h for help of a experiment
-        Avaliable experiments are [%s]"""
+        help="""type ./cmdsadit <exper> -h for help of an experiment;
+        available experiments are [%s]"""
         %(' | '.join(exper_ops)))
 
 parser.add_argument('--profile', default=None,

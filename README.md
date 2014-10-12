@@ -1,63 +1,58 @@
-Introduction
-============
 
-**SADIT** is the acronym of **S**ystematic **A**nomaly **D**etection of
-**I**nternet **T**raffic. The motivation of SADIT is to make the
-comparison and the validation of internet anomaly deteciton algorithmes
-super easy. It addresses this problem from the following two
-perspectives:
+# Introduction
 
- 1.  Faciliate the data generation
- 2.  Provide a standard library of anomaly detection algorithms.
+
+**SADIT** is the acronym of **S**ystematic **A**nomaly **D**etection of **I**nternet **T**raffic. The motivation of SADIT is to make the comparison and the validation of the Internet anomaly detection algorithms super easy. It addresses this problem from the following two perspectives:
+
+ 1.  Facilitating the data generation
+ 2.  Providing a standard library of anomaly detection algorithms
 
 If you are a researcher interested in Internet Anomaly Detection, we
 strongly encourage you to implement your algorithms following the APIs
 and data format of SADIT so that you can easily compare your methods
-with exisiting algorithms in SADIT. Your help will be highly appreciated
-if you can contribute your own algorithm to the algorithm libray of
+with the existing algorithms in SADIT. Your help will be highly appreciated
+if you can contribute your own algorithm(s) to the algorithms library of
 SADIT. Feel free to contact me if you have any question.
 
-What's New in 1.1
------------------
+### What's New in Version 1.1
 
- -   **More Flexible Configuration Script**: You can write the
-     parameters in a seperate config script and specify it with -c
+
+ -   **More Flexible Configuration Script**: You can set
+     parameters in a separate configuration script and specify it with `-c`
      option.
- -   **Generation of Traffic For Dynamic Network**: The distribution of
+ -   **Generation of Traffic for Dynamic Network**: The distribution of
      flow traffic and the arrival rate can change with time.
- -   **Robust Anomaly Detection Method**: A new anomaly detection that
+ -   **Robust Anomaly Detection Method**: A new anomaly detection algorithm that
      can work robustly in dynamic network environment has been added.
- -   **Faster Data Access Speed**. Use numpy.array to store data
-     instead of list of list, which accelerate the problem by a large
-     extend.
- -   **Check Data and Reference data can be different files**.
- -   **Better structure of classes**
+ -   **Faster Data Access Speed**: Using `numpy.array` to store data
+     instead of list of list, which accelerates the data processing significantly.
+ -   **Separable Check Data and Reference Data Files**
+ -   **Better Structure of Classes**
+  
+### What's New in Version 1.0
 
-What's New in 1.0
------------------
 
-the version 1.0 is a result of big refactor of version 0.0. The refactor
+Version 1.0 is a result of big refactor of Version 0.0. The refactor
 makes the code more scalable and less buggy. 
 
-- **Paradigm of Object-oriented programming**: The **Configure** module and **Detector**
-module have been rewritten under object-oriented paradigm. In version
-0.0, all modules depends on the global settings file setting.py, which
-make the code more vulunerable to bugs. In this verison only few scripts
-depend on settings.py. Classes are widely used to reduce the need to
+- **Paradigm of Object-Oriented Programming**: The **Configure** module and **Detector**
+module have been rewritten under object-oriented paradigm. In Version
+0.0, all modules depend on the global settings file `setting.py`, rendering the code more vulunerable to bugs. In this verison only a few scripts
+depend on `settings.py`. Classes are widely used to reduce the need to
 pass parameters around. In case that parameters passing is required,
 well-defined structures are used. 
 
 - **Experiment**: A new folder ROOT/Experiment appears to contain different experiments. You can write
-your own scripts of Experiment and put them in this folder. 
+your own experiment scripts  and put them in this folder. 
 
-- **Better Sensitivity Anaysis**: In the version 0.0, sensitivity anaysis is done
-by change the global settings.py file and rerun the simulation. Since
-settings.py is a typical python module,changing it during the run is
-really not a good idea. In this version, special Experiment is designed
+- **Better Sensitivity Analysis**: In Version 0.0, sensitivity analysis is done
+by changing the global `settings.py` file and rerunning the simulation. Since
+`settings.py` is a typical python module, changing it during the run is
+really not a good idea. In this version, a special experiment is designed
 to support sensitivity analysis.
 
-Structure
----------
+# Structure
+
 
 **SADIT** consists of two parts. The first part is a collection of
 anomalies detection algorithms. The second part is labeled flow record
@@ -88,7 +83,7 @@ labels.
 #### Configurer
 
 *Configurer* generate the corresponding DOT file according to
-description of user behaviour. The important concepts in *Configurer*
+description of user behavior. The important concepts in *Configurer*
 are as follows:
 
  -   **Generator**: description of a certain type of flow traffic. For
@@ -96,16 +91,16 @@ are as follows:
      flows](http://cs.colgate.edu/~jsommers/harpoon/).
  -   **Behaviour**: description of temporal pattern. There are three
      types behaviour: 
-     + **Normal** behaviour is described by start time and duration. 
-     + **I.I.D** behaviour has a list of possible states, but one state will be
+     + **Normal** behavior is described by start time and duration. 
+     + **I.I.D** behavior has a list of possible states, but one state will be
        selected as current state every *t* seconds according to certain
        probability distribution. 
-     + **Markov** the state in different time is not independtly and
+     + **Markov** the state in different time is not independently and
        identically distributed, but is a Markov process
 
- -   **Modulator**: combine *Behaviour* and *Generator*, basicially
-     description of generator behaviour. There are three types of
-     modulators, corresponding to three behaviours described above.
+ -   **Modulator**: combine *Behaviour* and *Generator*, basically
+     description of generator behavior. There are three types of
+     modulators, corresponding to three behaviors described above.
 
  -   **Node**: host in the network, has *modulator\_list* attributes
  -   **Edge**: connecting two network nodes, has *delay*, *capacity*
@@ -118,7 +113,7 @@ are as follows:
 #### Simulator
 
 Simulator is basically a revised version of fs simulator. We have added
-support to export anoumalous flows(add label information).
+support to export anomalous flows(add label information).
 
 Usage
 =====
@@ -211,13 +206,13 @@ n0\_flow.txt is the network flows trough node 0. File start with
 *abnormal\_* is the exported abnormal flows correspondingly.
 
 **A typical line is**
-:   textexport n0 1348412129.925416 1348412129.925416 1348412130.070733
+:   text-export n0 1348412129.925416 1348412129.925416 1348412130.070733
     10.0.7.4:80-\>10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA
 
 **line format**
-:   prefix nodename time flow\_start\_time flow\_end\_time
-    src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destname
-    unknown flowsize unknown
+:   prefix node-name time flow\_start\_time flow\_end\_time
+    src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destination-name
+    unknown flow-size unknown
 
 After finishing your detection algorihms, the last thing you need to do
 is to add the corresponding class name to **detector\_map** in
@@ -267,13 +262,13 @@ Installation
 SADIT can be installed in Linux, Mac OS X and Windows(through cygwin)
 with python 2.7
 
-### Debain (Ubuntu, Mint, etc)
+### Debian (Ubuntu, Mint, etc)
 
-If you are using debain based system like Ubuntu, Mint, you are lucky.
-There is an installation script prepared for debain based system, just
+If you are using Debian based system like Ubuntu, Mint, you are lucky.
+There is an installation script prepared for Debian based system, just
 type :
 
-    sh debain.sh
+    sh debian.sh
 
 ### Mac OS X
 
@@ -305,9 +300,9 @@ Those two systems are recommended
 
 ### Manually
 
-If the automatical methods fail, you can try to install manually.
+If the automatic methods fail, you can try to install manually.
 **SADIT** has been tested on python2.7.2. SADIT depends on all softwares
-that fs-simulate depends on:
+that fs-simulator depends on:
 
 > -   ipaddr (2.1.1)
 >     [Get](http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz)
@@ -384,7 +379,7 @@ Jing Conan Wang
 
     Jing Wang is a Ph.D. Student in Division of Systems Engineering, Boston
     University advised by Professor Yannis Paschalidis.  His main interests is
-    Mathematica Modeling, i.e., contructing mathematical models for the real
+    Mathematica Modeling, i.e., constructing mathematical models for the real
     word and try to solve practical problems.
 
     **EMAIL:** wangjing AT bu.edu
