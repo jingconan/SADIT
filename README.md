@@ -310,7 +310,7 @@ sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/robu
 **NOTE:** *You may need to change the ROOT variable accordingly in the configuration
 files before running these commands.*
 
-### Want to implement your algorithm?
+### Want to implement your algorithm(s)?
 
 
 #### Use the labeled flow records generator in fs simulator
