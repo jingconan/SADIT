@@ -181,11 +181,13 @@ optional arguments:
 **experiment** is actually a subcommand that has some certain functionality.
 
 Some of the available experiments are explained as follows:
-    - **detect**: Detect the flow records data specified by `-d` option.
-    - **detectbatch**: Run detection algortihms with all combinations
+- **detect**: Detect the flow records data specified by `-d` option.
+    
+- **detectbatch**: Run detection algortihms with all combinations
       of parameters and output the results to a folder; helps to
       select the optimal parameters.
-    - **detectcompare**: Run several detection algorithms and save the
+    
+- **detectcompare**: Run several detection algorithms and save the
       intermediate results; can also load results computed before
       and show comparison figure.
 - **eval**: Evaluation of the detection algorithmm (calculate fpr,
