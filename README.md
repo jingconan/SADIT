@@ -429,7 +429,7 @@ Jing Conan Wang
 
 Collaborator
 =============
-Jing (John) Zhang
+Jing John Zhang
 ```
 Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
 (advised by Professor Yannis Paschalidis). 
