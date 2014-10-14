@@ -117,99 +117,32 @@ Simulator is basically a revised version of [fs-simulator](http://cs-people.bu.e
 support to exporting anomalous flows (with label information).
 
 
-# Download
-
-You can download sadit from
-[here](https://github.com/hbhzwj/SADIT/archive/master.zip).
-
-or you can use `git` to get a complete copy with revision history:
-
-    $ git clone https://github.com/hbhzwj/SADIT.git
-
-
 # Installation
 
-
 SADIT can be installed on Linux, Mac OS X and Windows (through cygwin)
-with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-key installation scrit. 
+with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-key installation script. 
 
 To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following:
 
-- First, rename the ROOT folder of SADIT as `sadit` (otherwise there will be import errors).
-- Second, change the working directory to be `sadit/install`, and then type:
+1. Change the working direcotry to where you want to install SADIT, make a new folder `sadit`, and then type:
+
+    $ git clone https://github.com/hbhzwj/SADIT.git sadit/
+
+
+2. Change the working directory to be `sadit`, and then type:
+   
+  `sadit$ git clone https://github.com/hbhzwj/GAD.git Detector/`
+
+3. Change the working directory to be `sadit/install`, and then type:
   
   `sadit/install$ sudo bash install_on_ubuntu_12_04.sh` (for Ubuntu 12.04) or
+
   `sadit/install$ sudo bash install_on_ubuntu_14_04.sh` (for Ubuntu 14.04) 
 
-
-### Debian (Ubuntu, Mint, etc)
-
-If you are using Debian based system like Ubuntu, Mint, you are lucky.
-There is an installation script prepared for Debian based system, just
-type :
-
-    sh debian.sh
-
-### Mac OS X
-
-For mac user, just type :
-
-    sudo python setup-dep.py
-
-the **ipaddr**, **networkx**, **pydot**, **pyparsing** and **py-radix**
-will be automatically downloaded and installed. If you just want to use
-the **Detector** part, that is already enough If you want to use
-**Configure** and **Simulator** part, then you also need to install
-numpy and matplotlib. Please go to <http://www.scipy.org/NumPy> and
-<http://matplotlib.sourceforge.net/faq/installing_faq.html> for
-installation instruction.
-
-### Windows
-
-SADIT can be installed on windows machine with the help of cgywin. There
-is a detailed step by step installation tutorial, click
-<https://docs.google.com/open?id=0B0EiFkYoJWwbaloybWV5V1BuQVk>
+For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). (Note that some of them apply only to an older SADIT version and thus outdated!) 
 
 
-Note: for SADIT 1.1, I have only tested automatic installation script in 
 
-    - Ubuntu 12.04
-    - Linux Mint 13 Cinnamon 64-bit
-
-Those two systems are recommended
-
-### Manually
-
-If the automatic methods fail, you can try to install manually.
-**SADIT** has been tested on python2.7.2. SADIT depends on all softwares
-that fs-simulator depends on:
-
-> -   ipaddr (2.1.1)
->     [Get](http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz)
-> -   networkx (1.0)
->     [Get](http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz)
-> -   pydot (1.0.2)
->     [Get](http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz)
-> -   pyparsing (1.5.2)
->     [Get](http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyparsing%2Ffiles%2Fpyparsing%2Fpyparsing-1.5.2%2F&ts=1332828745&use_mirror=softlayer)
-> -   py-radix (0.5)
->     [Get](http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz)
-> -   Cython (0.20)
->     [Get](http://cython.org/release/Cython-0.20.1.tar.gz)
-
-besides: it requires:
-:   -   numpy [Get](http://numpy.scipy.org/)
-    -   matplotlib [Get](http://matplotlib.sourceforge.net/)
-    -   profilehooks [Get](http://mg.pov.lt/profilehooks/)
-
-if you are in debain based system. you can simple use :
-
-    sudo apt-get install python-dev
-    sudo apt-get install python-numpy
-    sudo apt-get install python-matplotlib
-
-in other system, refer to corresponding website for installation of
-**numpy** and **matplotlib**
 
 
 
