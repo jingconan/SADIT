@@ -285,7 +285,7 @@ is useful for the stochastic approaches. If you just need the raw data,
 you can simple use sadit.Detector.DataHandler.FakeDataHandler
 
 Then you just need to add your data\_handler to
-**data\_handler\_handle\_map** defined in *ROOT/Detector/API.py*
+**data\_handler\_handle\_map** defined in *ROOT/Detector/gad/Detector/API.py* 
 
 
 
@@ -335,10 +335,20 @@ Authors
 =============
 Jing Conan Wang
 
-    Jing Wang is a Ph.D. Student in Division of Systems Engineering, Boston
-    University advised by Professor Yannis Paschalidis.  His main interests is
+    Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, Boston
+    University (advised by Professor Yannis Paschalidis).  His main interest is
     Mathematica Modeling, i.e., constructing mathematical models for the real
-    word and try to solve practical problems.
+    world and trying to solve practical problems.
 
     **EMAIL:** wangjing AT bu.edu
     **Personal Webpage:** http://people.bu.edu/wangjing/
+    
+
+Collaborator
+=============
+Jing Zhang
+
+Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University (advised by Professor Yannis Paschalidis). 
+
+    **EMAIL:** jzh AT bu.edu
+    **Personal Webpage:** http://people.bu.edu/jzh/
