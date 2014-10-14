@@ -233,10 +233,12 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 Examples commands :
 ```
 sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py -d ./Simulator/n0_flow.txt --method='mfmb' --pic_show
+sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/gen-self-check-file.pyf   --pic_show
+sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/robust-detect.pyf --pic_show
 
 ```
-Note: You may need to change the ROOT variable in the configuration
-files before running these commands.
+**NOTE:** *You may need to change the ROOT variable accordingly in the configuration
+files before running these commands.*
 
 ### Want to implement your algorithm?
 
@@ -358,7 +360,7 @@ Jing Conan Wang
 
 Collaborator
 =============
-Jing Zhang
+Jing (John) Zhang
 ```
 Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
 (advised by Professor Yannis Paschalidis). 
