@@ -307,13 +307,13 @@ sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/gen-
 sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/robust-detect.pyf --pic_show
 
 ```
-**NOTE:** *You may need to change the ROOT variable accordingly in the configuration
-files before running these commands.*
+**NOTE:** You may need to change the ROOT variable accordingly in the configuration
+files before running these commands.
 
 ### Want to implement your algorithm?
 
 
-### Use the labeled flow records generator in fs simulator
+#### Use the labeled flow records generator in fs simulator
 The generated flows will be the *ROOT/Simulator* folder. The flows end with *\_flow.txt*, for example,
 n0\_flow.txt is the network flows trough node 0. File start with
 *abnormal\_* is the exported abnormal flows correspondingly.
@@ -334,7 +334,7 @@ detection algorithm. You can use **Compare** experiment to compare with
 other algorithm or **Eval** algorithm to Evaluate your algorithm. You
 can also implement new experiment to play with your new algorithm.
 
-### Use Other flow records
+#### Use Other flow records
 
 SADIT does not only support the text output format of fs simulator, but
 also several other types of flow data. The data wrapper classes are
