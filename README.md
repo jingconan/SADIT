@@ -309,8 +309,8 @@ sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/gen-
 sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/robust-detect.pyf --pic_show
 
 ```
-**NOTE:** *You may need to change the ROOT variable accordingly in the configuration
-files before running these commands.*
+**NOTE:** *Before running these commands, you may need to change the ROOT variable accordingly in the configuration
+files. You may also need to check the existence and the actual path of the data file to be imported.*
 
 ### Want to implement your algorithm(s)?
 
