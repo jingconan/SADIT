@@ -345,11 +345,10 @@ the `sadit.Detector.gad.Detector.DataHandler` module.
 In order to use data in a new format, you need to implement two new classes: 
 
 
-First, a data class that satisfies Data interface (Data.py line 9). Namely, such a class has to at least provide the following three functions:
+First, a data class that satisfies Data interface (Data.py, Line 9). Namely, such a class has to at least provide the following three functions:
 * get_rows: row slicing
 * get_where: get range of rows that satisfies a criterion. 
 * get_min_max: get min and max values of a certain feature at a certain range. 
-If if you have question about this interface, please READ line 9-67 in Data.py. 
 
 
 The package has included several data classes, which all locates in Data.py. In some cases, you can re-use existing classes.
@@ -369,7 +368,7 @@ Second, a data handler class that implements data preprocessing, e.g., quantizat
 
 
 Then you just need to add your data\_handler to
-**data\_handler\_handle\_map** defined in *ROOT/Detector/gad/Detector/API.py* 
+`data\_handler\_handle\_map` defined in `ROOT/Detector/gad/Detector/API.py`
 
 
 
