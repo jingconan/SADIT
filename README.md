@@ -124,7 +124,7 @@ with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12
 
 To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following sequentially:
 
-1. Change the working direcotry to where you want to install SADIT, make a new folder `sadit`, and then type:
+1. Change the working directory to where you want to install SADIT, make a new folder `sadit`, and then type:
 
  `$ git clone https://github.com/hbhzwj/SADIT.git sadit/`
 
@@ -147,7 +147,7 @@ For general installation instructions, see the **Installation** section of the o
 
 # Usage
 
-First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assumming you are working on Ubuntu 12.04 or 14.04, then, change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
+First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assuming you are working on Ubuntu 12.04 or 14.04, then, change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
 
 `export SADIT_ROOT='path_of_your_sadit_installation'`
 
@@ -327,7 +327,7 @@ The generated flows will be the `ROOT/Simulator` folder. The flows end with `_fl
     src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destination-name
     flow-size(in packets) flow-size(in bytes) protocol-flags
 
-After finishing your detection algorihms, the last thing you need to do
+After finishing your detection algorithms, the last thing you need to do
 is to add the corresponding class name to `detector_map` in
 `ROOT/Detector/gad/Detector/API.py`. After that you will be able to use your
 detection algorithm. You can use `Compare` experiment to compare with
@@ -336,7 +336,7 @@ can also implement new experiment to play with your new algorithm.
 
 #### Use Other flow records
 
-SADIT does not only support the text output format of fs simulator, but
+SADIT does not only support the text output format of [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf), but
 also several other types of flow data. The data wrapper classes are
 defined in `sadit.Detector.gad.Detector.Data` module and the handler classes locate in
 the `sadit.Detector.gad.Detector.DataHandler` module.
