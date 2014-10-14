@@ -122,7 +122,7 @@ support to exporting anomalous flows (with label information).
 SADIT can be installed on Linux, Mac OS X and Windows (through cygwin)
 with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-key installation script. 
 
-To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following:
+To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following sequentially:
 
 1. Change the working direcotry to where you want to install SADIT, make a new folder `sadit`, and then type:
 
@@ -145,15 +145,11 @@ For general installation instructions, see the **Installation** section of the o
 
 
 
+# Usage
 
+First, you need to specify the environment variable SADIT_ROOT in Bash. To do this, again, assumming you are working on Ubuntu 12.04 or 14.04, then, first change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
 
-Usage
-=====
-please type the ./cmdsadit and help documents will appear
-
-You need to specify the environment variable SADIT_ROOT before running it. 
-
-    export SADIT_ROOT=<path_of_your_sadit_installation>
+    `export SADIT_ROOT=<path_of_your_sadit_installation>`
 
 Then type 
     $./cmdsadit -h
