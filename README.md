@@ -126,18 +126,18 @@ To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the follo
 
 1. Change the working direcotry to where you want to install SADIT, make a new folder `sadit`, and then type:
 
-    $ git clone https://github.com/hbhzwj/SADIT.git sadit/
+ `$ git clone https://github.com/hbhzwj/SADIT.git sadit/`
 
 
 2. Change the working directory to be `sadit`, and then type:
-   
-  `sadit$ git clone https://github.com/hbhzwj/GAD.git Detector/`
+ 
+ `sadit$ git clone https://github.com/hbhzwj/GAD.git Detector/`
 
 3. Change the working directory to be `sadit/install`, and then type:
-  
-  `sadit/install$ sudo bash install_on_ubuntu_12_04.sh` (for Ubuntu 12.04) or
 
-  `sadit/install$ sudo bash install_on_ubuntu_14_04.sh` (for Ubuntu 14.04) 
+`sadit/install$ sudo bash install_on_ubuntu_12_04.sh` (for Ubuntu 12.04) or
+
+`sadit/install$ sudo bash install_on_ubuntu_14_04.sh` (for Ubuntu 14.04) 
 
 For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). (Note that some of them apply only to an older SADIT version and thus outdated!) 
 
@@ -153,7 +153,7 @@ First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do 
 
 Now, you are ready to use SADIT. Assume `sadit` is your working directory from now on.
 
-To get help message, just type
+To get general help message, just type
 
  `sadit$ ./cmdsadit -h`
  
@@ -177,34 +177,36 @@ optional arguments:
   
   
 
+*experiment* specifies the experiment you want to execute. An
+**experiment** is actually a subcommand that has some certain functionality.
 
-*experiment* specify the experiment you want to execute. An
-**experiment** is actually a subcommand that has certain functionality.
-
-Avaliable experiments are as follows:
-    - **Detect**: detect the flow record data specified by *-d* option
-    - **Sim**: simulate and generate flow records.
-    - **GUITopoSim** : simulate using network topogogy created by GUI
-      topology editor
-    - **SimDetect**: simulate and detect.
-    - **Eval**: Evaluation of the detection algorithmm (calculate fpr,
-      fnr and plot the ROC curve)
-    - **DetectBatch**: runs detection algortihms with all combinations
-      of parameters and outputs the results to a folder, helps to
+Some of the available experiments are explained as follows:
+    - **detect**: Detect the flow records data specified by `-d` option.
+    - **detectbatch**: Run detection algortihms with all combinations
+      of parameters and output the results to a folder; helps to
       select the optimal parameters.
-    - **DetectCompare**: run several detection algorithms and save the
-      intermediate results. Can also load results load computed before
+    - **detectcompare**: Run several detection algorithms and save the
+      intermediate results; can also load results computed before
       and show comparison figure.
+- **eval**: Evaluation of the detection algorithmm (calculate fpr,
+      fnr, and plot the ROC curve).
 
-To see the help message of an experiment, just type :
-    $ ./sadit -e <exper> -h
+- **guitoposim**: Simulate using network topogogy created by GUI
+      topology editor.
+      
+- **sim**: Simulate and generate flow records.
 
-Whenever you are not sure about the options you can set, just add *-h*
-to the end of command and execute it and help message will be printed
+
+To see the help message of an experiment, just type:
+
+`/sadit$ ./cmdsadit <exper> -h`
+
+Whenever you are not sure about the options you can set, just add `-h`
+to the end of the command and execute it, and then the help message will be printed
 correspondingly.
 
-Sample Configuration for Labeled Flow Generator
-------------------------------------- 
+### Sample Configuration for Labeled Flow Generator
+
 
 > - SimExample.py 
 > - TimeVaringSimExample.py 
@@ -212,9 +214,13 @@ Sample Configuration for Labeled Flow Generator
 > - CTMarkovConfig.py 
 > - imalse/
 
-Example Commands :
 
-    $ ./sadit Sim -c <ConfigFilePath>
+Example Commands:
+
+```
+sadit$ ./cmdsadit sim -c ./Example/SimExample.py
+sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py 
+```
 
 ### Sample Configuration for Detectors
 
@@ -225,19 +231,15 @@ Example Commands :
 > -   DetectBatchConfig.py
 
 Examples commands :
+```
+sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py  -d ./Simulator/n0_flow.txt     --method='mfmb'   --pic_show
 
-    $ ./cmdsadit Detect -c Example/DetectConfig.py -d <data_file> -m <method_name>
-    $ ./cmdsadit Detect -c ./Example/RobustDetect.py -d ./Simulator/n0_flow.txt -m robust --lamb=1 --pic_show
-    $ ./cmdsadit DetectBatch -c DetectBatchConfig.py -h
-    $ ./sadit Eval -c EvalConfig.py -h
-    $ cd tools/; ./convert-to-hdf.py ../Simulator/n0_flow.txt fs ./n0_flow.h5; cd ..;
-    $ ./cmdsadit Detect -d ./tools/n0_flow.h5 -c ./Example/DetectConfig.py --data_type='pt' -m mfmb --pic_show
-
+```
 Note: You may need to change the ROOT variable in the configuration
-files before run these commands.
+files before running these commands.
 
-Want to implement your algorithm?
----------------------------------
+### Want to implement your algorithm?
+
 
 ### Use the labeled flow records generator in fs simulator
 The generated flows will be the *ROOT/Simulator* folder. The flows end with *\_flow.txt*, for example,
@@ -251,7 +253,7 @@ n0\_flow.txt is the network flows trough node 0. File start with
 **line format**
 :   prefix node-name time flow\_start\_time flow\_end\_time
     src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destination-name
-    unknown flow-size unknown
+    flow-size(in packets) flow-size(in bytes) protocol-flags
 
 After finishing your detection algorihms, the last thing you need to do
 is to add the corresponding class name to **detector\_map** in
