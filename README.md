@@ -177,7 +177,7 @@ optional arguments:
   
   
 
-*experiment* specifies the experiment you want to execute. An
+`experiment` specifies the experiment you want to execute. An
 **experiment** is actually a subcommand that has some certain functionality.
 
 Some of the available experiments are explained as follows:
@@ -302,7 +302,7 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 > -   EvalConfig.py
 > -   DetectBatchConfig.py
 
-Examples commands :
+Example commands:
 ```
 sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py -d ./Simulator/n0_flow.txt --method='mfmb' --pic_show
 sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/gen-self-check-file.pyf   --pic_show
