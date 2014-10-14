@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 import os
 ROOT = os.environ['SADIT_ROOT']
-=======
+
 # ROOT = '/home/wangjing/Dropbox/Research/sadit/'
 ROOT = '/home/jzh/Dropbox/Git/sadit/'
-
->>>>>>> origin/testing-branch
 
 import numpy as np
 #################################
