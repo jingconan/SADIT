@@ -42,7 +42,7 @@ depend on `settings.py`. Classes are widely used to reduce the need to
 pass parameters around. In case that parameters passing is required,
 well-defined structures are used. 
 
-- **More Flexible Experiments**: A new folder *ROOT/Experiment* appears to contain different experiments. You can write
+- **More Flexible Experiments**: A new folder `ROOT/Experiment` appears to contain different experiments. You can write
 your own experiment scripts  and put them in this folder. 
 
 - **Better Sensitivity Analysis**: In Version 0.0, sensitivity analysis is done
