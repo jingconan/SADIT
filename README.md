@@ -412,7 +412,7 @@ format) in the following link(*it is hosted in Google Drive Server*).
 
 Licensing
 =============
-Please see the file called LICENSE.
+Please see the file called `LICENSE`.
 
 Authors
 =============
