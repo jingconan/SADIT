@@ -75,20 +75,20 @@ in the `ROOT/Detector/gad/Detector` folder:
 
 ### Labeled Flow Records Generator
 
-Labeled Flow Records Generator consists of a *Configurer* and a
-*Simulator*. The *Simulator* part is essentially a revised [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf),
-developed by researchers at UW Madison. The *Configurer* first generates a
+Labeled Flow Records Generator consists of a **Configurer** and a
+**Simulator**. The **Simulator** part is essentially a revised [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf),
+developed by researchers at UW Madison. The **Configurer** first generates a
 flow specification (DOT format) file with certain types of anomalies,
-and then the *Simulator* will generate flow records with labels.
+and then the **Simulator** will generate flow records with labels.
 
 #### Configurer
 
-The *Configurer* generates the corresponding DOT file according to
-descriptions of user behaviour. The important concepts in *Configurer*
+The **Configurer** generates the corresponding DOT file according to
+descriptions of user behaviour. The important concepts in **Configurer**
 are as follows:
 
  -   **Generator**: Descriptions of a certain type of flow traffic. For
-     example, *Harpoon* generator represents [harpoon
+     example, **Harpoon** generator represents [harpoon
      flows](http://cs.colgate.edu/~jsommers/harpoon/).
  -   **Behaviour**: Descriptions of temporal pattern. There are three typical
      types of behaviours: 
@@ -99,17 +99,17 @@ are as follows:
      + **Markovian** behaviour assumes that states at different times are not independent and
        identically distributed, but form a Markov process.
 
- -   **Modulator**: Combination of *Behaviour* and *Generator*; i.e.,
+ -   **Modulator**: Combination of **Behaviour** and **Generator**; i.e.,
      descriptions of generator behaviours. There are three types of
      modulators, corresponding to the three behaviours described above.
 
- -   **Node**: Host in the network, with *modulator\_list* attributes.
- -   **Edge**: Channel connecting two network nodes, with *delay* and *capacity*
+ -   **Node**: Host in the network, with `modulator\_list` attributes.
+ -   **Edge**: Channel connecting two network nodes, with `delay` and `capacity`
      attributes.
  -   **Network**: A collection of network nodes and edges.
  -   **Anomaly**: Descriptions of anomalies. When an anomaly is
-     injected into the network, some attributes in the network (*Node*,
-     *Edge*) will be changed.
+     injected into the network, some attributes in the network (**Node**,
+     **Edge**) will be changed.
 
 #### Simulator
 
