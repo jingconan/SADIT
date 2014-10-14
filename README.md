@@ -76,8 +76,7 @@ in the *ROOT/Detector/gad/Detector* folder:
 ### Labeled Flow Records Generator
 
 Labeled Flow Records Generator consists of a *Configurer* and a
-*Simulator*. The *Simulator* part is essentially a revised [fs
-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf),
+*Simulator*. The *Simulator* part is essentially a revised [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf),
 developed by researchers at UW Madison. The *Configurer* first generates a
 flow specification (DOT format) file with certain types of anomalies,
 and then the *Simulator* will generate flow records with labels.
@@ -114,7 +113,7 @@ are as follows:
 
 #### Simulator
 
-Simulator is basically a revised version of `fs-simulator`. We have added
+Simulator is basically a revised version of [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf). We have added
 support to exporting anomalous flows (with label information).
 
 Usage
