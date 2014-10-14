@@ -232,7 +232,7 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 
 Examples commands :
 ```
-sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py  -d ./Simulator/n0_flow.txt     --method='mfmb'   --pic_show
+sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py  -d ./Simulator/n0_flow.txt --method='mfmb'   --pic_show
 
 ```
 Note: You may need to change the ROOT variable in the configuration
@@ -348,7 +348,8 @@ Collaborator
 =============
 Jing Zhang
 ```
-Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University (advised by Professor Yannis Paschalidis). 
+Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
+(advised by Professor Yannis Paschalidis). 
 
 EMAIL: jzh AT bu.edu
 Personal Webpage: http://people.bu.edu/jzh/
