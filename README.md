@@ -147,9 +147,9 @@ For general installation instructions, see the **Installation** section of the o
 
 # Usage
 
-First, you need to specify the environment variable SADIT_ROOT in Bash. To do this, again, assumming you are working on Ubuntu 12.04 or 14.04, then, first change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
+First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assumming you are working on Ubuntu 12.04 or 14.04, then, first change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
 
-`export SADIT_ROOT=<path_of_your_sadit_installation>`
+`export SADIT_ROOT='path_of_your_sadit_installation'`
 
 Then type 
     $./cmdsadit -h
