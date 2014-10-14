@@ -147,25 +147,36 @@ For general installation instructions, see the **Installation** section of the o
 
 # Usage
 
-First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assumming you are working on Ubuntu 12.04 or 14.04, then, first change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
+First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assumming you are working on Ubuntu 12.04 or 14.04, then, change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
 
 `export SADIT_ROOT='path_of_your_sadit_installation'`
 
-Then type 
-    $./cmdsadit -h
+Now, you are ready to use SADIT. Assume `sadit` is your working directory from now on.
 
-usage: sadit [--profile PROFILE] [-h] [experiment]
+To get help message, just type
+
+ `sadit$ ./cmdsadit -h`
+ 
+Then, you will see the following:
+
+```
+usage: cmdsadit [--profile PROFILE] [-h] [experiment]
+
+sadit
 
 positional arguments:
-
-    experiment print ./sadit <exper> -h for help of a experiment Avaliable
-    experiments are [MultiSrvExperiment | Detect | DetectBatch | Eval | Sim |
-    BaseExper | DetectCompare | SimDetect | Batch | GUITopoSim]
+  experiment         type ./cmdsadit <exper> -h for help of an experiment;
+                     available experiments are [detect | detectbatch |
+                     detectcompare | detectrealtime | eval | guitoposim |
+                     multisrvexperiment | sim]
 
 optional arguments:
+  --profile PROFILE  profile the program
+  -h, --help         print help message and exit
+  ```
+  
+  
 
-    --profile PROFILE profile the program -h, --help print help message and
-    exit
 
 *experiment* specify the experiment you want to execute. An
 **experiment** is actually a subcommand that has certain functionality.
