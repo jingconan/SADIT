@@ -68,9 +68,9 @@ in the *ROOT/Detector/gad/Detector* folder:
      - SVM Temporal Detector
      - SVM Flow-by-Flow Detector
 
- -   **StoDetector.py** contains two anomaly detection algorithms based
-     on Large Deviation Theory.
- -   **RobustDetect.py** contains a algorithm that works robustly under
+ -   **StoDetector.py** contains two anomaly detection algorithms (model-free and model-based) based
+     on the Large Deviation Theory.
+ -   **RobustDetect.py** contains an algorithm that works robustly under
      dynamic network environment.
 
 ### Labeled Flow Records Generator
@@ -78,25 +78,24 @@ in the *ROOT/Detector/gad/Detector* folder:
 Labeled Flow Records Generator consists of a *Configurer* and a
 *Simulator*. The *Simulator* part is essentially a revised [fs
 simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf),
-developed by researchers at UW Madison. *Configurer* first generate a
+developed by researchers at UW Madison. The *Configurer* first generates a
 flow specification (DOT format) file with certain types of anomalies,
-then the *Simulator* will generate flow records and corresponding
-labels.
+and then the *Simulator* will generate flow records with labels.
 
 #### Configurer
 
-*Configurer* generate the corresponding DOT file according to
-description of user behavior. The important concepts in *Configurer*
+The *Configurer* generates the corresponding DOT file according to
+descriptions of user behaviour. The important concepts in *Configurer*
 are as follows:
 
- -   **Generator**: description of a certain type of flow traffic. For
-     examples, *Harpoon* generator represents [harpoon
+ -   **Generator**: Description of a certain type of flow traffic. For
+     example, *Harpoon* generator represents [harpoon
      flows](http://cs.colgate.edu/~jsommers/harpoon/).
- -   **Behaviour**: description of temporal pattern. There are three
-     types behaviour: 
+ -   **Behaviour**: Description of temporal pattern. There are three
+     types of behaviours: 
      + **Normal** behavior is described by start time and duration. 
      + **I.I.D** behavior has a list of possible states, but one state will be
-       selected as current state every *t* seconds according to certain
+       selected as the current state every *t* seconds according to a certain
        probability distribution. 
      + **Markov** the state in different time is not independently and
        identically distributed, but is a Markov process
