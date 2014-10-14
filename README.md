@@ -61,7 +61,7 @@ generator. The following sections will describe them accordingly.
 ### Collection of Anomaly Detection Algorithms
 
 All the detection algorithms locate
-in the *ROOT/Detector/gad/Detector* folder:
+in the `ROOT/Detector/gad/Detector` folder:
 
  -   **SVMDetector.py** contains two SVM-based anomaly detection
      algorithmes: 
