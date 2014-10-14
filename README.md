@@ -103,7 +103,7 @@ are as follows:
      descriptions of generator behaviours. There are three types of
      modulators, corresponding to the three behaviours described above.
 
- -   **Node**: Host in the network, with `modulator\_list` attributes.
+ -   **Node**: Host in the network, with `modulator_list` attributes.
  -   **Edge**: Channel connecting two network nodes, with `delay` and `capacity`
      attributes.
  -   **Network**: A collection of network nodes and edges.
