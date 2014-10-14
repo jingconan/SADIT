@@ -273,7 +273,7 @@ the `sadit.Detector.gad.Detector.DataHandler` module.
 In order to use data in a new format, you need to implement two new classes: 
 
 
-First, a data class that satisfies Data interface (Data.py line 9). Namely, such as a class has to at least provide the following three functions:
+First, a data class that satisfies Data interface (Data.py line 9). Namely, such a class has to at least provide the following three functions:
 * get_rows: row slicing
 * get_where: get range of rows that satisfies a criterion. 
 * get_min_max: get min and max values of a certain feature at a certain range. 
@@ -296,21 +296,6 @@ Second, a data handler class that implements data preprocessing, e.g., quantizat
 * IPHanlder: for logs with IP addresses. It will first cluster IPs and will replace IPV4 to (cluster label, dist to cluster center) pair.
 
 
-If you want to use a new type of data, you need to implement a data wrapper
-class first. `sadit.Detector.gad.Detector.Data` is the base class for all data
-wrapper class. `sadit.Detector.gad.Detector.Data.MEM_DiskFile`is the base class for
-disk file data. `sadit.Detector.gad.Detector.Data.MySQLDatabase` is
-the base class for all mysql database file data.
-
-Optionally, you can implement a handler class that will manipulate the
-DataFile and and some useful quantities that may be useful to you
-algorithms. The data handler classes are defined in
-sadit.Detector.DataHandler module.
-sadit.Detector.DataHandler.QuantizeDataHandler and its subclasses define
-get\_em() function to get probability distribution of the flows, which
-is useful for the stochastic approaches. If you just need the raw data,
-you can simple use sadit.Detector.DataHandler.FakeDataHandler
-
 Then you just need to add your data\_handler to
 **data\_handler\_handle\_map** defined in *ROOT/Detector/gad/Detector/API.py* 
 
@@ -321,7 +306,7 @@ Videos
 
 I have recorded several hand by hand video tutorials for SADIT 1.0. The
 usage of SADIT 1.1 is **a little bit different**, but I think these
-videos will still be useful. I will record new videos for latest version
+videos will still be useful. I will record new videos for the latest version
 of SADIT when I have time.
 
 ### Installation
@@ -381,3 +366,4 @@ Jing Zhang is now a PhD student in Division of Systems Engineering, Boston Unive
 EMAIL: jzh AT bu.edu
 Personal Webpage: http://people.bu.edu/jzh/
 ```
+--Last update: 10/13/2014 (By Jing Z.)
