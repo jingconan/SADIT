@@ -4,8 +4,8 @@
 
 **SADIT** is the acronym of Systematic Anomaly Detection of Internet Traffic. The motivation of SADIT is to make the comparison and the validation of the Internet anomaly detection algorithms super easy. It addresses this problem from the following two perspectives:
 
- 1.  Facilitating the data generation
- 2.  Providing a standard library of anomaly detection algorithms
+- Facilitating the data generation
+- Providing a standard library of anomaly detection algorithms
 
 If you are a researcher interested in Internet Anomaly Detection, we
 strongly encourage you to implement your algorithms following the APIs
@@ -35,14 +35,14 @@ SADIT. Feel free to contact me if you have any question.
 Version 1.0 is a result of big refactor of Version 0.0. The refactor
 makes the code more scalable and less buggy. 
 
-- **Paradigm of Object-Oriented Programming**: The **Configure** module and **Detector**
+- **Object-Oriented Programming Paradigm**: The **Configure** module and **Detector**
 module have been rewritten under object-oriented paradigm. In Version
 0.0, all modules depend on the global settings file `setting.py`, rendering the code more vulunerable to bugs. In this verison only a few scripts
 depend on `settings.py`. Classes are widely used to reduce the need to
 pass parameters around. In case that parameters passing is required,
 well-defined structures are used. 
 
-- **Experiment**: A new folder ROOT/Experiment appears to contain different experiments. You can write
+- **More Flexible Experiments**: A new folder ROOT/Experiment appears to contain different experiments. You can write
 your own experiment scripts  and put them in this folder. 
 
 - **Better Sensitivity Analysis**: In Version 0.0, sensitivity analysis is done
@@ -54,17 +54,20 @@ to support sensitivity analysis.
 # Structure
 
 
-**SADIT** consists of two parts. The first part is a collection of
-anomalies detection algorithms. The second part is labeled flow record
-generator. The follow sections will describe the two parts accordingly.
+SADIT consists of two parts. The first part is a collection of
+anomaly detection algorithms. The second part is a labeled flow record
+generator. The following sections will describe them accordingly.
 
-### Collection of Anomaly Detection Algorithm
+### Collection of Anomaly Detection Algorithms
 
-All the detection algorithms locates
-in the *ROOT/Detector* folder:
+All the detection algorithms locate
+in the *ROOT/Detector/gad/Detector* folder:
 
- -   **SVMDetector.py** contains two SVM based anomaly detection
-     algorithmes: 1. SVM Temporal Detector and 2. SVM Flow by Flow Detector.
+ -   **SVMDetector.py** contains two SVM-based anomaly detection
+     algorithmes: 
+     - SVM Temporal Detector
+     - SVM Flow-by-Flow Detector
+
  -   **StoDetector.py** contains two anomaly detection algorithms based
      on Large Deviation Theory.
  -   **RobustDetect.py** contains a algorithm that works robustly under
