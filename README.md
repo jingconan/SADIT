@@ -340,15 +340,16 @@ Jing Conan Wang
     Mathematica Modeling, i.e., constructing mathematical models for the real
     world and trying to solve practical problems.
 
-    **EMAIL:** wangjing AT bu.edu
-    **Personal Webpage:** http://people.bu.edu/wangjing/
+    EMAIL: wangjing AT bu.edu
+    Personal Webpage: http://people.bu.edu/wangjing/
     
 
 Collaborator
 =============
 Jing Zhang
-
+```
 Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University (advised by Professor Yannis Paschalidis). 
 
-    **EMAIL:** jzh AT bu.edu
-    **Personal Webpage:** http://people.bu.edu/jzh/
+EMAIL: jzh AT bu.edu
+Personal Webpage: http://people.bu.edu/jzh/
+```
