@@ -42,7 +42,7 @@ depend on `settings.py`. Classes are widely used to reduce the need to
 pass parameters around. In case that parameters passing is required,
 well-defined structures are used. 
 
-- **More Flexible Experiments**: A new folder ROOT/Experiment appears to contain different experiments. You can write
+- **More Flexible Experiments**: A new folder *ROOT/Experiment* appears to contain different experiments. You can write
 your own experiment scripts  and put them in this folder. 
 
 - **Better Sensitivity Analysis**: In Version 0.0, sensitivity analysis is done
@@ -88,34 +88,34 @@ The *Configurer* generates the corresponding DOT file according to
 descriptions of user behaviour. The important concepts in *Configurer*
 are as follows:
 
- -   **Generator**: Description of a certain type of flow traffic. For
+ -   **Generator**: Descriptions of a certain type of flow traffic. For
      example, *Harpoon* generator represents [harpoon
      flows](http://cs.colgate.edu/~jsommers/harpoon/).
- -   **Behaviour**: Description of temporal pattern. There are three
+ -   **Behaviour**: Descriptions of temporal pattern. There are three typical
      types of behaviours: 
-     + **Normal** behavior is described by start time and duration. 
-     + **I.I.D** behavior has a list of possible states, but one state will be
+     + **Normal** behaviour is described by start time and duration. 
+     + **I.I.D.** behaviour has a list of possible states, but one state will be
        selected as the current state every *t* seconds according to a certain
        probability distribution. 
-     + **Markov** the state in different time is not independently and
-       identically distributed, but is a Markov process
+     + **Markovian** behaviour assumes that states at different times are not independent and
+       identically distributed, but form a Markov process.
 
- -   **Modulator**: combine *Behaviour* and *Generator*, basically
-     description of generator behavior. There are three types of
-     modulators, corresponding to three behaviors described above.
+ -   **Modulator**: Combination of *Behaviour* and *Generator*; i.e.,
+     descriptions of generator behaviours. There are three types of
+     modulators, corresponding to the three behaviours described above.
 
- -   **Node**: host in the network, has *modulator\_list* attributes
- -   **Edge**: connecting two network nodes, has *delay*, *capacity*
-     attributes
- -   **Network**: a collection of network nodes and edges
- -   **Anomaly**: description of the anomaly. When an anomaly is
+ -   **Node**: Host in the network, with *modulator\_list* attributes.
+ -   **Edge**: Channel connecting two network nodes, with *delay* and *capacity*
+     attributes.
+ -   **Network**: A collection of network nodes and edges.
+ -   **Anomaly**: Descriptions of anomalies. When an anomaly is
      injected into the network, some attributes in the network (*Node*,
      *Edge*) will be changed.
 
 #### Simulator
 
-Simulator is basically a revised version of fs simulator. We have added
-support to export anomalous flows(add label information).
+Simulator is basically a revised version of `fs-simulator`. We have added
+support to exporting anomalous flows (with label information).
 
 Usage
 =====
