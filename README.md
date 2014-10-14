@@ -322,7 +322,7 @@ The generated flows will be the `ROOT/Simulator` folder. The flows end with `_fl
 :   text-export n0 1348412129.925416 1348412129.925416 1348412130.070733
     10.0.7.4:80-\>10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA
 
-**line format**
+**Line format**
 :   prefix node-name time flow\_start\_time flow\_end\_time
     src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destination-name
     flow-size(in packets) flow-size(in bytes) protocol-flags
