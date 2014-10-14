@@ -131,7 +131,16 @@ or you can use `git` to get a complete copy with revision history:
 
 
 SADIT can be installed on Linux, Mac OS X and Windows (through cygwin)
-with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-key installation scrit. To be specific, if you are working on Ubuntu 12.04, then, first, change your working directory to be the ROOT folder of SADIT, which should be renamed as `sadit` (just for )
+with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-key installation scrit. 
+
+To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following:
+
+- First, rename the ROOT folder of SADIT as `sadit` (otherwise there will be import errors).
+- Second, change the working directory to be `sadit/install`, and then type:
+  
+  `sadit/install$ sudo bash install_on_ubuntu_12_04.sh` (for Ubuntu 12.04) or
+  `sadit/install$ sudo bash install_on_ubuntu_14_04.sh` (for Ubuntu 14.04) 
+
 
 ### Debian (Ubuntu, Mint, etc)
 
