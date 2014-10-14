@@ -1,4 +1,4 @@
-
+﻿
 # Introduction
 
 
@@ -15,7 +15,6 @@ if you can contribute your own algorithm(s) to the algorithms library of
 SADIT. Feel free to contact me if you have any question.
 
 ### What's New in Version 1.1
-
 
  -   **More Flexible Configuration Script**: You can set
      parameters in a separate configuration script and specify it with `-c`
@@ -37,7 +36,7 @@ makes the code more scalable and less buggy.
 
 - **Object-Oriented Programming Paradigm**: The **Configure** module and **Detector**
 module have been rewritten under object-oriented paradigm. In Version
-0.0, all modules depend on the global settings file `setting.py`, rendering the code more vulunerable to bugs. In this verison only a few scripts
+0.0, all modules depend on the global settings file `setting.py`, rendering the code more vulunerable to bugs. In this version only a few scripts
 depend on `settings.py`. Classes are widely used to reduce the need to
 pass parameters around. In case that parameters passing is required,
 well-defined structures are used. 
@@ -60,8 +59,7 @@ generator. The following sections will describe them accordingly.
 
 ### Collection of Anomaly Detection Algorithms
 
-All the detection algorithms locate
-in the `ROOT/Detector/gad/Detector` folder:
+All the detection algorithms locate in the `ROOT/Detector/gad/Detector` folder:
 
  -   **SVMDetector.py** contains two SVM-based anomaly detection
      algorithmes: 
@@ -120,11 +118,11 @@ support to exporting anomalous flows (with label information).
 # Installation
 
 SADIT can be installed on Linux, Mac OS X and Windows (through cygwin)
-with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-key installation script. 
+with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-command installation script. 
 
 To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following sequentially:
 
-1. Change the working directory to where you want to install SADIT, make a new folder `sadit`, and then type:
+1. Change the working directory to where you want to install SADIT, create a new folder `sadit`, and then type:
 
  `$ git clone https://github.com/hbhzwj/SADIT.git sadit/`
 
@@ -139,7 +137,7 @@ To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the follo
 
 `sadit/install$ sudo bash install_on_ubuntu_14_04.sh` (for Ubuntu 14.04) 
 
-For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). (Note that some of them apply only to an older SADIT version and thus outdated!) 
+For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). (Note that some of them therein apply only to an older SADIT version and thus outdated!) 
 
 
 
@@ -149,13 +147,18 @@ For general installation instructions, see the **Installation** section of the o
 
 First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assuming you are working on Ubuntu 12.04 or 14.04, then, change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
 
-`export SADIT_ROOT='path_of_your_sadit_installation'`
+`export SADIT_ROOT='<path_of_your_sadit_installation>'`
+
+For instance, my path of `sadit` installation is `/home/jzh/Dropbox/Git/sadit`, so, at the end of the file `.profile`, I added
+
+`export SADIT_ROOT='/home/jzh/Dropbox/Git/sadit'`
+
 
 Now, you are ready to use SADIT. Assume `sadit` is your working directory from now on.
 
 To get general help message, just type
 
- `sadit$ ./cmdsadit -h`
+`sadit$ ./cmdsadit -h`
  
 Then, you will see the following:
 
@@ -178,22 +181,22 @@ optional arguments:
   
 
 `experiment` specifies the experiment you want to execute. An
-**experiment** is actually a subcommand that has some certain functionality.
+experiment is actually a subcommand that has some certain functionality.
 
 Some of the available experiments are explained as follows:
 - **detect**: Detect the flow records data specified by `-d` option.
     
-- **detectbatch**: Run detection algortihms with all combinations
+- **detectbatch**: Run detection algorithms with all combinations
       of parameters and output the results to a folder; helps to
       select the optimal parameters.
     
 - **detectcompare**: Run several detection algorithms and save the
       intermediate results; can also load results computed before
       and show comparison figure.
-- **eval**: Evaluation of the detection algorithmm (calculate fpr,
+- **eval**: Evaluation of the detection algorithm (calculate fpr,
       fnr, and plot the ROC curve).
 
-- **guitoposim**: Simulate using network topogogy created by GUI
+- **guitoposim**: Simulate using network topology created by GUI
       topology editor.
       
 - **sim**: Simulate and generate flow records.
@@ -312,59 +315,64 @@ sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/robu
 **NOTE:** *Before running these commands, you may need to change the ROOT variable accordingly in the configuration
 files. You may also need to check the existence and the actual path of the data file to be imported.*
 
-### Want to implement your algorithm(s)?
+For instance, if opening `sadit/sadit/Example/SimExample.py`, you will see its Line 1 to be:
+
+`ROOT = '/home/jzh/Dropbox/Git/sadit'`
+
+To make this configration file work on machine, say, by typing 
+
+`sadit$ ./cmdsadit sim -c ./Example/SimExample.py`,
+
+you may first need to change the path `/home/jzh/Dropbox/Git/sadit` accordingly.
 
 
-#### Use the labeled flow records generator in fs simulator
+### Want to Implement Your Algorithm(s)?
+
+
+#### Use the Labeled Flow Records Generated by [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf)
 The generated flows will be the `ROOT/Simulator` folder. The flows end with `_flow.txt`, for example,
 `n0_flow.txt` is the network flows trough node 0. File start with
-`abnormal_` is the exported abnormal flows correspondingly.
+`abnormal_` is the exported abnormal flows correspondingly. 
 
 **A typical line is**
-:   text-export n0 1348412129.925416 1348412129.925416 1348412130.070733
-    10.0.7.4:80-\>10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA
+:   `text-export n0 1348412129.925416 1348412129.925416 1348412130.070733 10.0.7.4:80-\>10.0.8.5:53701 tcp 0x0 n1 5 4215 FSA`
 
 **Line format**
-:   prefix node-name time flow\_start\_time flow\_end\_time
-    src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destination-name
-    flow-size(in packets) flow-size(in bytes) protocol-flags
+:   `prefix node-name time flow\_start\_time flow\_end\_time src\_ip:src\_port-\>dst\_ip:dst\_port protocol payload destination-name flow-size(in packets) flow-size(in bytes) protocol-flags`
 
-After finishing your detection algorithms, the last thing you need to do
-is to add the corresponding class name to `detector_map` in
-`ROOT/Detector/gad/Detector/API.py`. After that you will be able to use your
-detection algorithm. You can use `Compare` experiment to compare with
-other algorithm or `Eval` algorithm to Evaluate your algorithm. You
-can also implement new experiment to play with your new algorithm.
+After finishing your detection algorithm(s), the last thing you need to do
+is add the corresponding class name to `detector_map` in `ROOT/Detector/gad/Detector/API.py`. After that you will be able to use your
+detection algorithm(s). You can use `Compare` experiment to compare with
+other algorithms or `Eval` algorithm to Evaluate your algorithm(s). You
+can also implement new experiment to play with your new algorithm(s).
 
-#### Use Other flow records
+#### Use Other Flow Records
 
 SADIT does not only support the text output format of [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf), but
-also several other types of flow data. The data wrapper classes are
-defined in `sadit.Detector.gad.Detector.Data` module and the handler classes locate in
-the `sadit.Detector.gad.Detector.DataHandler` module.
+also several other types of flow data. The data wrapper classes are defined in `sadit.Detector.gad.Detector.Data` module and the handler classes locate in the `sadit.Detector.gad.Detector.DataHandler` module.
 
 
 In order to use data in a new format, you need to implement two new classes: 
 
 
 First, a data class that satisfies Data interface (`Data.py`, Line 9). Namely, such a class has to at least provide the following three functions:
-* get_rows: row slicing
-* get_where: get range of rows that satisfies a criterion. 
-* get_min_max: get min and max values of a certain feature at a certain range. 
+* `get_rows`: row slicing
+* `get_where`: get range of rows that satisfies a criterion. 
+* `get_min_max`: get min and max values of a certain feature at a certain range. 
 
 The package has included several data classes, which all locates in `Data.py`. In some cases, you can re-use existing classes.
 
-* MEM_DiskFile: base class for disk file data. 
-* MEM_FS: disk file generated by [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf).
-* MEM_FlowExport: disk file generated by FlowExport tool
-* MySQLDatabase: base class for data in disk file. 
+* `MEM_DiskFile`: base class for disk file data. 
+* `MEM_FS`: disk file generated by [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf).
+* `MEM_FlowExport`: disk file generated by FlowExport tool
+* `MySQLDatabase`: base class for data in disk file. 
 
 
 Second, a data handler class that implements data preprocessing, e.g., quantization.
 
 
-* QuantizeDataHandler: will quantize the input data.
-* IPHanlder: for logs with IP addresses. It will first cluster IPs and will replace IPV4 to (cluster label, dist to cluster center) pair.
+* `QuantizeDataHandler`: will quantize the input data.
+* `IPHanlder`: for logs with IP addresses. It will first cluster IPs and replace IPV4 with `(cluster label, dist to cluster center)` pair.
 
 
 Then you just need to add your `data_handler` to
@@ -392,7 +400,7 @@ http://www.youtube.com/embed/i87sXncx5KA
 
 http://www.youtube.com/embed/w-9kHeMcIZw
 
-### Basic run and tune of parameters
+### Running and Tunning Parameters
 
 http://www.youtube.com/embed/rAIJwZpIOjY
 
@@ -412,24 +420,21 @@ format) in the following link(*it is hosted in Google Drive Server*).
 
 Licensing
 =============
-Please see the file called `LICENSE`.
+Please see the `LICENSE` file.
 
 Authors
 =============
-Jing Conan Wang
+Jing (Conan) Wang
+```
+Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, Boston University (advised by Professor Yannis Paschalidis).  His main interest is Mathematical Modeling, i.e., constructing mathematical models for the real world and trying to solve practical problems.
 
-    Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, 
-    Boston University (advised by Professor Yannis Paschalidis).  His main interest is
-    Mathematica Modeling, i.e., constructing mathematical models for the real
-    world and trying to solve practical problems.
-
-    EMAIL: wangjing AT bu.edu
-    Personal Webpage: http://people.bu.edu/wangjing/
-    
+EMAIL: wangjing AT bu.edu
+Personal Webpage: http://people.bu.edu/wangjing/
+``` 
 
 Collaborator
 =============
-Jing John Zhang
+Jing (John) Zhang
 ```
 Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
 (advised by Professor Yannis Paschalidis). 
@@ -437,4 +442,4 @@ Jing Zhang is now a PhD student in Division of Systems Engineering, Boston Unive
 EMAIL: jzh AT bu.edu
 Personal Webpage: http://people.bu.edu/jzh/
 ```
-Last update: 10/14/2014 (By Jing Z.)
+Last update: 10/15/2014 (By Jing Z.)
