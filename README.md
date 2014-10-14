@@ -232,7 +232,7 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 
 Examples commands :
 ```
-sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py  -d ./Simulator/n0_flow.txt --method='mfmb'   --pic_show
+sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py -d ./Simulator/n0_flow.txt --method='mfmb' --pic_show
 
 ```
 Note: You may need to change the ROOT variable in the configuration
@@ -257,7 +257,7 @@ n0\_flow.txt is the network flows trough node 0. File start with
 
 After finishing your detection algorihms, the last thing you need to do
 is to add the corresponding class name to **detector\_map** in
-*ROOT/Detector/API.py*. After that you will be able to use your
+*ROOT/Detector/gad/Detector/API.py*. After that you will be able to use your
 detection algorithm. You can use **Compare** experiment to compare with
 other algorithm or **Eval** algorithm to Evaluate your algorithm. You
 can also implement new experiment to play with your new algorithm.
@@ -270,7 +270,7 @@ defined in sadit.Detector.Data module and the handler classes locate in
 the sadit.Detector.DataHandler module.
 
 If you want use a new type of data, you need to implement a data wrapper
-class first. sadit.Detector.Data.Data is the base class for all data
+class first. sadit.Detector.gad.Detector.Data.Data is the base class for all data
 wrapper class. sadit.Detector.Data.MEM\_DiskFile is the base class for
 all file-type data wrapper data. sadit.Detector.Data.MySQLDatabase is
 the base class for all mysql database wrapper class.
@@ -335,8 +335,8 @@ Authors
 =============
 Jing Conan Wang
 
-    Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, Boston
-    University (advised by Professor Yannis Paschalidis).  His main interest is
+    Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, 
+    Boston University (advised by Professor Yannis Paschalidis).  His main interest is
     Mathematica Modeling, i.e., constructing mathematical models for the real
     world and trying to solve practical problems.
 
