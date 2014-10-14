@@ -366,7 +366,7 @@ Second, a data handler class that implements data preprocessing, e.g., quantizat
 
 
 Then you just need to add your `data_handler` to
-`data\_handler\_handle\_map` defined in `ROOT/Detector/gad/Detector/API.py`
+`data_handler_handle_map` defined in `ROOT/Detector/gad/Detector/API.py`
 
 
 
