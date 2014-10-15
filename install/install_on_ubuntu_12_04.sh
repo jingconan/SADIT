@@ -6,4 +6,5 @@
 sudo apt-get install mercurial
 sudo bash debian.sh 
 sudo apt-get install python-scipy
+sudo apt-get install python-pydot
 sudo sh clean.sh
