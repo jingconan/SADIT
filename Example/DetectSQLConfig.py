@@ -1,5 +1,5 @@
-# ROOT = '/home/wangjing/Dropbox/Research/sadit/'
-ROOT = '/home/jzh/Dropbox/Git/sadit/'
+import os
+ROOT = os.environ['SADIT_ROOT']
 
 #################################
 ##   Parameters For Detector  ###

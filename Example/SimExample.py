@@ -1,4 +1,6 @@
-ROOT = '/home/jzh/Dropbox/Git/sadit'
+# import os
+# ROOT = os.environ['SADIT_ROOT']
+# ROOT = '/home/jzh/Dropbox/Git/sadit'
 
 #################################
 ##   Network Topology ##

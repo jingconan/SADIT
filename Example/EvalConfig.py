@@ -3,8 +3,8 @@
 # EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
 # EXPORT_ABNORMAL_FLOW_PARA_FILE = ROOT + '/Share/ano_flow_para.txt'
 # EXPORT_ABNORMAL_FLOW_FILE = ROOT + '/Simulator/abnormal_n0_flow.txt'
-# ROOT = '/home/wangjing/Dropbox/Research/sadit/'
-ROOT = '/home/jzh/Dropbox/Git/sadit/'
+import os
+ROOT = os.environ['SADIT_ROOT']
 
 #################################
 ##   Parameters For Detector  ###

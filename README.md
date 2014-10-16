@@ -139,7 +139,7 @@ To be specific, if you are working on Ubuntu 12.04 or 14.04, then do the followi
 
 3. Change the working directory to be `sadit/install`, and then type:
 
-`sadit/install$ sudo sh debian.sh` 
+ `sadit/install$ sudo sh debian.sh` 
 
 
 For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). 
@@ -309,21 +309,11 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 
 Example commands:
 ```
-sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py -d ./Simulator/n0_flow.txt --method='mfmb' --pic_show
+./cmdsadit detect -c ./Example/DetectConfig.py -d ./test/n0_flow.txt --method='mfmb' --pic_show
 
 ```
 **NOTE:** *Before running these commands, you may need to change the ROOT variable accordingly in the configuration
 files. You may also need to check the existence and the actual path of the data file to be imported.*
-
-For instance, if opening `sadit/Example/SimExample.py`, you will see its Line 1 to be:
-
-`ROOT = '/home/jzh/Dropbox/Git/sadit'`
-
-To make this configration file work on your machine, say, by typing 
-
-`sadit$ ./cmdsadit sim -c ./Example/SimExample.py`,
-
-you may first need to change the path `/home/jzh/Dropbox/Git/sadit` accordingly.
 
 
 ### Want to Implement Your Algorithm(s)?
