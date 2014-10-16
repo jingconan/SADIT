@@ -151,11 +151,11 @@ First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do 
 
 `export SADIT_ROOT='<path_of_your_sadit_installation>'`
 
-For instance, my path of `sadit` installation is `/home/jzh/Research/Anomaly_Detection/sadit`, so, at the end of the file `.profile`, I added
+For instance, my path of `sadit` installation is `/home/jzh/Dropbox/Git/sadit`, so, at the end of the file `.profile`, I added
 
-`export SADIT_ROOT='/home/jzh/Research/Anomaly_Detection/sadit'`
+`export SADIT_ROOT='/home/jzh/Dropbox/Git/sadit'`
 
-You may also specify the above content (`export SADIT_ROOT=<path_of_your_sadit_installation>`) each time in the terminal when asked to.
+Alternatively, you may also specify the above content (`export SADIT_ROOT=<path_of_your_sadit_installation>`) each time in the terminal when asked to.
 
 Now, you are ready to use SADIT. Assume `sadit` is your working directory from now on.
 
@@ -310,8 +310,6 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 Example commands:
 ```
 sadit$ ./cmdsadit detect -c ./Example/DetectConfig.py -d ./Simulator/n0_flow.txt --method='mfmb' --pic_show
-sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/gen-self-check-file.pyf   --pic_show
-sadit$ ./cmdsadit detect -m robust -c ./Example/Sample_Configs_for_TCNS_new/robust-detect.pyf --pic_show
 
 ```
 **NOTE:** *Before running these commands, you may need to change the ROOT variable accordingly in the configuration
