@@ -14,6 +14,13 @@ with the existing algorithms in SADIT. Your help will be highly appreciated
 if you can contribute your own algorithm(s) to the algorithms library of
 SADIT. Feel free to contact me if you have any question.
 
+
+### What's New in Version 1.1.1
+
+ -  **Wrap the Detector Module as Sub-Package [GAD](https://github.com/hbhzwj/GAD) (General Anomaly Detector)**: If you are merely interested in detection rathan than
+    both simulated network traffic data generation and anomaly detection, then you may only need to install [GAD](https://github.com/hbhzwj/GAD). 
+
+
 ### What's New in Version 1.1
 
  -   **More Flexible Configuration Script**: You can set
@@ -117,10 +124,9 @@ support to exporting anomalous flows (with label information).
 
 # Installation
 
-SADIT can be installed on Linux, Mac OS X and Windows (through cygwin)
-with python 2.7. However, we strongly recommend the Linux distribution Ubuntu 12.04 or 14.04, for each of which we have prepared a one-command installation script. 
+SADIT can be installed on Linux, Mac OS X and Windows (through cygwin) with python 2.7. However, we strongly recommend the debian-based OS, e.g., Ubuntu 12.04 or 14.04, for which we have prepared a one-command installation script. 
 
-To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the following sequentially:
+To be specific, if you are working on Ubuntu 12.04 or 14.04, then do the following sequentially:
 
 1. Change the working directory to where you want to install SADIT, create a new folder `sadit`, and then type:
 
@@ -133,14 +139,10 @@ To be specific, if you are working on Ubuntu 12.04 (or 14.04), then do the follo
 
 3. Change the working directory to be `sadit/install`, and then type:
 
-`sadit/install$ sudo bash install_on_ubuntu_12_04.sh` (for Ubuntu 12.04) or
-
-`sadit/install$ sudo bash install_on_ubuntu_14_04.sh` (for Ubuntu 14.04) 
-
-For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). (Note that some of them therein apply only to an older SADIT version and thus outdated!) 
+`sadit/install$ sudo sh debian.sh` 
 
 
-
+For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). 
 
 
 # Usage
@@ -149,10 +151,11 @@ First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do 
 
 `export SADIT_ROOT='<path_of_your_sadit_installation>'`
 
-For instance, my path of `sadit` installation is `/home/jzh/Dropbox/Git/sadit`, so, at the end of the file `.profile`, I added
+For instance, my path of `sadit` installation is `/home/jzh/Research/Anomaly_Detection/sadit`, so, at the end of the file `.profile`, I added
 
-`export SADIT_ROOT='/home/jzh/Dropbox/Git/sadit'`
+`export SADIT_ROOT='/home/jzh/Research/Anomaly_Detection/sadit'`
 
+You may also specify the above content (`export SADIT_ROOT=<path_of_your_sadit_installation>`) each time in the terminal when asked to.
 
 Now, you are ready to use SADIT. Assume `sadit` is your working directory from now on.
 
@@ -442,4 +445,4 @@ Jing Zhang is now a PhD student in Division of Systems Engineering, Boston Unive
 EMAIL: jzh AT bu.edu
 Personal Webpage: http://people.bu.edu/jzh/
 ```
-Last update: 10/15/2014 (By Jing Z.)
+Last update: 10/16/2014 (By Jing Z.)
