@@ -12,7 +12,16 @@ strongly encourage you to implement your algorithms following the APIs
 and data format of SADIT so that you can easily compare your methods
 with the existing algorithms in SADIT. Your help will be highly appreciated
 if you can contribute your own algorithm(s) to the algorithms library of
-SADIT. Feel free to contact me if you have any question.
+SADIT. Feel free to contact us if you have any questions.
+
+If you are interested in our recent publications (see below) on network anomaly detection and want to use them as references, please cite the repository [SADIT](https://github.com/hbhzwj/SADIT)/[GAD](https://github.com/hbhzwj/GAD) together with:
+
+
+Jing Wang and I. Ch. Paschalidis, "***Statistical Traffic Anomaly Detection in Time-Varying Communication Networks***", IEEE Transactions on Control of Network Systems, in print.
+
+Jing Wang and I. Ch. Paschalidis,  "***Robust Anomaly Detection in Dynamic Networks***", Proceedings of the 22nd Mediterranean Conference on Control and Automation
+  (MED 14), pages 428-433, June 16--19, 2014, Palermo, Italy. 
+
 
 
 ### What's New in Version 1.1.1
