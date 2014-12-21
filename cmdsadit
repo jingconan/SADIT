@@ -11,7 +11,7 @@ if ROOT is None:
     sys.exit()
 if not ROOT.endswith('sadit'):
     print('Please set <SADIT_ROOT> path variable correctly. '
-          'Please change the name of the <ROOT> folder to sadit. Other name '
+          'Please change the name of the <ROOT> folder to be sadit. Other name '
             'will cause import problem')
     sys.exit()
 
@@ -71,7 +71,7 @@ def main(args, res_args):
     try:
         get_exper(args.experiment, res_args).run()
     except:
-        print('Probabably you forget to specify some options?'
+        print('Probabably you forgot to specify some options?'
                 ' run cmdsadit <exper> -h for more information.')
         import traceback
         tb = traceback.format_exc()
@@ -83,4 +83,4 @@ if args.profile:
     command = """main(args, res_args)"""
     cProfile.runctx( command, globals(), locals(), filename=args.profile)
 else:
-    main(args, res_args)
+    main(args, res_args)    

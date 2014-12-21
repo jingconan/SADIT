@@ -422,24 +422,27 @@ Please see the `LICENSE` file.
 Authors
 =============
 Jing (Conan) Wang
-```
+
 Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, 
-Boston University (advised by Professor Yannis Paschalidis).  His main interest is 
+Boston University (advised by Professor [Yannis Paschalidis](http://ionia.bu.edu/)).  His main interest is 
 Mathematical Modeling, i.e., constructing mathematical models for the real world and 
 trying to solve practical problems.
 
-EMAIL: wangjing AT bu.edu
+Email: wangjing AT bu.edu
+
 Personal Webpage: http://people.bu.edu/wangjing/
-``` 
+
 
 Collaborator
 =============
 Jing (John) Zhang
-```
-Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
-(advised by Professor Yannis Paschalidis). 
 
-EMAIL: jzh AT bu.edu
+Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
+(advised by Professor [Yannis Paschalidis](http://ionia.bu.edu/)). 
+
+EMail: jzh AT bu.edu
+
 Personal Webpage: http://people.bu.edu/jzh/
-```
-Last update: 10/16/2014 (By Jing Z.)
+
+
+*Last update: 10/22/2014 (By Jing Z.)*
