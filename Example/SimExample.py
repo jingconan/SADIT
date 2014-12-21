@@ -43,14 +43,14 @@ NET_DESC = dict(
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 7200 # simulation time
+sim_t = 18000 # simulation time
 start = 0 # start time
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
 gen_desc1 = {
         'TYPE':'harpoon', # type of flow generated, defined in fs
         'flow_size_mean':'4e3', # flow size is normal distribution. Mean
-        'flow_size_var':'100', # variance
+        'flow_size_var':'800', # variance
         'flow_arrival_rate':'0.1' # flow arrival is poisson distribution. Arrival rate
         }
 
@@ -72,9 +72,10 @@ NORM_DESC = dict(
 ANO_DESC = {
         'anoType':'anomaly',
         'ano_node_seq':2,
-        'T':(5500, 6000),
+        'T':(8000, 10000),
         'change':{'flow_size_mean':'x10'},
-        # 'change':{'flow_arrival_rate':'x10'},
+        # 'T':(2500, 3000),
+        # 'change':{'flow_arrival_rate':'x5'},
         'srv_id':0,
         }
 
