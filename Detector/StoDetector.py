@@ -100,7 +100,7 @@ class StoDetector (WindowDetector):
                 help='entropy threshold to determine the anomaly, has \
                 higher priority than hoeff_far')
 
-        parser.add_argument('--ccoef', default=30.0, type=float,
+        parser.add_argument('--ccoef', default=0.0, type=float,
                 help="""correction coefficient for calculat threshold using hoeffding rule.
                 hoeffding threshold is only a asymotical result. An O(n) linear term has been
                 abandon during the analysis, however, it practice, this term is important. You
@@ -236,7 +236,15 @@ class StoDetector (WindowDetector):
 
         """
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
-        return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
+        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
+        from scipy.stats import chi2 # added by Jing Zhang (jingzbu@gmail.com)
+        # added by Jing Zhang (jingzbu@gmail.com)
+        # the following threshold is suggested in http://arxiv.org/abs/0909.2234
+        QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')
+        QuantLevel_2 = self.desc['fea_option'].get('flow_size')
+        QuantLevel_3 = self.desc['fea_option'].get('cluster')
+        return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, QuantLevel_1 * \
+			QuantLevel_2 * QuantLevel_3 - 1)
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
