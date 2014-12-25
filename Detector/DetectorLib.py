@@ -73,7 +73,7 @@ def adjust_mat(P):
 # DF = lambda x,y:abs(x[0]-y[0]) * (256**3) + abs(x[1]-y[1]) * (256 **2) + abs(x[2]-y[2]) * 256 + abs(x[3]-y[3])
 from sadit.util import DF
 
-EPS = 1e-50
+EPS = 1e-10
 from math import log
 def I1(nu, mu):
     """  Calculate the empirical measure of two probability vector nu and mu

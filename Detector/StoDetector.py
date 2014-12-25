@@ -10,11 +10,19 @@ __status__ = "Development"
 import os
 from math import log
 
+###### added by Jing Zhang (jingzbu@gmail.com)
+import numpy as np  
+from numpy import linalg as LA
+from math import sqrt
+from scipy.stats import chi2 
+from matplotlib.mlab import prctile
+##############################################
+
 from sadit.util import DataEndException, FetchNoDataException, abstract_method
 from sadit.util import save_csv, plt
 from sadit.util import zdump, zload
 
-from .DetectorLib import I1, I2
+from .DetectorLib import I1, I2, adjust_mat
 from .mod_util import plot_points
 from .Base import WindowDetector
 
@@ -142,6 +150,158 @@ class StoDetector (WindowDetector):
         rg_type = self.desc['win_type']
         return self.ref_file.get_em(rg=nominal_rg, rg_type=rg_type)
 
+    ###### added by Jing Zhang (jingzbu@gmail.com)
+    def Q_est(self, mu):
+        """ 
+        Estimate the original transition matrix Q
+        Example
+        ----------------
+        >>> mu = [[0.625,  0.125],  [0.125,  0.125]]
+        >>> print Q_est(mu)
+        [[ 0.83333333  0.16666667]
+        [ 0.5         0.5       ]]
+        """
+        mu = np.array(mu) 
+        N, _ = mu.shape
+        assert(N == _)
+
+        pi = np.sum(mu, axis=1)
+        Q = mu / np.dot( pi.reshape(-1, 1), np.ones((1, N)) )
+        Q = np.array(Q) 
+        
+        return Q
+        
+    ###### added by Jing Zhang (jingzbu@gmail.com)
+    def P_est(self, Q):
+        """
+        Estimate the new transition matrix P
+        Example
+        ----------------
+        >>> Q = [[ 0.83333333,  0.16666667],
+                 [ 0.5,         0.5       ]]
+        >>> Q = np.array(Q) 
+        >>> print P_est(Q)
+            [[ 0.83333333  0.16666667  0.          0.        ]
+             [ 0.          0.          0.5         0.5       ]
+             [ 0.83333333  0.16666667  0.          0.        ]
+             [ 0.          0.          0.5         0.5       ]]
+        """
+        N, _ = Q.shape
+        assert(N == _)
+        P1 = np.zeros((N, N**2))
+        for j in range(0, N):
+            for i in range( j * N, (j + 1) * N ):
+                P1[j, i] = Q[j, i - j * N]  
+        P = np.tile(P1, (N, 1))
+    
+        return P
+    
+    ###### added by Jing Zhang (jingzbu@gmail.com)
+    def G_est(self, Q):
+        """
+        Estimate the gradient
+        Example
+        ----------------
+        >>> Q = [[ 0.83333333,  0.16666667],
+                 [ 0.5,         0.5       ]]
+        >>> print G_est(Q)
+            [[ 0.16666667  0.83333333  0.5         0.5       ]]
+        """
+        N, _ = Q.shape
+        assert(N == _)
+        alpha = 1 - Q
+        G = alpha.reshape(1, N**2, order='F')
+    
+        return G
+    
+    ###### added by Jing Zhang (jingzbu@gmail.com)
+    def H_est(self, mu):
+        """
+        Estimate the Hessian
+        Example
+        ----------------
+        >>> Q = [[ 0.83333333,  0.16666667],
+                 [ 0.5,         0.5       ]]
+        >>> print H_est(Q)
+            [[ 0.04444444  0.         -0.22222222  0.        ]
+             [ 0.          2.          0.         -2.        ]
+             [-1.11111111  0.          5.55555556  0.        ]
+             [ 0.         -2.          0.          2.        ]]
+        """
+        mu = np.array(mu) 
+        N, _ = mu.shape
+        assert(N == _)
+    
+        H = np.zeros((N, N, N, N))
+        for i in range(0, N):
+            for j in range(0, N):
+                for k in range(0, N):
+                    for l in range(0, N):
+                        if k != i:
+                            H[i, j, k, l] = 0
+                        elif l == j:
+                            H[i, j, k, l] = 1.0 / mu[i, j] - 1.0 / (sum(mu[i, :])) - \
+                            ((sum(mu[i, :])) - mu[i, j]) / ((sum(mu[i, :]))**2)
+                        else:
+                            H[i, j, k, l] = - ((sum(mu[i, :])) - mu[i, j]) / \
+                                ((sum(mu[i, :]))**2)                   
+        H = np.reshape(H, (N**2, N**2), order='F')
+    
+        return H
+    
+    ###### added by Jing Zhang (jingzbu@gmail.com)
+    def Sigma_est(self, P, mu):
+        """
+        Estimate the covariance matrix of the empirical measure (Note that here 
+        'empirical measure' means differently than elsewhere in the package)
+        Example
+        ----------------
+        >>> Q = [[ 0.83333333,  0.16666667],
+                 [ 0.5,         0.5       ]]
+        >>> print Sigma_est(Q)
+            [[ 0.625   -0.15625 -0.15625 -0.3125 ]
+             [-0.15625  0.0625   0.0625   0.03125]
+             [-0.15625  0.0625   0.0625   0.03125]
+             [-0.3125   0.03125  0.03125  0.25   ]]
+        """  
+        mu = np.array(mu)
+
+        N, _ = mu.shape
+        assert(N == _)
+
+        muVec = np.reshape(mu, (1, N**2))
+        I = np.matrix(np.identity(N**2)) 
+        M = 1000
+    
+        PP = np.zeros((M, N**2, N**2))
+        for m in range(1, M):
+            PP[m] = LA.matrix_power(P, m)
+        
+        series = np.zeros((1, M))
+    
+        Sigma = np.zeros((N**2, N**2))
+        for i in range(0, N**2):
+            for j in range(0, N**2):
+                for m in range(1, M):
+                    series[0, m] = muVec[0, i] * (PP[m][i, j] - muVec[0, j]) + \
+                                    muVec[0, j] * (PP[m][j, i] - muVec[0, i])
+                Sigma[i, j] = muVec[0, i] * (I[i, j] - muVec[0, j]) + \
+                                sum(series[0, :])
+            
+        # Essure Sigma to be symmetric
+        Sigma = (1.0 / 2) * (Sigma + np.transpose(Sigma))  
+    
+        # Essure Sigma to be positive semi-definite
+        D, V = LA.eig(Sigma)
+        D = np.diag(D)
+        Q, R = LA.qr(V)  
+        for i in range(0, N**2):
+            if D[i, i] < 0:
+                D[i, i] = 0
+        Sigma = np.dot(np.dot(Q, D), LA.inv(Q))
+        
+        return Sigma
+        
     # def detect(self, data_file, nominal_rg = [0, 1000], rg_type='time',  max_detect_num=None):
     def detect(self, data_file, ref_file=None):
         """ main function to detect.
@@ -217,62 +377,6 @@ class StoDetector (WindowDetector):
         # record the parameters
         self.record_data['desc'] = dict((k, v) \
                 for k, v in self.desc.iteritems() if is_basic_type(v))
-
-    def hoeffding_rule(self, n, false_alarm_rate):
-        """ hoeffding rule with linear correction term
-
-        Parameters:
-        --------------
-        n : int
-            Number of flows in the window
-        false_alarm_rate : float
-            false alarm rate
-
-        Returns
-        --------------
-        ht : float
-            hoeffding threshold
-
-
-        """
-        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
-        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] / n
-        from scipy.stats import chi2 # added by Jing Zhang (jingzbu@gmail.com)
-        # added by Jing Zhang (jingzbu@gmail.com)
-        # the following threshold is suggested in http://arxiv.org/abs/0909.2234
-        QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')
-        QuantLevel_2 = self.desc['fea_option'].get('flow_size')
-        QuantLevel_3 = self.desc['fea_option'].get('cluster')
-        return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, QuantLevel_1 * \
-			QuantLevel_2 * QuantLevel_3 - 1)
-
-    def get_hoeffding_threshold(self, false_alarm_rate):
-        """calculate the threshold of hoeffiding rule,
-
-        Parameters:
-        ---------------
-        false_alarm_rate : float
-            false alarm rate
-
-        Returns
-        ---------------
-        res : list
-            list of thresholds for each window.
-
-        Notes:
-        ----------------
-        :math: `threshold = -1 / |G| log(epsilon)` where |G| is the number of flows in
-        the window and `epsilon` is the false alarm_rate
-
-        """
-        res = []
-        for i in xrange(self.detect_num):
-            flow_seq = self._get_flow_seq(i)
-            flow_num_in_win = flow_seq[1] - flow_seq[0] + 1
-            threshold = self.hoeffding_rule(flow_num_in_win, false_alarm_rate)
-            res.append(threshold)
-
-        return res
 
     def _get_flow_seq(self, win_idx):
         """Get the starting and ending sequence number of all flows in this window
@@ -416,7 +520,63 @@ class ModelFreeAnoDetector(StoDetector):
     """
     def I(self, em, norm_em):
         return I1(em, norm_em)
+        
+    # modified by Jing Zhang (jingzbu@gmail.com)
+    def hoeffding_rule(self, n, false_alarm_rate):
+        """ hoeffding rule with linear correction term
 
+        Parameters:
+        --------------
+        n : int
+            Number of flows in the window
+        false_alarm_rate : float
+            false alarm rate
+
+        Returns
+        --------------
+        ht : float
+            hoeffding threshold
+
+
+        """
+        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
+        # return -1.0 / n * log(false_alarm_rate) 
+        
+        # for model-free method only
+        # added by Jing Zhang (jingzbu@gmail.com)
+        # the following threshold is suggested in http://arxiv.org/abs/0909.2234
+        QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')
+        QuantLevel_2 = self.desc['fea_option'].get('flow_size')
+        QuantLevel_3 = self.desc['fea_option'].get('cluster')
+        return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, QuantLevel_1 * \
+		QuantLevel_2 * QuantLevel_3 - 1)
+
+    def get_hoeffding_threshold(self, false_alarm_rate):
+        """calculate the threshold of hoeffiding rule,
+
+        Parameters:
+        ---------------
+        false_alarm_rate : float
+            false alarm rate
+
+        Returns
+        ---------------
+        res : list
+            list of thresholds for each window.
+
+        Notes:
+        ----------------
+        :math: `threshold = -1 / |G| log(epsilon)` where |G| is the number of flows in
+        the window and `epsilon` is the false alarm_rate
+        """
+        res = []
+        for i in xrange(self.detect_num):
+            flow_seq = self._get_flow_seq(i)
+            flow_num_in_win = flow_seq[1] - flow_seq[0] + 1
+            threshold = self.hoeffding_rule(flow_num_in_win, false_alarm_rate)
+            res.append(threshold)
+        return res
+        
     # def get_em(self, rg, rg_type):
     #     """get empirical measure"""
     #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
@@ -453,6 +613,12 @@ class ModelBaseAnoDetector(StoDetector):
     """ Model based approach, use Markovian Assumption
     """
     def I(self, em, norm_em):
+        #norm_em = adjust_mat(norm_em)
+        #mu = norm_em
+        #N, _ = mu.shape
+        #assert(N == _)
+        #assert(sum(mu).all() == 1)
+        #assert((abs(sum(norm_em) - 1) > 0.1).all())
         return I2(em, norm_em)
         # d_Pmb, d_mpmb = em
         # Pmb, mpmb = norm_em
@@ -461,6 +627,174 @@ class ModelBaseAnoDetector(StoDetector):
     # def get_em(self, rg, rg_type):
     #     pmf, Pmb, mpmb = self.data_file.get_em(rg, rg_type)
     #     return Pmb, mpmb
+
+    def detect(self, data_file, ref_file=None):
+        """ main function to detect.
+
+        it will slide the window, get the emperical measure and get the
+        indicator
+
+        Parameters
+        --------------------
+        data_file : subclass of **DataHandler**.
+                See DataHandler.py.
+
+        Returns
+        --------------------
+        record_data: dict
+                + desc : parameters used in the detection
+                + threshold : threshold
+
+        """
+        # nominal_rg = self.desc['normal_rg']
+        rg_type = self.desc['win_type']
+        max_detect_num = self.desc['max_detect_num']
+
+        self.data_file = data_file
+        self.ref_file = data_file if ref_file is None else ref_file
+        # import ipdb;ipdb.set_trace()
+        # self.ref_file = ref_file
+        # self.norm_em = self.get_em(rg=nominal_rg, rg_type=rg_type)
+        self.norm_em = self.cal_norm_em()
+        # self.desc['norm_em'] = self.norm_em
+
+	self.mu = adjust_mat(self.norm_em)
+        # mu = np.array(mu)
+        mu = self.mu
+        N, _ = mu.shape
+        assert(N == _)
+  
+        ########### Added by Jing Zhang (jingzbu@gmail.com) 
+        # for model-based method only
+        Q = self.Q_est(self.mu)
+        Nq, _ = Q.shape
+        assert(Nq == _)
+        #assert(Nq == cardinality)
+        P = self.P_est(Q)  # Get the pair (new) transition matrix
+        k = 1000
+        PP = LA.matrix_power(P, k)
+        mu = PP[0, :]
+        mu = mu.reshape(N, N)
+        self.mu = mu
+  
+        self.G = self.G_est(Q)  # Get the gradient estimate
+        self.H = self.H_est(self.mu)  # Get the Hessian estimate
+        Sigma = self.Sigma_est(P, self.mu)  # Get the covariance matrix estimate
+  
+        # Generate samples of W
+        self.SampleNum = 1000
+        W_mean = np.zeros((1, N**2))
+        self.W = np.random.multivariate_normal(W_mean[0,:], Sigma, (1, self.SampleNum))
+        ###############################################################################
+
+        win_size = self.desc['win_size']
+        interval = self.desc['interval']
+
+        time = self.desc['fr_win_size'] if ('flow_rate' in self.desc['fea_option'].keys()) else 0
+
+        i = 0
+        while True:
+            i += 1
+            if max_detect_num and i > max_detect_num:
+                break
+            if rg_type == 'time' : print('time: %f' %(time))
+            else: print('flow: %s' %(time))
+
+            try:
+                self.rg = [time, time+win_size] # For two window method
+                em = self.data_file.get_em(rg=[time, time+win_size], rg_type=rg_type)
+                entropy = self.I(em, norm_em=self.norm_em)
+                self.record( entropy=entropy, winT = time, threshold = 0, em=em)
+            except FetchNoDataException:
+                print('there is no data to detect in this window')
+            except DataEndException:
+                print('reach data end, break')
+                break
+
+            time += interval
+
+        self.detect_num = i - 1
+        self.save_addi_info()
+
+        return self.record_data
+
+    # modified by Jing Zhang (jingzbu@gmail.com)
+    def hoeffding_rule(self, n, false_alarm_rate):
+        """ hoeffding rule with linear correction term
+
+        Parameters:
+        --------------
+        n : int
+            Number of flows in the window
+        false_alarm_rate : float
+            false alarm rate
+
+        Returns
+        --------------
+        ht : float
+            hoeffding threshold
+
+
+        """
+        # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
+        # return -1.0 / n * log(false_alarm_rate)   # threshold given by Sanov's theorem
+	
+	
+	#QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')
+ #       QuantLevel_2 = self.desc['fea_option'].get('flow_size')
+ #       QuantLevel_3 = self.desc['fea_option'].get('cluster')
+ #       cardinality = QuantLevel_1 * QuantLevel_2 * QuantLevel_3
+        
+	#norm_em = adjust_mat(self.norm_em)
+ #       mu = norm_em
+ #       mu = np.array(mu)
+ #       N, _ = mu.shape
+        #assert(N == cardinality)
+	
+        # for model-based method only
+	G = self.G
+	H = self.H
+        W = self.W  
+        # Estimate K-L divergence using 2nd-order Taylor expansion
+        KL = []
+        for j in range(0, self.SampleNum):
+            t = (1.0 / sqrt(n)) * np.dot(G, W[0, j, :]) + \
+                    (1.0 / 2) * (1.0 / n) * \
+			np.dot(np.dot(W[0, j, :], H), W[0, j, :])
+            KL.append(t)
+        # Get the estimated threshold   
+        eta = prctile(KL, 100 * (1 - false_alarm_rate))
+        assert(eta < 10)
+        
+        return eta
+
+    def get_hoeffding_threshold(self, false_alarm_rate):
+        """calculate the threshold of hoeffiding rule,
+
+        Parameters:
+        ---------------
+        false_alarm_rate : float
+            false alarm rate
+
+        Returns
+        ---------------
+        res : list
+            list of thresholds for each window.
+
+        Notes:
+        ----------------
+        :math: `threshold = -1 / |G| log(epsilon)` where |G| is the number of flows in
+        the window and `epsilon` is the false alarm_rate
+
+        """
+        res = []
+        for i in xrange(self.detect_num):
+            flow_seq = self._get_flow_seq(i)
+            flow_num_in_win = flow_seq[1] - flow_seq[0] + 1
+            threshold = self.hoeffding_rule(flow_num_in_win, false_alarm_rate)
+            res.append(threshold)
+
+        return res
 
     # plot module added by Jing Zhang (jingzbu@gmail.com) 
     def plot(self, far=None, figure_=None,
