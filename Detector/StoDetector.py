@@ -737,7 +737,7 @@ class ModelBaseAnoDetector(StoDetector):
 
         """
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
-        # return -1.0 / n * log(false_alarm_rate)   # threshold given by Sanov's theorem
+        return -1.0 / n * log(false_alarm_rate)   # threshold given by Sanov's theorem
 	
 	
 	#QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')

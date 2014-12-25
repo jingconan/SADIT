@@ -1,4 +1,5 @@
-ROOT = '/home/wangjing/Dropbox/Research/sadit'
+# ROOT = '/home/wangjing/Dropbox/Research/sadit'
+ROOT = '/home/jzh/Research/Anomaly_Detection/sadit'
 
 #################################
 ##   Network Topology ##
@@ -70,8 +71,9 @@ NORM_DESC = dict(
 ANO_DESC = {
         'anoType':'anomaly',
         'ano_node_seq':2,
-        'T':(4000, 4500),
+        'T':(1000, 1500),
         'change':{'flow_size_mean':'x10'},
+        #'change':{'flow_arrival_rate':'x10'},
         'srv_id':0,
         }
 
