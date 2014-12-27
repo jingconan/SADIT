@@ -110,9 +110,9 @@ class StoDetector (WindowDetector):
 
         parser.add_argument('--ccoef', default=0.0, type=float,
                 help="""correction coefficient for calculating threshold using hoeffding rule.
-                hoeffding threshold is only an asymotical result. An O(n) linear term has been
+                hoeffding threshold is only an asymptotic result. An O(n) linear term has been
                 abandon during the analysis, however, it practice, this term is important. You
-                need run on some test data set to determine an approraite correction coefficient
+                need run on some test data set to determine an appropriate correction coefficient
                 first. Increase ccoef will increase threshold.
                 """)
 
@@ -255,13 +255,16 @@ class StoDetector (WindowDetector):
         'empirical measure' means differently than elsewhere in the package)
         Example
         ----------------
-        >>> Q = [[ 0.83333333,  0.16666667],
-                 [ 0.5,         0.5       ]]
-        >>> print Sigma_est(Q)
-            [[ 0.625   -0.15625 -0.15625 -0.3125 ]
-             [-0.15625  0.0625   0.0625   0.03125]
-             [-0.15625  0.0625   0.0625   0.03125]
-             [-0.3125   0.03125  0.03125  0.25   ]]
+        >>> P = [[ 0.83333333,  0.16666667,  0.,          0.        ],
+                 [ 0.,          0.,          0.5,         0.5       ],
+                 [ 0.83333333,  0.16666667,  0.,          0.        ],
+                 [ 0.,          0.,          0.5,         0.5       ]]
+        >>> mu = [[0.625,  0.125],  [0.125,  0.125]]
+        >>> print Sigma_est(P, mu)
+            [[ 0.62499298 -0.15624953 -0.15624953 -0.31249953]
+             [-0.15624953  0.06250047  0.06250047  0.03125047]
+             [-0.15624953  0.06250047  0.06250047  0.03125047]
+             [-0.31249953  0.03125047  0.03125047  0.25000047]]
         """  
         mu = np.array(mu)
 
@@ -548,7 +551,7 @@ class ModelFreeAnoDetector(StoDetector):
         QuantLevel_2 = self.desc['fea_option'].get('flow_size')
         QuantLevel_3 = self.desc['fea_option'].get('cluster')
         return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, QuantLevel_1 * \
-		QuantLevel_2 * QuantLevel_3 - 1)
+		        QuantLevel_2 * QuantLevel_3 - 1)
 
     def get_hoeffding_threshold(self, false_alarm_rate):
         """calculate the threshold of hoeffiding rule,
@@ -736,7 +739,7 @@ class ModelBaseAnoDetector(StoDetector):
 
         """
         # return -1.0 / n * log(false_alarm_rate) + self.desc['ccoef'] * log(n) / n
-        return -1.0 / n * log(false_alarm_rate)   # threshold given by Sanov's theorem
+        # return -1.0 / n * log(false_alarm_rate)   # threshold given by Sanov's theorem
 	
 	
 	#QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')
@@ -749,7 +752,8 @@ class ModelBaseAnoDetector(StoDetector):
  #       mu = np.array(mu)
  #       N, _ = mu.shape
         #assert(N == cardinality)
-	
+
+        # added by Jing Zhang (jingzbu@gmail.com)
         # for model-based method only
 	G = self.G
 	H = self.H
