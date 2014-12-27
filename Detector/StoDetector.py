@@ -109,10 +109,10 @@ class StoDetector (WindowDetector):
                 higher priority than hoeff_far')
 
         parser.add_argument('--ccoef', default=0.0, type=float,
-                help="""correction coefficient for calculat threshold using hoeffding rule.
-                hoeffding threshold is only a asymotical result. An O(n) linear term has been
+                help="""correction coefficient for calculating threshold using hoeffding rule.
+                hoeffding threshold is only an asymotical result. An O(n) linear term has been
                 abandon during the analysis, however, it practice, this term is important. You
-                need run on some test data set to deterine an approraite correction coefficient
+                need run on some test data set to determine an approraite correction coefficient
                 first. Increase ccoef will increase threshold.
                 """)
 
@@ -210,7 +210,7 @@ class StoDetector (WindowDetector):
         N, _ = Q.shape
         assert(N == _)
         alpha = 1 - Q
-        G = alpha.reshape(1, N**2, order='F')
+        G = alpha.reshape(1, N**2)
     
         return G
     
@@ -220,13 +220,12 @@ class StoDetector (WindowDetector):
         Estimate the Hessian
         Example
         ----------------
-        >>> Q = [[ 0.83333333,  0.16666667],
-                 [ 0.5,         0.5       ]]
-        >>> print H_est(Q)
-            [[ 0.04444444  0.         -0.22222222  0.        ]
-             [ 0.          2.          0.         -2.        ]
-             [-1.11111111  0.          5.55555556  0.        ]
-             [ 0.         -2.          0.          2.        ]]
+        >>> mu = [[0.625,  0.125],  [0.125,  0.125]]
+        >>> print H_est(mu)
+        [[ 0.04444444 -0.22222222  0.          0.        ]
+         [-1.11111111  5.55555556  0.          0.        ]
+         [ 0.          0.          2.         -2.        ]
+         [ 0.          0.         -2.          2.        ]]
         """
         mu = np.array(mu) 
         N, _ = mu.shape
@@ -245,7 +244,7 @@ class StoDetector (WindowDetector):
                         else:
                             H[i, j, k, l] = - ((sum(mu[i, :])) - mu[i, j]) / \
                                 ((sum(mu[i, :]))**2)                   
-        H = np.reshape(H, (N**2, N**2), order='F')
+        H = np.reshape(H, (N**2, N**2))
     
         return H
     
@@ -288,10 +287,10 @@ class StoDetector (WindowDetector):
                 Sigma[i, j] = muVec[0, i] * (I[i, j] - muVec[0, j]) + \
                                 sum(series[0, :])
             
-        # Essure Sigma to be symmetric
+        # Ensure Sigma to be symmetric
         Sigma = (1.0 / 2) * (Sigma + np.transpose(Sigma))  
     
-        # Essure Sigma to be positive semi-definite
+        # Ensure Sigma to be positive semi-definite
         D, V = LA.eig(Sigma)
         D = np.diag(D)
         Q, R = LA.qr(V)  
@@ -684,7 +683,7 @@ class ModelBaseAnoDetector(StoDetector):
         # Generate samples of W
         self.SampleNum = 1000
         W_mean = np.zeros((1, N**2))
-        self.W = np.random.multivariate_normal(W_mean[0,:], Sigma, (1, self.SampleNum))
+        self.W = np.random.multivariate_normal(W_mean[0, :], Sigma, (1, self.SampleNum))
         ###############################################################################
 
         win_size = self.desc['win_size']
