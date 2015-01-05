@@ -1,0 +1,5 @@
+('opt_prob', <pyOpt.pyOpt_optimization.Optimization object at 0x1a76a50>)
+('inform', {'text': 'Optimization terminated successfully.', 'value': 0})
+('xstr', array([ 0.03740546,  0.10985506,  0.04312065,  0.03053474,  0.10653453,
+        0.02418531,  0.08220057,  0.56616369]))
+('fstr', array([ 1.00000001]))

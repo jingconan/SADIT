@@ -763,7 +763,7 @@ class ModelBaseAnoDetector(StoDetector):
         for j in range(0, self.SampleNum):
             t = (1.0 / sqrt(n)) * np.dot(G, W[0, j, :]) + \
                     (1.0 / 2) * (1.0 / n) * \
-			np.dot(np.dot(W[0, j, :], H), W[0, j, :])
+			            np.dot(np.dot(W[0, j, :], H), W[0, j, :])
             KL.append(t)
         # Get the estimated threshold   
         eta = prctile(KL, 100 * (1 - false_alarm_rate))
