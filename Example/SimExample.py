@@ -71,7 +71,7 @@ NORM_DESC = dict(
 ANO_DESC = {
         'anoType':'anomaly',
         'ano_node_seq':2,
-        'T':(1000, 1500),
+        'T':(1000, 1200),
         'change':{'flow_size_mean':'x10'},
         #'change':{'flow_arrival_rate':'x10'},
         'srv_id':0,

@@ -15,10 +15,12 @@ def GreedySolve(A, gam, cv):
         j_plus = np.argmax(S)
         x[j_plus] = 1
         C = C | set(i for i in dC if A[i,j_plus])
+    # x = np.ones((n,))
     return x
 
 def HeuristicRefinePL(D, lamb, gam0, r, epsi):
     m, n = D.shape
+    print('--> Number of candidate PLs: %d'%n)
     A = (D < lamb)
     if len(np.sum(A, axis=1).nonzero()[0]) != m:
         return None
@@ -42,4 +44,5 @@ def HeuristicRefinePL(D, lamb, gam0, r, epsi):
     sumx = np.sum(x, axis=1)
     print('sumx', sumx)
     j_star = np.argmin(sumx)
+    print(x[j_star])
     return x[j_star]

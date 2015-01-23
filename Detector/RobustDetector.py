@@ -6,8 +6,16 @@ import itertools, copy
 from sadit.util import zload
 from sadit.util import del_none_key, np
 
+###### added by Jing Zhang (jingzbu@gmail.com)
+import numpy as np
+from numpy import linalg as LA
+from math import sqrt
+from scipy.stats import chi2
+from matplotlib.mlab import prctile
+##############################################
+
 from . import StoDetector
-from .DetectorLib import I1, I2
+from .DetectorLib import I1, I2, adjust_mat
 # from .PLIdentify import PL_identify
 from .PLRefine import HeuristicRefinePL
 
@@ -183,7 +191,7 @@ class PLManager(object):
     #             mb_D[i, j] = I_rec[j][i, 1]
     #     return PL_identify(mf_D, lamb), PL_identify(mb_D, lamb)
 
-    def select(self, I_rec, lamb):
+    def select(self, I_rec, lamb_mf, lamb_mb):
         # n = len(I_rec) # window size
         # m = I_rec[0].shape[0] # no. of PLs
         n = I_rec[0].shape[0] # no. of candidnate PLs
@@ -198,8 +206,8 @@ class PLManager(object):
         gam = 50
         r = 0.5
         epsi = 0.001
-        return HeuristicRefinePL(mf_D, lamb, gam, r, epsi), \
-                HeuristicRefinePL(mb_D, lamb, gam, r, epsi)
+        return HeuristicRefinePL(mf_D, lamb_mf, gam, r, epsi), \
+                HeuristicRefinePL(mb_D, lamb_mb, gam, r, epsi)
 
 class RobustDetector(StoDetector.FBAnoDetector):
     """ Robust Detector is designed for dynamic network environment
@@ -231,7 +239,60 @@ class RobustDetector(StoDetector.FBAnoDetector):
             raise Exception('reference file must be specified for robust '
             'detector')
         register_info = self.desc['register_info']
+        ref_scheck = self.desc['ref_scheck']
+        # lamb = self.desc['lamb']
+        # StoDetector.FBAnoDetector.save_threshold(self, data_file)
+        # print(np.array(self.record_data['threshold']).shape)
+                # nominal_rg = self.desc['normal_rg']
+        rg_type = self.desc['win_type']
+        max_detect_num = self.desc['max_detect_num']
 
+        self.data_file = data_file
+        self.ref_file = data_file if ref_file is None else ref_file
+        # import ipdb;ipdb.set_trace()
+        # self.ref_file = ref_file
+        # self.norm_em = self.get_em(rg=nominal_rg, rg_type=rg_type)
+        self.norm_em = self.cal_norm_em()
+        # self.desc['norm_em'] = self.norm_em
+        # print(self.norm_em)
+        # assert(1 == 2)
+        pmf, Pmb = self.norm_em
+        self.mu = adjust_mat(Pmb)
+        print(self.mu)
+        # mu = np.array(mu)
+        mu = self.mu
+        N, _ = mu.shape
+        assert(N == _)
+
+        ########### Added by Jing Zhang (jingzbu@gmail.com)
+        # for model-based method only
+        Q = self.Q_est(self.mu)
+        Nq, _ = Q.shape
+        assert(Nq == _)
+        #assert(Nq == cardinality)
+        P = self.P_est(Q)  # Get the pair (new) transition matrix
+        k = 1000
+        PP = LA.matrix_power(P, k)
+        mu = PP[0, :]
+        mu = mu.reshape(N, N)
+        self.mu = mu
+
+        self.G = self.G_est(Q)  # Get the gradient estimate
+        self.H = self.H_est(self.mu)  # Get the Hessian estimate
+        Sigma = self.Sigma_est(P, self.mu)  # Get the covariance matrix estimate
+
+        # Generate samples of W
+        self.SampleNum = 1000
+        W_mean = np.zeros((1, N**2))
+        self.W = np.random.multivariate_normal(W_mean[0, :], Sigma, (1, self.SampleNum))
+
+        lamb_mf, lamb_mb = zip(*StoDetector.FBAnoDetector.save_threshold(self, data_file))
+        lamb_mf = np.amax((np.array(lamb_mb))) + 100
+        # lamb_mb = 0.4 * np.amin((np.array(lamb_mb))) + 0.6 * np.amax((np.array(lamb_mb)))
+        lamb_mb = np.amax((np.array(lamb_mb)))
+        print(lamb_mf)
+        print(lamb_mb)
+        # assert(1 == 2)
         self.plm = PLManager(ref_file)
 
         for method, prop in register_info.iteritems():
@@ -240,25 +301,32 @@ class RobustDetector(StoDetector.FBAnoDetector):
 
         self.ref_pool = self.plm.process_data()
 
-        #FIXME Need to clean these code later
-        lamb = self.desc['lamb']
         self.PL_enable = None
-        if lamb > 0: # enable Probability Law Identification
-            rs_file = self.desc['dump_folder'] + '/PLManager_scheck.pk'
-            if self.desc['ref_scheck'] == 'dump':
+        if lamb_mf > 0 and lamb_mb > 0: # enable Probability Law Identification
+            get_filepath = lambda s: ' '.join(s.split()[1:])
+            rs_file = get_filepath(ref_scheck)
+
+            # for backward compatibility
+            if not rs_file and self.desc.get('dump_folder'):
+                rs_file = self.desc['dump_folder'] + 'PLManager_scheck.pk'
+
+            if ref_scheck.startswith('dump'):
                 StoDetector.FBAnoDetector.detect(self, ref_file, ref_file)
                 ref_I_rec = self.record_data['I_rec']
                 self.dump(rs_file)
                 self._init_record()
-            else:
-                # with open(rs_file, 'r') as f: data = pk.load(f)
+            elif ref_scheck.startswith('load'):
                 data = zload(rs_file)
                 ref_I_rec = data['I_rec']
+            else:
+                raise Exception('unknown ref_scheck operation')
 
-            self.PL_enable = self.plm.select(ref_I_rec, lamb)
+            self.PL_enable = self.plm.select(ref_I_rec, lamb_mf, lamb_mb)
+            print(self.PL_enable)
             if self.PL_enable[0] is None or self.PL_enable[1] is None:
                 raise Exception('lamb is too small, probably you have too '
                         'little candidates')
+        # assert(1 == 2)
         StoDetector.FBAnoDetector.detect(self, data_file, ref_file)
 
     def I(self, em, **kwargs):
