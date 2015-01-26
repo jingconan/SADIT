@@ -550,7 +550,7 @@ class HarpoonGeneratorNode(GeneratorNode):
             #print 'etca',etca
             #print 'etdelack',etdelack
             #print 'entire estimated time',flowduration
-            assert(flowduration >= basertt)
+            # assert(flowduration >= basertt)
 
             csa00bw = flet.size / flowduration
             if test:
