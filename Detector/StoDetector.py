@@ -116,6 +116,9 @@ class StoDetector (WindowDetector):
                 first. Increase ccoef will increase threshold.
                 """)
 
+        parser.add_argument('--enable_sanov', default=False, action='store_true',
+                help="whether or not to use Sanov's theorem to estimate the threshold")
+
 
     def I(self, em1, em2):
         """ calculate the K-L divergence of two emperical measures
@@ -451,6 +454,8 @@ class StoDetector (WindowDetector):
         # return -1.0 / n * log(false_alarm_rate)
 
         if self.desc['method'] == 'mf':
+            if self.desc['enable_sanov']:
+                return -1.0 / n * log(false_alarm_rate)
             # for model-free method only
             # added by Jing Zhang (jingzbu@gmail.com)
             # the following threshold is suggested in http://arxiv.org/abs/0909.2234
@@ -460,6 +465,8 @@ class StoDetector (WindowDetector):
             return 1.0 / (2 * n) * chi2.ppf(1 - false_alarm_rate, QuantLevel_1 * \
                     QuantLevel_2 * QuantLevel_3 - 1)
         if self.desc['method'] == 'mb':
+            if self.desc['enable_sanov']:
+                return -1.0 / n * log(false_alarm_rate)
             # added by Jing Zhang (jingzbu@gmail.com)
             # for model-based method only
             G = self.G
@@ -477,6 +484,9 @@ class StoDetector (WindowDetector):
             assert(eta < 10)
             return eta
         if self.desc['method'] == 'mfmb' or self.desc['method'] == 'robust':
+            if self.desc['enable_sanov']:
+                return -1.0 / n * log(false_alarm_rate), -1.0 / n * log(false_alarm_rate)
+
             QuantLevel_1 = self.desc['fea_option'].get('dist_to_center')
             QuantLevel_2 = self.desc['fea_option'].get('flow_size')
             QuantLevel_3 = self.desc['fea_option'].get('cluster')
@@ -752,6 +762,8 @@ class ModelFreeAnoDetector(StoDetector):
                 title_ = title_,
                 pic_name=None, pic_show=False,
                 *args, **kwargs)
+        plt.ylabel('divergence')
+        plt.xlabel('time (s)')
         if pic_name and not plt.__name__.startswith("guiqwt"): plt.savefig(pic_name)
         if pic_show: plt.show()
 
@@ -797,6 +809,8 @@ class ModelBaseAnoDetector(StoDetector):
                 title_ = title_,
                 pic_name=None, pic_show=False,
                 *args, **kwargs)
+        plt.ylabel('divergence')
+        plt.xlabel('time (s)')
         if pic_name and not plt.__name__.startswith("guiqwt"): plt.savefig(pic_name)
         if pic_show: plt.show()
 
