@@ -789,7 +789,7 @@ class ModelBaseAnoDetector(StoDetector):
 
     # plot module added by Jing Zhang (jingzbu@gmail.com) 
     def plot(self, far=None, figure_=None,
-            title_='model based',
+            # title_='model based',
             pic_name=None, pic_show=False, csv=None,
             *args, **kwargs):
         if not plt: self.save_plot_as_csv()
@@ -806,7 +806,7 @@ class ModelBaseAnoDetector(StoDetector):
         plot_points(rt, mb, threshold,
                 figure_ = figure_,
                 xlabel_=self.desc['win_type'], ylabel_= 'entropy',
-                title_ = title_,
+                # title_ = title_,
                 pic_name=None, pic_show=False,
                 *args, **kwargs)
         plt.ylabel('divergence')
