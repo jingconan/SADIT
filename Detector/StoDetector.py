@@ -205,15 +205,16 @@ class StoDetector (WindowDetector):
         Estimate the gradient
         Example
         ----------------
-        >>> Q = [[ 0.83333333,  0.16666667],
-                 [ 0.5,         0.5       ]]
-        >>> print G_est(Q)
-            [[ 0.16666667  0.83333333  0.5         0.5       ]]
+        # >>> Q = [[ 0.83333333,  0.16666667],
+        #          [ 0.5,         0.5       ]]
+        # >>> print G_est(Q)
+        #     [[ 0.16666667  0.83333333  0.5         0.5       ]]
         """
-        N, _ = Q.shape
-        assert(N == _)
-        alpha = 1 - Q
-        G = alpha.reshape(1, N**2)
+        # N, _ = Q.shape
+        # assert(N == _)
+        # alpha = 1 - Q
+        # G = alpha.reshape(1, N**2)
+        G = 0
     
         return G
     
@@ -242,11 +243,9 @@ class StoDetector (WindowDetector):
                         if k != i:
                             H[i, j, k, l] = 0
                         elif l == j:
-                            H[i, j, k, l] = 1.0 / mu[i, j] - 1.0 / (sum(mu[i, :])) - \
-                            ((sum(mu[i, :])) - mu[i, j]) / ((sum(mu[i, :]))**2)
+                            H[i, j, k, l] = 1.0 / mu[i, j] - 1.0 / (sum(mu[i, :]))
                         else:
-                            H[i, j, k, l] = - ((sum(mu[i, :])) - mu[i, j]) / \
-                                ((sum(mu[i, :]))**2)                   
+                            H[i, j, k, l] = - 1.0 / (sum(mu[i, :]))
         H = np.reshape(H, (N**2, N**2))
     
         return H
