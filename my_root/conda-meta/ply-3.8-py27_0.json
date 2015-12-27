@@ -1,0 +1,38 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-10-02", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/ply-3.8-py2.7.egg-info", 
+    "lib/python2.7/site-packages/ply/__init__.py", 
+    "lib/python2.7/site-packages/ply/__init__.pyc", 
+    "lib/python2.7/site-packages/ply/cpp.py", 
+    "lib/python2.7/site-packages/ply/cpp.pyc", 
+    "lib/python2.7/site-packages/ply/ctokens.py", 
+    "lib/python2.7/site-packages/ply/ctokens.pyc", 
+    "lib/python2.7/site-packages/ply/lex.py", 
+    "lib/python2.7/site-packages/ply/lex.pyc", 
+    "lib/python2.7/site-packages/ply/yacc.py", 
+    "lib/python2.7/site-packages/ply/yacc.pyc", 
+    "lib/python2.7/site-packages/ply/ygen.py", 
+    "lib/python2.7/site-packages/ply/ygen.pyc"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/ply-3.8-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "093abc32d2a171f767564ecea9df3531", 
+  "name": "ply", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 72222, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/ply-3.8-py27_0.tar.bz2", 
+  "version": "3.8"
+}

@@ -1,0 +1,40 @@
+{
+  "app_cli_opts": [
+    {
+      "args": "--port %s", 
+      "default": 8080, 
+      "name": "port", 
+      "summary": "Server port ..."
+    }
+  ], 
+  "app_entry": "ipython notebook", 
+  "app_type": "web", 
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-08-28", 
+  "depends": [
+    "notebook", 
+    "python 2.7*"
+  ], 
+  "files": [], 
+  "icon": "58c9e8a4a41c41dc796ffe680c1e02b5.png", 
+  "icondata": "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", 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/ipython-notebook-4.0.4-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "9d688ba794a138de60f0919a253fd734", 
+  "name": "ipython-notebook", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 4837, 
+  "subdir": "linux-64", 
+  "summary": "IPython Notebook", 
+  "type": "app", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/ipython-notebook-4.0.4-py27_0.tar.bz2", 
+  "version": "4.0.4"
+}

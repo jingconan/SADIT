@@ -1,0 +1,19 @@
+prefix=/home/jzh/Research/Anomaly_Detection/sadit/my_root
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/QtWebKit
+qt_config=lex yacc uic resources qt release incremental link_prl gdb_dwarf_index shared def_files_disabled exceptions no_mocdepend release stl qt_no_framework release largefile stl precompile_header mmx 3dnow sse sse2 sse3 ssse3 dylib create_prl link_prl depend_includepath QTDIR_build building-libs depend_includepath standalone_package depend_includepath include_webinspector production production x11 no_debug_info link_pkgconfig production qt_install_headers qt warn_on depend_includepath qmake_cache target_qt hide_symbols create_pc create_libtool moc thread x11lib x11inc dll shared
+moc_location=${prefix}/bin/moc
+uic_location=${prefix}/bin/uic
+rcc_location=${prefix}/bin/rcc
+lupdate_location=${prefix}/bin/lupdate
+lrelease_location=${prefix}/bin/lrelease
+
+Name: Qtwebkit
+Description: Qtwebkit Library
+Version: 4.9.4
+Libs: -L${libdir} -lQtWebKit 
+Libs.private: -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L../../WebCore/release -L../../JavaScriptCore/release -L/usr/X11R6/lib  -lwebcore -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/usr/X11R6/lib -lfontconfig -lfreetype -lXext -lX11 -lm -ljscore -lXrender -lQtGui -lQtNetwork -lQtCore -lpthread -lXrender -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lfontconfig -lfreetype -lXext -lX11 -lm  
+Cflags: -DQT_SHARED -I/home/jzh/Research/Anomaly_Detection/sadit/my_root/include -I${includedir}
+Requires: QtCore QtGui QtNetwork
+

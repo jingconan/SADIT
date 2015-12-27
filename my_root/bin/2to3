@@ -1,0 +1,5 @@
+#!/home/jzh/Research/Anomaly_Detection/sadit/my_root/bin/python
+import sys
+from lib2to3.main import main
+
+sys.exit(main("lib2to3.fixes"))

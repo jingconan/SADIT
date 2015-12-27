@@ -1,0 +1,29 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-11-24", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/backports_abc-0.4-py2.7.egg-info", 
+    "lib/python2.7/site-packages/backports_abc.py", 
+    "lib/python2.7/site-packages/backports_abc.pyc"
+  ], 
+  "license": "PSF", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/backports_abc-0.4-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "011fd16fb415b72d9b6f90c04dff1766", 
+  "name": "backports_abc", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 4844, 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/backports_abc-0.4-py27_0.tar.bz2", 
+  "version": "0.4"
+}

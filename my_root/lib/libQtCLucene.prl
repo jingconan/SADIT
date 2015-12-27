@@ -1,0 +1,7 @@
+QMAKE_PRL_BUILD_DIR = /home/carlos/miniconda/conda-bld/work/qt-everywhere-opensource-src-4.8.7/tools/assistant/lib/fulltextsearch/
+QMAKE_PRO_INPUT = fulltextsearch.pro
+QMAKE_PRL_TARGET = libQtCLucene.so.4.8.7
+QMAKE_PRL_DEFINES = QT_SHARED
+QMAKE_PRL_CONFIG = lex yacc uic resources qt release incremental link_prl gdb_dwarf_index shared def_files_disabled exceptions no_mocdepend release stl qt_no_framework release largefile stl precompile_header mmx 3dnow sse sse2 sse3 ssse3 dylib create_prl link_prl depend_includepath QTDIR_build qt_install_headers qt depend_includepath qmake_cache target_qt hide_symbols create_pc create_libtool explicitlib qt warn_off hide_symbols moc thread dll shared
+QMAKE_PRL_VERSION = 4.8.7
+QMAKE_PRL_LIBS = -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib  -lQtCore -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lpthread 

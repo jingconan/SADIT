@@ -1,0 +1,1 @@
+/home/jzh/anaconda2/pkgs/pyqt-4.11.4-py27_1/share/sip/PyQt4/QtScriptTools/QtScriptToolsmod.sip

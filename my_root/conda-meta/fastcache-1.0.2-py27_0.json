@@ -1,0 +1,39 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2014-11-25", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/fastcache-1.0.2-py2.7.egg-info", 
+    "lib/python2.7/site-packages/fastcache/__init__.py", 
+    "lib/python2.7/site-packages/fastcache/__init__.pyc", 
+    "lib/python2.7/site-packages/fastcache/_lrucache.so", 
+    "lib/python2.7/site-packages/fastcache/benchmark.py", 
+    "lib/python2.7/site-packages/fastcache/benchmark.pyc", 
+    "lib/python2.7/site-packages/fastcache/tests/__init__.py", 
+    "lib/python2.7/site-packages/fastcache/tests/__init__.pyc", 
+    "lib/python2.7/site-packages/fastcache/tests/test_clrucache.py", 
+    "lib/python2.7/site-packages/fastcache/tests/test_clrucache.pyc", 
+    "lib/python2.7/site-packages/fastcache/tests/test_functools.py", 
+    "lib/python2.7/site-packages/fastcache/tests/test_functools.pyc", 
+    "lib/python2.7/site-packages/fastcache/tests/test_thread.py", 
+    "lib/python2.7/site-packages/fastcache/tests/test_thread.pyc"
+  ], 
+  "license": "MIT", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/fastcache-1.0.2-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "542ea8cc32ddde3993b595c405e7bfb3", 
+  "name": "fastcache", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 41254, 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/fastcache-1.0.2-py27_0.tar.bz2", 
+  "version": "1.0.2"
+}

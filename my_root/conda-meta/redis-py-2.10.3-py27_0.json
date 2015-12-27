@@ -1,0 +1,44 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2014-10-02", 
+  "depends": [
+    "python 2.7*", 
+    "redis 2.6.9"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/redis-2.10.3-py2.7.egg-info", 
+    "lib/python2.7/site-packages/redis/__init__.py", 
+    "lib/python2.7/site-packages/redis/__init__.pyc", 
+    "lib/python2.7/site-packages/redis/_compat.py", 
+    "lib/python2.7/site-packages/redis/_compat.pyc", 
+    "lib/python2.7/site-packages/redis/client.py", 
+    "lib/python2.7/site-packages/redis/client.pyc", 
+    "lib/python2.7/site-packages/redis/connection.py", 
+    "lib/python2.7/site-packages/redis/connection.pyc", 
+    "lib/python2.7/site-packages/redis/exceptions.py", 
+    "lib/python2.7/site-packages/redis/exceptions.pyc", 
+    "lib/python2.7/site-packages/redis/lock.py", 
+    "lib/python2.7/site-packages/redis/lock.pyc", 
+    "lib/python2.7/site-packages/redis/sentinel.py", 
+    "lib/python2.7/site-packages/redis/sentinel.pyc", 
+    "lib/python2.7/site-packages/redis/utils.py", 
+    "lib/python2.7/site-packages/redis/utils.pyc"
+  ], 
+  "license": "MIT (https://github.com/andymccurdy/redis-py/blob/master/LICENSE)", 
+  "license_family": "MIT", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/redis-py-2.10.3-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "fb09ef4da011287778a26dda54827378", 
+  "name": "redis-py", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 71622, 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/redis-py-2.10.3-py27_0.tar.bz2", 
+  "version": "2.10.3"
+}

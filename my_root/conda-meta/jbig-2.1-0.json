@@ -1,0 +1,29 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-11-11", 
+  "depends": [], 
+  "files": [
+    "include/jbig.h", 
+    "include/jbig85.h", 
+    "include/jbig_ar.h", 
+    "lib/libjbig.a", 
+    "lib/libjbig85.a"
+  ], 
+  "license": "GPL2", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/jbig-2.1-0", 
+    "type": "soft-link"
+  }, 
+  "md5": "334b102413fec962bf65c4d60697da34", 
+  "name": "jbig", 
+  "org_name": "jbigkit", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 30127, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/jbig-2.1-0.tar.bz2", 
+  "version": "2.1"
+}

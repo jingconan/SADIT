@@ -1,0 +1,14 @@
+prefix=/home/jzh/Research/Anomaly_Detection/sadit/my_root
+exec_prefix=/home/jzh/Research/Anomaly_Detection/sadit/my_root
+libdir=/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib
+includedir=/home/jzh/Research/Anomaly_Detection/sadit/my_root/include/freetype2
+
+Name: FreeType 2
+URL: http://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 17.4.11
+Requires:
+Requires.private: 
+Libs: -L${libdir} -lfreetype
+Libs.private: 
+Cflags: -I${includedir}

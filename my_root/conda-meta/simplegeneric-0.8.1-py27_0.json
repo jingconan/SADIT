@@ -1,0 +1,30 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-08-12", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/simplegeneric-0.8.1-py2.7.egg-info", 
+    "lib/python2.7/site-packages/simplegeneric.py", 
+    "lib/python2.7/site-packages/simplegeneric.pyc"
+  ], 
+  "license": "ZPL 2.1", 
+  "license_family": "Other", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/simplegeneric-0.8.1-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "b44f2af32fac8f46d97cb1fad4b45cd8", 
+  "name": "simplegeneric", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 5954, 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/simplegeneric-0.8.1-py27_0.tar.bz2", 
+  "version": "0.8.1"
+}

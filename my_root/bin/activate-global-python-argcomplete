@@ -1,0 +1,4 @@
+#!/home/jzh/Research/Anomaly_Detection/sadit/my_root/bin/python
+# EASY-INSTALL-SCRIPT: 'argcomplete==1.0.0','activate-global-python-argcomplete'
+__requires__ = 'argcomplete==1.0.0'
+__import__('pkg_resources').run_script('argcomplete==1.0.0', 'activate-global-python-argcomplete')

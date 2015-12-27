@@ -1,0 +1,34 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-10-20", 
+  "depends": [
+    "libsodium 1.0.3"
+  ], 
+  "files": [
+    "bin/curve_keygen", 
+    "include/zmq.h", 
+    "include/zmq_utils.h", 
+    "lib/libzmq.a", 
+    "lib/libzmq.la", 
+    "lib/libzmq.so", 
+    "lib/libzmq.so.5", 
+    "lib/libzmq.so.5.0.0", 
+    "lib/pkgconfig/libzmq.pc"
+  ], 
+  "license": "LGPL", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/zeromq-4.1.3-0", 
+    "type": "soft-link"
+  }, 
+  "md5": "1100b6a69c2de16989be313296942388", 
+  "name": "zeromq", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 4253169, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/zeromq-4.1.3-0.tar.bz2", 
+  "version": "4.1.3"
+}

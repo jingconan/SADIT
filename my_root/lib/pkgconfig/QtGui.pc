@@ -1,0 +1,19 @@
+prefix=/home/jzh/Research/Anomaly_Detection/sadit/my_root
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/QtGui
+qt_config=lex yacc warn_on uic resources qt warn_on release incremental link_prl gdb_dwarf_index shared def_files_disabled exceptions no_mocdepend release stl qt_no_framework release largefile stl precompile_header mmx 3dnow sse sse2 sse3 ssse3 dylib create_prl link_prl depend_includepath QTDIR_build x11 qt_install_headers qt warn_on depend_includepath qmake_cache target_qt hide_symbols create_pc create_libtool explicitlib x11sm opentype moc thread x11lib x11inc dll shared
+moc_location=${prefix}/bin/moc
+uic_location=${prefix}/bin/uic
+rcc_location=${prefix}/bin/rcc
+lupdate_location=${prefix}/bin/lupdate
+lrelease_location=${prefix}/bin/lrelease
+
+Name: Qtgui
+Description: Qtgui Library
+Version: 4.8.7
+Libs: -L${libdir} -lQtGui 
+Libs.private: -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/usr/X11R6/lib  -lQtCore -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lpthread -pthread -L/lib64 -lgthread-2.0 -lglib-2.0 -lpng -lfreetype -L/lib64 -lgobject-2.0 -lglib-2.0 -lSM -lICE -lXrender -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lfontconfig -lfreetype -lXext -lX11 -lm  
+Cflags: -DQT_SHARED -I/home/jzh/Research/Anomaly_Detection/sadit/my_root/include -I${includedir}
+Requires: QtCore
+

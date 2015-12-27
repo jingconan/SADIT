@@ -1,0 +1,8 @@
+#!/home/jzh/Research/Anomaly_Detection/sadit/my_root/bin/python
+
+def main():
+    from nbformat.sign import TrustNotebookApp
+    TrustNotebookApp.launch_instance()
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,1 @@
+/home/jzh/anaconda2/pkgs/qt-4.8.7-1/mkspecs/wince50standard-mipsii-msvc2008/qplatformdefs.h

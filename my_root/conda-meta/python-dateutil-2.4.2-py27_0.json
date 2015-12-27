@@ -1,0 +1,49 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-04-01", 
+  "depends": [
+    "python 2.7*", 
+    "six"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/dateutil/__init__.py", 
+    "lib/python2.7/site-packages/dateutil/__init__.pyc", 
+    "lib/python2.7/site-packages/dateutil/easter.py", 
+    "lib/python2.7/site-packages/dateutil/easter.pyc", 
+    "lib/python2.7/site-packages/dateutil/parser.py", 
+    "lib/python2.7/site-packages/dateutil/parser.pyc", 
+    "lib/python2.7/site-packages/dateutil/relativedelta.py", 
+    "lib/python2.7/site-packages/dateutil/relativedelta.pyc", 
+    "lib/python2.7/site-packages/dateutil/rrule.py", 
+    "lib/python2.7/site-packages/dateutil/rrule.pyc", 
+    "lib/python2.7/site-packages/dateutil/tz.py", 
+    "lib/python2.7/site-packages/dateutil/tz.pyc", 
+    "lib/python2.7/site-packages/dateutil/tzwin.py", 
+    "lib/python2.7/site-packages/dateutil/tzwin.pyc", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/__init__.py", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/__init__.pyc", 
+    "lib/python2.7/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz", 
+    "lib/python2.7/site-packages/python_dateutil-2.4.2-py2.7.egg-info/PKG-INFO", 
+    "lib/python2.7/site-packages/python_dateutil-2.4.2-py2.7.egg-info/SOURCES.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.4.2-py2.7.egg-info/dependency_links.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.4.2-py2.7.egg-info/requires.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.4.2-py2.7.egg-info/top_level.txt", 
+    "lib/python2.7/site-packages/python_dateutil-2.4.2-py2.7.egg-info/zip-safe"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/python-dateutil-2.4.2-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "67138f2410bb8147a31601de0bffe43a", 
+  "name": "python-dateutil", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 224175, 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/python-dateutil-2.4.2-py27_0.tar.bz2", 
+  "version": "2.4.2"
+}

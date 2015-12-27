@@ -1,0 +1,35 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2014-12-01", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/enum/LICENSE", 
+    "lib/python2.7/site-packages/enum/README", 
+    "lib/python2.7/site-packages/enum/__init__.py", 
+    "lib/python2.7/site-packages/enum/__init__.pyc", 
+    "lib/python2.7/site-packages/enum/doc/enum.rst", 
+    "lib/python2.7/site-packages/enum/enum.py", 
+    "lib/python2.7/site-packages/enum/enum.pyc", 
+    "lib/python2.7/site-packages/enum/test_enum.py", 
+    "lib/python2.7/site-packages/enum/test_enum.pyc", 
+    "lib/python2.7/site-packages/enum34-1.0.4-py2.7.egg-info"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/enum34-1.0.4-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "7bc95170ede73d27643b91a8731f4927", 
+  "name": "enum34", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 49354, 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/enum34-1.0.4-py27_0.tar.bz2", 
+  "version": "1.0.4"
+}

@@ -1,0 +1,49 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_1", 
+  "build_number": 1, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-10-20", 
+  "depends": [
+    "python 2.7*", 
+    "setuptools"
+  ], 
+  "files": [
+    "bin/activate-global-python-argcomplete", 
+    "bin/python-argcomplete-check-easy-install-script", 
+    "bin/register-python-argcomplete", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/PKG-INFO", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/SOURCES.txt", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/dependency_links.txt", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/not-zip-safe", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/scripts/activate-global-python-argcomplete", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/scripts/python-argcomplete-check-easy-install-script", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/scripts/register-python-argcomplete", 
+    "lib/python2.7/site-packages/argcomplete-1.0.0-py2.7.egg-info/top_level.txt", 
+    "lib/python2.7/site-packages/argcomplete/__init__.py", 
+    "lib/python2.7/site-packages/argcomplete/__init__.pyc", 
+    "lib/python2.7/site-packages/argcomplete/bash_completion.d/python-argcomplete.sh", 
+    "lib/python2.7/site-packages/argcomplete/compat.py", 
+    "lib/python2.7/site-packages/argcomplete/compat.pyc", 
+    "lib/python2.7/site-packages/argcomplete/completers.py", 
+    "lib/python2.7/site-packages/argcomplete/completers.pyc", 
+    "lib/python2.7/site-packages/argcomplete/my_argparse.py", 
+    "lib/python2.7/site-packages/argcomplete/my_argparse.pyc", 
+    "lib/python2.7/site-packages/argcomplete/my_shlex.py", 
+    "lib/python2.7/site-packages/argcomplete/my_shlex.pyc"
+  ], 
+  "license": "Apache", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/argcomplete-1.0.0-py27_1", 
+    "type": "soft-link"
+  }, 
+  "md5": "7aaf2d135a7de3dfe96ccafd9dd891d4", 
+  "name": "argcomplete", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 32502, 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/argcomplete-1.0.0-py27_1.tar.bz2", 
+  "version": "1.0.0"
+}

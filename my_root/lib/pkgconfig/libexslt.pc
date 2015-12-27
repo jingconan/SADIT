@@ -1,0 +1,12 @@
+prefix=/home/jzh/Research/Anomaly_Detection/sadit/my_root
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+
+Name: libexslt
+Version: 0.8.17
+Description: EXSLT Extension library
+Requires: libxml-2.0
+Libs: -L${libdir} -lexslt -lxslt  -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lxml2 -lz -lm -ldl -lm 
+Cflags: -I${includedir}

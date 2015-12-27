@@ -1,0 +1,46 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-11-25", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/psutil-3.3.0-py2.7.egg-info", 
+    "lib/python2.7/site-packages/psutil/__init__.py", 
+    "lib/python2.7/site-packages/psutil/__init__.pyc", 
+    "lib/python2.7/site-packages/psutil/_common.py", 
+    "lib/python2.7/site-packages/psutil/_common.pyc", 
+    "lib/python2.7/site-packages/psutil/_compat.py", 
+    "lib/python2.7/site-packages/psutil/_compat.pyc", 
+    "lib/python2.7/site-packages/psutil/_psbsd.py", 
+    "lib/python2.7/site-packages/psutil/_psbsd.pyc", 
+    "lib/python2.7/site-packages/psutil/_pslinux.py", 
+    "lib/python2.7/site-packages/psutil/_pslinux.pyc", 
+    "lib/python2.7/site-packages/psutil/_psosx.py", 
+    "lib/python2.7/site-packages/psutil/_psosx.pyc", 
+    "lib/python2.7/site-packages/psutil/_psposix.py", 
+    "lib/python2.7/site-packages/psutil/_psposix.pyc", 
+    "lib/python2.7/site-packages/psutil/_pssunos.py", 
+    "lib/python2.7/site-packages/psutil/_pssunos.pyc", 
+    "lib/python2.7/site-packages/psutil/_psutil_linux.so", 
+    "lib/python2.7/site-packages/psutil/_psutil_posix.so", 
+    "lib/python2.7/site-packages/psutil/_pswindows.py", 
+    "lib/python2.7/site-packages/psutil/_pswindows.pyc"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/psutil-3.3.0-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "3b2966422a3d7a30b99e9896cbf34be6", 
+  "name": "psutil", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 110277, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/psutil-3.3.0-py27_0.tar.bz2", 
+  "version": "3.3.0"
+}

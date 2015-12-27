@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /home/jzh/Research/Anomaly_Detection/sadit/my_root/bin/python /home/jzh/Research/Anomaly_Detection/sadit/my_root/lib/python2.7/site-packages/PyQt4/uic/pyuic.py ${1+"$@"}

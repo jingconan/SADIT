@@ -1,0 +1,18 @@
+prefix=/home/jzh/Research/Anomaly_Detection/sadit/my_root
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+sysconfdir=${prefix}/etc
+localstatedir=${prefix}/var
+PACKAGE=fontconfig
+confdir=${sysconfdir}/fonts
+cachedir=${localstatedir}/cache/${PACKAGE}
+
+Name: Fontconfig
+Description: Font configuration and customization library
+Version: 2.11.1
+Requires:  freetype2
+Requires.private:  libxml-2.0
+Libs: -L${libdir} -lfontconfig
+Libs.private:  -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lfreetype    -L/home/jzh/Research/Anomaly_Detection/sadit/my_root/lib -lxml2  
+Cflags: -I${includedir}  -I/home/jzh/Research/Anomaly_Detection/sadit/my_root/include/freetype2    -I/home/jzh/Research/Anomaly_Detection/sadit/my_root/include/libxml2  

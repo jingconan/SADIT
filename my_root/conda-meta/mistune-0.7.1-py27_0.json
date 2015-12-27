@@ -1,0 +1,27 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-09-01", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/mistune-0.7.1-py2.7-linux-x86_64.egg-info", 
+    "lib/python2.7/site-packages/mistune.so"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/mistune-0.7.1-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "0968cb0d35370891f504791cc4034fe6", 
+  "name": "mistune", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 583591, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/mistune-0.7.1-py27_0.tar.bz2", 
+  "version": "0.7.1"
+}

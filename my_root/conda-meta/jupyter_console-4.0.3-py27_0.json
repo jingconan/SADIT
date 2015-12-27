@@ -1,0 +1,52 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-10-09", 
+  "depends": [
+    "ipykernel", 
+    "ipython", 
+    "jupyter_client", 
+    "python 2.7*"
+  ], 
+  "files": [
+    "bin/jupyter-console", 
+    "lib/python2.7/site-packages/jupyter_console-4.0.3-py2.7.egg-info", 
+    "lib/python2.7/site-packages/jupyter_console/__init__.py", 
+    "lib/python2.7/site-packages/jupyter_console/__init__.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/__main__.py", 
+    "lib/python2.7/site-packages/jupyter_console/__main__.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/_version.py", 
+    "lib/python2.7/site-packages/jupyter_console/_version.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/app.py", 
+    "lib/python2.7/site-packages/jupyter_console/app.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/completer.py", 
+    "lib/python2.7/site-packages/jupyter_console/completer.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/interactiveshell.py", 
+    "lib/python2.7/site-packages/jupyter_console/interactiveshell.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/tests/__init__.py", 
+    "lib/python2.7/site-packages/jupyter_console/tests/__init__.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/tests/test_console.py", 
+    "lib/python2.7/site-packages/jupyter_console/tests/test_console.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/tests/test_image_handler.py", 
+    "lib/python2.7/site-packages/jupyter_console/tests/test_image_handler.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/tests/writetofile.py", 
+    "lib/python2.7/site-packages/jupyter_console/tests/writetofile.pyc", 
+    "lib/python2.7/site-packages/jupyter_console/zmqhistory.py", 
+    "lib/python2.7/site-packages/jupyter_console/zmqhistory.pyc"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/jupyter_console-4.0.3-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "06916cf182cd8ca104ee10d9190f600d", 
+  "name": "jupyter_console", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 22978, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/jupyter_console-4.0.3-py27_0.tar.bz2", 
+  "version": "4.0.3"
+}

@@ -1,0 +1,28 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-02-18", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/pyparsing-2.0.3-py2.7.egg-info", 
+    "lib/python2.7/site-packages/pyparsing.py", 
+    "lib/python2.7/site-packages/pyparsing.pyc"
+  ], 
+  "license": "MIT", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/pyparsing-2.0.3-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "8d03a7aa1f1f8682f2dc3aab049185ee", 
+  "name": "pyparsing", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 65020, 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/pyparsing-2.0.3-py27_0.tar.bz2", 
+  "version": "2.0.3"
+}

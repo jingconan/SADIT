@@ -1,0 +1,32 @@
+{
+  "app_entry": "ipython qtconsole", 
+  "app_type": "desk", 
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-08-28", 
+  "depends": [
+    "python 2.7*", 
+    "qtconsole"
+  ], 
+  "files": [], 
+  "icon": "5e8fa0302270586eb7b2ecf71c1d1529.png", 
+  "icondata": "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", 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/ipython-qtconsole-4.0.1-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "1302db0cca7091fa0ca3c069260785b4", 
+  "name": "ipython-qtconsole", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 3988, 
+  "subdir": "linux-64", 
+  "summary": "IPython QtConsole", 
+  "type": "app", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/ipython-qtconsole-4.0.1-py27_0.tar.bz2", 
+  "version": "4.0.1"
+}

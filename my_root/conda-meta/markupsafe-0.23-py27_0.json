@@ -1,0 +1,39 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2014-09-05", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/MarkupSafe-0.23-py2.7-linux-x86_64.egg-info", 
+    "lib/python2.7/site-packages/markupsafe/__init__.py", 
+    "lib/python2.7/site-packages/markupsafe/__init__.pyc", 
+    "lib/python2.7/site-packages/markupsafe/_compat.py", 
+    "lib/python2.7/site-packages/markupsafe/_compat.pyc", 
+    "lib/python2.7/site-packages/markupsafe/_constants.py", 
+    "lib/python2.7/site-packages/markupsafe/_constants.pyc", 
+    "lib/python2.7/site-packages/markupsafe/_native.py", 
+    "lib/python2.7/site-packages/markupsafe/_native.pyc", 
+    "lib/python2.7/site-packages/markupsafe/_speedups.c", 
+    "lib/python2.7/site-packages/markupsafe/_speedups.so", 
+    "lib/python2.7/site-packages/markupsafe/tests.py", 
+    "lib/python2.7/site-packages/markupsafe/tests.pyc"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/markupsafe-0.23-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "0ccff5a967d78d5193aa92ed561c539b", 
+  "name": "markupsafe", 
+  "org_name": "MarkupSafe", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 30425, 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/markupsafe-0.23-py27_0.tar.bz2", 
+  "version": "0.23"
+}

@@ -1,0 +1,41 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-07-09", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/multipledispatch-0.4.8-py2.7.egg-info/PKG-INFO", 
+    "lib/python2.7/site-packages/multipledispatch-0.4.8-py2.7.egg-info/SOURCES.txt", 
+    "lib/python2.7/site-packages/multipledispatch-0.4.8-py2.7.egg-info/dependency_links.txt", 
+    "lib/python2.7/site-packages/multipledispatch-0.4.8-py2.7.egg-info/not-zip-safe", 
+    "lib/python2.7/site-packages/multipledispatch-0.4.8-py2.7.egg-info/top_level.txt", 
+    "lib/python2.7/site-packages/multipledispatch/__init__.py", 
+    "lib/python2.7/site-packages/multipledispatch/__init__.pyc", 
+    "lib/python2.7/site-packages/multipledispatch/conflict.py", 
+    "lib/python2.7/site-packages/multipledispatch/conflict.pyc", 
+    "lib/python2.7/site-packages/multipledispatch/core.py", 
+    "lib/python2.7/site-packages/multipledispatch/core.pyc", 
+    "lib/python2.7/site-packages/multipledispatch/dispatcher.py", 
+    "lib/python2.7/site-packages/multipledispatch/dispatcher.pyc", 
+    "lib/python2.7/site-packages/multipledispatch/utils.py", 
+    "lib/python2.7/site-packages/multipledispatch/utils.pyc"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/multipledispatch-0.4.8-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "018a550bf92b18f476348f9adc9b321e", 
+  "name": "multipledispatch", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 11605, 
+  "subdir": "linux-64", 
+  "ucs": 4, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/multipledispatch-0.4.8-py27_0.tar.bz2", 
+  "version": "0.4.8"
+}

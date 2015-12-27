@@ -1,0 +1,39 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-09-23", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/alabaster-0.7.6-py2.7.egg-info", 
+    "lib/python2.7/site-packages/alabaster/__init__.py", 
+    "lib/python2.7/site-packages/alabaster/__init__.pyc", 
+    "lib/python2.7/site-packages/alabaster/_version.py", 
+    "lib/python2.7/site-packages/alabaster/_version.pyc", 
+    "lib/python2.7/site-packages/alabaster/about.html", 
+    "lib/python2.7/site-packages/alabaster/donate.html", 
+    "lib/python2.7/site-packages/alabaster/layout.html", 
+    "lib/python2.7/site-packages/alabaster/navigation.html", 
+    "lib/python2.7/site-packages/alabaster/relations.html", 
+    "lib/python2.7/site-packages/alabaster/static/alabaster.css_t", 
+    "lib/python2.7/site-packages/alabaster/support.py", 
+    "lib/python2.7/site-packages/alabaster/support.pyc", 
+    "lib/python2.7/site-packages/alabaster/theme.conf"
+  ], 
+  "license": "BSD", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/alabaster-0.7.6-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "56e2dd4e1f23a334a536c90f48e6c165", 
+  "name": "alabaster", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 14080, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/alabaster-0.7.6-py27_0.tar.bz2", 
+  "version": "0.7.6"
+}

@@ -1,0 +1,5 @@
+#!/home/jzh/Research/Anomaly_Detection/sadit/my_root/bin/python
+import sys
+from conda_build.main_inspect import main
+
+sys.exit(main())

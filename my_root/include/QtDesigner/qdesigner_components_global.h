@@ -1,0 +1,1 @@
+/home/jzh/anaconda2/pkgs/qt-4.8.7-1/include/QtDesigner/qdesigner_components_global.h

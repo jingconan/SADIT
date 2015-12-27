@@ -1,0 +1,44 @@
+{
+  "arch": "x86_64", 
+  "build": "0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-10-19", 
+  "depends": [
+    "openssl 1.0.2*", 
+    "zlib 1.2.*"
+  ], 
+  "files": [
+    "bin/curl", 
+    "bin/curl-config", 
+    "include/curl/curl.h", 
+    "include/curl/curlbuild.h", 
+    "include/curl/curlrules.h", 
+    "include/curl/curlver.h", 
+    "include/curl/easy.h", 
+    "include/curl/mprintf.h", 
+    "include/curl/multi.h", 
+    "include/curl/stdcheaders.h", 
+    "include/curl/typecheck-gcc.h", 
+    "lib/libcurl.a", 
+    "lib/libcurl.la", 
+    "lib/libcurl.so", 
+    "lib/libcurl.so.4", 
+    "lib/libcurl.so.4.4.0", 
+    "lib/pkgconfig/libcurl.pc"
+  ], 
+  "license": "MIT/X derivate (http://curl.haxx.se/docs/copyright.html)", 
+  "license_family": "MIT", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/curl-7.45.0-0", 
+    "type": "soft-link"
+  }, 
+  "md5": "4c98f792167bfea1cef72141e5359202", 
+  "name": "curl", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 540353, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/curl-7.45.0-0.tar.bz2", 
+  "version": "7.45.0"
+}

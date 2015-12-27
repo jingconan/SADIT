@@ -1,0 +1,33 @@
+{
+  "arch": "x86_64", 
+  "build": "1", 
+  "build_number": 1, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-03-23", 
+  "depends": [], 
+  "files": [
+    "bin/sqlite3", 
+    "include/sqlite3.h", 
+    "include/sqlite3ext.h", 
+    "lib/libsqlite3.a", 
+    "lib/libsqlite3.la", 
+    "lib/libsqlite3.so", 
+    "lib/libsqlite3.so.0", 
+    "lib/libsqlite3.so.0.8.6", 
+    "lib/pkgconfig/sqlite3.pc"
+  ], 
+  "license": "Public-Domain (http://www.sqlite.org/copyright.html)", 
+  "license_family": "Public-Domain", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/sqlite-3.8.4.1-1", 
+    "type": "soft-link"
+  }, 
+  "md5": "987665edcc4d5d8086cf9b9cbc614919", 
+  "name": "sqlite", 
+  "org_name": "sqlite-autoconf", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 2621615, 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/sqlite-3.8.4.1-1.tar.bz2", 
+  "version": "3.8.4.1"
+}

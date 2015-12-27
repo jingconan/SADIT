@@ -1,0 +1,7 @@
+#!/home/jzh/Research/Anomaly_Detection/sadit/my_root/bin/python
+"""Launch the root jupyter command"""
+
+from jupyter_core.command import main
+
+if __name__ == '__main__':
+    main()

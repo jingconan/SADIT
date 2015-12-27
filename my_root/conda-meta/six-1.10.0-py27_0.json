@@ -1,0 +1,28 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "channel": "https://repo.continuum.io/pkgs/free/linux-64/", 
+  "date": "2015-10-08", 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "lib/python2.7/site-packages/six-1.10.0-py2.7.egg-info", 
+    "lib/python2.7/site-packages/six.py", 
+    "lib/python2.7/site-packages/six.pyc"
+  ], 
+  "license": "MIT", 
+  "link": {
+    "source": "/home/jzh/anaconda2/pkgs/six-1.10.0-py27_0", 
+    "type": "soft-link"
+  }, 
+  "md5": "78d229dce568dd4bac1d88328f822fc5", 
+  "name": "six", 
+  "platform": "linux", 
+  "requires": [], 
+  "size": 16819, 
+  "subdir": "linux-64", 
+  "url": "https://repo.continuum.io/pkgs/free/linux-64/six-1.10.0-py27_0.tar.bz2", 
+  "version": "1.10.0"
+}

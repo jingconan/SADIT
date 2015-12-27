@@ -1,0 +1,1 @@
+/home/jzh/anaconda2/pkgs/qt-4.8.7-1/mkspecs/qnx-armv7le-qcc/qplatformdefs.h

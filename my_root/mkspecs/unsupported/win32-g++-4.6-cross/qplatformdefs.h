@@ -1,0 +1,1 @@
+/home/jzh/anaconda2/pkgs/qt-4.8.7-1/mkspecs/unsupported/win32-g++-4.6-cross/qplatformdefs.h
