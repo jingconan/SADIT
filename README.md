@@ -432,7 +432,7 @@ trying to solve practical problems.
 
 Email: wangjing AT bu.edu
 
-Personal Webpage: http://people.bu.edu/wangjing/
+Personal Webpage: https://wangjingpage.wordpress.com/
 
 
 
