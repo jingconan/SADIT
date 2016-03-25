@@ -17,12 +17,12 @@ SADIT. Feel free to contact us if you have any questions.
 If you are interested in our recent publications (see below) on network anomaly detection and want to use them as references, please cite the repository [SADIT](https://github.com/hbhzwj/SADIT)/[GAD](https://github.com/hbhzwj/GAD) together with:
 
 
-Jing Wang and I. Ch. Paschalidis, "***Statistical Traffic Anomaly Detection in Time-Varying Communication Networks***," IEEE Transactions on Control of Network Systems, in print.
+Jing Wang and I. Ch. Paschalidis, "***Statistical Traffic Anomaly Detection in Time-Varying Communication Networks***," IEEE Transactions on Control of Network Systems, vol. 2, no. 2, pp. 100-111, 2015.
 
 Jing Wang and I. Ch. Paschalidis,  "***Robust Anomaly Detection in Dynamic Networks***," Proceedings of the 22nd Mediterranean Conference on Control and Automation
-  (MED 14), pages 428-433, June 16--19, 2014, Palermo, Italy. 
+  (MED 14), pp. 428-433, June 16-19, 2014, Palermo, Italy. 
 
-Jing Zhang and I. Ch. Paschalidis, "***An Improved Composite Hypothesis Test for Markov Models with Applications in Network Anomaly Detection***," Proceedings of the 54th IEEE Conference on Decision and Control, December 15--18, 2015, Osaka, Japan, in print.
+Jing Zhang and I. Ch. Paschalidis, "***An Improved Composite Hypothesis Test for Markov Models with Applications in Network Anomaly Detection***," Proceedings of the 54th IEEE Conference on Decision and Control, pp. 3810-3815, December 15-18, 2015, Osaka, Japan.
 
 
 
@@ -425,8 +425,8 @@ Authors
 =============
 Jing (Conan) Wang
 
-Jing Wang obtained his Ph.D. degree in Fall 2014 from Division of Systems Engineering, 
-Boston University (advised by Professor [Yannis Paschalidis](http://ionia.bu.edu/)).  His main interest is 
+Jing Wang obtained his Ph.D. degree in Fall 2014 from the Division of Systems Engineering, 
+Boston University (advised by Professor [Yannis Paschalidis](http://sites.bu.edu/paschalidis/)).  His main interest is 
 Mathematical Modeling, i.e., constructing mathematical models for the real world and 
 trying to solve practical problems.
 
@@ -435,12 +435,12 @@ Email: wangjing AT bu.edu
 Personal Webpage: http://people.bu.edu/wangjing/
 
 
-Collaborator
+
 =============
 Jing (John) Zhang
 
-Jing Zhang is now a PhD student in Division of Systems Engineering, Boston University 
-(advised by Professor [Yannis Paschalidis](http://ionia.bu.edu/)). 
+Jing Zhang is now a PhD student in the Division of Systems Engineering, Boston University 
+(advised by Professor [Yannis Paschalidis](http://sites.bu.edu/paschalidis/)). 
 
 EMail: jzh AT bu.edu
 
