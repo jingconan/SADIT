@@ -42,7 +42,7 @@ NET_DESC = dict(
 #################################
 ##   Parameter For Normal Case ##
 #################################
-sim_t = 18000 # simulation time
+sim_t = 3600 # simulation time
 start = 0 # start time
 DEFAULT_PROFILE = ((sim_t,),(1,))
 
@@ -71,7 +71,7 @@ NORM_DESC = dict(
 ANO_DESC = {
         'anoType':'anomaly',
         'ano_node_seq':2,
-        'T':(5000, 6000),
+        'T':(2000, 2500),
         'change':{'flow_size_mean':'x10'},
         #'change':{'flow_arrival_rate':'x10'},
         'srv_id':0,
