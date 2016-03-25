@@ -437,7 +437,7 @@ Personal Webpage: http://people.bu.edu/wangjing/
 
 
 =============
-Jing (John) Zhang
+Jing (Jimmy) Zhang
 
 Jing Zhang is now a PhD student in the Division of Systems Engineering, Boston University 
 (advised by Professor [Yannis Paschalidis](http://sites.bu.edu/paschalidis/)). 
