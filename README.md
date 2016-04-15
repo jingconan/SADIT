@@ -16,6 +16,9 @@ SADIT. Feel free to contact us if you have any questions.
 
 If you are interested in our recent publications (see below) on network anomaly detection and want to use them as references, please cite the repository [SADIT](https://github.com/hbhzwj/SADIT)/[GAD](https://github.com/hbhzwj/GAD) together with:
 
+Wang, Jing, et al. "***Network anomaly detection: A survey and comparative
+analysis of stochastic and deterministic methods***." Decision and Control
+(CDC), 2013 IEEE 52nd Annual Conference on. IEEE, 2013.
 
 Jing Wang and I. Ch. Paschalidis, "***Statistical Traffic Anomaly Detection in Time-Varying Communication Networks***," IEEE Transactions on Control of Network Systems, vol. 2, no. 2, pp. 100-111, 2015.
 
