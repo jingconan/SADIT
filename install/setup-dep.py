@@ -3,7 +3,7 @@ from __future__ import print_function, division, absolute_import
 import os
 pkg_config = {
     'ipaddr': ('2.1.1', 'http://ipaddr-py.googlecode.com/files/ipaddr-2.1.1.tar.gz'),
-    'networkx': ('1.0', 'http://networkx.lanl.gov/download/networkx/networkx-1.0.1.tar.gz'),
+    'networkx': ('1.0', 'https://github.com/networkx/networkx/archive/networkx-1.0.tar.gz'),
     'pydot': ('1.0.2', 'http://pydot.googlecode.com/files/pydot-1.0.2.tar.gz'),
     'pyparsing': ('1.5.2', 'http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-1.5.2/pyparsing-1.5.2.tar.gz'),
     'pyradix': ('0.5', 'http://py-radix.googlecode.com/files/py-radix-0.5.tar.gz'),

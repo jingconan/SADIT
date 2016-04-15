@@ -1,6 +1,7 @@
 #!/usr/bin/python -B
 #!/usr/bin/env python -B
 from __future__ import print_function, division
+import re
 import sys
 import os
 import argparse
@@ -18,7 +19,8 @@ if not ROOT.endswith('sadit'):
 os.environ['EXPORT_ABNORMAL_FLOW_PARA_FILE'] = ROOT + '/Share/ano_flow_para.txt'
 os.environ['SVM_FOLDER'] = ROOT + '/tools/libsvm-3.12'
 sys.path.insert(0, ROOT)
-sys.path.insert(0, ROOT.rstrip('sadit'))
+upper_folder = re.sub('sadit', '', ROOT)
+sys.path.insert(0, upper_folder)
 
 # Get experiment options
 import Experiment
@@ -83,4 +85,4 @@ if args.profile:
     command = """main(args, res_args)"""
     cProfile.runctx( command, globals(), locals(), filename=args.profile)
 else:
-    main(args, res_args)    
+    main(args, res_args)
