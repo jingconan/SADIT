@@ -1,5 +1,5 @@
-#!/usr/bin/python -B
-#!/usr/bin/env python -B
+#!/home/jzh/anaconda2/bin/python
+
 from __future__ import print_function, division
 import sys
 import os
