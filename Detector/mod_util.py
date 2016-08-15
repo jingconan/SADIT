@@ -2,6 +2,7 @@
 """
 from __future__ import print_function, division, absolute_import
 from sadit.util import plt, np
+import matplotlib
 
 def find_seg(flag):
     """return (start and end point and level) of each segment"""
@@ -22,12 +23,18 @@ def find_seg(flag):
 def plot_seg(X, Y, flag, marker=None, *args, **kwargs):
     """plot X and Y, but the points with flag == true to be one color, the result to be another color
     """
+    font = {'family': 'normal',
+            'weight': 'normal',
+            'size': 16}
+
+    matplotlib.rc('font', **font)
+
     segs = find_seg(flag)
     for a, b, tp in segs:
         if marker[tp] is not None:
             # import ipdb;ipdb.set_trace()
             # plt.plot(X[a:b], Y[a:b], marker[tp], *args, **kwargs)
-            plt.plot(np.array(X[a:b]), np.array(Y[a:b]), marker[tp], *args, **kwargs)
+            plt.plot(np.array(X[a:b]), np.array(Y[a:b]), marker[tp], linewidth=2, *args, **kwargs)
 
 def plot_points(X, Y, threshold=None,  pic_show=False,
         pic_name=None, figure_=False, subplot_=111, title_ = None,
@@ -93,9 +100,9 @@ def plot_points(X, Y, threshold=None,  pic_show=False,
         plot_seg(X, Y, ano_flag, ano_marker, *args, **kwargs)
         if threshold_marker is not None:
             # plt.plot(X, threshold, threshold_marker, *args, **kwargs)
-            plt.plot(np.array(X), np.array(threshold), threshold_marker, *args, **kwargs)
+            plt.plot(np.array(X), np.array(threshold), threshold_marker, linewidth=2, *args, **kwargs)
     else:
-        plt.plot(np.array(X), np.array(Y), ano_marker[0], *args, **kwargs)
+        plt.plot(np.array(X), np.array(Y), ano_marker[0], linewidth=2, *args, **kwargs)
     if title_:
         plt.title(title_)
 

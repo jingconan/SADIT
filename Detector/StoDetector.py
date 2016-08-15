@@ -16,6 +16,7 @@ from numpy import linalg as LA
 from math import sqrt
 from scipy.stats import chi2 
 from matplotlib.mlab import prctile
+import matplotlib as mpl
 ##############################################
 
 from sadit.util import DataEndException, FetchNoDataException, abstract_method
@@ -791,6 +792,16 @@ class ModelBaseAnoDetector(StoDetector):
             # title_='model based',
             pic_name=None, pic_show=False, csv=None,
             *args, **kwargs):
+
+        # cf. https://codeyarns.com/2014/10/27/how-to-change-size-of-matplotlib-plot/
+        # Get current size
+        fig_size = plt.rcParams['figure.figsize']
+
+        # Set figure width to 12.0 and height to 6.0
+        fig_size[0] = 12.0
+        fig_size[1] = 6.0
+        plt.rcParams['figure.figsize'] = fig_size
+
         if not plt: self.save_plot_as_csv()
 
         rt = self.record_data['winT']
@@ -801,6 +812,7 @@ class ModelBaseAnoDetector(StoDetector):
             save_csv(csv, ['rt', 'mb', 'threshold'], rt, mb, threshold)
 
         if figure_ is None: figure_ = plt.figure()
+
         # import ipdb;ipdb.set_trace()
         plot_points(rt, mb, threshold,
                 figure_ = figure_,
@@ -810,6 +822,7 @@ class ModelBaseAnoDetector(StoDetector):
                 *args, **kwargs)
         plt.ylabel('divergence')
         plt.xlabel('time (s)')
+
         if pic_name and not plt.__name__.startswith("guiqwt"): plt.savefig(pic_name)
         if pic_show: plt.show()
 
@@ -1074,8 +1087,7 @@ class FBAnoDetector(StoDetector):
 
     #     return ano_flow_seq
 
-"""In the following algorithm, the reference empirical measure is calculate for
-each window
+"""In the following algorithm, the reference empirical measure is calculate for each window
 """
 class DynamicStoDetector(FBAnoDetector):
     """Base Class for All Dynamic Stochasic Detector
