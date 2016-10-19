@@ -3,3 +3,5 @@ For mac user, just type
 most of the dependencies will be installed
 you need install numpy by youself if you want to use 
 config and simulator part. 
+You can follow this tutorial:
+http://sourabhbajaj.com/mac-setup/Python/numpy.html
