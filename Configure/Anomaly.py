@@ -157,7 +157,7 @@ class Anomaly(object):
         In `fs
         <http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf>`_,
         one modulator can only have one behaviour. In order to simulate the
-        change of behaviour of the modulator, the abnormal haviour will be
+        change of behaviour of the modulator, the abnormal behaviour will be
         generator by new modulators.
 
         """

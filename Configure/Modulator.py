@@ -38,8 +38,8 @@ class MarkovModulator(Modulator):
     -------------------
     name : str
         name of modular. now it is useless
-    start : float
-        start time
+    start : str
+        a expression that can generate start time (using eval)
     profile : tuple of tuple
         profile
     generator_states : a list of generator names
@@ -55,7 +55,11 @@ class MarkovModulator(Modulator):
 
     """
     def __init__(self, name, start, profile, generator_states, node_para):
-        Modulator.__init__(self, name=name, start=start, profile=profile)
+        # start is an expression that could generate a start time (randomly). We
+        # want to frozen start time here.
+        self.frozen_start_time = eval(start)
+        Modulator.__init__(self, name=name, start=str(self.frozen_start_time),
+                           profile=profile)
         self.name = name
         self.states = generator_states
         # self.start = start
@@ -74,7 +78,7 @@ class MarkovModulator(Modulator):
         self.sync()
 
     def sync(self):
-        self.behaviour.behave_with_profile(self.start, self.profile, self.stage)
+        self.behaviour.behave_with_profile(self.frozen_start_time, self.profile, self.stage)
 
     def __str__(self):
         return ' '.join([str(mod) for mod in self.mod_list])

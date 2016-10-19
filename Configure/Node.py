@@ -261,7 +261,7 @@ class MarkovNode(NNode):
 
     def get_modulator(self, start, profile, s_id_list,
             node_para):
-        return MarkovModulator('modulator', float(start), profile,
+        return MarkovModulator('modulator', str(start), profile,
                 s_id_list, node_para)
 
     def sync(self):
