@@ -35,7 +35,8 @@ DETECTOR_DESC = dict(
 
         ##### For Batch Method #######
         batch_var = ['fea_option.dist_to_center'],
-        fea_option = {'dist_to_center':[1, 2, 3], 'flow_size':3, 'cluster':1},
+        #fea_option = {'dist_to_center':[1, 2, 3], 'flow_size':3, 'cluster':1},
+	fea_option = {'cluster':(2, [0, 20]), 'dist_to_center':(1, [0, 1000]), 'flow_size':(2, [0, 50000])},
         res_folder = './res/res_batch_test/',
         data = './Simulator/n0_flow.txt',
         method = 'mfmb',

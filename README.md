@@ -140,7 +140,7 @@ support to exporting anomalous flows (with label information).
 
 SADIT can be installed on Linux, Mac OS X and Windows (through cygwin) with python 2.7. However, we strongly recommend the debian-based OS, e.g., Ubuntu 12.04, 14.04, or 16.04, for which we have prepared a one-command installation script. We recommend using Anaconda2 as the Python environment; conda has a good ability to manage external packages.
 
-To be specific, if you are working on Ubuntu 12.04 or 14.04, then proceed as follows:
+To be specific, if you are working on Ubuntu, then proceed as follows:
 
 1. Change the working directory to where you want to install SADIT, create a new folder `sadit`, and then type:
 
@@ -156,7 +156,7 @@ For general installation instructions, see the **Installation** section of the o
 
 # Usage
 
-First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assuming you are working on Ubuntu 12.04 or 14.04, then, change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
+First, you need to specify the environment variable `SADIT_ROOT` in Bash. To do this, again, assuming you are working on Ubuntu, then, change the working directory to be your home folder, open the file `.profile` therein and add the following content: 
 
 `export SADIT_ROOT='<path_of_your_sadit_installation>'`
 
@@ -181,13 +181,14 @@ sadit
 
 positional arguments:
   experiment         type ./cmdsadit <exper> -h for help of an experiment;
-                     available experiments are [detect | detectbatch |
-                     detectcompare | detectrealtime | eval | guitoposim |
-                     multisrvexperiment | sim]
+                     available experiments are [botnet_detection_eval | detect
+                     | detectbatch | detectcompare | detectrealtime | eval |
+                     guitoposim | sim | timebased_botnet_detection_eval]
 
 optional arguments:
   --profile PROFILE  profile the program
   -h, --help         print help message and exit
+
   ```
   
   
@@ -214,18 +215,18 @@ Some of the available experiments are explained as follows:
 - **sim**: Simulate and generate flow records.
 
 
-To see the help message of an experiment, just type:
+To see the help message of a method for an experiment, just type:
 
-`/sadit$ ./cmdsadit <exper> -h`
+`/sadit$ ./cmdsadit <exper> -m <method> -h`
 
 For instance, if you type:
 
-`sadit$ ./cmdsadit detect -h`
+`sadit$ ./cmdsadit detect -m mfmb -h`
 
 then you will see the following help message:
 
 ```
-usage: cmdsadit [-h] [-c CONFIG] [-d DATA] [-m METHOD]
+usage: cmdsadit [-h] [-c CONFIG] [--logging LOGGING] [-d DATA] [-m METHOD]
                 [--help_method HELP_METHOD] [--data_type DATA_TYPE]
                 [--feature_option FEATURE_OPTION]
                 [--export_flows EXPORT_FLOWS] [--pic_name PIC_NAME]
@@ -235,30 +236,37 @@ optional arguments:
   -h, --help            print help message
   -c CONFIG, --config CONFIG
                         config
+  --logging LOGGING     logging level. See
+                        https://docs.python.org/2/library/logging.html#levels
   -d DATA, --data DATA  --data [filename] will simply detect the flow file,
                         simulator will not run in this case
   -m METHOD, --method METHOD
                         --method [method] will specify the method to use.
-                        Avaliable options are: ['mfmb': FBAnoDetector model
-                        free and model based together, will be faster then run
-                        model free | 'period': PeriodStoDetector Stochastic
-                        Detector Designed to Detect Anomaly when the |
-                        'speriod': PeriodStaticDetector Reference Empirical
-                        Measure is calculated by periodically selection. |
-                        'gen_fb_mb': FBAnoDetector model free and model based
+                        Avaliable options are: ['gen_fb_mb': FBAnoDetector
+                        model free and model based together, will be faster
+                        then run model free | 'robust': RobustDetector Robust
+                        Detector is designed for dynamic network environment |
+                        '2w': TwoWindowAnoDetector Two Window Stochastic
+                        Anomaly Detector. | 'speriod': PeriodStaticDetector
+                        Reference Empirical Measure is calculated by
+                        periodically selection. | 'mb': ModelBaseAnoDetector
+                        Model based approach, use Markovian Assumption |
+                        'gen_fb_mf': FBAnoDetector model free and model based
                         together, will be faster then run model free |
-                        'robust': RobustDetector Robust Detector is designed
-                        for dynamic network environment | 'two_win':
-                        TwoWindowAnoDetector Two Window Stochastic Anomaly
-                        Detector. | 'gen_fb_mf': FBAnoDetector model free and
-                        model based together, will be faster then run model
-                        free]. If you want to compare the results of several
-                        methods, simple use / as seperator, for example [mfmb/
-                        period/speriod/gen_fb_mb/robust/two_win/gen_fb_mf]
+                        'two_win': TwoWindowAnoDetector Two Window Stochastic
+                        Anomaly Detector. | 'mf': ModelFreeAnoDetector Model
+                        Free approach, use I.I.D Assumption | 'mfmb':
+                        FBAnoDetector model free and model based together,
+                        will be faster then run model free | 'period':
+                        PeriodStoDetector Stochastic Detector Designed to
+                        Detect Anomaly when the]. If you want to compare the
+                        results of several methods, simple use / as seperator,
+                        for example [gen_fb_mb/robust/2w/speriod/mb/gen_fb_mf/
+                        two_win/mf/mfmb/period]
   --help_method HELP_METHOD
                         print the detailed help message for a method.
-                        Avaliable method [mfmb | period | speriod | gen_fb_mb
-                        | robust | two_win | gen_fb_mf]
+                        Avaliable method [gen_fb_mb | robust | 2w | speriod |
+                        mb | gen_fb_mf | two_win | mf | mfmb | period]
   --data_type DATA_TYPE
                         --specify the type of the data you use, the availiable
                         option are: ['fs': MEM_FS Data generated by `fs-
@@ -284,7 +292,32 @@ optional arguments:
   --pic_show            whether to show the picture after finishing running
   --csv CSV             the path of the file to save plots a text output
 ----------------------------------------------------------------------
-run with -m <method> -h to see the help of each method
+usage: cmdsadit [-h] [--interval INTERVAL] [--win_size WIN_SIZE]
+                [--win_type WIN_TYPE] [--max_detect_num MAX_DETECT_NUM]
+                [--normal_rg NORMAL_RG] [--hoeff_far HOEFF_FAR]
+                [--entropy_th ENTROPY_TH] [--enable_sanov] [--lw LW]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --interval INTERVAL   interval between two consequent detection
+  --win_size WIN_SIZE   window_size
+  --win_type WIN_TYPE   window type 'flow'|'time'
+  --max_detect_num MAX_DETECT_NUM
+                        max detection number, useful for debug
+  --normal_rg NORMAL_RG
+                        normal range, when it is none, use the whole data as
+                        the norminal data set
+  --hoeff_far HOEFF_FAR
+                        false alarm rate for hoeffding rule, if this parameter
+                        is set while entropy_th parameter is not set, will
+                        calculate threshold according to hoeffding rule.
+                        Increase hoeff_far will decrease threshold
+  --entropy_th ENTROPY_TH
+                        entropy threshold to determine the anomaly, has higher
+                        priority than hoeff_far
+  --enable_sanov        whether or not to use Sanov's theorem to estimate the
+                        threshold
+  --lw LW               line width of the plot
 
 ```
 Whenever you are not sure about the options you can set, just add `-h` to 
@@ -319,6 +352,12 @@ sadit$ ./cmdsadit sim -c ./Example/TimeVaringSimExample.py
 Example commands:
 ```
 ./cmdsadit detect -c ./Example/DetectConfig.py -d ./test/n0_flow.txt --method='mfmb' --pic_show
+./cmdsadit detect -c ./Example/DetectSQLConfig.py -d ./test/n0_flow.txt --method='mfmb' --pic_show
+./cmdsadit detect -c ./Example/DetectSQLConfig.py -d ./test/n0_flow.txt --method='mfmb' --pic_show --lw 3
+./cmdsadit detect -c ./Example/DetectSQLConfig.py -d ./test/n0_flow.txt --m mb --pic_show --lw 1
+./cmdsadit detect -c ./Example/DetectSQLConfig.py -d ./test/n0_flow.txt --m mf --pic_show --hoeff_far 0.5
+./cmdsadit detect -c ./Example/DetectSQLConfig.py -d ./test/n0_flow.txt --m mf --pic_show --hoeff_far 0.1
+./cmdsadit detect -c ./Example/DetectSQLConfig.py -d ./test/n0_flow.txt --m mfmb --pic_show --hoeff_far 0.6
 
 ```
 **NOTE:** *Before running these commands, you may need to change the ROOT variable accordingly in the configuration
@@ -435,7 +474,7 @@ Personal Webpage: https://wangjingpage.wordpress.com/
 
 
 =============
-Jing (Jimmy) Zhang
+Jing Zhang
 
 Jing Zhang is now a PhD student in the Division of Systems Engineering, Boston University 
 (advised by Professor [Yannis Paschalidis](http://sites.bu.edu/paschalidis/)). 
