@@ -138,20 +138,15 @@ support to exporting anomalous flows (with label information).
 
 # Installation
 
-SADIT can be installed on Linux, Mac OS X and Windows (through cygwin) with python 2.7. However, we strongly recommend the debian-based OS, e.g., Ubuntu 12.04 or 14.04, for which we have prepared a one-command installation script. 
+SADIT can be installed on Linux, Mac OS X and Windows (through cygwin) with python 2.7. However, we strongly recommend the debian-based OS, e.g., Ubuntu 12.04, 14.04, or 16.04, for which we have prepared a one-command installation script. We recommend using Anaconda2 as the Python environment; conda has a good ability to manage external packages.
 
-To be specific, if you are working on Ubuntu 12.04 or 14.04, then do the following sequentially:
+To be specific, if you are working on Ubuntu 12.04 or 14.04, then proceed as follows:
 
 1. Change the working directory to where you want to install SADIT, create a new folder `sadit`, and then type:
 
- `$ git clone https://github.com/hbhzwj/SADIT.git sadit/`
+ `$ git clone --recursive https://github.com/hbhzwj/SADIT.git sadit/`
 
-
-2. Change the working directory to be `sadit`, and then type:
- 
- `sadit$ git clone https://github.com/hbhzwj/GAD.git Detector/`
-
-3. Change the working directory to be `sadit/install`, and then type:
+2. Change the working directory to be `sadit/install`, and then type:
 
  `sadit/install$ sudo sh debian.sh` 
 
