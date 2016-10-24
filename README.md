@@ -132,7 +132,7 @@ are as follows:
 
 #### Simulator
 
-Simulator is basically a revised version of [fs-simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf). We have added
+Simulator is basically a revised version of [fs-simulator](https://github.com/jsommers/fs). We have added
 support to exporting anomalous flows (with label information).
 
 
@@ -153,7 +153,7 @@ To be specific, if you are working on Ubuntu, then proceed as follows:
 
 For general installation instructions, see the **Installation** section of the older version of [README](https://github.com/hbhzwj/SADIT/blob/develop/README.md). 
 
-NOTE: We have encountered cases where a user still can not run the `sim` experiments after running Step 2 above; possible causes could be: one or more packages that [fs simulator](http://cs-people.bu.edu/eriksson/papers/erikssonInfocom11Flow.pdf) depends on are still missing. In such cases, you might need to manually add them to the `Simulator` folder. As a straightforward alternative, you could replace your `Simulator` folder using the `Simulator` folder contained in [this release](https://github.com/hbhzwj/SADIT/archive/v1.2.tar.gz).
+NOTE: We have encountered cases where a user still can not run the `sim` experiments after running Step 2 above; possible causes could be: one or more packages that [fs simulator](https://github.com/jsommers/fs) depends on are still missing. In such cases, you might need to manually add them to the `Simulator` folder. As a straightforward alternative, you could replace your `Simulator` folder using the `Simulator` folder contained in [this release](https://github.com/hbhzwj/SADIT/archive/v1.2.tar.gz).
 
 
 # Usage
