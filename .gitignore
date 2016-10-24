@@ -27,3 +27,5 @@ para_comp.sh
 test.sh
 **.swp
 build/**
+Simulator/network*
+Simulator/radix*
