@@ -27,6 +27,8 @@ Jing Wang and I. Ch. Paschalidis,  "***Robust Anomaly Detection in Dynamic Netwo
 
 Jing Zhang and I. Ch. Paschalidis, "***An Improved Composite Hypothesis Test for Markov Models with Applications in Network Anomaly Detection***," Proceedings of the 54th IEEE Conference on Decision and Control, pp. 3810-3815, December 15-18, 2015, Osaka, Japan.
 
+Jing Zhang and I. Ch. Paschalidis, "***Statistical Anomaly Detection via Composite Hypothesis Testing for Markov Models***," IEEE Transactions on Signal Processing, submitted, 2017. [arXiv:1702.08435](https://arxiv.org/abs/1702.08435)
+
 
 
 ### What's New in Version 1.1.1
